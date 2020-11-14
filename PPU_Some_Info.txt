@@ -1,0 +1,18 @@
+Every spire needs 4 bytes (1 byte = 8 bits) of information.
+- Y position of the top left corner of the sprite (0-255)
+- Tile number from the sprite pattern table (0-255)
+- Special attribute flags (horizontal/vertical flipping, palette number, etc.)
+- X position of the top left corner of the sprite (0-255)
+
+The ppu of the nes has 256 bytes of momory to store sprite information
+maximum of 64 sprites at the screen at the same time.
+
+Sprite Attribute Flags
+Bit #	Purpose
+7	Flips sprite vertically (if "1")
+6	Flips sprite horizontally (if "1")
+5	Sprite priority (behind background if "1")
+4-2	Not used
+1-0	Palette for sprite
+
+The cpu has to have the sprite data ready to quickly write to the PPU the have a smooth game.
