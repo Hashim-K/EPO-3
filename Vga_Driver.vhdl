@@ -20,11 +20,11 @@ end Vga_driver;
    signal H_counter, H_counter_new, V_counter, V_counter_new : integer := 0;
    
    signal count : integer := 0;
-   signal tmp, clk_div : std_logic := '0';
+   signal tmp, clk_div, Vsy_new, Vsy_buf : std_logic := '0';
  begin
 
 
-   clock_divider: process (clk)
+   clock_divider: process (clk, tmp)
    begin
 	if (rising_edge(clk)) then
       if reset = '1' then
@@ -50,39 +50,54 @@ end Vga_driver;
         state <= new_state;
         H_counter <= H_counter_new;
         V_counter <= V_counter_new;
+		
+		Vsy <= Vsy_new;
+		Vsy_buf <= Vsy_new;
       end if;
     end if;
 
 
   end process;
 
-  combinationorial: process (state, H_counter, V_counter)
+  	G <= '0';
+    B <= '0';
+  
+  
+  combinationorial: process (state, H_counter, V_counter, Vsy_buf)
   begin
-
+  
     case state is
 
       when RESET_STATE =>
-        Vsy <= '1';
+	    H_counter_new <= 0;
+		V_counter_new <= V_counter;
+        Vsy_new <= '1';
+		
+		
         Hsy <= '1';
-        R <= '1';
-        G <= '0';
-        B <= '0';
+        R <= '0';
         new_state <= STATE1;
 
 
 
       when STATE1 =>
         H_counter_new <= H_counter + 1;
-        Vsy <= '1';
+		V_counter_new <= V_counter;
+        Vsy_new <= '1';
+		
+		
         Hsy <= '1';
+        R <= '0';
         new_state <= STATE2;
 
 
 
       when STATE2 =>
         H_counter_new <= H_counter + 1;
-
-        -- data out = 1
+		V_counter_new <= V_counter;
+		Vsy_new <= Vsy_buf;
+		
+        Hsy <= '1';
         R <= '1';
 
         if (H_counter >= 639) then
@@ -96,8 +111,10 @@ end Vga_driver;
 
       when STATE3 =>
         H_counter_new <= H_counter + 1;
-
-        -- data out = 0
+		V_counter_new <= V_counter;
+		Vsy_new <= Vsy_buf;
+		
+        Hsy <= '1';
         R <= '0';
 
         if (H_counter >= 655) then
@@ -110,9 +127,11 @@ end Vga_driver;
 
       when STATE4 =>
         H_counter_new <= H_counter + 1;
-
-        -- Hsynche = 0
+		V_counter_new <= V_counter;
+		Vsy_new <= Vsy_buf;
+        
         Hsy <= '0';
+		R <= '0';
 
         if H_counter >= 751 then
           new_state <= STATE5;
@@ -124,7 +143,11 @@ end Vga_driver;
 
       when STATE5 =>
         H_counter_new <= H_counter + 1;
+		V_counter_new <= V_counter;
+		Vsy_new <= Vsy_buf;
+		
         Hsy <= '1';
+		R <= '0';
 
         if H_counter >= 798 then
           new_state <= STATE6;
@@ -136,6 +159,10 @@ end Vga_driver;
       when STATE6 =>
         H_counter_new <= 0;
         V_counter_new <= V_counter + 1;
+		Vsy_new <= Vsy_buf;
+		
+		R <= '0';
+		Hsy <= '1';
 
         if V_counter >= 480 then
           new_state <= STATE7;
@@ -145,30 +172,43 @@ end Vga_driver;
 
 
       when STATE7 =>
-      H_counter_new <= H_counter + 1;
-      -- data out = 0
-      R <= '0';
+		H_counter_new <= H_counter + 1;
+		V_counter_new <= V_counter;
+		Vsy_new <= Vsy_buf;
+		
+		R <= '0';
+		Hsy <= '1';
 
-      if (V_counter >= 489) then
-		if (V_counter >= 491) then
-			new_state <= STATE9;
+		if (V_counter >= 489) then
+			if (V_counter >= 491) then
+				new_state <= STATE9;
+			else
+				new_state <= STATE8;
+			end if;
 		else
-			new_state <= STATE8;
+			new_state <= STATE3;
 		end if;
-      else
-        new_state <= STATE3;
-      end if;
 
 
       when STATE8 =>
 		H_counter_new <= H_counter + 1;
-        Vsy <= '0';
+		V_counter_new <= V_counter;
+		Vsy_new <= '0';
+
+		R <= '0';
+		Hsy <= '1';
+		
+		
         new_state <= STATE3;
 
 
       when STATE9 =>
 		H_counter_new <= H_counter + 1;
-		Vsy <= '1';
+		V_counter_new <= V_counter;
+		Vsy_new <= '1';
+		
+		R <= '0';
+		Hsy <= '1';
 
 		if V_counter >= 525 then
 			new_state <= STATE10;
@@ -180,6 +220,12 @@ end Vga_driver;
       when STATE10 =>
 		H_counter_new <= H_counter + 1;
 		V_counter_new <= 0;
+		Vsy_new <= '1';
+		
+		R <= '0';
+		Hsy <= '1';
+		
+		
 		new_state <= STATE2;
 
     end case;
