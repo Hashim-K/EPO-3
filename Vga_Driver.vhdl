@@ -1,235 +1,208 @@
-Library IEEE;
-use IEEE.std_logic_1164.all;
+LIBRARY IEEE;
+USE IEEE.std_logic_1164.ALL;
 
-entity Vga_driver is
-    port(
-    clk: in std_logic;
-	reset: in std_logic;
-    R : out std_logic;
-    G : out std_logic;
-    B : out std_logic;
-    Vsy : out std_logic;
-    Hsy : out std_logic
-    );
-end Vga_driver;
+ENTITY Vga_driver IS
+	PORT (
+		clk : IN std_logic;
+		reset : IN std_logic;
+		R : OUT std_logic;
+		G : OUT std_logic;
+		B : OUT std_logic;
+		Vsy : OUT std_logic;
+		Hsy : OUT std_logic
 
+	);
+END Vga_driver;
+ARCHITECTURE behavioural OF Vga_driver IS
+	TYPE state_type IS (RESET_STATE, STATE2, STATE3, STATE4, STATE5, STATE6, STATE7, STATE8, STATE9, STATE10);
+	SIGNAL state, new_state : state_type;
+	SIGNAL H_counter, H_counter_new, V_counter, V_counter_new : INTEGER := 0;
 
- architecture behavioural of Vga_driver is
-   type state_type is ( RESET_STATE, STATE1, STATE2, STATE3, STATE4, STATE5, STATE6, STATE7, STATE8, STATE9, STATE10);
-   signal state, new_state: state_type;
-   signal H_counter, H_counter_new, V_counter, V_counter_new : integer := 0;
-   
-   signal count : integer := 0;
-   signal tmp, clk_div, Vsy_new, Vsy_buf : std_logic := '0';
- begin
+	SIGNAL tmp, clk_div, Vsy_new, Vsy_buf : std_logic := '0';
+BEGIN
 
+	clock_divider : PROCESS (clk, tmp)
+	BEGIN
+		IF (rising_edge(clk)) THEN
+			IF reset = '1' THEN
+				tmp <= '0';
+			ELSE
+				tmp <= NOT tmp;
+			END IF;
+		END IF;
+		clk_div <= tmp;
+	END PROCESS;
 
-   clock_divider: process (clk, tmp)
-   begin
-	if (rising_edge(clk)) then
-      if reset = '1' then
-        count <= 1;
-		tmp <= '0';
-      else
-        count <= count + 1;
-		if (count >= 2) then
-			tmp <= NOT tmp;
-		end if;
-      end if;
-	 end if;
-	  clk_div <= tmp;
-   end process;
+	statereg : PROCESS (clk_div)
+	BEGIN
+		IF (rising_edge(clk_div)) THEN
+			IF reset = '1' THEN
+				state <= RESET_STATE;
+				H_counter <= 0;
+				V_counter <= 0;
+				Vsy <= '1';
 
+			ELSE
+				state <= new_state;
+				H_counter <= H_counter_new;
+				V_counter <= V_counter_new;
+				Vsy <= Vsy_new;
+				Vsy_buf <= Vsy_new;
+			END IF;
+		END IF;
+	END PROCESS;
 
-   statereg: process (clk_div)
-   begin
-	if (rising_edge(clk_div)) then
-      if reset = '1' then
-        state <= RESET_STATE;
-      else
-        state <= new_state;
-        H_counter <= H_counter_new;
-        V_counter <= V_counter_new;
-		
-		Vsy <= Vsy_new;
-		Vsy_buf <= Vsy_new;
-      end if;
-    end if;
-
-
-  end process;
-
-  	G <= '0';
-    B <= '0';
-  
-  
-  combinationorial: process (state, H_counter, V_counter, Vsy_buf)
-  begin
-  
-    case state is
-
-      when RESET_STATE =>
-	    H_counter_new <= 0;
-		V_counter_new <= V_counter;
-        Vsy_new <= '1';
-		
-		
-        Hsy <= '1';
-        R <= '0';
-        new_state <= STATE1;
+	G <= '0';
+	B <= '0';
 
 
+	combinationorial : PROCESS (state, H_counter, V_counter, Vsy_buf)
+	BEGIN
+		CASE state IS
 
-      when STATE1 =>
-        H_counter_new <= H_counter + 1;
-		V_counter_new <= V_counter;
-        Vsy_new <= '1';
-		
-		
-        Hsy <= '1';
-        R <= '0';
-        new_state <= STATE2;
+			WHEN RESET_STATE =>
+				H_counter_new <= 0;
+				V_counter_new <= 0;
+				Vsy_new <= '1';
 
-
-
-      when STATE2 =>
-        H_counter_new <= H_counter + 1;
-		V_counter_new <= V_counter;
-		Vsy_new <= Vsy_buf;
-		
-        Hsy <= '1';
-        R <= '1';
-
-        if (H_counter >= 639) then
-          new_state <= STATE3;
-        else
-          new_state <= STATE2;
-        end if;
+				Hsy <= '1';
+				R <= '0';
+				new_state <= STATE2;
 
 
 
 
-      when STATE3 =>
-        H_counter_new <= H_counter + 1;
-		V_counter_new <= V_counter;
-		Vsy_new <= Vsy_buf;
-		
-        Hsy <= '1';
-        R <= '0';
+			WHEN STATE2 =>
+				H_counter_new <= H_counter + 1;
+				V_counter_new <= V_counter;
+				Vsy_new <= Vsy_buf;
 
-        if (H_counter >= 655) then
-          new_state <= STATE4;
-        else
-          new_state <= STATE3;
-        end if;
+				Hsy <= '1';
+				R <= '1';
 
-
-
-      when STATE4 =>
-        H_counter_new <= H_counter + 1;
-		V_counter_new <= V_counter;
-		Vsy_new <= Vsy_buf;
-        
-        Hsy <= '0';
-		R <= '0';
-
-        if H_counter >= 751 then
-          new_state <= STATE5;
-        else
-          new_state <= STATE4;
-        end if;
+				IF (H_counter >= 639) THEN
+					new_state <= STATE3;
+				ELSE
+					new_state <= STATE2;
+				END IF;
 
 
+			WHEN STATE3 =>
+				H_counter_new <= H_counter + 1;
+				V_counter_new <= V_counter;
+				Vsy_new <= Vsy_buf;
 
-      when STATE5 =>
-        H_counter_new <= H_counter + 1;
-		V_counter_new <= V_counter;
-		Vsy_new <= Vsy_buf;
-		
-        Hsy <= '1';
-		R <= '0';
+				Hsy <= '1';
+				R <= '0';
 
-        if H_counter >= 798 then
-          new_state <= STATE6;
-        else
-          new_state <= STATE5;
-        end if;
-
-
-      when STATE6 =>
-        H_counter_new <= 0;
-        V_counter_new <= V_counter + 1;
-		Vsy_new <= Vsy_buf;
-		
-		R <= '0';
-		Hsy <= '1';
-
-        if V_counter >= 480 then
-          new_state <= STATE7;
-        else
-          new_state <= STATE1;
-        end if;
+				IF (H_counter >= 655) THEN
+					new_state <= STATE4;
+				ELSE
+					new_state <= STATE3;
+				END IF;
 
 
-      when STATE7 =>
-		H_counter_new <= H_counter + 1;
-		V_counter_new <= V_counter;
-		Vsy_new <= Vsy_buf;
-		
-		R <= '0';
-		Hsy <= '1';
+			WHEN STATE4 =>
+				H_counter_new <= H_counter + 1;
+				V_counter_new <= V_counter;
+				Vsy_new <= Vsy_buf;
 
-		if (V_counter >= 489) then
-			if (V_counter >= 491) then
-				new_state <= STATE9;
-			else
-				new_state <= STATE8;
-			end if;
-		else
-			new_state <= STATE3;
-		end if;
+				Hsy <= '0';
+				R <= '0';
+
+				IF (H_counter >= 751) THEN
+					new_state <= STATE5;
+				ELSE
+					new_state <= STATE4;
+				END IF;
 
 
-      when STATE8 =>
-		H_counter_new <= H_counter + 1;
-		V_counter_new <= V_counter;
-		Vsy_new <= '0';
+			WHEN STATE5 =>
+				H_counter_new <= H_counter + 1;
+				V_counter_new <= V_counter;
+				Vsy_new <= Vsy_buf;
 
-		R <= '0';
-		Hsy <= '1';
-		
-		
-        new_state <= STATE3;
+				Hsy <= '1';
+				R <= '0';
 
-
-      when STATE9 =>
-		H_counter_new <= H_counter + 1;
-		V_counter_new <= V_counter;
-		Vsy_new <= '1';
-		
-		R <= '0';
-		Hsy <= '1';
-
-		if V_counter >= 525 then
-			new_state <= STATE10;
-		else
-			new_state <= STATE3;
-		end if;
+				IF (H_counter >= 799) THEN
+					new_state <= STATE6;
+				ELSE
+					new_state <= STATE5;
+				END IF;
 
 
-      when STATE10 =>
-		H_counter_new <= H_counter + 1;
-		V_counter_new <= 0;
-		Vsy_new <= '1';
-		
-		R <= '0';
-		Hsy <= '1';
-		
-		
-		new_state <= STATE2;
+			WHEN STATE6 =>
+				H_counter_new <= 0;
+				V_counter_new <= V_counter + 1;
+				Vsy_new <= Vsy_buf;
 
-    end case;
+				R <= '0';
+				Hsy <= '1';
 
-  end process;
+				IF (V_counter >= 480) THEN
+					new_state <= STATE7;
+				ELSE
+					new_state <= STATE2;
+				END IF;
 
- end behavioural;
+
+			WHEN STATE7 =>
+				H_counter_new <= H_counter + 1;
+				V_counter_new <= V_counter;
+				Vsy_new <= Vsy_buf;
+
+				R <= '0';
+				Hsy <= '1';
+
+				IF (V_counter >= 489) THEN
+					IF (V_counter >= 491) THEN
+						new_state <= STATE9;
+					ELSE
+						new_state <= STATE8;
+					END IF;
+				ELSE
+					new_state <= STATE3;
+				END IF;
+
+
+			WHEN STATE8 =>
+				H_counter_new <= H_counter + 1;
+				V_counter_new <= V_counter;
+				Vsy_new <= '0';
+
+				R <= '0';
+				Hsy <= '1';
+
+				new_state <= STATE3;
+
+
+			WHEN STATE9 =>
+				H_counter_new <= H_counter + 1;
+				V_counter_new <= V_counter;
+				Vsy_new <= '1';
+
+				R <= '0';
+				Hsy <= '1';
+
+				IF (V_counter >= 524) THEN
+					new_state <= STATE10;
+				ELSE
+					new_state <= STATE3;
+				END IF;
+
+
+			WHEN STATE10 =>
+				H_counter_new <= H_counter + 1;
+				V_counter_new <= 0;
+				Vsy_new <= '1';
+
+				R <= '0';
+				Hsy <= '1';
+				new_state <= STATE2;
+
+		END CASE;
+
+	END PROCESS;
+
+END behavioural;
