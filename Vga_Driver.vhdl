@@ -5,14 +5,13 @@ ENTITY Vga_driver IS
 	PORT (
 		clk : IN std_logic;
 		reset : IN std_logic;
-		R : OUT std_logic;
-		G : OUT std_logic;
-		B : OUT std_logic;
+		Data_Out : OUT std_logic;
 		Vsy : OUT std_logic;
 		Hsy : OUT std_logic
 
 	);
 END Vga_driver;
+
 ARCHITECTURE behavioural OF Vga_driver IS
 	TYPE state_type IS (RESET_STATE, STATE2, STATE3, STATE4, STATE5, STATE6, STATE7, STATE8, STATE9, STATE10);
 	SIGNAL state, new_state : state_type;
@@ -52,9 +51,6 @@ BEGIN
 		END IF;
 	END PROCESS;
 
-	G <= '0';
-	B <= '0';
-
 
 	combinationorial : PROCESS (state, H_counter, V_counter, Vsy_buf)
 	BEGIN
@@ -66,7 +62,7 @@ BEGIN
 				Vsy_new <= '1';
 
 				Hsy <= '1';
-				R <= '0';
+				Data_Out <= '0';
 				new_state <= STATE2;
 
 
@@ -78,7 +74,7 @@ BEGIN
 				Vsy_new <= Vsy_buf;
 
 				Hsy <= '1';
-				R <= '1';
+				Data_Out <= '1';
 
 				IF (H_counter >= 639) THEN
 					new_state <= STATE3;
@@ -93,7 +89,7 @@ BEGIN
 				Vsy_new <= Vsy_buf;
 
 				Hsy <= '1';
-				R <= '0';
+				Data_Out <= '0';
 
 				IF (H_counter >= 655) THEN
 					new_state <= STATE4;
@@ -108,7 +104,7 @@ BEGIN
 				Vsy_new <= Vsy_buf;
 
 				Hsy <= '0';
-				R <= '0';
+				Data_Out <= '0';
 
 				IF (H_counter >= 751) THEN
 					new_state <= STATE5;
@@ -123,7 +119,7 @@ BEGIN
 				Vsy_new <= Vsy_buf;
 
 				Hsy <= '1';
-				R <= '0';
+				Data_Out <= '0';
 
 				IF (H_counter >= 799) THEN
 					new_state <= STATE6;
@@ -137,7 +133,7 @@ BEGIN
 				V_counter_new <= V_counter + 1;
 				Vsy_new <= Vsy_buf;
 
-				R <= '0';
+				Data_Out <= '0';
 				Hsy <= '1';
 
 				IF (V_counter >= 480) THEN
@@ -152,7 +148,7 @@ BEGIN
 				V_counter_new <= V_counter;
 				Vsy_new <= Vsy_buf;
 
-				R <= '0';
+				Data_Out <= '0';
 				Hsy <= '1';
 
 				IF (V_counter >= 489) THEN
@@ -171,7 +167,7 @@ BEGIN
 				V_counter_new <= V_counter;
 				Vsy_new <= '0';
 
-				R <= '0';
+				Data_Out <= '0';
 				Hsy <= '1';
 
 				new_state <= STATE3;
@@ -182,7 +178,7 @@ BEGIN
 				V_counter_new <= V_counter;
 				Vsy_new <= '1';
 
-				R <= '0';
+				Data_Out <= '0';
 				Hsy <= '1';
 
 				IF (V_counter >= 524) THEN
@@ -197,7 +193,7 @@ BEGIN
 				V_counter_new <= 0;
 				Vsy_new <= '1';
 
-				R <= '0';
+				Data_Out <= '0';
 				Hsy <= '1';
 				new_state <= STATE2;
 
