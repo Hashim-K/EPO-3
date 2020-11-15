@@ -1,82 +1,66 @@
 LIBRARY IEEE;
 USE IEEE.std_logic_1164.ALL;
+use ieee.numeric_std.all;
 
-ENTITY Vga_driver IS
+ENTITY vga_driver IS
 	PORT (
-		clk : IN std_logic;
 		reset : IN std_logic;
-		Data_Out : OUT std_logic;
-		Vsy : OUT std_logic;
-		Hsy : OUT std_logic
-
+		clk_div : IN std_logic;
+		h_counter : IN std_logic_vector(9 downto 0);
+		v_counter : IN std_logic_vector(9 downto 0);
+		r : OUT std_logic;
+		vsy : OUT std_logic;
+		hsy : OUT std_logic
 	);
-END Vga_driver;
+END vga_driver;
 
-ARCHITECTURE behavioural OF Vga_driver IS
+ARCHITECTURE behavioural OF vga_driver IS
 	TYPE state_type IS (RESET_STATE, STATE2, STATE3, STATE4, STATE5, STATE6, STATE7, STATE8, STATE9, STATE10);
 	SIGNAL state, new_state : state_type;
-	SIGNAL H_counter, H_counter_new, V_counter, V_counter_new : INTEGER := 0;
+	-- SIGNAL h_counter_int, h_counter_int_new, v_counter_int, v_counter_int_new : INTEGER := 0;
 
-	SIGNAL tmp, clk_div, Vsy_new, Vsy_buf : std_logic := '0';
+	SIGNAL vsy_new, vsy_buf : std_logic := '0';
+	signal h_counter_int, v_counter_int : integer;
 BEGIN
 
-	clock_divider : PROCESS (clk, tmp)
-	BEGIN
-		IF (rising_edge(clk)) THEN
-			IF reset = '1' THEN
-				tmp <= '0';
-			ELSE
-				tmp <= NOT tmp;
-			END IF;
-		END IF;
-		clk_div <= tmp;
-	END PROCESS;
+	h_counter_int <= to_integer(unsigned(h_counter));
+	v_counter_int <= to_integer(unsigned(v_counter));
 
 	statereg : PROCESS (clk_div)
-	BEGIN
-		IF (rising_edge(clk_div)) THEN
-			IF reset = '1' THEN
-				state <= RESET_STATE;
-				H_counter <= 0;
-				V_counter <= 0;
-				Vsy <= '1';
+		BEGIN
+			IF (rising_edge(clk_div)) THEN
+				IF reset = '1' THEN
+					 state <= RESET_STATE;
+					 vsy <= '1';
 
-			ELSE
-				state <= new_state;
-				H_counter <= H_counter_new;
-				V_counter <= V_counter_new;
-				Vsy <= Vsy_new;
-				Vsy_buf <= Vsy_new;
+				ELSE
+					state <= new_state;
+					vsy <= Vsy_new;
+					vsy_buf <= Vsy_new;
+				END IF;
 			END IF;
-		END IF;
-	END PROCESS;
+		END PROCESS;
 
 
-	combinationorial : PROCESS (state, H_counter, V_counter, Vsy_buf)
+	combinationorial : PROCESS (state, h_counter_int, v_counter_int, vsy_buf)
 	BEGIN
+
 		CASE state IS
 
 			WHEN RESET_STATE =>
-				H_counter_new <= 0;
-				V_counter_new <= 0;
-				Vsy_new <= '1';
+				vsy_new <= '1';
 
-				Hsy <= '1';
-				Data_Out <= '0';
+				hsy <= '1';
+				r <= '0';
 				new_state <= STATE2;
 
-
-
-
 			WHEN STATE2 =>
-				H_counter_new <= H_counter + 1;
-				V_counter_new <= V_counter;
-				Vsy_new <= Vsy_buf;
+				vsy_new <= vsy_buf;
 
-				Hsy <= '1';
-				Data_Out <= '1';
+				hsy <= '1';
+				r <= '1';
 
-				IF (H_counter >= 639) THEN
+				IF (h_counter_int >= 639) THEN
 					new_state <= STATE3;
 				ELSE
 					new_state <= STATE2;
@@ -84,14 +68,12 @@ BEGIN
 
 
 			WHEN STATE3 =>
-				H_counter_new <= H_counter + 1;
-				V_counter_new <= V_counter;
-				Vsy_new <= Vsy_buf;
+				vsy_new <= vsy_buf;
 
-				Hsy <= '1';
-				Data_Out <= '0';
+				hsy <= '1';
+				r <= '0';
 
-				IF (H_counter >= 655) THEN
+				IF (h_counter_int >= 655) THEN
 					new_state <= STATE4;
 				ELSE
 					new_state <= STATE3;
@@ -99,14 +81,12 @@ BEGIN
 
 
 			WHEN STATE4 =>
-				H_counter_new <= H_counter + 1;
-				V_counter_new <= V_counter;
-				Vsy_new <= Vsy_buf;
+				vsy_new <= vsy_buf;
 
-				Hsy <= '0';
-				Data_Out <= '0';
+				hsy <= '0';
+				r <= '0';
 
-				IF (H_counter >= 751) THEN
+				IF (h_counter_int >= 751) THEN
 					new_state <= STATE5;
 				ELSE
 					new_state <= STATE4;
@@ -114,14 +94,12 @@ BEGIN
 
 
 			WHEN STATE5 =>
-				H_counter_new <= H_counter + 1;
-				V_counter_new <= V_counter;
-				Vsy_new <= Vsy_buf;
+				vsy_new <= vsy_buf;
 
-				Hsy <= '1';
-				Data_Out <= '0';
+				hsy <= '1';
+				r <= '0';
 
-				IF (H_counter >= 799) THEN
+				IF (h_counter_int >= 799) THEN
 					new_state <= STATE6;
 				ELSE
 					new_state <= STATE5;
@@ -129,14 +107,12 @@ BEGIN
 
 
 			WHEN STATE6 =>
-				H_counter_new <= 0;
-				V_counter_new <= V_counter + 1;
-				Vsy_new <= Vsy_buf;
+				vsy_new <= vsy_buf;
 
-				Data_Out <= '0';
-				Hsy <= '1';
+				r <= '0';
+				hsy <= '1';
 
-				IF (V_counter >= 480) THEN
+				IF (v_counter_int >= 480) THEN
 					new_state <= STATE7;
 				ELSE
 					new_state <= STATE2;
@@ -144,15 +120,13 @@ BEGIN
 
 
 			WHEN STATE7 =>
-				H_counter_new <= H_counter + 1;
-				V_counter_new <= V_counter;
-				Vsy_new <= Vsy_buf;
+				vsy_new <= vsy_buf;
 
-				Data_Out <= '0';
-				Hsy <= '1';
+				r <= '0';
+				hsy <= '1';
 
-				IF (V_counter >= 489) THEN
-					IF (V_counter >= 491) THEN
+				IF (v_counter_int >= 489) THEN
+					IF (v_counter_int >= 491) THEN
 						new_state <= STATE9;
 					ELSE
 						new_state <= STATE8;
@@ -163,25 +137,21 @@ BEGIN
 
 
 			WHEN STATE8 =>
-				H_counter_new <= H_counter + 1;
-				V_counter_new <= V_counter;
-				Vsy_new <= '0';
+				vsy_new <= '0';
 
-				Data_Out <= '0';
-				Hsy <= '1';
+				r <= '0';
+				hsy <= '1';
 
 				new_state <= STATE3;
 
 
 			WHEN STATE9 =>
-				H_counter_new <= H_counter + 1;
-				V_counter_new <= V_counter;
-				Vsy_new <= '1';
+				vsy_new <= '1';
 
-				Data_Out <= '0';
-				Hsy <= '1';
+				r <= '0';
+				hsy <= '1';
 
-				IF (V_counter >= 524) THEN
+				IF (v_counter_int >= 524) THEN
 					new_state <= STATE10;
 				ELSE
 					new_state <= STATE3;
@@ -189,12 +159,10 @@ BEGIN
 
 
 			WHEN STATE10 =>
-				H_counter_new <= H_counter + 1;
-				V_counter_new <= 0;
-				Vsy_new <= '1';
+				vsy_new <= '1';
 
-				Data_Out <= '0';
-				Hsy <= '1';
+				r <= '0';
+				hsy <= '1';
 				new_state <= STATE2;
 
 		END CASE;

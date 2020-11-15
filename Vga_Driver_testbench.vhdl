@@ -1,14 +1,14 @@
 Library IEEE;
 use IEEE.std_logic_1164.all;
 
-entity Vga_Driver_Testbench is
-end Vga_Driver_Testbench;
+entity vga_driver_testbench is
+end vga_driver_testbench;
 
-architecture behavioural of Vga_Driver_Testbench is
+architecture behavioural of vga_driver_testbench is
   component Vga_driver is
       port(
       clk: in std_logic;
-	  reset: in std_logic;
+	    reset: in std_logic;
       R : out std_logic;
       G : out std_logic;
       B : out std_logic;
@@ -23,7 +23,7 @@ architecture behavioural of Vga_Driver_Testbench is
   signal Vsy : std_logic := '0';
   signal Hsy : std_logic := '0';
   signal reset : std_logic := '0';
-  
+
   signal clk : std_logic := '0'; -- make sure you initialise!
 
 begin
@@ -34,7 +34,7 @@ begin
 
   clk <= not clk after 10 ns;
   L1 : Vga_driver port map (clk, reset, R, G, B, Vsy, Hsy);
-  
+
 
 
 
