@@ -2,6 +2,8 @@ LIBRARY IEEE;
 USE IEEE.std_logic_1164.ALL;
 use ieee.numeric_std.all;
 
+-- still bug data transfer in non data time
+
 ENTITY vga_driver IS
 	PORT (
 		reset : IN std_logic;
