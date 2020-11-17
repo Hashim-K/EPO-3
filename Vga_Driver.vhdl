@@ -10,14 +10,13 @@ ENTITY vga_driver IS
 		clk_div : IN std_logic;
 		h_counter : IN std_logic_vector(9 downto 0);
 		v_counter : IN std_logic_vector(9 downto 0);
-		r : OUT std_logic;
 		vsy : OUT std_logic;
 		hsy : OUT std_logic
 	);
 END vga_driver;
 
 ARCHITECTURE behavioural OF vga_driver IS
-	TYPE state_type IS (RESET_STATE, STATE2, STATE3, STATE4, STATE5, STATE6, STATE7, STATE8, STATE9, STATE10);
+	TYPE state_type IS (RESET_STATE, STATE3, STATE4, STATE5, STATE6, STATE7, STATE8, STATE9);
 	SIGNAL state, new_state : state_type;
 	-- SIGNAL h_counter_int, h_counter_int_new, v_counter_int, v_counter_int_new : INTEGER := 0;
 
@@ -49,31 +48,21 @@ BEGIN
 
 		CASE state IS
 
+
 			WHEN RESET_STATE =>
 				vsy_new <= '1';
-
 				hsy <= '1';
-				r <= '0';
-				new_state <= STATE2;
-
-			WHEN STATE2 =>
-				vsy_new <= vsy_buf;
-
-				hsy <= '1';
-				r <= '1';
 
 				IF (h_counter_int >= 639) THEN
 					new_state <= STATE3;
 				ELSE
-					new_state <= STATE2;
+					new_state <= RESET_STATE;
 				END IF;
 
 
 			WHEN STATE3 =>
 				vsy_new <= vsy_buf;
-
 				hsy <= '1';
-				r <= '0';
 
 				IF (h_counter_int >= 655) THEN
 					new_state <= STATE4;
@@ -84,9 +73,7 @@ BEGIN
 
 			WHEN STATE4 =>
 				vsy_new <= vsy_buf;
-
 				hsy <= '0';
-				r <= '0';
 
 				IF (h_counter_int >= 751) THEN
 					new_state <= STATE5;
@@ -97,9 +84,7 @@ BEGIN
 
 			WHEN STATE5 =>
 				vsy_new <= vsy_buf;
-
 				hsy <= '1';
-				r <= '0';
 
 				IF (h_counter_int >= 799) THEN
 					new_state <= STATE6;
@@ -110,21 +95,17 @@ BEGIN
 
 			WHEN STATE6 =>
 				vsy_new <= vsy_buf;
-
-				r <= '0';
 				hsy <= '1';
 
 				IF (v_counter_int >= 480) THEN
 					new_state <= STATE7;
 				ELSE
-					new_state <= STATE2;
+					new_state <= RESET_STATE;
 				END IF;
 
 
 			WHEN STATE7 =>
 				vsy_new <= vsy_buf;
-
-				r <= '0';
 				hsy <= '1';
 
 				IF (v_counter_int >= 489) THEN
@@ -140,8 +121,6 @@ BEGIN
 
 			WHEN STATE8 =>
 				vsy_new <= '0';
-
-				r <= '0';
 				hsy <= '1';
 
 				new_state <= STATE3;
@@ -149,23 +128,14 @@ BEGIN
 
 			WHEN STATE9 =>
 				vsy_new <= '1';
-
-				r <= '0';
 				hsy <= '1';
 
 				IF (v_counter_int >= 524) THEN
-					new_state <= STATE10;
+					new_state <= RESET_STATE;
 				ELSE
 					new_state <= STATE3;
 				END IF;
 
-
-			WHEN STATE10 =>
-				vsy_new <= '1';
-
-				r <= '0';
-				hsy <= '1';
-				new_state <= STATE2;
 
 		END CASE;
 

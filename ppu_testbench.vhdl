@@ -11,13 +11,15 @@ architecture behavioural of ppu_testbench is
     port (
     clk : IN std_logic;
     reset : IN std_logic;
-    r : OUT std_logic;
+    R : OUT std_logic;
+    G : OUT std_logic;
+    B : OUT std_logic;
     vsy : OUT std_logic;
     hsy : OUT std_logic
     );
   end component;
 
-    SIGNAL clk, reset, vsy, hsy, r : std_logic := '0';
+    SIGNAL clk, reset, vsy, hsy, R, G, B : std_logic := '0';
 begin
 
 
@@ -26,6 +28,6 @@ begin
   reset <= '1' after 0 ns,
           '0' after 20 ns;
 
-  L1 : ppu port map (clk, reset, r, vsy, hsy);
+  L1 : ppu port map (clk, reset, R, G, B, vsy, hsy);
 
 end architecture;

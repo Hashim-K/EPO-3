@@ -14,7 +14,7 @@ END counter;
 
 
 ARCHITECTURE behavioural OF counter IS
-signal h_counter_sig : integer;
+signal clk_div_internal : std_logic;
 BEGIN
 
 	clock_divider : PROCESS (clk)
@@ -27,44 +27,34 @@ BEGIN
 				tmp := NOT tmp;
 			END IF;
 		END IF;
-		clk_div <= tmp;
+		clk_div_internal <= tmp;
 	END PROCESS;
+
+	clk_div <= clk_div_internal;
 
   -- Horizontal Counter
-	PROCESS (clk)
-	VARIABLE cnt : INTEGER RANGE 0 TO 800;
+	counter : PROCESS (clk_div_internal)
+	VARIABLE v_counter_int : INTEGER RANGE 0 TO 525;
+	VARIABLE h_counter_int  : INTEGER RANGE 0 TO 800;
 	BEGIN
-		IF (rising_edge(clk)) THEN
+		IF (rising_edge(clk_div_internal)) THEN
 			IF reset = '1' THEN
-        cnt := 0;
-			elsif (cnt >= 800) then
-				cnt := 0;
+        h_counter_int := 0;
+				v_counter_int := 0;
 			else
-				cnt := cnt + 1;
-			END IF;
-		END IF;
-		h_counter_sig <= cnt;
-		h_counter <= std_logic_vector(to_unsigned(cnt, h_counter'length));
-	END PROCESS;
-
-
-
-  -- Verticle Counter
-	PROCESS (clk)
-	VARIABLE cnt : INTEGER RANGE 0 TO 525;
-	BEGIN
-		IF (rising_edge(clk)) THEN
-			IF reset = '1' THEN
-        cnt := 0;
-			ELSif (h_counter_sig >= 525) THEN
-				if (cnt >= 525) THEN
-        	cnt := 0;
+				if (h_counter_int >= 800) then
+					h_counter_int := 0;
+					v_counter_int := v_counter_int + 1;
+				elsif (v_counter_int >= 525) then
+					v_counter_int := 0;
 				else
-					cnt := cnt + 1;
-				end if;
-			END IF;
+					h_counter_int := h_counter_int + 1;
+				END IF;
+			end if;
 		END IF;
-		v_counter <= std_logic_vector(to_unsigned(cnt, v_counter'length));
+		h_counter <= std_logic_vector(to_unsigned(h_counter_int, h_counter'length));
+		v_counter <= std_logic_vector(to_unsigned(v_counter_int, v_counter'length));
 	END PROCESS;
+
 
 END behavioural;
