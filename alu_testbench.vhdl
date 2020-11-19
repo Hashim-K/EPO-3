@@ -21,7 +21,11 @@ signal controll: std_logic_vector(2 downto 0);
 signal counter_a : integer := 0;
 begin
 
-controll <= "000"; -- Addition
+controll <= "000" after 0 ns,
+            "001" after 100 ns,
+            "010" after 200 ns,
+            "011" after 300 ns,
+            "100" after 400 ns; -- Addition
 
 
 
