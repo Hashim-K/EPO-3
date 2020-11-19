@@ -10,7 +10,7 @@ entity eight_bit_xor is
   );
 end entity;
 
-architecture arch of eight_bit_xor is
+architecture behavioural of eight_bit_xor is
 begin
   o <= a xor b;
-end architecture;
+end behavioural;
