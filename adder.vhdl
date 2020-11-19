@@ -7,7 +7,7 @@ entity adder is
   a : IN std_logic_vector(7 downto 0);
   b : IN std_logic_vector(7 downto 0);
   cin : IN std_logic;
-  s : OUT std_logic_vector(7 downto 0);
+  o : OUT std_logic_vector(7 downto 0);
   carry : OUT std_logic
   );
 end entity;
@@ -17,7 +17,7 @@ architecture arch of adder is
 begin
 
 result <= ("0" & a) + ("0" & b) + cin;
-s <= result(7 downto 0);
+o <= result(7 downto 0);
 carry <= result(8);
 
 
