@@ -10,8 +10,9 @@ entity eight_bit_shift is
   );
 end entity;
 
-architecture arch of eight_bit_xor is
+architecture arch of eight_bit_shift is
 begin
+  o(0) <= a(1);
   o(1) <= a(2);
   o(2) <= a(3);
   o(3) <= a(4);

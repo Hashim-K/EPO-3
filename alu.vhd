@@ -10,12 +10,14 @@ entity alu is
   controll :  IN std_logic_vector(2 downto 0);
   o :         OUT std_logic_vector(7 downto 0);
   AVR :       OUT std_logic;
-  ACR :       OUT std_logic;
+  ACR :       OUT std_logic; -- cary out
   HC  :       OUT std_logic
   );
 end entity;
 
-component eigth_bit_adder is
+architecture structural of alu is
+
+component eight_bit_adder is
   port (
   a : IN std_logic_vector(7 downto 0);
   b : IN std_logic_vector(7 downto 0);
@@ -61,54 +63,69 @@ end component;
 -- Additinos, Or, Xor, And, Shift right, Carry in
 -- 0000 addition
 
-architecture structural of alu is
-  signal o_adder, o_or, o_xor, o_and, o_shift
+signal o_adder, o_or, o_xor, o_and, o_shift : std_logic_vector(7 downto 0);
 begin
-ADDER : adder port map(a => a, b => b, cin => cin, o => o_adder, carry => ACR);
-ORR   : eight_bit_or port map(a => a, b => b, o => o_or);
-XORR  : eight_bit_xor port map(a => a, b => b, o => o_xor);
-ANDD : eight_bit_and port map()
+ADDER: eight_bit_adder port map(a, b, cin, o_adder, ACR);
+ORR  : eight_bit_or port map(a, b, o_or);
+XORR : eight_bit_xor port map(a, b, o_xor);
+ANDD : eight_bit_and port map(a, b, o_and);
+SHIFT : eight_bit_shift port map(a, b, o_shift);
 
 
 
+-- -- The logic only updates when the states update Its important to take away that processes does not work if you want to synthesis logic
+-- ALU : process(a, b)
+-- begin
+--
+--   case controll is
+--
+--   -- Addition
+--   when "000" =>
+--     o <= o_adder;
+--
+--   -- Or
+--   when "001" =>
+--   o <= o_or;
+--
+--
+--   -- Xor
+--   when "010" =>
+--   o <= o_xor;
+--
+--
+--   -- And
+--   when "011" =>
+--   o <= o_and;
+--
+--
+--   -- Shift right
+--   when "100" =>
+--   o <= o_shift;
+--
+--   --   -- carry in
+--   -- when "101" =>
+--
+--   when others =>
+--     o <= "00000000";
+--   end case;
+--
+--
+-- end process;
 
 
-ALU : process(a, b)
-begin
+with controll select o <=
+-- Addition
+  o_adder when "000",
+-- Or
+  o_or when "001",
+-- Xor
+  o_xor when "010",
+-- And
+  o_and when "011",
+-- Shift right
+  o_shift when "100",
+  "00000000" when others;
 
-  case controll is
-
-  -- Addition
-  when "000" =>
-    o <= std_logic_vector(unsigned(a) + unsigned(b));
-
-  -- Or
-  when "001" =>
-
-
-  -- Xor
-  when "010" =>
- 
-
-  -- And
-  when "011" =>
-
-
-  -- Shift right
-  when "100" =>
-   
-
-    -- carry in
-  when "101" =>
-   
-
-
-  when others =>
-    o <= "00000000";
-  end case;
-
-
-end process;
 
 
 

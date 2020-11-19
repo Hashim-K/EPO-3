@@ -11,6 +11,7 @@ entity eight_bit_or is
 end entity;
 
 architecture behavioural of eight_bit_or is
+  begin
     o(0) <= a(0) or b (0);
     o(1) <= a(1) or b (1);
     o(2) <= a(2) or b (2);
