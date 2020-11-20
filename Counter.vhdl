@@ -4,9 +4,8 @@ use ieee.numeric_std.all;
 
 ENTITY counter IS
 	PORT (
-		clk : IN std_logic;
+		clk_25mhz : IN std_logic;
 		reset : IN std_logic;
-		clk_div : OUT std_logic;
 		h_counter : OUT std_logic_vector(9 downto 0);
     v_counter : OUT std_logic_vector(9 downto 0)
 	);
@@ -14,30 +13,30 @@ END counter;
 
 
 ARCHITECTURE behavioural OF counter IS
-signal clk_div_internal : std_logic;
+-- signal clk_div_internal : std_logic;
 BEGIN
 
-	clock_divider : PROCESS (clk)
-	VARIABLE tmp : std_logic := '0';
-	BEGIN
-		IF (rising_edge(clk)) THEN
-			IF reset = '1' THEN
-				tmp := '0';
-			ELSE
-				tmp := NOT tmp;
-			END IF;
-		END IF;
-		clk_div_internal <= tmp;
-	END PROCESS;
+	-- clock_divider : PROCESS (clk)
+	-- VARIABLE tmp : std_logic := '0';
+	-- BEGIN
+	-- 	IF (rising_edge(clk)) THEN
+	-- 		IF reset = '1' THEN
+	-- 			tmp := '0';
+	-- 		ELSE
+	-- 			tmp := NOT tmp;
+	-- 		END IF;
+	-- 	END IF;
+	-- 	clk_div_internal <= tmp;
+	-- END PROCESS;
 
-	clk_div <= clk_div_internal;
+	-- clk_div <= clk_div_internal;
 
   -- Horizontal Counter
-	counter : PROCESS (clk_div_internal)
+	counter : PROCESS (clk_25mhz)
 	VARIABLE v_counter_int : INTEGER RANGE 0 TO 525;
 	VARIABLE h_counter_int  : INTEGER RANGE 0 TO 800;
 	BEGIN
-		IF (rising_edge(clk_div_internal)) THEN
+		IF (rising_edge(clk_25mhz)) THEN
 			IF reset = '1' THEN
         h_counter_int := 0;
 				v_counter_int := 0;

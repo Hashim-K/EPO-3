@@ -6,13 +6,12 @@ use ieee.numeric_std.all;
 
 ENTITY vga_driver IS
 	PORT (
+		clk_25mhz : IN std_logic;
 		reset : IN std_logic;
-		clk_div : IN std_logic;
 		h_counter : IN std_logic_vector(9 downto 0);
 		v_counter : IN std_logic_vector(9 downto 0);
 		vsy : OUT std_logic;
 		hsy : OUT std_logic;
-
 		tempsignal : OUT std_logic_vector(3 downto 0)
 	);
 END vga_driver;
@@ -29,9 +28,9 @@ BEGIN
 	h_counter_int <= to_integer(unsigned(h_counter));
 	v_counter_int <= to_integer(unsigned(v_counter));
 
-	statereg : PROCESS (clk_div)
+	statereg : PROCESS (clk_25mhz)
 		BEGIN
-			IF (rising_edge(clk_div)) THEN
+			IF (rising_edge(clk_25mhz)) THEN
 				IF reset = '1' THEN
 					 state <= RESET_STATE;
 					 vsy <= '1';

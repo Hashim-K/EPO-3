@@ -4,7 +4,7 @@ library ieee;
 
 entity simple_vga is
   port (
-  clk : IN std_logic;
+  clk_25mhz : IN std_logic;
   reset : IN std_logic;
   vsy : out std_logic;
   hsy: out std_logic;
@@ -16,8 +16,8 @@ end entity;
 architecture arch of simple_vga is
   component Vga_driver is
     PORT (
+  		clk_25mhz : IN std_logic;
   		reset : IN std_logic;
-  		clk_div : IN std_logic;
   		h_counter : IN std_logic_vector(9 downto 0);
   		v_counter : IN std_logic_vector(9 downto 0);
   		vsy : OUT std_logic;
@@ -27,15 +27,13 @@ architecture arch of simple_vga is
 
 component counter IS
   	PORT (
-  		clk : IN std_logic;
+  		clk_25mhz : IN std_logic;
   		reset : IN std_logic;
-  		clk_div : OUT std_logic;
   		h_counter : OUT std_logic_vector(9 downto 0);
       v_counter : OUT std_logic_vector(9 downto 0)
   	);
   END component;
 
-  signal clk_div : std_logic; -- make sure you initialise!
 
   signal h_counter, v_counter : std_logic_vector(9 downto 0);
 
@@ -43,8 +41,8 @@ component counter IS
 begin
   R <= '1';
 
-  L1 : Vga_driver port map (reset, clk_div, h_counter, v_counter, vsy, hsy);
-  L2 : counter port map (clk, reset, clk_div, h_counter, v_counter);
+  L1 : Vga_driver port map (reset, clk_25mhz, h_counter, v_counter, vsy, hsy);
+  L2 : counter port map (clk_25mhz, reset, h_counter, v_counter);
 
 
 end architecture;

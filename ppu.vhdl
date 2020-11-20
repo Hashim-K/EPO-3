@@ -38,7 +38,7 @@ entity ppu is
   G : OUT std_logic_vector(3 downto 0);
   B : OUT std_logic_vector(3 downto 0);
   vsy : OUT std_logic;
-  hsy : OUT std_logic
+  hsy : OUT std_logic;
 
   tempsignal : OUT std_logic_vector(3 downto 0)
   );
@@ -89,7 +89,6 @@ architecture structural of ppu is
 
   signal sram_data2 : std_logic_vector(11 downto 0);
 
-  signal tempsignal : std_logic_vector(3 downto 0);
 begin
 
   sram_data2 <= "111111111111";
