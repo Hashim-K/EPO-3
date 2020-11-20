@@ -28,18 +28,19 @@ for y in range(0, Size_Y):
 file1 = open("Raw_data.txt", "a")
 
 c = 0
-tempstring = ""
+tempstring = 0
 hex_arr = []
 
 for y in range(0, Size_Y):
     for x in range(0, Size_X):
 
         if c >= 8:
-            hex_arr.append(hex(int(tempstring.zfill(8))))
-            tempstring = ""
+            hex_arr.append(hex(tempstring))
+            tempstring = 0
             c = 0
 
-        tempstring = tempstring + str(img[x][y])
+        tempstring = tempstring + (2**c)*(img[x][y])
+        print(tempstring)
         c = c + 1
 
 print(hex_arr)

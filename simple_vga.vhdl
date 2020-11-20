@@ -1,10 +1,18 @@
-Library IEEE;
-use IEEE.std_logic_1164.all;
+library ieee;
+  use ieee.std_logic_1164.all;
+  use ieee.numeric_std.all;
 
-entity vga_driver_testbench is
-end vga_driver_testbench;
+entity simple_vga is
+  port (
+  clk : IN std_logic;
+  reset : IN std_logic;
+  vsy : out std_logic;
+  hsy: out std_logic;
+  R : out std_logic
+  );
+end entity;
 
-architecture behavioural of vga_driver_testbench is
+architecture arch of simple_vga is
   component Vga_driver is
     PORT (
   		reset : IN std_logic;
@@ -26,29 +34,16 @@ component counter IS
   	);
   END component;
 
-
-  signal R : std_logic := '0';
-  signal vsy : std_logic := '0';
-  signal hsy : std_logic := '0';
-  signal reset : std_logic := '0';
-
-  signal clk_div : std_logic := '0'; -- make sure you initialise!
+  signal clk_div : std_logic; -- make sure you initialise!
 
   signal h_counter, v_counter : std_logic_vector(9 downto 0);
-  signal clk : std_logic := '0';
+
 
 begin
-
-  clk <= not clk after 10 ns;
-
-  reset <= '1' after 0 ns,
-		   '0' after 40 ns;
-
+  R <= '1';
 
   L1 : Vga_driver port map (reset, clk_div, h_counter, v_counter, vsy, hsy);
   L2 : counter port map (clk, reset, clk_div, h_counter, v_counter);
 
 
-
-
-end behavioural;
+end architecture;

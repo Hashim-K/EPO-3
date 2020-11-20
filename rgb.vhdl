@@ -6,11 +6,12 @@ entity rgb is
   port (
   h_counter : in std_logic_vector(9 downto 0);
   v_counter : in std_logic_vector(9 downto 0);
-  video_data : in std_logic;
+  sram_data : in std_logic_vector(11 downto 0);
 
-  R : OUT std_logic;
-  G : OUT std_logic;
-  B : OUT std_logic;
+  R : OUT std_logic_vector(3 downto 0);
+  G : OUT std_logic_vector(3 downto 0);
+  B : OUT std_logic_vector(3 downto 0);
+
   address : OUT std_logic_vector(18 downto 0)
   );
 end entity;
@@ -18,12 +19,8 @@ end entity;
 architecture behavioural of rgb is
 begin
 
-G <= '0';
-B <= '0';
-
-
 -- 640 x 480
-create_addres : process(h_counter, v_counter)
+create_addres : process(h_counter, v_counter, sram_data)
   variable h_counter_int, v_counter_int, h_addres, v_addres, addres_int : integer;
 begin
 
@@ -46,16 +43,17 @@ begin
   address <= std_logic_vector(to_unsigned(addres_int, address'length));
 
   -- Video needs to be disabled during blank time
-  if ( (h_counter_int>= 640) or (v_counter_int>= 480))  then
-    R <= '0';
+  if  ((h_counter_int>= 640) or (v_counter_int>= 480))  then
+    R <= "0000";
+    G <= "0000";
+    B <= "0000";
   else
-    R <= '1';
+    R <= sram_data(3 downto 0);
+    G <= sram_data(7 downto 4);
+    B <= sram_data(11 downto 8);
   end if;
 
 end process;
-
-
-
 
 
 end architecture;

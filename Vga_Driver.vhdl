@@ -11,7 +11,9 @@ ENTITY vga_driver IS
 		h_counter : IN std_logic_vector(9 downto 0);
 		v_counter : IN std_logic_vector(9 downto 0);
 		vsy : OUT std_logic;
-		hsy : OUT std_logic
+		hsy : OUT std_logic;
+
+		tempsignal : OUT std_logic_vector(3 downto 0)
 	);
 END vga_driver;
 
@@ -50,6 +52,7 @@ BEGIN
 
 
 			WHEN RESET_STATE =>
+			  tempsignal <= "0000";
 				vsy_new <= '1';
 				hsy <= '1';
 
@@ -61,6 +64,7 @@ BEGIN
 
 
 			WHEN STATE3 =>
+			  tempsignal <= "0001";
 				vsy_new <= vsy_buf;
 				hsy <= '1';
 
@@ -72,6 +76,7 @@ BEGIN
 
 
 			WHEN STATE4 =>
+			  tempsignal <= "0010";
 				vsy_new <= vsy_buf;
 				hsy <= '0';
 
@@ -83,6 +88,7 @@ BEGIN
 
 
 			WHEN STATE5 =>
+			  tempsignal <= "0011";
 				vsy_new <= vsy_buf;
 				hsy <= '1';
 
@@ -94,10 +100,11 @@ BEGIN
 
 
 			WHEN STATE6 =>
+			  tempsignal <= "0100";
 				vsy_new <= vsy_buf;
 				hsy <= '1';
 
-				IF (v_counter_int >= 480) THEN
+				IF (v_counter_int >= 479) THEN
 					new_state <= STATE7;
 				ELSE
 					new_state <= RESET_STATE;
@@ -105,6 +112,7 @@ BEGIN
 
 
 			WHEN STATE7 =>
+			  tempsignal <= "0101";
 				vsy_new <= vsy_buf;
 				hsy <= '1';
 
@@ -120,6 +128,7 @@ BEGIN
 
 
 			WHEN STATE8 =>
+			  tempsignal <= "0110";
 				vsy_new <= '0';
 				hsy <= '1';
 
@@ -127,6 +136,7 @@ BEGIN
 
 
 			WHEN STATE9 =>
+			  tempsignal <= "0111";
 				vsy_new <= '1';
 				hsy <= '1';
 
