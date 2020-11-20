@@ -1,19 +1,7 @@
-library ieee;
-  use ieee.std_logic_1164.all;
-  use ieee.numeric_std.all;
+library IEEE;
+use IEEE.std_logic_1164.ALL;
 
-entity simple_vga is
-  port (
-  clk : IN std_logic;
-  reset : IN std_logic;
-  vsy : out std_logic;
-  hsy: out std_logic;
-  R : out std_logic;
-  tempsignal : OUT std_logic_vector(3 downto 0)
-  );
-end entity;
-
-architecture arch of simple_vga is
+architecture strucural of simple_vga is
   component Vga_driver is
     PORT (
   		reset : IN std_logic;

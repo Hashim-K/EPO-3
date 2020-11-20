@@ -1,0 +1,45 @@
+library ieee;
+  use ieee.std_logic_1164.all;
+  use ieee.numeric_std.all;
+
+entity ppu is
+  port (
+  clk : IN std_logic;
+  reset : IN std_logic;
+
+
+  -- Sram now contains image
+  sram_data : IN std_logic_vector(11 downto 0);
+  sram_addr : OUT std_logic_vector(17 downto 0);
+
+  sram_chip_enable : OUT std_logic;
+  sram_output_enable : OUT std_logic;
+
+-- Work in progress !!
+  -- -- Memory interfacing OAM (Object RAM)
+  -- mem_data : IN std_logic_vector(8 downto 0);
+  -- mem_addr : OUT std_logic_vector(15 downto 0);
+  --
+  -- -- Sprite rom
+  -- Rom_data : OUT std_logic_vector(8 downto 0);
+  -- rom_addr : OUT std_logic_vector(15 downto 0);
+  --
+  --
+  --
+  -- -- cpu interface
+  -- cpu_data_in : IN std_logic_vector(7 downto 0); -- Eight bit data bus
+  -- cpu_adderes_in : IN std_logic_vector(15 downto 0); -- cpu addres bus
+  -- cpu_read  : IN std_logic;
+  -- cpu_write : IN std_logic;
+
+
+  -- Output video 4 bit
+  R : OUT std_logic_vector(3 downto 0);
+  G : OUT std_logic_vector(3 downto 0);
+  B : OUT std_logic_vector(3 downto 0);
+  vsy : OUT std_logic;
+  hsy : OUT std_logic
+
+  tempsignal : OUT std_logic_vector(3 downto 0)
+  );
+end entity;
