@@ -2,7 +2,7 @@ library ieee;
   use ieee.std_logic_1164.all;
   use ieee.numeric_std.all;
 
-entity eight_bit_shift is
+entity eight_shift is
   port (
   a : IN std_logic_vector(7 downto 0);
   b : IN std_logic_vector(7 downto 0);
@@ -10,7 +10,7 @@ entity eight_bit_shift is
   );
 end entity;
 
-architecture arch of eight_bit_shift is
+architecture behaviour of eight_shift is
 begin
   o(0) <= a(1);
   o(1) <= a(2);

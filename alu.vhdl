@@ -17,7 +17,7 @@ end entity;
 
 architecture structural of alu is
 
-component eight_bit_adder is
+component eight_adder is
   port (
   a : IN std_logic_vector(7 downto 0);
   b : IN std_logic_vector(7 downto 0);
@@ -51,7 +51,7 @@ component eight_bit_and is
   );
 end component;
 
-component eight_bit_shift is
+component eight_shift is
   port (
   a : IN std_logic_vector(7 downto 0);
   b : IN std_logic_vector(7 downto 0);
@@ -65,52 +65,11 @@ end component;
 
 signal o_adder, o_or, o_xor, o_and, o_shift : std_logic_vector(7 downto 0);
 begin
-ADDER: eight_bit_adder port map(a, b, cin, o_adder, ACR);
+ADDER: eight_adder port map(a, b, cin, o_adder, ACR);
 ORR  : eight_bit_or port map(a, b, o_or);
 XORR : eight_bit_xor port map(a, b, o_xor);
 ANDD : eight_bit_and port map(a, b, o_and);
-SHIFT : eight_bit_shift port map(a, b, o_shift);
-
-
-
--- -- The logic only updates when the states update Its important to take away that processes does not work if you want to synthesis logic
--- ALU : process(a, b)
--- begin
---
---   case controll is
---
---   -- Addition
---   when "000" =>
---     o <= o_adder;
---
---   -- Or
---   when "001" =>
---   o <= o_or;
---
---
---   -- Xor
---   when "010" =>
---   o <= o_xor;
---
---
---   -- And
---   when "011" =>
---   o <= o_and;
---
---
---   -- Shift right
---   when "100" =>
---   o <= o_shift;
---
---   --   -- carry in
---   -- when "101" =>
---
---   when others =>
---     o <= "00000000";
---   end case;
---
---
--- end process;
+SHIFT : eight_shift port map(a, b, o_shift);
 
 
 with controll select o <=
@@ -125,10 +84,6 @@ with controll select o <=
 -- Shift right
   o_shift when "100",
   "00000000" when others;
-
-
-
-
 
 
 end architecture;

@@ -5,17 +5,18 @@ library ieee;
 entity alu_testbench is
 end entity;
 
-architecture arch of alu_testbench is
+architecture strucutral of alu_testbench is
   component alu is
     port (
     a :         IN std_logic_vector(7 downto 0);
     b :         IN std_logic_vector(7 downto 0);
-    cin :       IN std_logic;
+    cin :       IN std_logic;                     -- cary in
     controll :  IN std_logic_vector(2 downto 0);
+    DAA :       IN std_logic;                     -- decimal adjust adder.
     o :         OUT std_logic_vector(7 downto 0);
-    AVR :       OUT std_logic;
-    ACR :       OUT std_logic; -- cary out
-    HC  :       OUT std_logic
+    AVR :       OUT std_logic;                    -- overflow
+    ACR :       OUT std_logic;                    -- cary out
+    HC  :       OUT std_logic                     -- halfcary
     );
   end component;
 
