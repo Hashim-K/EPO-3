@@ -1,15 +1,29 @@
-library ieee;
-  use ieee.std_logic_1164.all;
-  use ieee.numeric_std.all;
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+USE ieee.numeric_std.ALL;
 
-entity a_input_register is
-  port (
-  clock :
+ENTITY a_input_register IS
+  PORT (
+    a : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+    o : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
+    0/add : IN STD_LOGIC; --Load all 0's
+    SB/add : IN STD_LOGIC; --Load data from bus
+    clk : IN STD_LOGIC
   );
-end entity;
+END ENTITY;
 
-architecture arch of a_input_register is
+COMPONENT register_8bit IS
+  PORT (
+    clk : IN STD_LOGIC;
+    load : IN STD_LOGIC;
+    reset : IN STD_LOGIC;
+    data_in : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+    wrt : IN STD_LOGIC;
+    reg_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0));
+END COMPONENT;
 
-begin
+ARCHITECTURE strucutural OF a_input_register IS
 
-end architecture;
+BEGIN
+
+END ARCHITECTURE;
