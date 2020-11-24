@@ -29,11 +29,11 @@ BEGIN
         '0' AFTER 30 ns;
     counter_a <= (counter_a + 1) AFTER 5 ns;
     o_add <= '0' AFTER 0 ns,
-    '1' AFTER 90 ns,
-    '0' AFTER 200 ns;
+        '1' AFTER 90 ns,
+        '0' AFTER 200 ns;
     SB_add <= '0' AFTER 0 ns,
-    '1' AFTER 150 ns,
-    '0' AFTER 400 ns;
+        '1' AFTER 150 ns,
+        '0' AFTER 400 ns;
 
     a <= STD_LOGIC_VECTOR(to_unsigned(counter_a, a'length));
     L1 : Ainputreg PORT MAP(a, o, o_add, SB_add, clk, reset);
