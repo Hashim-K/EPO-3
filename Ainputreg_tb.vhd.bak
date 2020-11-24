@@ -2,11 +2,11 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 
-ENTITY Ainputreg_tb IS
+ENTITY Ainputreg_testbench IS
 END ENTITY;
 
-ARCHITECTURE structural OF Ainputreg_tb IS
-    COMPONENT Ainputreg IS
+ARCHITECTURE structural OF Ainputreg_testbench IS
+    COMPONENT a_input_register IS
         PORT (
             a : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
             o : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
@@ -37,4 +37,4 @@ BEGIN
 
     a <= STD_LOGIC_VECTOR(to_unsigned(counter_a, a'length));
     L1 : Ainputreg PORT MAP(a, o, o_add, SB_add, clk, reset);
-END ARCHITECTURE;
+END structural;

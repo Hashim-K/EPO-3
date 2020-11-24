@@ -31,7 +31,6 @@ BEGIN
 
   control(0) <= o_add;
   control(1) <= SB_add;
-  data_in <= data_in;
 
   WITH control SELECT temp_data <=
     data_in WHEN "01",
