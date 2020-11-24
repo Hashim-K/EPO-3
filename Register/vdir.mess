@@ -1,0 +1,176 @@
+Library vendor : Model Technology
+Maximum unnamed designs : 3
+OPTIMIZED DESIGN _opt
+    Compile time: Thu Nov 19 11:36:00 2020
+    Version string: ?[`i158niD8dzk71i`8Wn2
+    Top-level model: work register_8bit_tb_behaviour_cfg 1
+    Compile options: -quiet -auto_acc_if_foreign -work work -L TSMCLib
+    Compile defaults: CvgOpt=0
+    Short name: @_opt
+    Opcode format: 10.5b; VCOM/VLOG SE-64 Object version 63
+    Source directory: /home/hsteman/Register
+ENTITY register_8bit
+    Source modified time: Thu Nov 19 09:23:38 2020
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Source directory: /home/hsteman/Register
+    HDL source file: VHDL/register_8bit.vhd
+    Source file: VHDL/register_8bit.vhd
+    Start location: VHDL/register_8bit.vhd:4
+    Version string: h[EK]k^I0^gGJ02=bm=^Y3
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Thu Nov 19 09:23:38 2020
+    Debug Symbol file exists
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+  ARCHITECTURE BODY synthesised
+    Source modified time: Thu Nov 19 11:42:52 2020
+    Depends on: E work register_8bit h[EK]k^I0^gGJ02=bm=^Y3
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    HDL source file: VHDL/register_8bit_SYN.vhd
+    Source file: VHDL/register_8bit_SYN.vhd
+    Start location: VHDL/register_8bit_SYN.vhd:7
+    Version string: 88_6IK8:d]o?=VVJ[Z3WR0
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Thu Nov 19 12:07:33 2020
+    Debug Symbol file exists
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+    Source directory: /home/hsteman/Register
+  ARCHITECTURE BODY behaviour
+    Source modified time: Thu Nov 19 11:32:47 2020
+    Depends on: E work register_8bit h[EK]k^I0^gGJ02=bm=^Y3
+    Depends on: P ieee numeric_std :ASDNFgHXf_ih3J@9F3Ze1
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    HDL source file: VHDL/register_8bit-behaviour.vhd
+    Source file: VHDL/register_8bit-behaviour.vhd
+    Start location: VHDL/register_8bit-behaviour.vhd:5
+    Version string: RADngD55WfIEFT@4YJzmL2
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Thu Nov 19 11:32:47 2020
+    Debug Symbol file exists
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+    Source directory: /home/hsteman/Register
+VHDL CONFIGURATION register_8bit_behaviour_cfg
+    Configuration applies to entity: register_8bit
+    Block configuration applies to architecture: behaviour
+    Depends on: P ieee numeric_std :ASDNFgHXf_ih3J@9F3Ze1
+    Depends on: A work register_8bit behaviour RADngD55WfIEFT@4YJzmL2
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Depends on: E work register_8bit h[EK]k^I0^gGJ02=bm=^Y3
+    Source modified time: Thu Nov 19 11:34:40 2020
+    Source directory: /home/hsteman/Register
+    HDL source file: VHDL/register_8bit_behaviour_cfg.vhd
+    Source file: VHDL/register_8bit_behaviour_cfg.vhd
+    Start location: VHDL/register_8bit_behaviour_cfg.vhd:1
+    Version string: NaY6WMKhPTCFbSU:N?;ab1
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Thu Nov 19 11:34:40 2020
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+VHDL CONFIGURATION register_8bit_synthesised_cfg
+    Configuration applies to entity: register_8bit
+    Block configuration applies to architecture: synthesised
+    Depends on: A work register_8bit synthesised 88_6IK8:d]o?=VVJ[Z3WR0
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Depends on: E work register_8bit h[EK]k^I0^gGJ02=bm=^Y3
+    Source modified time: Thu Nov 19 12:07:41 2020
+    Source directory: /home/hsteman/Register
+    HDL source file: VHDL/register_8bit_synthesised_cfg.vhd
+    Source file: VHDL/register_8bit_synthesised_cfg.vhd
+    Start location: VHDL/register_8bit_synthesised_cfg.vhd:1
+    Version string: @NBzcdKW6`:B_fUbG524?1
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Thu Nov 19 12:07:41 2020
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+ENTITY register_8bit_tb
+    Source modified time: Thu Nov 19 11:34:50 2020
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Source directory: /home/hsteman/Register
+    HDL source file: VHDL/register_8bit_tb.vhd
+    Source file: VHDL/register_8bit_tb.vhd
+    Start location: VHDL/register_8bit_tb.vhd:4
+    Version string: :MnABLB`bV6N?K]QSH79V2
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Thu Nov 19 11:34:50 2020
+    Debug Symbol file exists
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+  ARCHITECTURE BODY behaviour
+    Source modified time: Thu Nov 19 11:35:46 2020
+    Depends on: E work register_8bit_tb :MnABLB`bV6N?K]QSH79V2
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    HDL source file: VHDL/register_8bit_tb-behaviour.vhd
+    Source file: VHDL/register_8bit_tb-behaviour.vhd
+    Start location: VHDL/register_8bit_tb-behaviour.vhd:4
+    Version string: ogeM0<c0Y5RM<TIAmBe7k1
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Thu Nov 19 11:35:46 2020
+    Debug Symbol file exists
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+    Source directory: /home/hsteman/Register
+VHDL CONFIGURATION register_8bit_tb_behaviour_cfg
+    Configuration applies to entity: register_8bit_tb
+    Block configuration applies to architecture: behaviour
+    Depends on: E work register_8bit h[EK]k^I0^gGJ02=bm=^Y3
+    Depends on: C work register_8bit_behaviour_cfg NaY6WMKhPTCFbSU:N?;ab1
+    Depends on: A work register_8bit_tb behaviour ogeM0<c0Y5RM<TIAmBe7k1
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Depends on: E work register_8bit_tb :MnABLB`bV6N?K]QSH79V2
+    Source modified time: Thu Nov 19 11:35:50 2020
+    Source directory: /home/hsteman/Register
+    HDL source file: VHDL/register_8bit_tb_behaviour_cfg.vhd
+    Source file: VHDL/register_8bit_tb_behaviour_cfg.vhd
+    Start location: VHDL/register_8bit_tb_behaviour_cfg.vhd:1
+    Version string: 6SfL<z1[ONZ?Q^ocUF<E50
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Thu Nov 19 11:35:50 2020
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+VHDL CONFIGURATION register_8bit_tb_behaviour_syn_cfg
+    Configuration applies to entity: register_8bit_tb
+    Block configuration applies to architecture: behaviour
+    Depends on: E work register_8bit h[EK]k^I0^gGJ02=bm=^Y3
+    Depends on: C work register_8bit_synthesised_cfg @NBzcdKW6`:B_fUbG524?1
+    Depends on: A work register_8bit_tb behaviour ogeM0<c0Y5RM<TIAmBe7k1
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Depends on: E work register_8bit_tb :MnABLB`bV6N?K]QSH79V2
+    Source modified time: Tue Nov 24 14:24:44 2020
+    Source directory: /home/hsteman/Register
+    HDL source file: VHDL/register_8bit_tb_behaviour_syn_cfg2.vhd
+    Source file: VHDL/register_8bit_tb_behaviour_syn_cfg2.vhd
+    Start location: VHDL/register_8bit_tb_behaviour_syn_cfg2.vhd:1
+    Version string: =14eOU3[7N[g<d;I8Ie[83
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Tue Nov 24 14:24:44 2020
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
