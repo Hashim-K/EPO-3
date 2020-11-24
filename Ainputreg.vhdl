@@ -6,8 +6,8 @@ ENTITY a_input_register IS
   PORT (
     a : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
     o : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
-    o/add : IN STD_LOGIC; --Load all 0's
-    SB/add : IN STD_LOGIC; --Load data from bus
+    o_add : IN STD_LOGIC; --Load all 0's
+    SB_add : IN STD_LOGIC; --Load data from bus
     clk : IN STD_LOGIC;
     reset : IN STD_LOGIC
   );
@@ -29,8 +29,8 @@ ARCHITECTURE strucutural OF a_input_register IS
 BEGIN
   L1 : register_8bit PORT MAP(clk, '1', reset, temp_data, o);
 
-  control(0) <= o/add;
-  control(1) <= SB/add;
+  control(0) <= o_add;
+  control(1) <= SB_add;
 
   WITH control SELECT data_in <=
     data_in WHEN "01",
