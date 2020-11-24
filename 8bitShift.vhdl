@@ -1,17 +1,17 @@
-library ieee;
-  use ieee.std_logic_1164.all;
-  use ieee.numeric_std.all;
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+USE ieee.numeric_std.ALL;
 
-entity eight_shift is
-  port (
-  a : IN std_logic_vector(7 downto 0);
-  b : IN std_logic_vector(7 downto 0);
-  o : OUT std_logic_vector(7 downto 0)
+ENTITY eight_shift IS
+  PORT (
+    a : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+    b : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+    o : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)
   );
-end entity;
+END ENTITY;
 
-architecture behaviour of eight_shift is
-begin
+ARCHITECTURE behaviour OF eight_shift IS
+BEGIN
   o(0) <= a(1);
   o(1) <= a(2);
   o(2) <= a(3);
@@ -20,4 +20,4 @@ begin
   o(5) <= a(6);
   o(6) <= a(7);
   o(7) <= '0';
-end architecture;
+END ARCHITECTURE;

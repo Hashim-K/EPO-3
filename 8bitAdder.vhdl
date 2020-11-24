@@ -1,24 +1,22 @@
-library ieee;
-  use ieee.std_logic_1164.all;
-  use IEEE.NUMERIC_STD_UNSIGNED.ALL;
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+USE IEEE.NUMERIC_STD_UNSIGNED.ALL;
 
-entity eight_adder is
-  port (
-  a : IN std_logic_vector(7 downto 0);
-  b : IN std_logic_vector(7 downto 0);
-  cin : IN std_logic;
-  o : OUT std_logic_vector(7 downto 0);
-  carry : OUT std_logic
+ENTITY eight_adder IS
+  PORT (
+    a : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+    b : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+    cin : IN STD_LOGIC;
+    o : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
+    carry : OUT STD_LOGIC
   );
-end entity;
+END ENTITY;
 
-architecture behaviour of eight_adder is
-  signal result : std_logic_vector(8 downto 0);
-begin
+ARCHITECTURE behaviour OF eight_adder IS
+  SIGNAL result : STD_LOGIC_VECTOR(8 DOWNTO 0);
+BEGIN
 
-result <= ("0" & a) + ("0" & b) + cin;
-o <= result(7 downto 0);
-carry <= result(8);
-
-
-end architecture;
+  result <= ("0" & a) + ("0" & b) + cin;
+  o <= result(7 DOWNTO 0);
+  carry <= result(8);
+END ARCHITECTURE;

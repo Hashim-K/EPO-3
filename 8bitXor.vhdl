@@ -1,16 +1,16 @@
-library ieee;
-  use ieee.std_logic_1164.all;
-  use ieee.numeric_std.all;
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+USE ieee.numeric_std.ALL;
 
-entity eight_bit_xor is
-  port (
-  a : IN std_logic_vector(7 downto 0);
-  b : IN std_logic_vector(7 downto 0);
-  o : OUT std_logic_vector(7 downto 0)
+ENTITY eight_bit_xor IS
+  PORT (
+    a : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+    b : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+    o : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)
   );
-end entity;
+END ENTITY;
 
-architecture behavioural of eight_bit_xor is
-begin
-  o <= a xor b;
-end behavioural;
+ARCHITECTURE behavioural OF eight_bit_xor IS
+BEGIN
+  o <= a XOR b;
+END behavioural;

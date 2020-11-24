@@ -1,89 +1,85 @@
-library ieee;
-  use ieee.std_logic_1164.all;
-  use ieee.numeric_std.all;
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+USE ieee.numeric_std.ALL;
 
-entity alu is
-  port (
-  a :         IN std_logic_vector(7 downto 0);
-  b :         IN std_logic_vector(7 downto 0);
-  cin :       IN std_logic;
-  controll :  IN std_logic_vector(2 downto 0);
-  o :         OUT std_logic_vector(7 downto 0);
-  AVR :       OUT std_logic;
-  ACR :       OUT std_logic; -- cary out
-  HC  :       OUT std_logic
+ENTITY alu IS
+  PORT (
+    a : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+    b : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+    cin : IN STD_LOGIC;
+    controll : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+    o : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
+    AVR : OUT STD_LOGIC;
+    ACR : OUT STD_LOGIC; -- cary out
+    HC : OUT STD_LOGIC
   );
-end entity;
+END ENTITY;
 
-architecture structural of alu is
+ARCHITECTURE structural OF alu IS
 
-component eight_adder is
-  port (
-  a : IN std_logic_vector(7 downto 0);
-  b : IN std_logic_vector(7 downto 0);
-  cin : IN std_logic;
-  o : OUT std_logic_vector(7 downto 0);
-  carry : OUT std_logic
-  );
-end component;
+  COMPONENT eight_adder IS
+    PORT (
+      a : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+      b : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+      cin : IN STD_LOGIC;
+      o : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
+      carry : OUT STD_LOGIC
+    );
+  END COMPONENT;
 
-component eight_bit_or is
-  port (
-      a : IN std_logic_vector(7 downto 0);
-      b : IN std_logic_vector(7 downto 0);
-      o : OUT std_logic_vector(7 downto 0)
-  );
-end component;
+  COMPONENT eight_bit_or IS
+    PORT (
+      a : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+      b : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+      o : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)
+    );
+  END COMPONENT;
 
-component eight_bit_xor is
-  port (
-  a : IN std_logic_vector(7 downto 0);
-  b : IN std_logic_vector(7 downto 0);
-  o : OUT std_logic_vector(7 downto 0)
-  );
-end component;
+  COMPONENT eight_bit_xor IS
+    PORT (
+      a : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+      b : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+      o : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)
+    );
+  END COMPONENT;
 
-component eight_bit_and is
-  port (
-  a : IN std_logic_vector(7 downto 0);
-  b : IN std_logic_vector(7 downto 0);
-  o : OUT std_logic_vector(7 downto 0)
-  );
-end component;
+  COMPONENT eight_bit_and IS
+    PORT (
+      a : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+      b : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+      o : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)
+    );
+  END COMPONENT;
 
-component eight_shift is
-  port (
-  a : IN std_logic_vector(7 downto 0);
-  b : IN std_logic_vector(7 downto 0);
-  o : OUT std_logic_vector(7 downto 0)
-  );
-end component;
+  COMPONENT eight_shift IS
+    PORT (
+      a : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+      b : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+      o : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)
+    );
+  END COMPONENT;
 
--- Main operations
--- Additinos, Or, Xor, And, Shift right, Carry in
--- 0000 addition
+  -- Main operations
+  -- Additinos, Or, Xor, And, Shift right, Carry in
+  -- 0000 addition
 
-signal o_adder, o_or, o_xor, o_and, o_shift : std_logic_vector(7 downto 0);
-begin
-ADDER: eight_adder port map(a, b, cin, o_adder, ACR);
-ORR  : eight_bit_or port map(a, b, o_or);
-XORR : eight_bit_xor port map(a, b, o_xor);
-ANDD : eight_bit_and port map(a, b, o_and);
-SHIFT : eight_shift port map(a, b, o_shift);
-
-
-with controll select o <=
--- Addition
-  o_adder when "000",
--- Or
-  o_or when "001",
--- Xor
-  o_xor when "010",
--- And
-  o_and when "011",
--- Shift right
-  o_shift when "100",
-  "00000000" when others;
-
-
-end architecture;
+  SIGNAL o_adder, o_or, o_xor, o_and, o_shift : STD_LOGIC_VECTOR(7 DOWNTO 0);
+BEGIN
+  ADDER : eight_adder PORT MAP(a, b, cin, o_adder, ACR);
+  ORR : eight_bit_or PORT MAP(a, b, o_or);
+  XORR : eight_bit_xor PORT MAP(a, b, o_xor);
+  ANDD : eight_bit_and PORT MAP(a, b, o_and);
+  SHIFT : eight_shift PORT MAP(a, b, o_shift);
+  WITH controll SELECT o <=
+    -- Addition
+    o_adder WHEN "000",
+    -- Or
+    o_or WHEN "001",
+    -- Xor
+    o_xor WHEN "010",
+    -- And
+    o_and WHEN "011",
+    -- Shift right
+    o_shift WHEN "100",
+    "00000000" WHEN OTHERS;
+END ARCHITECTURE;
