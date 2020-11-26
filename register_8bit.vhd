@@ -1,5 +1,6 @@
 LIBRARY IEEE;
 USE IEEE.std_logic_1164.ALL;
+USE ieee.numeric_std.ALL;
 
 ENTITY register_8bit IS
 	PORT (
@@ -9,10 +10,6 @@ ENTITY register_8bit IS
 		data_in : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
 		reg_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0));
 END register_8bit;
-
-LIBRARY IEEE;
-USE IEEE.std_logic_1164.ALL;
-USE IEEE.numeric_std.ALL;
 
 ARCHITECTURE behaviour OF register_8bit IS
 
@@ -29,5 +26,5 @@ BEGIN
 			END IF;
 		END IF;
 	END PROCESS;
-	reg_out <= q;
+reg_out <= q;
 END behaviour;
