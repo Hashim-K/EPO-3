@@ -2,7 +2,7 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 
-ENTITY B_input_register IS
+ENTITY Binputreg IS
   PORT (
     clk : IN STD_LOGIC;
     reset : IN STD_LOGIC;
@@ -10,13 +10,13 @@ ENTITY B_input_register IS
     adress_bus : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
     out_to_alu : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
 
-    DB_INV : IN STD_LOGIC; -- use databus inverse
-    DB : IN STD_LOGIC; -- use databus
-    ADL : IN STD_LOGIC -- use addres line
+    db_inv : IN STD_LOGIC; -- use databus inverse
+    db : IN STD_LOGIC; -- use databus
+    adl : IN STD_LOGIC -- use addres line
   );
 END ENTITY;
 
-ARCHITECTURE arch OF B_input_register IS
+ARCHITECTURE arch OF Binputreg IS
 
   COMPONENT register_8bit IS
     PORT (
@@ -35,17 +35,17 @@ ARCHITECTURE arch OF B_input_register IS
 BEGIN
   l1 : register_8bit PORT MAP(clk, load, reset, data_in, reg_out);
 
-  controll(0) <= DB_INV;
-  controll(1) <= DB;
-  controll(2) <= ADL;
+  control(0) <= db_inv;
+  control(1) <= db;
+  control(2) <= adl;
 
   data_bus_inv <= NOT databus;
-  load <= '1';
+  out_to_alu <= reg_out;
 
-  WITH controll SELECT data_in <=
+  WITH control SELECT data_in <=
     data_bus_inv WHEN "001",
     databus WHEN "010",
-    ADL WHEN "100",
+    adress_bus WHEN "100",
     reg_out WHEN OTHERS;
 
 END ARCHITECTURE;

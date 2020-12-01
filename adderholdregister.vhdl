@@ -1,24 +1,24 @@
-library ieee;
-  use ieee.std_logic_1164.all;
-  use ieee.numeric_std.all;
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+USE ieee.numeric_std.ALL;
 
-entity adder_hold_register is
-  port (
-  clk : IN STD_LOGIC;
-  reset : IN STD_LOGIC;
+ENTITY adder_hold_register IS
+  PORT (
+    clk : IN STD_LOGIC;
+    reset : IN STD_LOGIC;
 
-  alu_data_in : IN std_logic_vector(7 downto 0); -- 8 bit input from alu
-  ADL : OUT std_logic_vector(7 downto 0); -- ADDERES LOW bus
-  SB : OUT std_logic_vector(7 downto 0);  -- SB bus
+    alu_data_in : IN STD_LOGIC_VECTOR(7 DOWNTO 0); -- 8 bit input from alu
+    adl : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); -- addres low bus
+    sb : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); -- system bus
 
-  load : IN std_logic; -- load the content of the alu into register two this is connected to the second phase clock!!
-  ADD/ADL : IN std_logic; -- put content to aderes low bus
-  ADD/SB6 : IN std_logic; -- put content to SB bus 0-6
-  ADD/SB7 : IN std_logic -- put content to sb bus 7
+    load : IN STD_LOGIC; -- load the content of the alu into register, this is connected to the second phase clock!
+    ADD/ADL : IN STD_LOGIC; -- put content to aderes low bus
+    ADD/SB6 : IN STD_LOGIC; -- put content to SB bus 0-6
+    ADD/SB7 : IN STD_LOGIC -- put content to sb bus 7
   );
-end entity;
+END ENTITY;
 
-architecture arch of adder_hold_register is
+ARCHITECTURE arch OF adder_hold_register IS
 
   -- Universual register
   COMPONENT register_8bit IS
@@ -29,31 +29,25 @@ architecture arch of adder_hold_register is
       data_in : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
       reg_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0));
   END COMPONENT;
+  SIGNAL reg_out : STD_LOGIC_VECTOR(7 DOWNTO 0);
 
-
-  signal reg_out : std_logic_vector(7 downto 0);
-
-  signal controll : std_logic_vector(1 downto 0);
-begin
+  SIGNAL controll : STD_LOGIC_VECTOR(1 DOWNTO 0);
+BEGIN
 
   controll(0) <= ADD/SB6;
   controll(1) <= ADD/SB7;
 
   -- Output to ADL
-  WITH ADD/ADL SELECT ADL <=
-    reg_out WHEN '1',
-    "zzzzzzzz" WHEN '0';
+  WITH ADD/ADL SELECT adl <=
+  reg_out WHEN '1',
+  "zzzzzzzz" WHEN '0';
 
   -- Output to SB
-  WITH controll SELECT SB <=
+  WITH controll SELECT sb <=
     reg_out WHEN "11",
-    "0" + reg_out(6 downto 0) WHEN "10",
+    "0" + reg_out(6 DOWNTO 0) WHEN "10",
     reg_out(7) + "0000000" WHEN "01",
     "zzzzzzzz" WHEN OTHERS;
-
-
   l1 : register_8bit PORT MAP(clk, load, reset, alu_data_in, reg_out);
 
-
-
-end architecture;
+END ARCHITECTURE;

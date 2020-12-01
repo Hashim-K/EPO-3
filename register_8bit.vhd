@@ -18,7 +18,7 @@ ARCHITECTURE behaviour OF register_8bit IS
 BEGIN
 	PROCESS (clk, reset, load) --process to determine output register
 	BEGIN
-		IF (rising_edge(clk) AND load = '1') THEN --both need to be high to load value from bus
+		IF (rising_edge(clk)) THEN --both need to be high to load value from bus
 			IF (reset = '1') THEN
 				q <= "00000000"; --clears the value in q
 			ELSIF (reset = '0') THEN
