@@ -6,7 +6,7 @@ ENTITY alu IS
   PORT (
     a : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
     b : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
-    control : IN STD_LOGIC_VECTOR(9 DOWNTO 0);
+    control : IN STD_LOGIC_VECTOR(9 DOWNTO 0);  -- This is not efficent for number of wires maybe multiplex and demultiplax
     --bit(0) = daa
     --bit(1) = i/addc
     --bit(2) = sums
