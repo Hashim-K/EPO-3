@@ -1,90 +1,73 @@
-LIBRARY ieee;
-USE ieee.std_logic_1164.ALL;
-USE ieee.numeric_std.ALL;
+library ieee;
+  use ieee.std_logic_1164.all;
+  use ieee.numeric_std.all;
 
-ENTITY alu IS
-  PORT (
-    a : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
-    b : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
-    control : IN STD_LOGIC_VECTOR(9 DOWNTO 0);  -- This is not efficent for number of wires maybe multiplex and demultiplax
-    --bit(0) = daa
-    --bit(1) = i/addc
-    --bit(2) = sums
-    --bit(3) = ands
-    --bit(4) = exors
-    --bit(5) = ors
-    --bit(6) = srs (lsr)
-    --bit(7) = sls (asl)
-    --bit(8) = pass1 (rega)
-    --bit(9) = pass2 (regb)
-    o : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); --output signal
-    avr : OUT STD_LOGIC;
-    acr : OUT STD_LOGIC; -- cary out
-    hc : OUT STD_LOGIC
+entity alu is
+  port (
+  clock
   );
-END ENTITY;
+end entity;
 
-ARCHITECTURE structural OF alu IS
+architecture arch of alu is
 
-  COMPONENT eight_adder IS
+  component alu_logic IS
     PORT (
       a : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
       b : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
-      cin : IN STD_LOGIC;
-      o : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
-      carry : OUT STD_LOGIC
+      control : IN STD_LOGIC_VECTOR(9 DOWNTO 0);  -- This is not efficent for number of wires maybe multiplex and demultiplax
+      --bit(0) = daa
+      --bit(1) = i/addc
+      --bit(2) = sums
+      --bit(3) = ands
+      --bit(4) = exors
+      --bit(5) = ors
+      --bit(6) = srs (lsr)
+      --bit(7) = sls (asl)
+      --bit(8) = pass1 (rega)
+      --bit(9) = pass2 (regb)
+      o : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); --output signal
+      avr : OUT STD_LOGIC;
+      acr : OUT STD_LOGIC; -- cary out
+      hc : OUT STD_LOGIC
     );
-  END COMPONENT;
+  END component;
 
-  COMPONENT eight_bit_or IS
+
+  component Ainputreg IS
     PORT (
-      a : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
-      b : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
-      o : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)
+      clk : IN STD_LOGIC;
+      reset : IN STD_LOGIC;
+      in_sb : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+      out_alu : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
+      o_add : IN STD_LOGIC; --Load all 0's
+      sb_add : IN STD_LOGIC --Load data from bus
     );
-  END COMPONENT;
+  END component;
 
-  COMPONENT eight_bit_xor IS
+  component Binputreg IS
     PORT (
-      a : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
-      b : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
-      o : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)
-    );
-  END COMPONENT;
+      clk : IN STD_LOGIC;
+      reset : IN STD_LOGIC;
+      databus : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+      adress_bus : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+      out_to_alu : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
 
-  COMPONENT eight_bit_and IS
-    PORT (
-      a : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
-      b : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
-      o : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)
+      db_inv : IN STD_LOGIC; -- use databus inverse
+      db : IN STD_LOGIC; -- use databus
+      adl : IN STD_LOGIC -- use addres line
     );
-  END COMPONENT;
+  END component;
 
-  COMPONENT eight_shift IS
-    PORT (
-      a : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
-      b : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
-      o : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)
-    );
-  END COMPONENT;
+begin
 
-  SIGNAL o_adder, o_or, o_xor, o_and, o_shift : STD_LOGIC_VECTOR(7 DOWNTO 0);
-BEGIN
-  ADDER : eight_adder PORT MAP(a, b, cin, o_adder, ACR);
-  ORR : eight_bit_or PORT MAP(a, b, o_or);
-  XORR : eight_bit_xor PORT MAP(a, b, o_xor);
-  ANDD : eight_bit_and PORT MAP(a, b, o_and);
-  SHIFT : eight_shift PORT MAP(a, b, o_shift);
-  WITH control SELECT o <=
-    -- Addition
-    o_adder WHEN "0000000100",
-    --And
-    o_and WHEN "0000001000",
-    -- Xor
-    o_xor WHEN "0000010000",
-    -- Or
-    o_or WHEN "0000100000",
-    -- Shift right
-    o_shift WHEN "0001000000",
-    "00000000" WHEN OTHERS;
-END ARCHITECTURE;
+  l1 : Ainputreg port map(a, b, control, o, avr, acr, hc);
+  l2 : Binputreg port map(clk, reset);
+  l3 : alu_logic port map();
+
+
+
+
+
+
+
+end architecture;
