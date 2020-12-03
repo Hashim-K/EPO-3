@@ -33,19 +33,19 @@ ARCHITECTURE arch OF adder_hold_register IS
   SIGNAL reg_out : STD_LOGIC_VECTOR(7 DOWNTO 0);
   SIGNAL control : STD_LOGIC_VECTOR(1 DOWNTO 0);
 BEGIN
-  control(0) <= ADD/SB6;
-  control(1) <= ADD/SB7;
+  control(0) <= add_sb6;
+  control(1) <= add_sb7;
 
   -- Output to ADL
   WITH add_adl SELECT adl <=
-  reg_out WHEN '1',
-  "ZZZZZZZZ" WHEN '0';
+    reg_out WHEN '1',
+    "ZZZZZZZZ" WHEN OTHERS;
 
   -- Output to SB
   WITH control SELECT sb <=
     reg_out WHEN "11",
-    '0' + reg_out(6 DOWNTO 0) WHEN "10",
-    reg_out(7) + "0000000" WHEN "01",
+    '0' & reg_out(6 DOWNTO 0) WHEN "10",
+    reg_out(7) & "0000000" WHEN "01",
     "ZZZZZZZZ" WHEN OTHERS;
   l1 : register_8bit PORT MAP(clk, load, reset, alu_data_in, reg_out);
 
