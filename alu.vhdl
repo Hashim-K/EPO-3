@@ -7,9 +7,10 @@ entity alu is
   clk : in std_logic;
   reset : in std_logic;
   abh  : out std_logic_vector(7 downto 0); -- addres bus high
-  abl : out std_logic_vector(7 downto 0); -- addres bus low
-  db_in : in std_logic_vector(7 downto 0); -- data bus in
-  db_out : out std_logic_vector(7 downto 0); -- data bus out
+  adl_in : in std_logic_vector(7 downto 0); -- addres bus low
+  adl_out : out std_logic_vector(7 downto 0); -- addres bus low
+  sb_in : in std_logic_vector(7 downto 0); -- data bus in
+  sb_out : out std_logic_vector(7 downto 0); -- data bus out
 
 
   -- control signals
@@ -26,9 +27,9 @@ entity alu is
 
     -- adder hold register
     clk_2 : in std_logic;
-    add_sb : in std_logic;
-    add_sb : in std_logic;
-    add adl : in std_logic;
+    add_adl : in std_logic;
+    add_sb6 : in std_logic;
+    add_sb7 : in std_logic;
 
     -- A input register
     o_add : IN std_logic;
@@ -37,12 +38,8 @@ entity alu is
     -- B input register
     inv_db_add : IN std_logic;
     db_add : IN std_logic;
-    adl_add : IN std_logic;
-
-
-
-  i_addc : in std_logic;
-
+    adl_add : IN std_logic
+);
 end entity;
 
 architecture structural of alu is
@@ -65,7 +62,8 @@ architecture structural of alu is
       o : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); --output signal
       avr : OUT STD_LOGIC;
       acr : OUT STD_LOGIC; -- cary out
-      hc : OUT STD_LOGIC
+      hc : OUT STD_LOGIC;
+      i_addc : in std_logic
     );
   END component;
 
@@ -85,10 +83,9 @@ architecture structural of alu is
     PORT (
       clk : IN STD_LOGIC;
       reset : IN STD_LOGIC;
-      db : IN STD_LOGIC_VECTOR(7 DOWNTO 0); -- data bus
-      abl : IN STD_LOGIC_VECTOR(7 DOWNTO 0); -- addres bus low
+      sb : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+      adl : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
       out_to_alu : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
-
       inv_db_add : IN STD_LOGIC; -- use databus inverse
       db_add : IN STD_LOGIC; -- use databus
       adl_add : IN STD_LOGIC -- use addres line
@@ -96,7 +93,7 @@ architecture structural of alu is
   END component;
 
 
-  ENTITY adder_hold_register IS
+  component adder_hold_register IS
     PORT (
       clk : IN STD_LOGIC;
       reset : IN STD_LOGIC;
@@ -105,12 +102,12 @@ architecture structural of alu is
       adl : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); -- addres low bus
       sb : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); -- system bus
 
-      load : IN STD_LOGIC; -- load the content of the alu into register, this is connected to the second phase clock!
+      clk_2 : IN STD_LOGIC; -- load the content of the alu into register, this is connected to the second phase clock!
       add_adl : IN STD_LOGIC; -- put content to aderes low bus
       add_sb6 : IN STD_LOGIC; -- put content to SB bus 0-6
       add_sb7 : IN STD_LOGIC -- put content to sb bus 7
     );
-  END ENTITY;
+  END component;
 
 -- intermidate data signals
 signal output_alu : std_logic_vector(7 downto 0);
@@ -118,21 +115,16 @@ signal a, b : std_logic_vector(7 downto 0);
 
 begin
    -- alu part
-  l1 : alu_logic port map(a, b, control, output_alu, avr, acr, hc); -- portmap done
+  l1 : alu_logic port map(a, b, control, output_alu, avr, acr, hc, i_addc); -- portmap done
 
   -- B input register
-  l2 : Binputreg port map(clk, reset, db_in, abl, a, inv_db_add, db_add, adl_add);
+  l2 : B_input_register port map(clk, reset, sb_in, adl_in, a, inv_db_add, db_add, adl_add);
 
   -- a input register
-  l3 : Ainputreg port map(clk, reset, db, adress_bus, out_to_alu, db_inv, db, adl);
+  l3 : A_input_register port map(clk, reset, sb_in, a, o_add, sb_add);
 
   -- adder hold register
-  l4 : adder_hold_register port map(clk, reset, output_alu, adl, sb, load, add_adl, add_sb6, add_sb7);
-
-
-
-
-
+  l4 : adder_hold_register port map(clk, reset, output_alu, adl_out, sb_out, clk_2, add_adl, add_sb6, add_sb7);
 
 
 

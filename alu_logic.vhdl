@@ -20,7 +20,8 @@ ENTITY alu_logic IS
     o : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); --output signal
     avr : OUT STD_LOGIC;
     acr : OUT STD_LOGIC; -- cary out
-    hc : OUT STD_LOGIC
+    hc : OUT STD_LOGIC;
+    i_addc : in std_logic
   );
 END ENTITY;
 
@@ -70,11 +71,11 @@ ARCHITECTURE structural OF alu_logic IS
 
   SIGNAL o_adder, o_or, o_xor, o_and, o_shift : STD_LOGIC_VECTOR(7 DOWNTO 0);
 BEGIN
-  ADDER : eight__bit_adder PORT MAP(a, b, cin, o_adder, ACR);
+  ADDER : eight_bit_adder PORT MAP(a, b, i_addc, o_adder, ACR);
   ORR : eight_bit_or PORT MAP(a, b, o_or);
   XORR : eight_bit_xor PORT MAP(a, b, o_xor);
   ANDD : eight_bit_and PORT MAP(a, b, o_and);
-  SHIFT : eight__bit_shift PORT MAP(a, b, o_shift);
+  SHIFT : eight_bit_shift PORT MAP(a, b, o_shift);
   WITH control SELECT o <=
     -- Addition
     o_adder WHEN "0000000100",

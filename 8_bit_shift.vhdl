@@ -2,7 +2,7 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 
-ENTITY eight__bit_shift IS
+ENTITY eight_bit_shift IS
   PORT (
     a : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
     b : IN STD_LOGIC_VECTOR(7 DOWNTO 0);

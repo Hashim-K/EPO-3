@@ -38,12 +38,12 @@ BEGIN
   control(1) <= db_add;
   control(2) <= adl_add;
 
-  data_bus_inv <= NOT databus;
+  data_bus_inv <= NOT sb;
   out_to_alu <= reg_out;
 
   WITH control SELECT data_in <=
     data_bus_inv WHEN "001",
-    databus WHEN "010",
+    sb WHEN "010",
     adl WHEN "100",
     reg_out WHEN OTHERS;
 

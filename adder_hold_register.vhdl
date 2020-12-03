@@ -11,7 +11,7 @@ ENTITY adder_hold_register IS
     adl : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); -- addres low bus
     sb : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); -- system bus
 
-    load : IN STD_LOGIC; -- load the content of the alu into register, this is connected to the second phase clock!
+    clk_2 : IN STD_LOGIC; -- load the content of the alu into register, this is connected to the second phase clock!
     add_adl : IN STD_LOGIC; -- put content to aderes low bus
     add_sb6 : IN STD_LOGIC; -- put content to SB bus 0-6
     add_sb7 : IN STD_LOGIC -- put content to sb bus 7
@@ -47,6 +47,6 @@ BEGIN
     '0' & reg_out(6 DOWNTO 0) WHEN "10",
     reg_out(7) & "0000000" WHEN "01",
     "ZZZZZZZZ" WHEN OTHERS;
-  l1 : register_8bit PORT MAP(clk, load, reset, alu_data_in, reg_out);
+  l1 : register_8bit PORT MAP(clk, clk_2, reset, alu_data_in, reg_out);
 
 END ARCHITECTURE;
