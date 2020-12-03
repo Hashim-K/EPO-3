@@ -39,14 +39,14 @@ BEGIN
   -- Output to ADL
   WITH add_adl SELECT adl <=
   reg_out WHEN '1',
-  "zzzzzzzz" WHEN '0';
+  "ZZZZZZZZ" WHEN '0';
 
   -- Output to SB
   WITH control SELECT sb <=
     reg_out WHEN "11",
     '0' + reg_out(6 DOWNTO 0) WHEN "10",
     reg_out(7) + "0000000" WHEN "01",
-    "zzzzzzzz" WHEN OTHERS;
+    "ZZZZZZZZ" WHEN OTHERS;
   l1 : register_8bit PORT MAP(clk, load, reset, alu_data_in, reg_out);
 
 END ARCHITECTURE;
