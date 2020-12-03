@@ -2,17 +2,17 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 
-ENTITY Ainputreg IS
+ENTITY A_input_register IS
   PORT (
     clk : IN STD_LOGIC;
     reset : IN STD_LOGIC;
-    in_SB : IN STD_LOGIC_VECTOR(7 DOWNTO 0);S
+    in_sb : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
     out_alu : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
     o_add : IN STD_LOGIC; --Load all 0's
-    SB_add : IN STD_LOGIC --Load data from bus
+    sb_add : IN STD_LOGIC --Load data from bus
   );
 END ENTITY;
-ARCHITECTURE strucutural OF Ainputreg IS
+ARCHITECTURE strucutural OF A_input_register IS
 
   COMPONENT register_8bit IS
     PORT (
@@ -23,15 +23,15 @@ ARCHITECTURE strucutural OF Ainputreg IS
       reg_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0));
   END COMPONENT;
 
-  SIGNAL temp_data, bus_data, reg_out: STD_LOGIC_VECTOR(7 DOWNTO 0);
+  SIGNAL temp_data, bus_data, reg_out : STD_LOGIC_VECTOR(7 DOWNTO 0);
   SIGNAL control : STD_LOGIC_VECTOR(1 DOWNTO 0);
   SIGNAL temp_control : STD_LOGIC;
 BEGIN
-  L1 : register_8bit PORT MAP(clk => clk, load => temp_control, reset => reset, data_in  => temp_data, reg_out => reg_out);
+  L1 : register_8bit PORT MAP(clk => clk, load => temp_control, reset => reset, data_in => temp_data, reg_out => reg_out);
 
   control(1) <= o_add;
-  control(0) <= SB_add;
-  bus_data <= in_SB;
+  control(0) <= sb_add;
+  bus_data <= in_sb;
   out_alu <= reg_out;
 
   WITH control SELECT temp_data <=

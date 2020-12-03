@@ -26,7 +26,7 @@ END ENTITY;
 
 ARCHITECTURE structural OF alu_logic IS
 
-  COMPONENT eight_bit_adder IS
+  COMPONENT eight_adder IS
     PORT (
       a : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
       b : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
@@ -60,7 +60,7 @@ ARCHITECTURE structural OF alu_logic IS
     );
   END COMPONENT;
 
-  COMPONENT eight_bit_shift IS
+  COMPONENT eight_shift IS
     PORT (
       a : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
       b : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
@@ -70,11 +70,11 @@ ARCHITECTURE structural OF alu_logic IS
 
   SIGNAL o_adder, o_or, o_xor, o_and, o_shift : STD_LOGIC_VECTOR(7 DOWNTO 0);
 BEGIN
-  ADDER : eight__bit_adder PORT MAP(a, b, cin, o_adder, ACR);
+  ADDER : eight_adder PORT MAP(a, b, cin, o_adder, ACR);
   ORR : eight_bit_or PORT MAP(a, b, o_or);
   XORR : eight_bit_xor PORT MAP(a, b, o_xor);
   ANDD : eight_bit_and PORT MAP(a, b, o_and);
-  SHIFT : eight__bit_shift PORT MAP(a, b, o_shift);
+  SHIFT : eight_shift PORT MAP(a, b, o_shift);
   WITH control SELECT o <=
     -- Addition
     o_adder WHEN "0000000100",

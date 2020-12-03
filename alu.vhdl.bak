@@ -12,7 +12,7 @@ entity alu is
   db_out : out std_logic_vector(7 downto 0); -- data bus out
 end entity;
 
-architecture structural of alu is
+architecture arch of alu is
 
   component alu_logic IS
     PORT (
@@ -37,7 +37,7 @@ architecture structural of alu is
   END component;
 
 
-  component A_input_register IS
+  component Ainputreg IS
     PORT (
       clk : IN STD_LOGIC;
       reset : IN STD_LOGIC;
@@ -48,7 +48,7 @@ architecture structural of alu is
     );
   END component;
 
-  component B_input_register IS
+  component Binputreg IS
     PORT (
       clk : IN STD_LOGIC;
       reset : IN STD_LOGIC;
@@ -81,8 +81,8 @@ architecture structural of alu is
 
 begin
   l1 : alu_logic port map(a, b, control, o, avr, acr, hc);
-  l2 : A_input_register port map(clk, reset, databus, );
-  l3 : B_input_register port map(clk, reset);
+  l2 : Ainputreg port map(clk, reset, databus, );
+  l3 : Binputreg port map(clk, reset);
   l4 : adder_hold_register port map(clk, reset);
 
 
