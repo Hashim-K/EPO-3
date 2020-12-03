@@ -2,7 +2,7 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE IEEE.NUMERIC_STD_UNSIGNED.ALL;
 
-ENTITY eight_adder IS
+ENTITY eight_bit_adder IS
   PORT (
     a : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
     b : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
@@ -13,7 +13,7 @@ ENTITY eight_adder IS
   );
 END ENTITY;
 
-ARCHITECTURE behaviour OF eight_adder IS
+ARCHITECTURE behaviour OF eight_bit_adder IS
   SIGNAL result : STD_LOGIC_VECTOR(8 DOWNTO 0);
 BEGIN
   result <= ("0" & a) + ("0" & b) + cin;

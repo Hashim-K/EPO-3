@@ -1,3 +1,4 @@
+-- Verified working!! Tom
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
@@ -19,7 +20,6 @@ ARCHITECTURE structural OF A_input_register_tb IS
 
     SIGNAL a, o : STD_LOGIC_VECTOR(7 DOWNTO 0);
     SIGNAL o_add, sb_add, reset, clk : STD_LOGIC;
-    SIGNAL counter_a : INTEGER := 0;
 
 BEGIN
     clk <= '0' AFTER 0 ns,

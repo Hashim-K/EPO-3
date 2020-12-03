@@ -116,16 +116,48 @@ signal a, b : std_logic_vector(7 downto 0);
 
 begin
    -- alu part
-  l1 : alu_logic port map(a, b, control, output_alu, avr, acr, hc, i_addc); -- portmap done
+  alu_logicmap : alu_logic port map(
+                          a,
+                          b,
+                          control,
+                          output_alu,
+                          avr,
+                          acr,
+                          hc,
+                          i_addc
+                          ); -- portmap done
 
   -- B input register
-  l2 : B_input_register port map(clk, reset, sb_in, adl_in, a, inv_db_add, db_add, adl_add);
+  B_REGISTER: B_input_register port map(
+                                 clk,
+                                 reset,
+                                 sb_in,
+                                 adl_in,
+                                 b,
+                                 inv_db_add,
+                                 db_add,
+                                 adl_add);
 
   -- a input register
-  l3 : A_input_register port map(clk, reset, sb_in, a, o_add, sb_add);
+  A_REGSISTER : A_input_register port map(
+                                 clk,
+                                 reset,
+                                 sb_in,
+                                 a,
+                                 o_add,
+                                 sb_add);
 
   -- adder hold register
-  l4 : adder_hold_register port map(clk, reset, output_alu, adl_out, sb_out, clk_2, add_adl, add_sb6, add_sb7);
+  HOLD_REGISTER : adder_hold_register port map(
+                                    clk,
+                                    reset,
+                                    output_alu,
+                                    adl_out,
+                                    sb_out,
+                                    clk_2,
+                                    add_adl,
+                                    add_sb6,
+                                    add_sb7);
 
 
 

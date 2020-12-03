@@ -73,7 +73,7 @@ end component;
 
   -- Clock signals and reset
   signal clk_25mhz : std_logic;
-  signal reset, clk, clk_2 : std_logic;
+  signal special_clk_reset, reset, clk, clk_2 : std_logic;
 
 
   -- connected busses
@@ -90,16 +90,18 @@ end component;
 BEGIN
 
   -- Clock stuff
-  L2 : clock PORT MAP(clk_25mhz, reset, clk, clk_2);
+  CLKmap : clock PORT MAP(clk_25mhz, special_clk_reset, clk, clk_2);
   clk_25mhz <= '0' AFTER 0 ns,
     '1' AFTER 20 ns WHEN clk_25mhz /= '1' ELSE
     '0' AFTER 20 ns;
 
 
-  -- reset
+  -- reset (Reset needs to be very long becaus of two phase clock)
   reset <= '1' after 0 ns,
-           '0' after 30 ns;
+           '0' after 100 ns;
 
+  special_clk_reset <= '1' after 0 ns,
+                       '0' after 30 ns;
 
 -- Bus inputs
 
@@ -110,7 +112,9 @@ BEGIN
 
 
 -- Controll signals from decoder
-  control <= "1000000000";
+  control <= "0000010000";
+
+
   daa         <= '0'; -- decimal mode
   i_addc      <= '0'; -- cary in
   srs         <= '0'; -- ?

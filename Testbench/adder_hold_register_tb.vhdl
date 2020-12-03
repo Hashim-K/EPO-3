@@ -1,3 +1,4 @@
+-- Verified working!! Tom
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
@@ -15,7 +16,7 @@ ARCHITECTURE structural OF adder_hold_register_tb IS
             adl : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); -- addres low bus
             sb : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); -- system bus
 
-            load : IN STD_LOGIC; -- load the content of the alu into register, this is connected to the second phase clock!
+            clk_2 : IN STD_LOGIC; -- clk_2 the content of the alu into register, this is connected to the second phase clock!
             add_adl : IN STD_LOGIC; -- put content to aderes low bus
             add_sb6 : IN STD_LOGIC; -- put content to SB bus 0-6
             add_sb7 : IN STD_LOGIC -- put content to sb bus 7
@@ -24,7 +25,7 @@ ARCHITECTURE structural OF adder_hold_register_tb IS
 
     SIGNAL clk, reset : STD_LOGIC;
     SIGNAL alu_data_in, adl, sb : STD_LOGIC_VECTOR(7 DOWNTO 0);
-    SIGNAL load, add_adl, add_sb6, add_sb7 : STD_LOGIC;
+    SIGNAL clk_2, add_adl, add_sb6, add_sb7 : STD_LOGIC;
 
 BEGIN
     clk <= '0' AFTER 0 ns,
@@ -33,7 +34,7 @@ BEGIN
     reset <= '1' AFTER 0 ns,
         '0' AFTER 30 ns;
     alu_data_in <= "11111111" AFTER 0 ns;
-    load <= '0' AFTER 0 ns,
+    clk_2 <= '0' AFTER 0 ns,
         '1' AFTER 50 ns;
     add_adl <= '0' AFTER 0 ns,
         '1' AFTER 100 ns,
@@ -45,5 +46,5 @@ BEGIN
         '1' AFTER 250 ns,
         '0' AFTER 400 ns;
 
-    L1 : adder_hold_register PORT MAP(clk, reset, alu_data_in, adl, sb, load, add_adl, add_sb6, add_sb7);
+    L1 : adder_hold_register PORT MAP(clk, reset, alu_data_in, adl, sb, clk_2, add_adl, add_sb6, add_sb7);
 END ARCHITECTURE;

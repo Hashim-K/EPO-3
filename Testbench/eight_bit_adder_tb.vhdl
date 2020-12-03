@@ -25,7 +25,9 @@ BEGIN
 	 "11111110" after 20 ns;
     b <= "11010011" AFTER 0 ns,
 	 "00000110" after 20 ns;
-    cin <= '1' AFTER 0 ns;
+
+    cin <= '1' AFTER 0 ns,
+           '0' after 40 ns;
 
     L1 : eight_bit_adder PORT MAP(a, b, cin, o, carry);
 END ARCHITECTURE;

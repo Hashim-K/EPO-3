@@ -78,15 +78,26 @@ BEGIN
   ANDD : eight_bit_and PORT MAP(a, b, o_and);
   SHIFT : eight_bit_shift PORT MAP(a, b, o_shift);
   WITH control SELECT o <=
+
+    -- TODO: Implement every feature
+
     -- Addition
-    o_adder WHEN  "1000000000",
-    --And
-    o_and WHEN    "0100000000",
-    -- Xor
-    o_xor WHEN    "0000100000",
-    -- Or
-    o_or WHEN     "0000010000",
-    -- Shift right
-    o_shift WHEN "0001000000",
+    o_adder WHEN  "0000000100",
+    -- Addition with carry
+    --  Substract with borrow
+    --  Arithmetic shift left
+    --  Logical shift right
+    --  Bitwise AND
+    o_and WHEN  "0000001000",
+    --  Bitwise OR
+    o_or WHEN  "0000100000",
+    --  Bitwise XOR
+    o_xor WHEN  "0000010000",
+    --  Rotate left
+    --  Rotate right
+    --  Pass value from input register
+    --  Pass value from input register
+
+
     "00000000" WHEN OTHERS;
 END ARCHITECTURE;

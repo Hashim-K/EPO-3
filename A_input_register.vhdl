@@ -1,3 +1,4 @@
+-- Verified working!! Tom
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
@@ -6,8 +7,8 @@ ENTITY A_input_register IS
   PORT (
     clk : IN STD_LOGIC;
     reset : IN STD_LOGIC;
-    in_sb : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
-    out_alu : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
+    in_sb : IN STD_LOGIC_VECTOR(7 DOWNTO 0); -- databus in
+    out_alu : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); -- output to alu
     o_add : IN STD_LOGIC; --Load all 0's
     sb_add : IN STD_LOGIC --Load data from bus
   );
