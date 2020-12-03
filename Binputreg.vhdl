@@ -9,7 +9,6 @@ ENTITY Binputreg IS
     databus : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
     adress_bus : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
     out_to_alu : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
-
     db_inv : IN STD_LOGIC; -- use databus inverse
     db : IN STD_LOGIC; -- use databus
     adl : IN STD_LOGIC -- use addres line

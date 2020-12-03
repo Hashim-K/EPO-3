@@ -4,8 +4,12 @@ library ieee;
 
 entity alu is
   port (
-  clock
-  );
+  clk : in std_logic;
+  reset : in std_logic;
+  abh  : out std_logic_vector(7 downto 0); -- addres bus high
+  abl : out std_logic_vector(7 downto 0); -- addres bus low
+  db_in : in std_logic_vector(7 downto 0); -- data bus in
+  db_out : out std_logic_vector(7 downto 0); -- data bus out
 end entity;
 
 architecture arch of alu is
@@ -48,7 +52,7 @@ architecture arch of alu is
     PORT (
       clk : IN STD_LOGIC;
       reset : IN STD_LOGIC;
-      databus : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+      db : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
       adress_bus : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
       out_to_alu : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
 
@@ -58,11 +62,29 @@ architecture arch of alu is
     );
   END component;
 
-begin
 
-  l1 : Ainputreg port map(a, b, control, o, avr, acr, hc);
-  l2 : Binputreg port map(clk, reset);
-  l3 : alu_logic port map();
+  component adder_hold_register IS
+    PORT (
+      clk : IN STD_LOGIC;
+      reset : IN STD_LOGIC;
+
+      alu_data_in : IN STD_LOGIC_VECTOR(7 DOWNTO 0); -- 8 bit input from alu
+      adl : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); -- addres low bus
+      sb : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); -- system bus
+
+      load : IN STD_LOGIC; -- load the content of the alu into register, this is connected to the second phase clock!
+      ADD/ADL : IN STD_LOGIC; -- put content to aderes low bus
+      ADD/SB6 : IN STD_LOGIC; -- put content to SB bus 0-6
+      ADD/SB7 : IN STD_LOGIC -- put content to sb bus 7
+    );
+  END component;
+
+begin
+  l1 : alu_logic port map(a, b, control, o, avr, acr, hc);
+  l2 : Ainputreg port map(clk, reset, databus, );
+  l3 : Binputreg port map(clk, reset);
+  l4 : adder_hold_register port map(clk, reset);
+
 
 
 
