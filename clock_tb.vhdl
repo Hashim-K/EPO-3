@@ -12,7 +12,8 @@ architecture arch of clk_tb is
     clk_25mhz : IN std_logic; -- External cock in
     reset : IN std_logic;
     clk : OUT std_logic;  -- first phase clock
-    clk_2 : OUT std_logic -- Second phase clock
+    clk_2 : OUT std_logic; -- Second phase clock
+    clk_3 : OUT std_logic
     );
   end component;
 
