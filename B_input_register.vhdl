@@ -6,12 +6,12 @@ ENTITY B_input_register IS
   PORT (
     clk : IN STD_LOGIC;
     reset : IN STD_LOGIC;
-    databus : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
-    adress_bus : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+    sb : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+    adl : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
     out_to_alu : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
-    db_inv : IN STD_LOGIC; -- use databus inverse
-    db : IN STD_LOGIC; -- use databus
-    adl : IN STD_LOGIC -- use addres line
+    inv_db_add : IN STD_LOGIC; -- use databus inverse
+    db_add : IN STD_LOGIC; -- use databus
+    adl_add : IN STD_LOGIC -- use addres line
   );
 END ENTITY;
 
@@ -34,9 +34,9 @@ ARCHITECTURE structural OF B_input_register IS
 BEGIN
   l1 : register_8bit PORT MAP(clk, load, reset, data_in, reg_out);
 
-  control(0) <= db_inv;
-  control(1) <= db;
-  control(2) <= adl;
+  control(0) <= inv_db_add;
+  control(1) <= db_add;
+  control(2) <= adl_add;
 
   data_bus_inv <= NOT databus;
   out_to_alu <= reg_out;
@@ -44,7 +44,7 @@ BEGIN
   WITH control SELECT data_in <=
     data_bus_inv WHEN "001",
     databus WHEN "010",
-    adress_bus WHEN "100",
+    adl WHEN "100",
     reg_out WHEN OTHERS;
 
 END ARCHITECTURE;
