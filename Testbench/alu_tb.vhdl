@@ -6,6 +6,17 @@ ENTITY alu_tb IS
 END ENTITY;
 
 ARCHITECTURE structural OF alu_tb IS
+
+component clock is
+  port (
+  clk_25mhz : IN std_logic; -- External cock in
+  reset : IN std_logic;
+  clk : OUT std_logic;  -- first phase clock
+  clk_2 : OUT std_logic -- Second phase clock
+  );
+end component;
+
+
 component alu is
   port (
   clk : in std_logic;
@@ -51,11 +62,25 @@ end component;
   SIGNAL counter_a : INTEGER := 0;
   SIGNAL cin, AVR, ACR, HC : STD_LOGIC;
 
+  signal clk_25mhz : std_logic;
+  signal reset, clk, clk_2 : std_logic;
+
+
+  signal abh, adl_in, adl_out, sb_in, sb_out : std_logic_vector(7 downto 0);
+  signal
+
+  signal control : std_logic_vector(9 downto 0);
+
+
 BEGIN
 
-  clk <= '0' AFTER 0 ns,
-    '1' AFTER 20 ns WHEN clk /= '1' ELSE
+  clk_25mhz <= '0' AFTER 0 ns,
+    '1' AFTER 20 ns WHEN clk_25mhz /= '1' ELSE
     '0' AFTER 20 ns;
+
+  L2 : clock PORT MAP(clk_25mhz, reset, clk, clk_2);
+
+
 
   cin <= '0';
   controll <= "100"; -- Shift right register A     !works
