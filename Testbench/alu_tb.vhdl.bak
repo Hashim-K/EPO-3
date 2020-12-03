@@ -2,10 +2,10 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 
-ENTITY alu_tb IS
+ENTITY alu_testbench IS
 END ENTITY;
 
-ARCHITECTURE structural OF alu_tb IS
+ARCHITECTURE strucutral OF alu_testbench IS
   COMPONENT alu IS
     PORT (
       a : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
