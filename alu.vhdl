@@ -6,7 +6,6 @@ entity alu is
   port (
   clk : in std_logic;
   reset : in std_logic;
-  abh  : out std_logic_vector(7 downto 0); -- addres bus high
   adl_in : in std_logic_vector(7 downto 0); -- addres bus low
   adl_out : out std_logic_vector(7 downto 0); -- addres bus low
   sb_in : in std_logic_vector(7 downto 0); -- data bus in
@@ -16,29 +15,31 @@ entity alu is
   -- control signals
     -- alu logic in
     control : IN std_logic_vector(9 downto 0); -- alu operation mode
-    daa : in std_logic; -- decimal enable
-    i_addc : in std_logic;
-    srs : in std_logic;
+
+
+    daa : in std_logic;     -- decimal enable
+    i_addc : in std_logic;  -- carry in
+    srs : in std_logic;     --
 
     -- alu logic out
-    avr : out std_logic;
-    acr : out std_logic;
-    hc : out std_logic;
+    avr : out std_logic;    -- overflow
+    acr : out std_logic;    -- carry out
+    hc : out std_logic;     -- half carry
 
     -- adder hold register
-    clk_2 : in std_logic;
-    add_adl : in std_logic;
-    add_sb6 : in std_logic;
-    add_sb7 : in std_logic;
+    clk_2 : in std_logic;   -- clock phase two input
+    add_adl : in std_logic; --
+    add_sb6 : in std_logic; --
+    add_sb7 : in std_logic; --
 
     -- A input register
-    o_add : IN std_logic;
-    sb_add : IN std_logic;
+    o_add : IN std_logic;  -- Load zero
+    sb_add : IN std_logic; -- Load form SB
 
     -- B input register
-    inv_db_add : IN std_logic;
-    db_add : IN std_logic;
-    adl_add : IN std_logic
+    inv_db_add : IN std_logic; -- inverted in from DB
+    db_add : IN std_logic;     -- load from DB
+    adl_add : IN std_logic     -- load from ADL
 );
 end entity;
 

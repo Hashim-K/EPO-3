@@ -33,7 +33,8 @@ ARCHITECTURE structural OF alu_logic IS
       b : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
       cin : IN STD_LOGIC;
       o : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
-      carry : OUT STD_LOGIC
+      carry : OUT STD_LOGIC;
+      overflow : OUT STD_LOGIC
     );
   END COMPONENT;
 
@@ -71,20 +72,20 @@ ARCHITECTURE structural OF alu_logic IS
 
   SIGNAL o_adder, o_or, o_xor, o_and, o_shift : STD_LOGIC_VECTOR(7 DOWNTO 0);
 BEGIN
-  ADDER : eight_bit_adder PORT MAP(a, b, i_addc, o_adder, ACR);
+  ADDER : eight_bit_adder PORT MAP(a, b, i_addc, o_adder, acr, avr);
   ORR : eight_bit_or PORT MAP(a, b, o_or);
   XORR : eight_bit_xor PORT MAP(a, b, o_xor);
   ANDD : eight_bit_and PORT MAP(a, b, o_and);
   SHIFT : eight_bit_shift PORT MAP(a, b, o_shift);
   WITH control SELECT o <=
     -- Addition
-    o_adder WHEN "0000000100",
+    o_adder WHEN  "1000000000",
     --And
-    o_and WHEN "0000001000",
+    o_and WHEN    "0100000000",
     -- Xor
-    o_xor WHEN "0000010000",
+    o_xor WHEN    "0000100000",
     -- Or
-    o_or WHEN "0000100000",
+    o_or WHEN     "0000010000",
     -- Shift right
     o_shift WHEN "0001000000",
     "00000000" WHEN OTHERS;
