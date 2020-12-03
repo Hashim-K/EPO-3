@@ -6,19 +6,45 @@ ENTITY alu_tb IS
 END ENTITY;
 
 ARCHITECTURE structural OF alu_tb IS
-  COMPONENT alu IS
-    PORT (
-      a : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
-      b : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
-      cin : IN STD_LOGIC; -- cary in
-      controll : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
-      DAA : IN STD_LOGIC; -- decimal adjust adder.
-      o : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
-      AVR : OUT STD_LOGIC; -- overflow
-      ACR : OUT STD_LOGIC; -- cary out
-      HC : OUT STD_LOGIC -- halfcary
-    );
-  END COMPONENT;
+component alu is
+  port (
+  clk : in std_logic;
+  reset : in std_logic;
+  abh  : out std_logic_vector(7 downto 0); -- addres bus high
+  adl_in : in std_logic_vector(7 downto 0); -- addres bus low
+  adl_out : out std_logic_vector(7 downto 0); -- addres bus low
+  sb_in : in std_logic_vector(7 downto 0); -- data bus in
+  sb_out : out std_logic_vector(7 downto 0); -- data bus out
+
+  -- control signals
+    -- alu logic in
+    control : IN std_logic_vector(9 downto 0); -- alu operation mode
+    daa : in std_logic; -- decimal enable
+    i_addc : in std_logic;
+    srs : in std_logic;
+
+    -- alu logic out
+    avr : out std_logic;
+    acr : out std_logic;
+    hc : out std_logic;
+
+    -- adder hold register
+    clk_2 : in std_logic;
+    add_adl : in std_logic;
+    add_sb6 : in std_logic;
+    add_sb7 : in std_logic;
+
+    -- A input register
+    o_add : IN std_logic;
+    sb_add : IN std_logic;
+
+    -- B input register
+    inv_db_add : IN std_logic;
+    db_add : IN std_logic;
+    adl_add : IN std_logic
+);
+end component;
+
   SIGNAL a, b, o : STD_LOGIC_VECTOR(7 DOWNTO 0);
   SIGNAL controll : STD_LOGIC_VECTOR(2 DOWNTO 0);
 
@@ -27,16 +53,41 @@ ARCHITECTURE structural OF alu_tb IS
 
 BEGIN
 
+  clk <= '0' AFTER 0 ns,
+    '1' AFTER 20 ns WHEN clk /= '1' ELSE
+    '0' AFTER 20 ns;
+
   cin <= '0';
-  -- controll <= "000"; -- Adition        !works
-  -- controll <= "001"; -- Or             !works
-  -- controll <= "010"; -- Xor            !works
-  -- controll <= "011"; -- And            !works
   controll <= "100"; -- Shift right register A     !works
   -- counter adding numbers
   counter_a <= (counter_a + 1) AFTER 5 ns;
   a <= STD_LOGIC_VECTOR(to_unsigned(counter_a, a'length));
   b <= STD_LOGIC_VECTOR(to_unsigned(counter_a, a'length));
-  L1 : alu PORT MAP(a, b, cin, controll, o, AVR, ACR, HC);
+
+
+  L1 : alu PORT MAP(clk,
+                    reset,
+                    abh,
+                    adl_in,
+                    adl_out,
+                    sb_in,
+                    sb_out,
+                    control,
+                    daa,
+                    i_addc,
+                    srs,
+                    avr,
+                    acr,
+                    hc,
+                    clk_2,
+                    add_adl,
+                    add_sb6,
+                    add_sb7,
+                    o_add,
+                    sb_add,
+                    inv_db_add,
+                    db_add,
+                    adl_add
+);
 
 END ARCHITECTURE;
