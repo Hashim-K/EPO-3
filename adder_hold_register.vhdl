@@ -44,8 +44,8 @@ BEGIN
   -- Output to SB
   WITH control SELECT sb <=
     reg_out WHEN "11",
-    '0' & reg_out(6 DOWNTO 0) WHEN "10",
-    reg_out(7) & "0000000" WHEN "01",
+    '0' & reg_out(6 DOWNTO 0) WHEN "01",
+    reg_out(7) & "0000000" WHEN "10",
     "ZZZZZZZZ" WHEN OTHERS;
   l1 : register_8bit PORT MAP(clk, clk_2, reset, alu_data_in, reg_out);
 
