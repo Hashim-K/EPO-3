@@ -2,28 +2,24 @@ library ieee;
   use ieee.std_logic_1164.all;
   use ieee.numeric_std.all;
 
-entity program_counter_basis is
+entity pc_high is
   port (
   clk : IN std_logic;
   reset : IN std_logic;
-  i_pc : IN std_logic; -- Program counter increment enable
-  -- PCL_PCL : IN std_logic; -- Load form program counter I dont think this realy neaded
-  pclc : OUT std_logic; -- carry out
-  -- Bus controll signals
-  adl_pcl : IN std_logic; -- load form Adress bus
-  pcl_db  : IN std_logic; -- Put data on databus
-  pcl_adl : IN std_logic; -- Put data on adress bus
-  -- Bus in
-  adb_in : IN std_logic_vector(7 downto 0); -- addres buss in for loading
-  -- Bus out
-  db_out : OUT std_logic_vector(7 downto 0); -- output to databus
-  adl_out: OUT std_logic_vector(7 downto 0) -- addres buss for output
+
+  -- Program counter high
+  adh_pch : IN std_logic; -- load from ADH
+  pch_adh : IN std_logic; -- output to adh
+  pch_db : IN std_logic; -- output to databus
+  pclc : IN std_logic;    -- increment "Carry in from pc low"
+
+  adh_in : IN std_logic_vector(7 downto 0);  -- addres bus low in
+  adh_out : OUT std_logic_vector(7 downto 0); -- addres bus high out
+  db_out : OUT std_logic_vector(7 downto 0) -- databus out
   );
 end entity;
 
-
-
-architecture arch of program_counter_basis is
+architecture arch of pc_high is
 
   component register_8bit IS
   	PORT (
@@ -42,31 +38,31 @@ signal controll : std_logic_vector(1 downto 0);
 
 signal to_increment, to_register : std_logic_vector(7 downto 0);
 begin
-  -- controll(3) <= PCL_PCL;
 
-  -- Program counter select
-  with ADL_PCL select to_increment <=
-	ADB_IN when '1',
+  -- Program counter (load or not)
+  with adh_pch select to_increment <=
+	adh_in when '1',
   reg_out when others;
 
+
   -- Increment
-  with I_PC select to_register <=
+  with pclc select to_register <=
   std_logic_vector( unsigned(to_increment) + 1 ) when '1',
   to_increment when others;
+
 
   -- register
   l1 : register_8bit PORT MAP(clk, reset, '1', to_register, reg_out);
 
+
   -- Adress bus output
-  with pcl_adl select adl_out <=
+  with pch_adh select adh_out <=
   reg_out when '1',
   "ZZZZZZZZ" when others;
 
   -- data bus output
-  with pcl_db select db_out <=
+  with pch_db select db_out <=
   reg_out when '1',
   "ZZZZZZZZ" when others;
-
-
 
 end architecture;
