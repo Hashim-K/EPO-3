@@ -159,6 +159,4 @@ begin
                                     add_sb6,
                                     add_sb7);
 
-
-
 end architecture;
