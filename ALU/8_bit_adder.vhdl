@@ -1,10 +1,6 @@
-
--- todo cin 
-
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
---USE IEEE.NUMERIC_STD_UNSIGNED.ALL;  This package does not work in quartus
-use ieee.numeric_std.all; 
+USE IEEE.NUMERIC_STD_UNSIGNED.ALL;
 
 ENTITY eight_bit_adder IS
   PORT (
@@ -19,11 +15,8 @@ END ENTITY;
 
 ARCHITECTURE behaviour OF eight_bit_adder IS
   SIGNAL result : STD_LOGIC_VECTOR(8 DOWNTO 0);
-  SIGNAL a_in, b_in : integer;
 BEGIN
-  a_in <= to_integer(signed(a));
-  b_in <= to_integer(signed(b));
-  result <= std_logic_vector(to_unsigned(a_in, result'length) + to_unsigned(b_in,  result'length));
+  result <= ("0" & a) + ("0" & b) + cin;
   o <= result(7 DOWNTO 0);
   carry <= result(8);
 END ARCHITECTURE;
