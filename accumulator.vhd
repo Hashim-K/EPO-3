@@ -6,12 +6,12 @@ ENTITY accumulator IS
     PORT (
         clk : IN STD_LOGIC;
         reset : IN STD_LOGIC;
-        ac_db : IN STD_LOGIC;
-        ac_sb : IN STD_LOGIC;
-        sb_ac : IN STD_LOGIC;
-        sb_in : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
-        sb_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
-        db : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)
+        ac_db : IN STD_LOGIC; --accumulator to databus
+        ac_sb : IN STD_LOGIC; --accumulator to systembus
+        sb_ac : IN STD_LOGIC; --systembus to accumulator
+        sb_in : IN STD_LOGIC_VECTOR(7 DOWNTO 0); --systembus in
+        sb_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); --systembus out
+        db : OUT STD_LOGIC_VECTOR(7 DOWNTO 0) --databus out
     );
 END ENTITY;
 
