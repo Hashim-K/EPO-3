@@ -7,7 +7,7 @@ ENTITY alu_logic IS
     a : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
     b : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
     control : IN STD_LOGIC_VECTOR(9 DOWNTO 0); -- This is not efficent for number of wires maybe multiplex and demultiplax
-    --bit(0) = daa, not used atm since decimal
+    --bit(0) = daa, not used atm since decimalmode
     --bit(1) = i/addc or called carry in
     --bit(2) = sums
     --bit(3) = ands
@@ -20,8 +20,7 @@ ENTITY alu_logic IS
     o : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); --output signal
     avr : OUT STD_LOGIC; --overflow
     acr : OUT STD_LOGIC; --carry out
-    hc : OUT STD_LOGIC --half carry out, not used atm since decimal
-    
+    hc : OUT STD_LOGIC --half carry out, not used atm since decimalmode
   );
 END ENTITY;
 
