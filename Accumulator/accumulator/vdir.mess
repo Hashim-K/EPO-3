@@ -1,0 +1,180 @@
+Library vendor : Model Technology
+Maximum unnamed designs : 3
+OPTIMIZED DESIGN _opt
+    Compile time: Tue Dec 15 16:30:36 2020
+    Version string: 6ic3e^^;nb]L;7n]BPDCT1
+    Top-level model: work accumulator_tb_structural_cfg 1
+    Compile options: -quiet -auto_acc_if_foreign -work work -L TSMCLib
+    Compile defaults: CvgOpt=0
+    Short name: @_opt
+    Opcode format: 10.5b; VCOM/VLOG SE-64 Object version 63
+    Source directory: /home/hsteman/accumulator
+ENTITY accumulator
+    Source modified time: Tue Dec 15 16:27:23 2020
+    Depends on: P ieee numeric_std :ASDNFgHXf_ih3J@9F3Ze1
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Source directory: /home/hsteman/accumulator
+    HDL source file: VHDL/accumulator.vhd
+    Source file: VHDL/accumulator.vhd
+    Start location: VHDL/accumulator.vhd:5
+    Version string: R;az1aD;7?TR<Raba^LiG2
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Tue Dec 15 16:27:23 2020
+    Debug Symbol file exists
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+  ARCHITECTURE BODY structural
+    Depends on: P ieee numeric_std :ASDNFgHXf_ih3J@9F3Ze1
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Depends on: E work accumulator R;az1aD;7?TR<Raba^LiG2
+    Start location: VHDL/accumulator.vhd:20
+    Version string: fXzZQWMGO6D7Xm2Z;@]GR3
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Tue Dec 15 16:27:23 2020
+    Debug Symbol file exists
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+    Source directory: /home/hsteman/accumulator
+    Source file: VHDL/accumulator.vhd
+    Source modified time: Tue Dec 15 16:27:23 2020
+    HDL source file: VHDL/accumulator.vhd
+VHDL CONFIGURATION accumulator_structural_cfg
+    Configuration applies to entity: accumulator
+    Block configuration applies to architecture: structural
+    Depends on: E work register_8bit 1f1UR0gjT4?m6i2P;71<f2
+    Depends on: C work register_8bit_behaviour_cfg NaY6WMKhPTCFbSU:N?;ab1
+    Depends on: A work accumulator structural fXzZQWMGO6D7Xm2Z;@]GR3
+    Depends on: P ieee numeric_std :ASDNFgHXf_ih3J@9F3Ze1
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Depends on: E work accumulator R;az1aD;7?TR<Raba^LiG2
+    Source modified time: Tue Dec 15 16:28:39 2020
+    Source directory: /home/hsteman/accumulator
+    HDL source file: VHDL/accumulator_structural_cfg.vhd
+    Source file: VHDL/accumulator_structural_cfg.vhd
+    Start location: VHDL/accumulator_structural_cfg.vhd:1
+    Version string: =MQAl=9[6T6=<[:Fb@iFf2
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Tue Dec 15 16:28:39 2020
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+ENTITY accumulator_tb
+    Source modified time: Tue Dec 15 16:34:21 2020
+    Depends on: P ieee numeric_std :ASDNFgHXf_ih3J@9F3Ze1
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Source directory: /home/hsteman/accumulator
+    HDL source file: VHDL/accumulator_tb.vhd
+    Source file: VHDL/accumulator_tb.vhd
+    Start location: VHDL/accumulator_tb.vhd:5
+    Version string: YI7MdMjjNMXkh0HcWb2E43
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Tue Dec 15 16:34:21 2020
+    Debug Symbol file exists
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+  ARCHITECTURE BODY structural
+    Depends on: P ieee numeric_std :ASDNFgHXf_ih3J@9F3Ze1
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Depends on: E work accumulator_tb YI7MdMjjNMXkh0HcWb2E43
+    Start location: VHDL/accumulator_tb.vhd:8
+    Version string: zZbnOL5I@8T0C8F7f7VU:1
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Tue Dec 15 16:34:21 2020
+    Debug Symbol file exists
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+    Source directory: /home/hsteman/accumulator
+    Source file: VHDL/accumulator_tb.vhd
+    Source modified time: Tue Dec 15 16:34:21 2020
+    HDL source file: VHDL/accumulator_tb.vhd
+VHDL CONFIGURATION accumulator_tb_structural_cfg
+    Configuration applies to entity: accumulator_tb
+    Block configuration applies to architecture: structural
+    Depends on: E work accumulator R;az1aD;7?TR<Raba^LiG2
+    Depends on: C work accumulator_structural_cfg =MQAl=9[6T6=<[:Fb@iFf2
+    Depends on: A work accumulator_tb structural zZbnOL5I@8T0C8F7f7VU:1
+    Depends on: P ieee numeric_std :ASDNFgHXf_ih3J@9F3Ze1
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Depends on: E work accumulator_tb YI7MdMjjNMXkh0HcWb2E43
+    Source modified time: Tue Dec 15 16:34:30 2020
+    Source directory: /home/hsteman/accumulator
+    HDL source file: VHDL/accumulator_tb_structural_cfg.vhd
+    Source file: VHDL/accumulator_tb_structural_cfg.vhd
+    Start location: VHDL/accumulator_tb_structural_cfg.vhd:1
+    Version string: _aIQ;?PQR[SWQ^6B56==I2
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Tue Dec 15 16:34:30 2020
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+ENTITY register_8bit
+    Source modified time: Tue Dec 15 16:01:30 2020
+    Depends on: P ieee numeric_std :ASDNFgHXf_ih3J@9F3Ze1
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Source directory: /home/hsteman/accumulator
+    HDL source file: VHDL/register_8bit.vhd
+    Source file: VHDL/register_8bit.vhd
+    Start location: VHDL/register_8bit.vhd:5
+    Version string: 1f1UR0gjT4?m6i2P;71<f2
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Tue Dec 15 16:12:43 2020
+    Debug Symbol file exists
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+  ARCHITECTURE BODY behaviour
+    Depends on: P ieee numeric_std :ASDNFgHXf_ih3J@9F3Ze1
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Depends on: E work register_8bit 1f1UR0gjT4?m6i2P;71<f2
+    Start location: VHDL/register_8bit.vhd:14
+    Version string: Qm4l]7<^n4bHR_T`d1cdN2
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Tue Dec 15 16:12:43 2020
+    Debug Symbol file exists
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+    Source directory: /home/hsteman/accumulator
+    Source file: VHDL/register_8bit.vhd
+    Source modified time: Tue Dec 15 16:01:30 2020
+    HDL source file: VHDL/register_8bit.vhd
+VHDL CONFIGURATION register_8bit_behaviour_cfg
+    Configuration applies to entity: register_8bit
+    Block configuration applies to architecture: behaviour
+    Depends on: A work register_8bit behaviour Qm4l]7<^n4bHR_T`d1cdN2
+    Depends on: P ieee numeric_std :ASDNFgHXf_ih3J@9F3Ze1
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Depends on: E work register_8bit 1f1UR0gjT4?m6i2P;71<f2
+    Source modified time: Tue Dec 15 16:12:46 2020
+    Source directory: /home/hsteman/accumulator
+    HDL source file: VHDL/register_8bit_behaviour_cfg.vhd
+    Source file: VHDL/register_8bit_behaviour_cfg.vhd
+    Start location: VHDL/register_8bit_behaviour_cfg.vhd:1
+    Version string: NaY6WMKhPTCFbSU:N?;ab1
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Tue Dec 15 16:12:47 2020
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0

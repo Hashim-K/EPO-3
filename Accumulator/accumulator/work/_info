@@ -1,0 +1,224 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 d/home/hsteman/accumulator
+T_opt
+!s110 1608046475
+V>;6eL2TjjfCT56Di[VbZA1
+04 29 0 work accumulator_tb_structural_cfg 1
+=1-000ae431a4f1-5fd8d78b-82f2d-7b40
+o-quiet -auto_acc_if_foreign -work work -L TSMCLib
+tCvgOpt 0
+n@_opt
+OL;O;10.5b;63
+Eaccumulator
+Z1 w1608046043
+Z2 DPx4 ieee 11 numeric_std 0 22 :ASDNFgHXf_ih3J@9F3Ze1
+Z3 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
+Z4 DPx4 ieee 14 std_logic_1164 0 22 eNV`TJ_GofJTzYa?f<@Oe1
+R0
+Z5 8VHDL/accumulator.vhd
+Z6 FVHDL/accumulator.vhd
+l0
+L5
+VR;az1aD;7?TR<Raba^LiG2
+!s100 @SSfAAh?DkTz3BFN_2Nd=0
+Z7 OL;C;10.5b;63
+33
+Z8 !s110 1608046043
+!i10b 1
+Z9 !s108 1608046043.000000
+Z10 !s90 -2008|-lower|-explicit|-work|work|VHDL/accumulator.vhd|-quiet|-nologo|
+Z11 !s107 VHDL/accumulator.vhd|
+!i113 0
+Z12 o-quiet -nologo -2008 -lower -explicit -work work
+Z13 tExplicit 1 CvgOpt 0
+Astructural
+R2
+R3
+R4
+Z14 DEx4 work 11 accumulator 0 22 R;az1aD;7?TR<Raba^LiG2
+l35
+L20
+VfXzZQWMGO6D7Xm2Z;@]GR3
+!s100 [;Q0[kQ]c0oiKE2gCQki42
+R7
+33
+R8
+!i10b 1
+R9
+R10
+R11
+!i113 0
+R12
+R13
+Caccumulator_structural_cfg
+eaccumulator
+Z15 astructural
+Z16 DEx4 work 13 register_8bit 0 22 1f1UR0gjT4?m6i2P;71<f2
+DCx4 work 27 register_8bit_behaviour_cfg 0 22 NaY6WMKhPTCFbSU:N?;ab1
+DAx4 work 11 accumulator 10 structural 22 fXzZQWMGO6D7Xm2Z;@]GR3
+R2
+R3
+R4
+R14
+w1608046119
+R0
+8VHDL/accumulator_structural_cfg.vhd
+FVHDL/accumulator_structural_cfg.vhd
+l0
+L1
+V=MQAl=9[6T6=<[:Fb@iFf2
+!s100 YGaRFD2aH4d>JVVIUY<K_3
+R7
+33
+!s110 1608046119
+!i10b 0
+!s108 1608046119.000000
+!s90 -2008|-lower|-explicit|-work|work|VHDL/accumulator_structural_cfg.vhd|-quiet|-nologo|
+!s107 VHDL/accumulator_structural_cfg.vhd|
+!i113 0
+R12
+R13
+Eaccumulator_tb
+Z17 w1608046461
+R2
+R3
+R4
+R0
+Z18 8VHDL/accumulator_tb.vhd
+Z19 FVHDL/accumulator_tb.vhd
+l0
+L5
+VYI7MdMjjNMXkh0HcWb2E43
+!s100 Zf7_8C?1CBTOJ5cXZS1@K2
+R7
+33
+Z20 !s110 1608046461
+!i10b 1
+Z21 !s108 1608046461.000000
+Z22 !s90 -2008|-lower|-explicit|-work|work|VHDL/accumulator_tb.vhd|-quiet|-nologo|
+Z23 !s107 VHDL/accumulator_tb.vhd|
+!i113 0
+R12
+R13
+Astructural
+R2
+R3
+R4
+Z24 DEx4 work 14 accumulator_tb 0 22 YI7MdMjjNMXkh0HcWb2E43
+l27
+L8
+VzZbnOL5I@8T0C8F7f7VU:1
+!s100 ^LNW:IYUU3<c2OM9;YZ^I2
+R7
+33
+R20
+!i10b 1
+R21
+R22
+R23
+!i113 0
+R12
+R13
+Caccumulator_tb_structural_cfg
+eaccumulator_tb
+R15
+R14
+DCx4 work 26 accumulator_structural_cfg 0 22 =MQAl=9[6T6=<[:Fb@iFf2
+DAx4 work 14 accumulator_tb 10 structural 22 zZbnOL5I@8T0C8F7f7VU:1
+R2
+R3
+R4
+R24
+w1608046470
+R0
+8VHDL/accumulator_tb_structural_cfg.vhd
+FVHDL/accumulator_tb_structural_cfg.vhd
+l0
+L1
+V_aIQ;?PQR[SWQ^6B56==I2
+!s100 MV@TEz<Hd^>OJDm0j2cXl2
+R7
+33
+!s110 1608046470
+!i10b 0
+!s108 1608046470.000000
+!s90 -2008|-lower|-explicit|-work|work|VHDL/accumulator_tb_structural_cfg.vhd|-quiet|-nologo|
+!s107 VHDL/accumulator_tb_structural_cfg.vhd|
+!i113 0
+R12
+R13
+Eregister_8bit
+Z25 w1608044490
+R2
+R3
+R4
+R0
+Z26 8VHDL/register_8bit.vhd
+Z27 FVHDL/register_8bit.vhd
+l0
+L5
+V1f1UR0gjT4?m6i2P;71<f2
+!s100 @2nI`mnk?9I`zkV[fbT_c0
+R7
+33
+Z28 !s110 1608045163
+!i10b 1
+Z29 !s108 1608045163.000000
+Z30 !s90 -2008|-lower|-explicit|-work|work|VHDL/register_8bit.vhd|-quiet|-nologo|
+Z31 !s107 VHDL/register_8bit.vhd|
+!i113 0
+R12
+R13
+Abehaviour
+R2
+R3
+R4
+R16
+l18
+L14
+VQm4l]7<^n4bHR_T`d1cdN2
+!s100 4i7U]c`hLbZhVNZh>AW[b2
+R7
+33
+R28
+!i10b 1
+R29
+R30
+R31
+!i113 0
+R12
+R13
+Cregister_8bit_behaviour_cfg
+eregister_8bit
+abehaviour
+DAx4 work 13 register_8bit 9 behaviour 22 Qm4l]7<^n4bHR_T`d1cdN2
+R2
+R3
+R4
+R16
+w1608045166
+R0
+8VHDL/register_8bit_behaviour_cfg.vhd
+FVHDL/register_8bit_behaviour_cfg.vhd
+l0
+L1
+VNaY6WMKhPTCFbSU:N?;ab1
+!s100 zNS1YTe=l<4M?A7aHOah82
+R7
+33
+!s110 1608045167
+!i10b 0
+!s108 1608045166.000000
+!s90 -2008|-lower|-explicit|-work|work|VHDL/register_8bit_behaviour_cfg.vhd|-quiet|-nologo|
+!s107 VHDL/register_8bit_behaviour_cfg.vhd|
+!i113 0
+R12
+R13
