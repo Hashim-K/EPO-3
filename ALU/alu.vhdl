@@ -16,11 +16,6 @@ entity alu is
     -- alu logic in
     control : IN std_logic_vector(9 downto 0); -- alu operation mode
 
-
-    daa : in std_logic;     -- decimal enable
-    i_addc : in std_logic;  -- carry in
-    srs : in std_logic;     --
-
     -- alu logic out
     avr : out std_logic;    -- overflow
     acr : out std_logic;    -- carry out
@@ -63,8 +58,7 @@ architecture structural of alu is
       o : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); --output signal
       avr : OUT STD_LOGIC;
       acr : OUT STD_LOGIC; -- cary out
-      hc : OUT STD_LOGIC;
-      i_addc : in std_logic
+      hc : OUT STD_LOGIC
     );
   END component;
 
@@ -123,8 +117,7 @@ begin
                           output_alu,
                           avr,
                           acr,
-                          hc,
-                          i_addc
+                          hc
                           ); -- portmap done
 
   -- B input register
