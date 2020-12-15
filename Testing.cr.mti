@@ -1,4 +1,13 @@
-C:/Users/stefa/Documents/GitHub/EPO-3/register_8bit.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/stefa/Documents/GitHub/EPO-3/register_8bit.vhd
+C:/Users/stefa/Documents/GitHub/EPO-3/accumulator.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/stefa/Documents/GitHub/EPO-3/accumulator.vhd
+Model Technology ModelSim PE Student Edition vcom 10.4a Compiler 2015.03 Apr  7 2015
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity accumulator
+-- Compiling architecture structural of accumulator
+
+} {} {}} C:/Users/stefa/Documents/GitHub/EPO-3/ALU/register_8bit.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/stefa/Documents/GitHub/EPO-3/ALU/register_8bit.vhd
 Model Technology ModelSim PE Student Edition vcom 10.4a Compiler 2015.03 Apr  7 2015
 -- Loading package STANDARD
 -- Loading package TEXTIO
@@ -7,22 +16,13 @@ Model Technology ModelSim PE Student Edition vcom 10.4a Compiler 2015.03 Apr  7 
 -- Compiling entity register_8bit
 -- Compiling architecture behaviour of register_8bit
 
-} {} {}} C:/Users/stefa/Documents/GitHub/EPO-3/adder_hold_register.vhdl {1 {vcom -work work -2002 -explicit -stats=none C:/Users/stefa/Documents/GitHub/EPO-3/adder_hold_register.vhdl
+} {} {}} C:/Users/stefa/Documents/GitHub/EPO-3/accumulator_tb.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/stefa/Documents/GitHub/EPO-3/accumulator_tb.vhd
 Model Technology ModelSim PE Student Edition vcom 10.4a Compiler 2015.03 Apr  7 2015
 -- Loading package STANDARD
 -- Loading package TEXTIO
 -- Loading package std_logic_1164
 -- Loading package NUMERIC_STD
--- Compiling entity adder_hold_register
--- Compiling architecture arch of adder_hold_register
-
-} {} {}} C:/Users/stefa/Documents/GitHub/EPO-3/Testbench/adder_hold_register_tb.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/stefa/Documents/GitHub/EPO-3/Testbench/adder_hold_register_tb.vhd
-Model Technology ModelSim PE Student Edition vcom 10.4a Compiler 2015.03 Apr  7 2015
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Loading package NUMERIC_STD
--- Compiling entity adder_hold_register_tb
--- Compiling architecture structural of adder_hold_register_tb
+-- Compiling entity accumulator_tb
+-- Compiling architecture structural of accumulator_tb
 
 } {} {}}
