@@ -15,11 +15,13 @@ ARCHITECTURE structural OF accumulator_tb IS
             sb_ac : IN STD_LOGIC;
             sb_in : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
             sb_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
-            db : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)
+            db : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
+            zero_flag : OUT STD_LOGIC;
+            negative_flag : OUT STD_LOGIC
         );
     END COMPONENT;
 
-    SIGNAL clk, reset, ac_db, ac_sb, sb_ac : STD_LOGIC;
+    SIGNAL clk, reset, ac_db, ac_sb, sb_ac, zero_flag, negative_flag : STD_LOGIC;
     SIGNAL sb_in, sb_out, db : STD_LOGIC_VECTOR(7 DOWNTO 0);
 
 BEGIN
