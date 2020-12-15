@@ -1,0 +1,240 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 d/home/hsteman/Register
+T_opt
+!s110 1605782160
+V?[`i158niD8dzk71i`8Wn2
+04 30 0 work register_8bit_tb_behaviour_cfg 1
+=1-000ae431a4f1-5fb64a90-7ff9d-1ac6b
+o-quiet -auto_acc_if_foreign -work work -L TSMCLib
+Z1 tCvgOpt 0
+n@_opt
+Z2 OL;O;10.5b;63
+R0
+T_opt1
+!s110 1606224313
+VndC9=4VG3^OH@kbj6X_zB2
+04 34 0 work register_8bit_tb_behaviour_syn_cfg 1
+=1-000ae431a4f1-5fbd09b8-a51ec-f8bd
+o-quiet -auto_acc_if_foreign -work work -L TSMCLib -sdfmax /test=VHDL/register_8bit_SYN.sdf -suppress 1948
+R1
+n@_opt1
+R2
+Eregister_8bit
+w1605774218
+Z3 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
+Z4 DPx4 ieee 14 std_logic_1164 0 22 eNV`TJ_GofJTzYa?f<@Oe1
+R0
+8VHDL/register_8bit.vhd
+FVHDL/register_8bit.vhd
+l0
+L4
+Vh[EK]k^I0^gGJ02=bm=^Y3
+!s100 ESH[Y[WkR^VjD?^N>X>0E0
+Z5 OL;C;10.5b;63
+33
+!s110 1605774218
+!i10b 1
+!s108 1605774218.000000
+!s90 -2008|-lower|-explicit|-work|work|VHDL/register_8bit.vhd|-quiet|-nologo|
+!s107 VHDL/register_8bit.vhd|
+!i113 0
+Z6 o-quiet -nologo -2008 -lower -explicit -work work
+Z7 tExplicit 1 CvgOpt 0
+Asynthesised
+w1605782572
+Z8 DEx4 work 13 register_8bit 0 22 h[EK]k^I0^gGJ02=bm=^Y3
+R3
+R4
+8VHDL/register_8bit_SYN.vhd
+FVHDL/register_8bit_SYN.vhd
+l33
+L7
+V88_6IK8:d]o?=VVJ[Z3WR0
+!s100 4o^zf4g^B[Waz8@2=[41R0
+R5
+33
+!s110 1605784053
+!i10b 1
+!s108 1605784053.000000
+!s90 -2008|-lower|-explicit|-work|work|VHDL/register_8bit_SYN.vhd|-quiet|-nologo|
+!s107 VHDL/register_8bit_SYN.vhd|
+!i113 0
+R6
+R7
+Abehaviour
+w1605781967
+R8
+Z9 DPx4 ieee 11 numeric_std 0 22 :ASDNFgHXf_ih3J@9F3Ze1
+R3
+R4
+8VHDL/register_8bit-behaviour.vhd
+FVHDL/register_8bit-behaviour.vhd
+l9
+L5
+VRADngD55WfIEFT@4YJzmL2
+!s100 zzCgF?o8blMaUVXOZTc3g1
+R5
+33
+!s110 1605781967
+!i10b 1
+!s108 1605781967.000000
+!s90 -2008|-lower|-explicit|-work|work|VHDL/register_8bit-behaviour.vhd|-quiet|-nologo|
+!s107 VHDL/register_8bit-behaviour.vhd|
+!i113 0
+R6
+R7
+Cregister_8bit_behaviour_cfg
+Z10 eregister_8bit
+Z11 abehaviour
+R9
+DAx4 work 13 register_8bit 9 behaviour 22 RADngD55WfIEFT@4YJzmL2
+R3
+R4
+R8
+w1605782080
+R0
+8VHDL/register_8bit_behaviour_cfg.vhd
+FVHDL/register_8bit_behaviour_cfg.vhd
+l0
+L1
+VNaY6WMKhPTCFbSU:N?;ab1
+!s100 zNS1YTe=l<4M?A7aHOah82
+R5
+33
+!s110 1605782080
+!i10b 0
+!s108 1605782080.000000
+!s90 -2008|-lower|-explicit|-work|work|VHDL/register_8bit_behaviour_cfg.vhd|-quiet|-nologo|
+!s107 VHDL/register_8bit_behaviour_cfg.vhd|
+!i113 0
+R6
+R7
+Cregister_8bit_synthesised_cfg
+R10
+asynthesised
+DAx4 work 13 register_8bit 11 synthesised 22 88_6IK8:d]o?=VVJ[Z3WR0
+R3
+R4
+R8
+w1605784061
+R0
+8VHDL/register_8bit_synthesised_cfg.vhd
+FVHDL/register_8bit_synthesised_cfg.vhd
+l0
+L1
+V@NBzcdKW6`:B_fUbG524?1
+!s100 4VPWH6I49:[H[NKAX^jKn2
+R5
+33
+!s110 1605784061
+!i10b 0
+!s108 1605784061.000000
+!s90 -2008|-lower|-explicit|-work|work|VHDL/register_8bit_synthesised_cfg.vhd|-quiet|-nologo|
+!s107 VHDL/register_8bit_synthesised_cfg.vhd|
+!i113 0
+R6
+R7
+Eregister_8bit_tb
+w1605782090
+R3
+R4
+R0
+8VHDL/register_8bit_tb.vhd
+FVHDL/register_8bit_tb.vhd
+l0
+L4
+V:MnABLB`bV6N?K]QSH79V2
+!s100 iDd5RD;^71<QReRefD><Y1
+R5
+33
+!s110 1605782090
+!i10b 1
+!s108 1605782090.000000
+!s90 -2008|-lower|-explicit|-work|work|VHDL/register_8bit_tb.vhd|-quiet|-nologo|
+!s107 VHDL/register_8bit_tb.vhd|
+!i113 0
+R6
+R7
+Abehaviour
+w1605782146
+Z12 DEx4 work 16 register_8bit_tb 0 22 :MnABLB`bV6N?K]QSH79V2
+R3
+R4
+8VHDL/register_8bit_tb-behaviour.vhd
+FVHDL/register_8bit_tb-behaviour.vhd
+l19
+L4
+VogeM0<c0Y5RM<TIAmBe7k1
+!s100 DZ4Lae<Lc_7:fM<>=4b]C2
+R5
+33
+!s110 1605782146
+!i10b 1
+!s108 1605782146.000000
+!s90 -2008|-lower|-explicit|-work|work|VHDL/register_8bit_tb-behaviour.vhd|-quiet|-nologo|
+!s107 VHDL/register_8bit_tb-behaviour.vhd|
+!i113 0
+R6
+R7
+Cregister_8bit_tb_behaviour_cfg
+Z13 eregister_8bit_tb
+R11
+R8
+DCx4 work 27 register_8bit_behaviour_cfg 0 22 NaY6WMKhPTCFbSU:N?;ab1
+Z14 DAx4 work 16 register_8bit_tb 9 behaviour 22 ogeM0<c0Y5RM<TIAmBe7k1
+R3
+R4
+R12
+w1605782150
+R0
+8VHDL/register_8bit_tb_behaviour_cfg.vhd
+FVHDL/register_8bit_tb_behaviour_cfg.vhd
+l0
+L1
+V6SfL<z1[ONZ?Q^ocUF<E50
+!s100 z@nf6eRfUmNWAKK;gzzO83
+R5
+33
+!s110 1605782150
+!i10b 0
+!s108 1605782150.000000
+!s90 -2008|-lower|-explicit|-work|work|VHDL/register_8bit_tb_behaviour_cfg.vhd|-quiet|-nologo|
+!s107 VHDL/register_8bit_tb_behaviour_cfg.vhd|
+!i113 0
+R6
+R7
+Cregister_8bit_tb_behaviour_syn_cfg
+R13
+R11
+R8
+DCx4 work 29 register_8bit_synthesised_cfg 0 22 @NBzcdKW6`:B_fUbG524?1
+R14
+R3
+R4
+R12
+w1606224284
+R0
+8VHDL/register_8bit_tb_behaviour_syn_cfg2.vhd
+FVHDL/register_8bit_tb_behaviour_syn_cfg2.vhd
+l0
+L1
+V=14eOU3[7N[g<d;I8Ie[83
+!s100 5SdS@G8ZAc@d[TmEZTi:Y3
+R5
+33
+!s110 1606224284
+!i10b 0
+!s108 1606224284.000000
+!s90 -2008|-lower|-explicit|-work|work|VHDL/register_8bit_tb_behaviour_syn_cfg2.vhd|-quiet|-nologo|
+!s107 VHDL/register_8bit_tb_behaviour_syn_cfg2.vhd|
+!i113 0
+R6
+R7

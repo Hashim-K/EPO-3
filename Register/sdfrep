@@ -1,0 +1,47 @@
+Unannotated Specify Objects Report:
+===================================
+(UASP) = Unannotated specify path.
+(UATC) = Unannotated timing check.
+(IATE) = Incompltely annotated specify path transition edges.
+-------------------------------------------------------------
+/register_8bit_tb/test/q_reg_0: ( [DFQD1BWP7T(fast):/data/public/common/software/opprog/sim_libs/tcb018gbwp7t.v(6560)]):
+  WIDTH: (negedge CP &&& CP_DEFCHK): 0 : (UATC)
+  WIDTH: (posedge CP &&& CP_DEFCHK): 0 : (UATC)
+/register_8bit_tb/test/q_reg_1: ( [DFQD1BWP7T(fast):/data/public/common/software/opprog/sim_libs/tcb018gbwp7t.v(6560)]):
+  WIDTH: (negedge CP &&& CP_DEFCHK): 0 : (UATC)
+  WIDTH: (posedge CP &&& CP_DEFCHK): 0 : (UATC)
+/register_8bit_tb/test/q_reg_2: ( [DFQD1BWP7T(fast):/data/public/common/software/opprog/sim_libs/tcb018gbwp7t.v(6560)]):
+  WIDTH: (negedge CP &&& CP_DEFCHK): 0 : (UATC)
+  WIDTH: (posedge CP &&& CP_DEFCHK): 0 : (UATC)
+/register_8bit_tb/test/q_reg_3: ( [DFQD1BWP7T(fast):/data/public/common/software/opprog/sim_libs/tcb018gbwp7t.v(6560)]):
+  WIDTH: (negedge CP &&& CP_DEFCHK): 0 : (UATC)
+  WIDTH: (posedge CP &&& CP_DEFCHK): 0 : (UATC)
+/register_8bit_tb/test/q_reg_4: ( [DFQD1BWP7T(fast):/data/public/common/software/opprog/sim_libs/tcb018gbwp7t.v(6560)]):
+  WIDTH: (negedge CP &&& CP_DEFCHK): 0 : (UATC)
+  WIDTH: (posedge CP &&& CP_DEFCHK): 0 : (UATC)
+/register_8bit_tb/test/q_reg_5: ( [DFQD1BWP7T(fast):/data/public/common/software/opprog/sim_libs/tcb018gbwp7t.v(6560)]):
+  WIDTH: (negedge CP &&& CP_DEFCHK): 0 : (UATC)
+  WIDTH: (posedge CP &&& CP_DEFCHK): 0 : (UATC)
+/register_8bit_tb/test/q_reg_6: ( [DFQD1BWP7T(fast):/data/public/common/software/opprog/sim_libs/tcb018gbwp7t.v(6560)]):
+  WIDTH: (negedge CP &&& CP_DEFCHK): 0 : (UATC)
+  WIDTH: (posedge CP &&& CP_DEFCHK): 0 : (UATC)
+/register_8bit_tb/test/q_reg_7: ( [DFQD1BWP7T(fast):/data/public/common/software/opprog/sim_libs/tcb018gbwp7t.v(6560)]):
+  WIDTH: (negedge CP &&& CP_DEFCHK): 0 : (UATC)
+  WIDTH: (posedge CP &&& CP_DEFCHK): 0 : (UATC)
+/register_8bit_tb/test/g15: ( [BUFTD4BWP7T(fast):/data/public/common/software/opprog/sim_libs/tcb018gbwp7t.v(3406)]):
+  3419: (posedge OE => Z) = (0, 0, 304, 1528, 308, 1065) : (IATE:01,10)
+/register_8bit_tb/test/g14: ( [BUFTD4BWP7T(fast):/data/public/common/software/opprog/sim_libs/tcb018gbwp7t.v(3406)]):
+  3419: (posedge OE => Z) = (0, 0, 304, 1528, 308, 1065) : (IATE:01,10)
+/register_8bit_tb/test/g21: ( [BUFTD4BWP7T(fast):/data/public/common/software/opprog/sim_libs/tcb018gbwp7t.v(3406)]):
+  3419: (posedge OE => Z) = (0, 0, 304, 1528, 308, 1065) : (IATE:01,10)
+/register_8bit_tb/test/g19: ( [BUFTD4BWP7T(fast):/data/public/common/software/opprog/sim_libs/tcb018gbwp7t.v(3406)]):
+  3419: (posedge OE => Z) = (0, 0, 304, 1528, 308, 1065) : (IATE:01,10)
+/register_8bit_tb/test/g18: ( [BUFTD4BWP7T(fast):/data/public/common/software/opprog/sim_libs/tcb018gbwp7t.v(3406)]):
+  3419: (posedge OE => Z) = (0, 0, 304, 1528, 308, 1065) : (IATE:01,10)
+/register_8bit_tb/test/g16: ( [BUFTD4BWP7T(fast):/data/public/common/software/opprog/sim_libs/tcb018gbwp7t.v(3406)]):
+  3419: (posedge OE => Z) = (0, 0, 304, 1528, 308, 1065) : (IATE:01,10)
+/register_8bit_tb/test/g20: ( [BUFTD4BWP7T(fast):/data/public/common/software/opprog/sim_libs/tcb018gbwp7t.v(3406)]):
+  3419: (posedge OE => Z) = (0, 0, 304, 1528, 308, 1065) : (IATE:01,10)
+/register_8bit_tb/test/g17: ( [BUFTD4BWP7T(fast):/data/public/common/software/opprog/sim_libs/tcb018gbwp7t.v(3406)]):
+  3419: (posedge OE => Z) = (0, 0, 304, 1528, 308, 1065) : (IATE:01,10)
+Found 16 instances with unannotated or incompletely annotated specify block objects.
