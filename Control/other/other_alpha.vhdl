@@ -2,7 +2,7 @@ library ieee;
   use ieee.std_logic_1164.all;
   use ieee.numeric_std.all;
 
-entity jmp is
+entity other_alpha is
   port (
   opcode : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
   timing: IN STD_LOGIC_VECTOR(2 DOWNTO 0);
@@ -14,7 +14,7 @@ entity jmp is
   );
 end entity;
 
-architecture behaviour of jmp is
+architecture behaviour of other_alpha is
   type statetype is(t0, t1);
   signal control_out : STD_LOGIC_VECTOR(64 DOWNTO 0);
   signal dl_db, dl_adl, dl_adh, 0_adh(0), 0_adh(1to7), adh_abh, adl_abl, pcl_pcl, adl_pcl, 1_pc, pcl_db, pcl_adl, pch_pch, adh_pch, pch_db, pch_adh, sb_adh, sb_db, 0_adl(0), 0_adl(1), 0_adl(2), s_adl, sb_s, s_s, s_sb, db'_add, db_add, adl_add, dsa, daa, 1_addc, sums, ands, xors,
@@ -41,17 +41,56 @@ architecture behaviour of jmp is
 
           --selecting addressing mode
           when t1=>
-            case opcode(4 downto 2) is
-              when "011" => --4C : ABS
-                next_state<=t011x0;
+                case opcode(7 downto 4) is
 
-              end case;
+                  when "1000" => --8A : TXA
+                    next_state<=txa0;
 
+                  when "1001" => --9A : TXS
+                    next_state<=txs0;
 
-          --4C : 011 : ABS
-          when t011x0
-            next_state<=t011x1;
-          when t011x1
+                  when "1010" => --AA : TAX
+                    next_state<=tax0;
+
+                  when "1011" => --BA : TSX
+                    next_state<=tsx0;
+
+                  when "1100" => --CA : DEX
+                    next_state<=dex0;
+
+                  when "1110" => --EA : NOP
+                    next_state<=done;
+
+                end case;
+
+          --88 : TXA
+          when txa0
+            next_state<=txa1;
+          when txa1
+            next_state<=done;
+
+          --98 : TXS
+          when txs0
+            next_state<=txs1;
+          when txs1
+            next_state<=done;
+
+          --A8 : TAX
+          when tax0
+            next_state<=tax1;
+          when tax1
+            next_state<=done;
+
+          --B8 : TSX
+          when tsx0
+            next_state<=tsx1;
+          when tsx1
+            next_state<=done;
+
+          --C8 : DEX
+          when dex0
+            next_state<=dex1;
+          when dex1;
             next_state<=done;
 
         end case;

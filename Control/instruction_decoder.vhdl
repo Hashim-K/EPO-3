@@ -5,7 +5,7 @@ library ieee;
 entity instruction_decoder is
   port (
       ir_in: IN STD_LOGIC_VECTOR(15 DOWNTO 0);
-      timing: IN STD_LOGIC_VECTOR(5 DOWNTO 0);
+      timing: IN STD_LOGIC_VECTOR(2 DOWNTO 0);
       interrupt: IN STD_LOGIC_VECTOR(2 DOWNTO 0);
       ready: IN STD_LOGIC;
       r_w: IN STD_LOGIC;
@@ -20,7 +20,6 @@ begin
   case ir_in(1 downto 0)
     when "00" =>
       case ir_in(7 downto 5)
-        when "000" => --nothing
         when "001" => --BIT
         when "010" => --JMP
         when "011" => --JMP(ABS)
@@ -28,6 +27,7 @@ begin
         when "101" => --LDY
         when "110" => --CPY
         when "111" => --CPX
+      end case;
     when "01" =>
       case ir_in(7 downto 5)
         when "000" => --ORA
@@ -38,6 +38,7 @@ begin
         when "101" => --LDA
         when "110" => --CMP
         when "111" => --SBC
+      end case;
     when "10" =>
       case ir_in(7 downto 5)
         when "000" => --ASL
@@ -48,6 +49,13 @@ begin
         when "101" => --LDX
         when "110" => --DEC
         when "111" => --INC
-    when "11" =>
-
+      end case;
+  end case;
+  case ir_in(3 downto 0)
+    when "0000"=> --other_zero
+    when "1000"=> --other_eight
+    when "1010"=> --other_alpha
+  if (ir_in(4 downto 0)="10000" then
+   --branch
+  end if;
 end architecture;

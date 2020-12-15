@@ -2,7 +2,7 @@ library ieee;
   use ieee.std_logic_1164.all;
   use ieee.numeric_std.all;
 
-entity jmp is
+entity other_zero is
   port (
   opcode : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
   timing: IN STD_LOGIC_VECTOR(2 DOWNTO 0);
@@ -14,7 +14,7 @@ entity jmp is
   );
 end entity;
 
-architecture behaviour of jmp is
+architecture behaviour of other_zero is
   type statetype is(t0, t1);
   signal control_out : STD_LOGIC_VECTOR(64 DOWNTO 0);
   signal dl_db, dl_adl, dl_adh, 0_adh(0), 0_adh(1to7), adh_abh, adl_abl, pcl_pcl, adl_pcl, 1_pc, pcl_db, pcl_adl, pch_pch, adh_pch, pch_db, pch_adh, sb_adh, sb_db, 0_adl(0), 0_adl(1), 0_adl(2), s_adl, sb_s, s_s, s_sb, db'_add, db_add, adl_add, dsa, daa, 1_addc, sums, ands, xors,
@@ -41,19 +41,44 @@ architecture behaviour of jmp is
 
           --selecting addressing mode
           when t1=>
-            case opcode(4 downto 2) is
-              when "011" => --4C : ABS
-                next_state<=t011x0;
+                case opcode(7 downto 4) is
+                  when "0000" => --00 : BRK
+                    next_state<=brk0;
 
-              end case;
+                  when "0010" => --20 : JSR
+                    next_state<=jsr0;
 
+                  when "0100" => --40 : RTI
+                    next_state<=rti0;
 
-          --4C : 011 : ABS
-          when t011x0
-            next_state<=t011x1;
-          when t011x1
+                  when "0110" => --60 : RTS
+                    next_state<=rts0;
+                end case;
+              
+
+          --00 : BRK
+          when brk0
+            next_state<=brk1;
+          when brk1
             next_state<=done;
 
+          --20 : JSR
+          when jsr0
+            next_state<=jsr1;
+          when jsr1
+            next_state<=done;
+
+          --40 : RTI
+          when rti0
+            next_state<=rti1;
+          when rti1
+            next_state<=done;
+
+          --60 : RTS
+          when rts0
+            next_state<=rts1;
+          when rts1
+            next_state<=done;
         end case;
     end process
 end architecture;
