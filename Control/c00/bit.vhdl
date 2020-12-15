@@ -5,7 +5,7 @@ library ieee;
 entity bit is
   port (
   opcode : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
-  timing: IN STD_LOGIC_VECTOR(5 DOWNTO 0);
+  timing: IN STD_LOGIC_VECTOR(2 DOWNTO 0);
   interrupt: IN STD_LOGIC_VECTOR(2 DOWNTO 0);
   ready: IN STD_LOGIC;
   r_w: IN STD_LOGIC;
