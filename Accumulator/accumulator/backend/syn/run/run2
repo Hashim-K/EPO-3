@@ -1,0 +1,1 @@
+ssh -XY hsteman@ce-epo3-cad.ewi.tudelft.nl cd /home/hsteman/accumulator/backend/syn/run\; genus -files ../tcl/syn2.tcl
