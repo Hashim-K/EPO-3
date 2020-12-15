@@ -20,7 +20,8 @@ ENTITY alu_logic IS
     o : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); --output signal
     avr : OUT STD_LOGIC; --overflow
     acr : OUT STD_LOGIC; --carry out
-    hc : OUT STD_LOGIC --half carry out
+    hc : OUT STD_LOGIC --half carry out, not used atm since decimal
+    
   );
 END ENTITY;
 

@@ -40,23 +40,18 @@ BEGIN
 
     load <= sb_ac;
     data_in <= sb_in;
+    negative_flag <= data_in(7);
 
     PROCESS (sb_ac, data_in)
     BEGIN
         IF sb_ac = '1' THEN
             IF data_in = "00000000" THEN
                 zero_flag <= '1';
-                negative_flag <= '0';
-            ELSIF data_in(7) = '1' THEN
-                negative_flag <= '1';
-                zero_flag <= '0';
             ELSE
                 zero_flag <= '0';
-                negative_flag <= '0';
             END IF;
         ELSE
             zero_flag <= '0';
-            negative_flag <= '0';
         END IF;
     END PROCESS;
 
