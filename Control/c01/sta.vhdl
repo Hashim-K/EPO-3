@@ -15,7 +15,8 @@ entity sta is
 end entity;
 
 architecture behaviour of sta is
-  type statetype is(t0, t1, t000x0, t000x1, t000x2, t000x3, t001x0, t001x1, t001x2, t001x3, t010x0, t010x1, t010x2, t011x0, t011x1, t011x2, t011x3, t100x0, t100x1, t100x2, t100x3, t101x0, t101x1, t101x2, t101x3, t110x0, t110x1, t110x2, t110x3, t111x0, t111x1, t111x2, t111x3)
+  type statetype is(t0, t1, t000x0, t000x1, t000x2, t000x3, t000x4, t000x5, t001x0, t001x1, t001x2, t010x0, t010x1, t011x0, t011x1, t011x2, t011x3, t100x0, t100x1, t100x2, t100x3, t100x4, t101x0, t101x1, t101x2, t101x3, t110x0, t110x1, t110x2, t110x3, t111x0, t111x1, t111x2, t111x3, done);
+  signal state, next_state : statetype;
   signal control_out : STD_LOGIC_VECTOR(64 DOWNTO 0);
   signal dl_db, dl_adl, dl_adh, 0_adh(0), 0_adh(1to7), adh_abh, adl_abl, pcl_pcl, adl_pcl, 1_pc, pcl_db, pcl_adl, pch_pch, adh_pch, pch_db, pch_adh, sb_adh, sb_db, 0_adl(0), 0_adl(1), 0_adl(2), s_adl, sb_s, s_s, s_sb, db'_add, db_add, adl_add, dsa, daa, 1_addc, sums, ands, xors,
   ors, lsr, asl, pass1, pass2, add_adl, add_sb(0to6), add_sb(7), 0_add, sb_add, sb_ac, ac_db, ac_sb, sb_x, x_sb, sb_y, y_sb, p_db, dbo_c, ir5_c, acr_c, dbi_z, dbz_z, db2_1, ir5_1, db3_d, ir5_d, db6_v, avr_v, 1_v : STD_LOGIC;
@@ -48,9 +49,6 @@ architecture behaviour of sta is
             when "001" => --85 : Z-Page
               next_state<=t001x0;
 
-            when "010" => --89 : IMM
-              next_state<=t010x0;
-
             when "011" => --8D : ABS
               next_state<=t011x0;
 
@@ -75,6 +73,10 @@ architecture behaviour of sta is
         when t000x2
           next_state<=t000x3;
         when t000x3
+          next_state<=t000x4;
+        when t000x4
+          next_state<=t000x5;
+        when t000x5
           next_state<=done;
 
 
@@ -84,18 +86,8 @@ architecture behaviour of sta is
         when t001x1
           next_state<=t001x2;
         when t001x2
-          next_state<=t001x3;
-        when t001x3
-          next_state<=done;
+          next_state<=done'
 
-
-        --89 : 010 : IMM
-        when t010x0
-          next_state<=t010x1;
-        when t010x1
-          next_state<=t010x2;
-        when t010x2
-          next_state<=done;
 
         --8D : 011 : ABS
         when t011x0
@@ -116,6 +108,8 @@ architecture behaviour of sta is
         when t100x2
           next_state<=t100x3;
         when t100x3
+          next_state<=t100x4;
+        when t100x4
           next_state<=done;
 
 
