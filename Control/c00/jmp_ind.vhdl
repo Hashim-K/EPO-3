@@ -15,7 +15,7 @@ entity jmp_ind is
 end entity;
 
 architecture behaviour of jmp_ind is
-  type statetype is(t0,t1);
+  type statetype is(t0,t1, t101x0, t101x1, t101x2, t101x3, t101x4);
   signal control_out : STD_LOGIC_VECTOR(64 DOWNTO 0);
   signal dl_db, dl_adl, dl_adh, 0_adh(0), 0_adh(1to7), adh_abh, adl_abl, pcl_pcl, adl_pcl, 1_pc, pcl_db, pcl_adl, pch_pch, adh_pch, pch_db, pch_adh, sb_adh, sb_db, 0_adl(0), 0_adl(1), 0_adl(2), s_adl, sb_s, s_s, s_sb, db'_add, db_add, adl_add, dsa, daa, 1_addc, sums, ands, xors,
   ors, lsr, asl, pass1, pass2, add_adl, add_sb(0to6), add_sb(7), 0_add, sb_add, sb_ac, ac_db, ac_sb, sb_x, x_sb, sb_y, y_sb, p_db, dbo_c, ir5_c, acr_c, dbi_z, dbz_z, db2_1, ir5_1, db3_d, ir5_d, db6_v, avr_v, 1_v : STD_LOGIC;
@@ -42,14 +42,20 @@ architecture behaviour of jmp_ind is
           --selecting addressing mode
           when t1=>
             case opcode(4 downto 2) is
-              when "011" => --6C : ABS
+              when "101" => --6C : IND
                 next_state<=t011x0;
               end case;
 
-          --6C : 011 : ABS
-          when t011x0
-            next_state<=t011x1;
-          when t011x1
+          --6C : 101 : IND
+          when t101x0
+            next_state<=t101x1;
+          when t101x1
+            next_state<=t101x2;
+          when t101x2
+            next_state<=t101x3;
+          when t101x3
+            next_state<=t101x4;
+          when t101x4
             next_state<=done;
 
 
