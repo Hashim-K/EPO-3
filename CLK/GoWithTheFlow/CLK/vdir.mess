@@ -1,0 +1,57 @@
+Library vendor : Model Technology
+Maximum unnamed designs : 3
+ENTITY clock
+    Source modified time: Tue Dec 15 16:01:30 2020
+    Depends on: P ieee numeric_std :ASDNFgHXf_ih3J@9F3Ze1
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Source directory: /home/hsteman/CLK
+    HDL source file: VHDL/clock.vhd
+    Source file: VHDL/clock.vhd
+    Start location: VHDL/clock.vhd:5
+    Version string: 49_b0]04zV`n]:bNXKen40
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Wed Dec 16 15:59:39 2020
+    Debug Symbol file exists
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+  ARCHITECTURE BODY arch
+    Depends on: P ieee numeric_std :ASDNFgHXf_ih3J@9F3Ze1
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Depends on: E work clock 49_b0]04zV`n]:bNXKen40
+    Start location: VHDL/clock.vhd:15
+    Version string: <aQn_LI@VC=a06NdbR`1B1
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Wed Dec 16 15:59:39 2020
+    Debug Symbol file exists
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+    Source directory: /home/hsteman/CLK
+    Source file: VHDL/clock.vhd
+    Source modified time: Tue Dec 15 16:01:30 2020
+    HDL source file: VHDL/clock.vhd
+VHDL CONFIGURATION clock_arch_cfg
+    Configuration applies to entity: clock
+    Block configuration applies to architecture: arch
+    Depends on: A work clock arch <aQn_LI@VC=a06NdbR`1B1
+    Depends on: P ieee numeric_std :ASDNFgHXf_ih3J@9F3Ze1
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Depends on: E work clock 49_b0]04zV`n]:bNXKen40
+    Source modified time: Wed Dec 16 15:59:42 2020
+    Source directory: /home/hsteman/CLK
+    HDL source file: VHDL/clock_arch_cfg.vhd
+    Source file: VHDL/clock_arch_cfg.vhd
+    Start location: VHDL/clock_arch_cfg.vhd:1
+    Version string: L[iY9zkf]@DhG<0OHQHa@3
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Wed Dec 16 15:59:42 2020
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
