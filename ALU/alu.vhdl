@@ -44,17 +44,19 @@ architecture structural of alu is
     PORT (
       a : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
       b : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
-      control : IN STD_LOGIC_VECTOR(9 DOWNTO 0);  -- This is not efficent for number of wires maybe multiplex and demultiplax
-      --bit(0) = daa
-      --bit(1) = i/addc
+      control : IN STD_LOGIC_VECTOR(11 DOWNTO 0);  -- This is not efficent for number of wires maybe multiplex and demultiplax
+      --bit(0) = daa, not used atm since decimal
+      --bit(1) = i/addc or called carry in
       --bit(2) = sums
       --bit(3) = ands
       --bit(4) = exors
       --bit(5) = ors
       --bit(6) = srs (lsr)
       --bit(7) = sls (asl)
-      --bit(8) = pass1 (rega)
-      --bit(9) = pass2 (regb)
+      --bit(8) = rotate right
+      --bit(9) = rotate left
+      --bit(10) = pass1 (rega)
+      --bit(11) = pass2 (regb)
       o : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); --output signal
       avr : OUT STD_LOGIC;
       acr : OUT STD_LOGIC; -- cary out

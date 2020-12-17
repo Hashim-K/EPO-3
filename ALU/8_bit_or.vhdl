@@ -20,4 +20,4 @@ BEGIN
   o(5) <= a(5) OR b (5);
   o(6) <= a(6) OR b (6);
   o(7) <= a(7) OR b (7);
-END behavioural;
+END ARCHITECTURE;

@@ -19,4 +19,5 @@ BEGIN
   result <= ("0" & a) + ("0" & b) + cin;
   o <= result(7 DOWNTO 0);
   carry <= result(8);
+  --overflow needs to be done
 END ARCHITECTURE;
