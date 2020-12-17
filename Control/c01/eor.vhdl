@@ -38,121 +38,114 @@ architecture behaviour of eor is
       begin
       case state is
         when t0=>
-          next_state<t1;
+          next_state<=t1;
 
         --selecting addressing mode
         when t1=>
           case opcode(4 downto 2) is
             when "000" => --41 : IND,X
               next_state<=t000x0;
-
             when "001" => --45 : Z-Page
               next_state<=t001x0;
-
             when "010" => --49 : IMM
               next_state<=t010x0;
-
             when "011" => --4D : ABS
               next_state<=t011x0;
-
             when "100" => --51 : IND,Y
               next_state<=t100x0;
-
             when "101" => --55 : Z-Page,X
               next_state<=t101x0;
-
             when "110" => --59 : ABS,Y
               next_state<=t110x0;
-
             when "111" => --5D : ABS,X
               next_state<=t111x0;
             end case;
 
         --41 : 000 : IND,X
-        when t000x0
+        when t000x0 =>
           next_state<=t000x1;
-        when t000x1
+        when t000x1 =>
           next_state<=t000x2;
-        when t000x2
+        when t000x2 =>
           next_state<=t000x3;
-        when t000x3
+        when t000x3 =>
           next_state<=t000x4;
-        when t000x4
+        when t000x4 =>
           next_state<=t000x5;
-        when t000x5
+        when t000x5 =>
           next_state<=done;
 
 
         --45 : 001 : Z-Page
-        when t001x0
+        when t001x0 =>
           next_state<=t001x1;
-        when t001x1
+        when t001x1 =>
           next_state<=t001x2;
-        when t001x2
+        when t001x2 =>
           next_state<=done;
 
 
         --49 : 010 : IMM
-        when t010x0
+        when t010x0 =>
           next_state<=t010x1;
-        when t010x1
+        when t010x1 =>
           next_state<=done;
 
 
         --4D : 011 : ABS
-        when t011x0
+        when t011x0 =>
           next_state<=t011x1;
-        when t011x1
+        when t011x1 =>
           next_state<=t011x2;
-        when t011x2
+        when t011x2 =>
           next_state<=t011x3;
-        when t011x3
+        when t011x3 =>
           next_state<=done;
 
 
         --51 : 100 : IND,Y
-        when t100x0
+        when t100x0 =>
           next_state<=t100x1;
-        when t100x1
+        when t100x1 =>
           next_state<=t100x2;
-        when t100x2
+        when t100x2 =>
           next_state<=t100x3;
-        when t100x3
+        when t100x3 =>
           next_state<=t100x4;
-        when t100x4
+        when t100x4 =>
           next_state<=done;
 
 
         --55 : 101 : Z-Page,X
-        when t101x0
+        when t101x0 =>
           next_state<=t101x1;
-        when t101x1
+        when t101x1 =>
           next_state<=t101x2;
-        when t101x2
+        when t101x2 =>
           next_state<=t101x3;
-        when t101x3
+        when t101x3 =>
           next_state<=done;
 
 
         --59 : 110 : ABS,Y
-        when t110x0
+        when t110x0 =>
           next_state<=t110x1;
-        when t110x1
+        when t110x1 =>
           next_state<=t110x2;
-        when t110x2
+        when t110x2 =>
           next_state<=t110x3;
-        when t110x3
+        when t110x3 =>
           next_state<=done;
 
 
         --5D : 111 : ABS,X
-        when t111x0
+        when t111x0 =>
           next_state<=t111x1;
-        when t111x1
+        when t111x1 =>
           next_state<=t111x2;
-        when t111x2
+        when t111x2 =>
           next_state<=t111x3;
-        when t111x3
+        when t111x3 =>
           next_state<=done;
 
 

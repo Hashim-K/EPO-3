@@ -22,6 +22,7 @@ begin
   case ir_in(1 downto 0)
     when "00" =>
       case ir_in(7 downto 5)
+        when "000" => --BRK
         when "001" => --BIT
         when "010" => --JMP
         when "011" => --JMP(ABS)

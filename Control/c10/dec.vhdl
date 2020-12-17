@@ -15,7 +15,7 @@ entity dec is
 end entity;
 
 architecture behaviour of dec is
-  type statetype is(t0, t1, t001x0, t001x1, t001x2, t001x3, t001x4, t011x0, t011x1, t011x2, t011x3, t011x4, t011x5, t101x0, t101x1, t101x2, t101x3, t101x4, t101x5, t111x0, t111x1, t111x2, t111x3, t111x4, t111x5, t111x6)
+  type statetype is(t0, t1, t001x0, t001x1, t001x2, t001x3, t001x4, t010x0, t010x1, t011x0, t011x1, t011x2, t011x3, t011x4, t011x5, t101x0, t101x1, t101x2, t101x3, t101x4, t101x5, t111x0, t111x1, t111x2, t111x3, t111x4, t111x5, t111x6)
   signal state, next_state : statetype;
   signal control_out : STD_LOGIC_VECTOR(64 DOWNTO 0);
   signal dl_db, dl_adl, dl_adh, 0_adh(0), 0_adh(1to7), adh_abh, adl_abl, pcl_pcl, adl_pcl, 1_pc, pcl_db, pcl_adl, pch_pch, adh_pch, pch_db, pch_adh, sb_adh, sb_db, 0_adl(0), 0_adl(1), 0_adl(2), s_adl, sb_s, s_s, s_sb, db'_add, db_add, adl_add, dsa, daa, 1_addc, sums, ands, xors,
@@ -38,82 +38,88 @@ architecture behaviour of dec is
         begin
         case state is
           when t0=>
-            next_state<t1;
+            next_state<=t1;
 
           --selecting addressing mode
           when t1=>
             case opcode(4 downto 2) is
               when "001" => --C6 : Z-Page
                 next_state<=t001x0;
-
+              when "010" => --CA : DEX
+                next_state<=t010x0;
               when "011" => --CE : ABS
-                next_state<=t011x0;
-
+                next_state<=t011x0; =>
               when "101" => --D6 : Z-Page,X
                 next_state<=t101x0;
-
               when "111" => --DE : ABS,X
                 next_state<=t111x0;
               end case;
 
           --C6 : 001 : Z-Page
-          when t001x0
+          when t001x0 =>
             next_state<=t001x1;
-          when t001x1
+          when t001x1 =>
             next_state<=t001x2;
-          when t001x2
+          when t001x2 =>
             next_state<=t001x3;
-          when t0001x3
+          when t0001x3 =>
             next_state<=t001x4;
-          when t001x4
+          when t001x4 =>
+            next_state<=done;
+
+
+          --CA : 010 : DEX
+          when t010x0 =>
+            next_state<=t010x1;
+          when t010x1 =>
             next_state<=done;
 
 
           --CE : 011 : ABS
-          when t011x0
+          when t011x0 =>
             next_state<=t011x1;
-          when t011x1
+          when t011x1 =>
             next_state<=t011x2;
-          when t011x2
+          when t011x2 =>
             next_state<=t011x3;
-          when t011x3
+          when t011x3 =>
             next_state<=t011x4;
-          when t011x4
+          when t011x4 =>
             next_state<=t011x5;
-          when t011x5
+          when t011x5 =>
             next_state<=done;
 
 
           --D6 : 101 : Z-Page,X
-          when t101x0
+          when t101x0 =>
             next_state<=t101x1;
-          when t101x1
+          when t101x1 =>
             next_state<=t101x2;
-          when t101x2
+          when t101x2 =>
             next_state<=t101x3;
-          when t101x3
+          when t101x3 =>
             next_state<=t101x4;
-          when t101x4
+          when t101x4 =>
             next_state<=t101x5;
-          when t101x41x5
+          when t101x5 =>
             next_state<=done;
 
 
 
           --DE : 111 : ABS,X
-          when t111x0
+          when t111x0 =>
             next_state<=t111x1;
-          when t111x1
+          when t111x1 =>
             next_state<=t111x2;
-          when t111x2
+          when t111x2 =>
             next_state<=t111x3;
-          when t111x3
+          when t111x3 =>
             next_state<=t111x4;
-          when t111x4
+          when t111x4 =>
             next_state<=t111x5;
-          when t111x5
+          when t111x5 =>
             next_state<=t111x6;
-          when t111x6
+          when t111x6 =>
             next_state<=done;
 
         end case;

@@ -40,20 +40,12 @@ BEGIN
 
     load <= sb_ac;
     data_in <= sb_in;
-    negative_flag <= data_in(7);
 
-    PROCESS (sb_ac, data_in)
-    BEGIN
-        IF sb_ac = '1' THEN
-            IF data_in = "00000000" THEN
-                zero_flag <= '1';
-            ELSE
-                zero_flag <= '0';
-            END IF;
-        ELSE
-            zero_flag <= '0';
-        END IF;
-    END PROCESS;
+    WITH sb_in SELECT zero_flag <=
+        '1' WHEN "00000000",
+        '0' WHEN OTHERS;
+
+    negative_flag <= sb_in(7);
 
     WITH control SELECT sb_out <=
         data_out WHEN "10",
