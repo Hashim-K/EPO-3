@@ -2,7 +2,7 @@ library ieee;
   use ieee.std_logic_1164.all;
   use ieee.numeric_std.all;
 
-entity stx is
+entity bit is
   port (
   opcode : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
   timing: IN STD_LOGIC_VECTOR(2 DOWNTO 0);
@@ -14,8 +14,8 @@ entity stx is
   );
 end entity;
 
-architecture behaviour of stx is
-  type statetype is(t0, t1, t001x0, t001x1, t001x2, t010x0, t010x1, t011x0, t011x1, t011x2, t011x3, t101x0, t101x1, t101x2, t101x3, t110x0, t110x1);
+architecture behaviour of bit is
+  type statetype is(t0, t1, t000x0, t000x1, t000x2, t000x3);
   signal state, next_state : statetype;
   signal control_out : STD_LOGIC_VECTOR(64 DOWNTO 0);
   signal dl_db, dl_adl, dl_adh, 0_adh(0), 0_adh(1to7), adh_abh, adl_abl, pcl_pcl, adl_pcl, 1_pc, pcl_db, pcl_adl, pch_pch, adh_pch, pch_db, pch_adh, sb_adh, sb_db, 0_adl(0), 0_adl(1), 0_adl(2), s_adl, sb_s, s_s, s_sb, db'_add, db_add, adl_add, dsa, daa, 1_addc, sums, ands, xors,
@@ -43,59 +43,51 @@ architecture behaviour of stx is
           --selecting addressing mode
           when t1=>
             case opcode(4 downto 2) is
-              when "001" => --86 : Z-Page
-                next_state<=t001x0;
-              when "010" => --8A : TXA
+              when "000" => -- BRL
+                next_state<=t000x0;
+              when "010" => -- PHP
                 next_state<=t010x0;
-              when "011" => --8E : ABS
-                next_state<=t011x0;
-              when "101" => --96 : Z-Page,Y
-                next_state<=t101x0;
-              when "110" => --9A : TXS
+              when "100" => -- BPL
+                next_state<=t100x0;
+              when "110" => -- CLC
                 next_state<=t110x0;
 
               end case;
 
-          --86 : 001 : Z-Page
-          when t001x0 =>
-            next_state<=t001x1;
-          when t001x1 =>
-            next_state<=t001x2;
-          when t001x2 =>
+            -- 00 : 000 : BRK
+          when t000x0 =>
+            next_state<=t000x1;
+          when t000x1 =>
+            next_state<=t000x2;
+          when t000x2 =>
+            next_state<=t000x3;
+          when t000x3 =>
+            next_state<=t000x4;
+          when t000x4 =>
+            next_state<=t000x5;
+          when t000x5 =>
+            next_state<=t000x6;
+          when t000x6 =>
             next_state<=done;
 
-          --8A : 010 : TXA
+            -- 08 : 010 : PHP
           when t010x0 =>
             next_state<=t010x1;
           when t010x1 =>
+            next_state<=t010x2;
+          when t010x2 =>
             next_state<=done;
 
-          --8E : 011 : ABS
-          when t011x0 =>
-            next_state<=t011x1;
-          when t011x1 =>
-            next_state<=t011x2;
-          when t011x2 =>
-            next_state<=t011x3;
-          when t011x3 =>
+            -- 10 : 100 : BPL
+          when t100x0 =>
+            next_state<=t100x1;
+          when t100x1 =>
             next_state<=done;
 
-
-          --96 : 101 : Z-Page,Y
-          when t101x0 =>
-            next_state<=t101x1;
-          when t101x1 =>
-            next_state<=t101x2;
-          when t101x2 =>
-            next_state<=t101x3;
-          when t101x3 =>
-            next_state<=done;
-
-          --9A : 110 : TXS
+            -- 18 : 110 : CLC
           when t110x0 =>
-            next_state<=t110x1;
-          when t110x1 =>
             next_state<=done;
+
 
 
         end case;
