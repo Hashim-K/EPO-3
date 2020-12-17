@@ -13,7 +13,7 @@ entity processor is
   data_in : OUT std_logic_vector(7 downto 0);  -- for data in from ram
 end entity;
 
-architecture arch of processor is
+architecture structural of processor is
 
   -- clock circuit for generating a two phase clock signal
   component clock is
@@ -22,18 +22,34 @@ architecture arch of processor is
     reset : IN std_logic;
     clk : OUT std_logic;  -- first phase clock
     clk_2 : OUT std_logic; -- Second phase clock
+
+    adb_external : OUT std_logic_vector(7 downto 0);  -- External connection of the addres + data
+    db_external : IN std_logic_vector(7 downto 0);    -- External connection of the databus bus in
     );
   end component;
 
-  -- 8 Bit register
-  component register_8bit is
+
+  -- x index register
+  component x_index is
      port(clk     : in  std_logic;
-          load    : in  std_logic;
+          sb_x    : in  std_logic;
           reset   : in  std_logic;
           data_in : in  std_logic_vector(7 downto 0);
-          write_enable   : in  std_logic;
-          reg_out : out std_logic_vector(7 downto 0));
-  END component;
+          x_sb   : in  std_logic;
+          sb : out std_logic_vector(7 downto 0));
+  end component;
+
+
+  -- y index register
+  component y_index is
+     port(clk     : in  std_logic;
+          sb_y    : in  std_logic;
+          reset   : in  std_logic;
+          data_in : in  std_logic_vector(7 downto 0);
+          y_sb   : in  std_logic;
+          sb : out std_logic_vector(7 downto 0)); -- Serial Bus
+  end component;
+
 
   -- Alu block including register A and B and memory hold register
   component alu is
@@ -45,14 +61,9 @@ architecture arch of processor is
     sb_in : in std_logic_vector(7 downto 0); -- data bus in
     sb_out : out std_logic_vector(7 downto 0); -- data bus out
 
-
     -- control signals
       -- alu logic in
-      control : IN std_logic_vector(9 downto 0); -- alu operation mode
-
-      daa : in std_logic;     -- decimal enable
-      i_addc : in std_logic;  -- carry in
-      srs : in std_logic;     --
+      control : IN std_logic_vector(11 downto 0); -- alu operation mode
 
       -- alu logic out
       avr : out std_logic;    -- overflow
@@ -135,17 +146,50 @@ end component;
       );
   END component;
 
+  -- External Memory
+  component mem_add_reg is -- output logic for external interfacint output first low addres, high addres, than data
+    port (
+    clk : IN std_logic;
+    reset : IN std_logic;
+
+    enable : IN std_logic; -- enable the transition
+
+    abl_in : IN std_logic_vector(7 downto 0); -- Addres bus low in
+    abh_in : IN std_logic_vector(7 downto 0); -- Addres bus High in
+    db_in : IN std_logic_vector(7 downto 0); -- Data bus in
+
+    o_to_extern : OUT std_logic_vector(7 downto 0); -- output to external component
+    control : OUT std_logic_vector(1 downto 0) -- multiplex data
+    );
+  end component;
+
+  component mem_data_reg is
+    port (
+    clk : IN std_logic;
+    reset : IN std_logic;
+    enable : IN std_logic; -- store data from external memory into registers
+    control : IN std_logic_vector(1 downto 0); -- control signal for selecting if data has to be put onto db, adh, adl
+    db : OUT std_logic_vector(7 downto 0); -- to databus
+    adl : OUT std_logic_vector(7 downto 0); -- addres low
+    adh : OUT std_logic_vector(7 downto 0); -- addres high
+    external_in : IN std_logic_vector(7 downto 0) -- external input databus
+    );
+  end component;
+
+
 
   -- Instruction decoder
   entity instruction_decoder is
     port (
-        ir_in: IN STD_LOGIC_VECTOR(15 DOWNTO 0);
-        timing: IN STD_LOGIC_VECTOR(5 DOWNTO 0);
-        interrupt: IN STD_LOGIC_VECTOR(2 DOWNTO 0);
-        ready: IN STD_LOGIC;
-        r_w: IN STD_LOGIC;
-        sv: IN STD_LOGIC;
-        control_out: OUT STD_LOGIC_VECTOR(64 DOWNTO 0)
+          clk : IN std_logic;
+          clk_2 : IN std_logic;
+          ir_in: IN STD_LOGIC_VECTOR(15 DOWNTO 0);    -- Instruction register in
+          timing: IN STD_LOGIC_VECTOR(2 DOWNTO 0);    -- Cycle select
+          interrupt: IN STD_LOGIC_VECTOR(2 DOWNTO 0); --
+          ready: IN STD_LOGIC;
+          r_w: IN STD_LOGIC;
+          sv: IN STD_LOGIC;
+          control_out: OUT STD_LOGIC_VECTOR(66 DOWNTO 0)
     );
   end entity;
 
@@ -159,72 +203,101 @@ signal clk, clk_2 : std_logic;
 signal daa, i_addc, srs, avr, acr, hc, clk_2, add_adl, add_sb6, add_sb7, o_add, sb_add, inv_db_add, db_add, adl_add : std_logic;
 
 
-
-
--- Main control signal
-signal control_out STD_LOGIC_VECTOR(64 DOWNTO 0);
+signal sb, db, adh, adl : std_logic_vector(7 downto 0);     -- Busses
+signal control_out STD_LOGIC_VECTOR(64 DOWNTO 0);           -- Main control signal
+signal pc_carry : STD_LOGIC;                                -- pc_low carry to pc_high_carry
 
 begin
 
+-- This is the main map for all the control signals
+
+-- x index register
+  sb_x        <= control_out(49);
+  x_sb        <= control_out(50);
+
+-- Y index REGISTER
+  sb_y        <= control_out(51);
+  y_sb        <= control_out(52);
 
 
 -- ALU control signals maps
   -- ALU in from control
-  daa         <= control_out(29);
-  i_addc      <= control_out(30);
+  control(0)  <= control_out(29);  -- TODO FIX!
+  control(1)  <= control_out(30);
+  control(2)  <= control_out(31);
+  control(3)  <= control_out(32);
+  control(4)  <= control_out(33);
+  control(5)  <= control_out(34);
+  control(6)  <= control_out(35);
+  control(7)  <= control_out(36);
+  control(8)  <= control_out(37);
+  control(9)  <= control_out(38);
+  control(10)  <= control_out(39);
+  control(11)  <= control_out(40);
 
-  control     <= --: IN std_logic_vector(9 downto 0);
+  add_adl     <= control_out(41);
+  add_sb6     <= control_out(42);
+  add_sb7     <= control_out(43);
+  o_add       <= control_out(44);
+  sb_add      <= control_out(45);
+  inv_db_add  <= control_out(25);
+  db_add      <= control_out(26);
+  adl_add     <= control_out(27);
 
-  srs         <= control_out();
-  clk_2       <= control_out();
-  add_adl     <= control_out();
-  add_sb6     <= control_out();
-  add_sb7     <= control_out();
-  o_add       <= control_out();
-  sb_add      <= control_out();
-  inv_db_add  <= control_out();
-  db_add      <= control_out();
-  adl_add     <= control_out();
-
-  -- ALU OUT to control
-  avr         <= control_out();
-  acr         <= control_out();
-  hc          <= control_out();
+  -- ALU OUT flaggs
+           <= avr;
+           <= acr;
+           <= hc;
 
 
 -- Program Counter High
   adh_pch     <= control_out(13);
   pch_adh     <= control_out(15);
   pch_db      <= control_out(14);
-  pclc        <= ; -- cary in from program counter low
-  adh_in      <= ; -- addres bus low in
-  -- Program counter HIGH
-  adh_out     <= ;-- addres bus high out
-  db_out      <= ;-- databus out
+  pclc        <= pc_carry; -- cary in from program counter low
 
 
 -- Program Counter Low
-  pclc    -- Carry out
-
-  i_pc        <= ;-- Enable Increment program counter
-  pcl_adl     <= ;-- output count to ADL
-  pcl_db      <= ;-- output count to DB
-  adl_pcl     <= ;-- Load from ADL
+  pclc        <= pc_carry;-- Carry out
+  i_pc        <= control_out(9);-- Enable Increment program counter
+  pcl_adl     <= control_out(11);-- output count to ADL
+  pcl_db      <= control_out(10);-- output count to DB
+  adl_pcl     <= control_out(8);-- Load from ADL
 -- PCL_PCL : IN std_logic  -- Questionable if needed maybe obsolite
-
--- buss conections
-adl_in : IN std_logic_vector(7 downto 0); -- adders bus low
-adl_out : OUT std_logic_vector(7 downto 0);
-db_out : OUT std_logic_vector(7 downto 0) -- databus
+  adl_in      <= ;-- adders bus low
+  adl_out     <= ;
+  db_out      <= ;-- databus
 
 
+-- accumulator
+  ac_db         <=  control_out(47);
+  ac_sb         <=  control_out(48);
+  sb_ac         <=  control_out(46);
+
+                <=  zero_flag;
+                <=  negative_flag;
 
 
 
+-- NOT ABLE TO DO NOW!!! TODO
+-- Instruction decoder
+  ir_in         <= ; -- IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+  timing        <= ; -- IN STD_LOGIC_VECTOR(5 DOWNTO 0);
+  interrupt     <= ; -- interrupt
+  ready         <= ;
+  r_w           <= ;
+  sv            <= ;
+
+-- mem_add_reg
+  enable        <= ;
+  o_to_extern   <= ;
+  control       <= ;
 
 
-
-
+-- mem_data_reg
+  enable      <= ;
+  control     <= ;
+  external_in <= ;
 
 
 
@@ -237,6 +310,27 @@ clock: clock PORT MAP(
                       clk,
                       clk_2
                       );
+
+-- x index register
+x_in : x_index PORT MAP(
+                      clk,
+                      sb_x,
+                      reset,
+                      data_in,
+                      x_sb,
+                      sb
+);
+
+-- y index register
+y_in : y_index PORT MAP(
+                      clk,
+                      sb_y,
+                      reset,
+                      data_in,
+                      y_sb,
+                      sb
+);
+
 
 
 -- ALU port map
@@ -287,9 +381,9 @@ program_couter_high : pc_high PORT MAP(
                       pch_adh,
                       pch_db,
                       pclc,
-                      adh_in,
-                      adh_out,
-                      db_out,
+                      adh,
+                      adh,
+                      adh,
                       );
 
 -- accumulator
@@ -299,25 +393,17 @@ accumu : accumulator PORT MAP(
                       ac_db,
                       ac_sb,
                       sb_ac,
-                      sb_in,
-                      sb_out,
+                      sb,
+                      sb,
                       db,
                       zero_flag,
                       negative_flag
                       );
 
-
-registe : register_8bit PORT MAP(
-                      clk,
-                      load,
-                      reset,
-                      data_in,
-                      write_enable,
-                      reg_out,
-                      );
-
-
+-- Instruction Decoder
 instruction_dec : instruction_decoder PORT MAP(
+                      clk,
+                      clk_2,
                       ir_in,
                       timing,
                       interrupt,
@@ -325,6 +411,28 @@ instruction_dec : instruction_decoder PORT MAP(
                       r_w,
                       sv,
                       control_out,
+);
+
+add_Reg : mem_add_reg PORT MAP(
+                      clk,
+                      reset,
+                      enable,
+                      abl_in,
+                      abh_in,
+                      db_in,
+                      o_to_extern,
+                      control
+);
+
+data_reg :mem_data_reg PORT MAP(
+                      clk,
+                      reset,
+                      enable,
+                      control,
+                      db,
+                      adl,
+                      adh,
+                      external_in
 );
 
 

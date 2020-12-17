@@ -2,7 +2,7 @@ library ieee;
   use ieee.std_logic_1164.all;
   use ieee.numeric_std.all;
 
-entity o is -- output logic for external interfacint output first low addres, high addres, than data
+entity mem_add_reg is -- output logic for external interfacint output first low addres, high addres, than data
   port (
   clk : IN std_logic;
   reset : IN std_logic;
@@ -18,7 +18,7 @@ entity o is -- output logic for external interfacint output first low addres, hi
   );
 end entity;
 
-architecture arch of o is
+architecture arch of mem_add_reg is
   type statetype is (reset_state, state1, state2, state3);
   signal state, next_state : statetype := reset_state;
 

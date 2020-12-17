@@ -4,13 +4,15 @@ library ieee;
 
 entity instruction_decoder is
   port (
-      ir_in: IN STD_LOGIC_VECTOR(15 DOWNTO 0);
-      timing: IN STD_LOGIC_VECTOR(2 DOWNTO 0);
-      interrupt: IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+      clk : IN std_logic;
+      clk_2 : IN std_logic;
+      ir_in: IN STD_LOGIC_VECTOR(15 DOWNTO 0);    -- Instruction register in
+      timing: IN STD_LOGIC_VECTOR(2 DOWNTO 0);    -- Cycle select
+      interrupt: IN STD_LOGIC_VECTOR(2 DOWNTO 0); --
       ready: IN STD_LOGIC;
       r_w: IN STD_LOGIC;
       sv: IN STD_LOGIC;
-      control_out: OUT STD_LOGIC_VECTOR(64 DOWNTO 0)
+      control_out: OUT STD_LOGIC_VECTOR(66 DOWNTO 0)
   );
 end entity;
 

@@ -2,7 +2,7 @@ library ieee;
   use ieee.std_logic_1164.all;
   use ieee.numeric_std.all;
 
-entity i is
+entity mem_data_reg is
   port (
   clk : IN std_logic;
   reset : IN std_logic;
@@ -15,7 +15,7 @@ entity i is
   );
 end entity;
 
-architecture arch of i is
+architecture arch of mem_data_reg is
   component register_8bit IS
     PORT (
       clk : IN STD_LOGIC;
@@ -43,7 +43,6 @@ begin
   with control select adh <=
     reg_out when "11",
     "ZZZZZZZZ" when others;
-
 
   -- to register in
   with enable select data_in <=
