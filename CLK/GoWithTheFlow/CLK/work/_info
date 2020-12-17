@@ -1,0 +1,77 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 d/home/hsteman/CLK
+Eclock
+Z1 w1608044490
+Z2 DPx4 ieee 11 numeric_std 0 22 :ASDNFgHXf_ih3J@9F3Ze1
+Z3 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
+Z4 DPx4 ieee 14 std_logic_1164 0 22 eNV`TJ_GofJTzYa?f<@Oe1
+R0
+Z5 8VHDL/clock.vhd
+Z6 FVHDL/clock.vhd
+l0
+L5
+V49_b0]04zV`n]:bNXKen40
+!s100 gQ_ELzM`JM8ISLiINS3^W2
+Z7 OL;C;10.5b;63
+33
+Z8 !s110 1608130779
+!i10b 1
+Z9 !s108 1608130778.000000
+Z10 !s90 -2008|-lower|-explicit|-work|work|VHDL/clock.vhd|-quiet|-nologo|
+Z11 !s107 VHDL/clock.vhd|
+!i113 0
+Z12 o-quiet -nologo -2008 -lower -explicit -work work
+Z13 tExplicit 1 CvgOpt 0
+Aarch
+R2
+R3
+R4
+Z14 DEx4 work 5 clock 0 22 49_b0]04zV`n]:bNXKen40
+l18
+L15
+V<aQn_LI@VC=a06NdbR`1B1
+!s100 ^cTJb5G^;n4hA@JoILKHo2
+R7
+33
+R8
+!i10b 1
+R9
+R10
+R11
+!i113 0
+R12
+R13
+Cclock_arch_cfg
+eclock
+aarch
+DAx4 work 5 clock 4 arch 22 <aQn_LI@VC=a06NdbR`1B1
+R2
+R3
+R4
+R14
+w1608130782
+R0
+8VHDL/clock_arch_cfg.vhd
+FVHDL/clock_arch_cfg.vhd
+l0
+L1
+VL[iY9zkf]@DhG<0OHQHa@3
+!s100 LK`>g_=H9ldk0G0cZl3C^3
+R7
+33
+!s110 1608130782
+!i10b 0
+!s108 1608130782.000000
+!s90 -2008|-lower|-explicit|-work|work|VHDL/clock_arch_cfg.vhd|-quiet|-nologo|
+!s107 VHDL/clock_arch_cfg.vhd|
+!i113 0
+R12
+R13

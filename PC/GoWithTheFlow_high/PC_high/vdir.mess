@@ -1,0 +1,113 @@
+Library vendor : Model Technology
+Maximum unnamed designs : 3
+ENTITY pc_high
+    Source modified time: Tue Dec 15 16:01:30 2020
+    Depends on: P ieee numeric_std :ASDNFgHXf_ih3J@9F3Ze1
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Source directory: /home/hsteman/PC_high
+    HDL source file: VHDL/pc_high.vhd
+    Source file: VHDL/pc_high.vhd
+    Start location: VHDL/pc_high.vhd:5
+    Version string: :=G:>io4bg8gNDkWb7kWY0
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Wed Dec 16 16:25:28 2020
+    Debug Symbol file exists
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+  ARCHITECTURE BODY arch
+    Depends on: P ieee numeric_std :ASDNFgHXf_ih3J@9F3Ze1
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Depends on: E work pc_high :=G:>io4bg8gNDkWb7kWY0
+    Start location: VHDL/pc_high.vhd:22
+    Version string: 7IH8NTV1nSl_:gV4_752o1
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Wed Dec 16 16:25:28 2020
+    Debug Symbol file exists
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+    Source directory: /home/hsteman/PC_high
+    Source file: VHDL/pc_high.vhd
+    Source modified time: Tue Dec 15 16:01:30 2020
+    HDL source file: VHDL/pc_high.vhd
+VHDL CONFIGURATION pc_high_arch_cfg
+    Configuration applies to entity: pc_high
+    Block configuration applies to architecture: arch
+    Depends on: E work register_8bit RMTUnnKiY1D`lm@7B]aPd3
+    Depends on: C work register_8bit_behaviour_cfg NaY6WMKhPTCFbSU:N?;ab1
+    Depends on: A work pc_high arch 7IH8NTV1nSl_:gV4_752o1
+    Depends on: P ieee numeric_std :ASDNFgHXf_ih3J@9F3Ze1
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Depends on: E work pc_high :=G:>io4bg8gNDkWb7kWY0
+    Source modified time: Wed Dec 16 16:25:33 2020
+    Source directory: /home/hsteman/PC_high
+    HDL source file: VHDL/pc_high_arch_cfg.vhd
+    Source file: VHDL/pc_high_arch_cfg.vhd
+    Start location: VHDL/pc_high_arch_cfg.vhd:1
+    Version string: :7mUknOL8HR?Gnb^Y[A[;2
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Wed Dec 16 16:25:33 2020
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+ENTITY register_8bit
+    Source modified time: Tue Dec 15 16:01:30 2020
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Source directory: /home/hsteman/PC_high
+    HDL source file: VHDL/8_bit_register.vhd
+    Source file: VHDL/8_bit_register.vhd
+    Start location: VHDL/8_bit_register.vhd:4
+    Version string: RMTUnnKiY1D`lm@7B]aPd3
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Wed Dec 16 16:25:27 2020
+    Debug Symbol file exists
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+  ARCHITECTURE BODY behaviour
+    Depends on: E work register_8bit RMTUnnKiY1D`lm@7B]aPd3
+    Depends on: P ieee numeric_std :ASDNFgHXf_ih3J@9F3Ze1
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Start location: VHDL/8_bit_register.vhd:18
+    Version string: G]NWEI3hdhn`1:TGcz>783
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Wed Dec 16 16:25:27 2020
+    Debug Symbol file exists
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+    Source directory: /home/hsteman/PC_high
+    Source file: VHDL/8_bit_register.vhd
+    Source modified time: Tue Dec 15 16:01:30 2020
+    HDL source file: VHDL/8_bit_register.vhd
+VHDL CONFIGURATION register_8bit_behaviour_cfg
+    Configuration applies to entity: register_8bit
+    Block configuration applies to architecture: behaviour
+    Depends on: P ieee numeric_std :ASDNFgHXf_ih3J@9F3Ze1
+    Depends on: A work register_8bit behaviour G]NWEI3hdhn`1:TGcz>783
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Depends on: E work register_8bit RMTUnnKiY1D`lm@7B]aPd3
+    Source modified time: Wed Dec 16 16:25:32 2020
+    Source directory: /home/hsteman/PC_high
+    HDL source file: VHDL/register_8bit_behaviour_cfg.vhd
+    Source file: VHDL/register_8bit_behaviour_cfg.vhd
+    Start location: VHDL/register_8bit_behaviour_cfg.vhd:1
+    Version string: NaY6WMKhPTCFbSU:N?;ab1
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Wed Dec 16 16:25:32 2020
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0

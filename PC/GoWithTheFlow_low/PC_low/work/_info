@@ -1,0 +1,145 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 d/home/hsteman/PC_low
+Epc_low
+Z1 w1608044490
+Z2 DPx4 ieee 11 numeric_std 0 22 :ASDNFgHXf_ih3J@9F3Ze1
+Z3 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
+Z4 DPx4 ieee 14 std_logic_1164 0 22 eNV`TJ_GofJTzYa?f<@Oe1
+R0
+Z5 8VHDL/pc_low.vhd
+Z6 FVHDL/pc_low.vhd
+l0
+L5
+V<5i02[OkKj[14gD<XdjPE1
+!s100 ^HL`8ME6hf@XLQzhh_`9C2
+Z7 OL;C;10.5b;63
+33
+Z8 !s110 1608132189
+!i10b 1
+Z9 !s108 1608132189.000000
+Z10 !s90 -2008|-lower|-explicit|-work|work|VHDL/pc_low.vhd|-quiet|-nologo|
+Z11 !s107 VHDL/pc_low.vhd|
+!i113 0
+Z12 o-quiet -nologo -2008 -lower -explicit -work work
+Z13 tExplicit 1 CvgOpt 0
+Aarch
+R2
+R3
+R4
+Z14 DEx4 work 6 pc_low 0 22 <5i02[OkKj[14gD<XdjPE1
+l45
+L27
+ViSHcL_1jmmWf:iRgZ>^Cb3
+!s100 <LFh=7]KEXWGJWS7fAANE2
+R7
+33
+R8
+!i10b 1
+R9
+R10
+R11
+!i113 0
+R12
+R13
+Cpc_low_arch_cfg
+epc_low
+aarch
+Z15 DEx4 work 13 register_8bit 0 22 RMTUnnKiY1D`lm@7B]aPd3
+DCx4 work 27 register_8bit_behaviour_cfg 0 22 NaY6WMKhPTCFbSU:N?;ab1
+DAx4 work 6 pc_low 4 arch 22 iSHcL_1jmmWf:iRgZ>^Cb3
+R2
+R3
+R4
+R14
+w1608132191
+R0
+8VHDL/pc_low_arch_cfg.vhd
+FVHDL/pc_low_arch_cfg.vhd
+l0
+L1
+V;>8e:B8YeXb7621h4M>DW3
+!s100 010B:i2i]U@^6SfdO;O;03
+R7
+33
+!s110 1608132191
+!i10b 0
+!s108 1608132191.000000
+!s90 -2008|-lower|-explicit|-work|work|VHDL/pc_low_arch_cfg.vhd|-quiet|-nologo|
+!s107 VHDL/pc_low_arch_cfg.vhd|
+!i113 0
+R12
+R13
+Eregister_8bit
+R1
+R3
+R4
+R0
+Z16 8VHDL/8_bit_register.vhd
+Z17 FVHDL/8_bit_register.vhd
+l0
+L4
+VRMTUnnKiY1D`lm@7B]aPd3
+!s100 3oZ58Zif[[8RFTlTHYajh3
+R7
+33
+Z18 !s110 1608132177
+!i10b 1
+Z19 !s108 1608132177.000000
+Z20 !s90 -2008|-lower|-explicit|-work|work|VHDL/8_bit_register.vhd|-quiet|-nologo|
+Z21 !s107 VHDL/8_bit_register.vhd|
+!i113 0
+R12
+R13
+Abehaviour
+R15
+R2
+R3
+R4
+l22
+L18
+VG]NWEI3hdhn`1:TGcz>783
+!s100 i5=j7Hk2D<bk=ZKzg[;OC3
+R7
+33
+R18
+!i10b 1
+R19
+R20
+R21
+!i113 0
+R12
+R13
+Cregister_8bit_behaviour_cfg
+eregister_8bit
+abehaviour
+R2
+DAx4 work 13 register_8bit 9 behaviour 22 G]NWEI3hdhn`1:TGcz>783
+R3
+R4
+R15
+w1608132181
+R0
+8VHDL/register_8bit_behaviour_cfg.vhd
+FVHDL/register_8bit_behaviour_cfg.vhd
+l0
+L1
+VNaY6WMKhPTCFbSU:N?;ab1
+!s100 zNS1YTe=l<4M?A7aHOah82
+R7
+33
+!s110 1608132181
+!i10b 0
+!s108 1608132181.000000
+!s90 -2008|-lower|-explicit|-work|work|VHDL/register_8bit_behaviour_cfg.vhd|-quiet|-nologo|
+!s107 VHDL/register_8bit_behaviour_cfg.vhd|
+!i113 0
+R12
+R13

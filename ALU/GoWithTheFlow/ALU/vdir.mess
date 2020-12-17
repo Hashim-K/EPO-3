@@ -1,0 +1,631 @@
+Library vendor : Model Technology
+Maximum unnamed designs : 3
+ENTITY a_input_register
+    Source modified time: Tue Dec 15 16:01:30 2020
+    Depends on: P ieee numeric_std :ASDNFgHXf_ih3J@9F3Ze1
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Source directory: /home/hsteman/ALU
+    HDL source file: VHDL/A_input_register.vhd
+    Source file: VHDL/A_input_register.vhd
+    Start location: VHDL/A_input_register.vhd:6
+    Version string: JfPeS>P_5c<ehYg1Hez_m2
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Wed Dec 16 15:01:11 2020
+    Debug Symbol file exists
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+  ARCHITECTURE BODY strucutural
+    Depends on: P ieee numeric_std :ASDNFgHXf_ih3J@9F3Ze1
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Depends on: E work a_input_register JfPeS>P_5c<ehYg1Hez_m2
+    Start location: VHDL/A_input_register.vhd:16
+    Version string: DSF7ckDMHb=fR:=;:m[A82
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Wed Dec 16 15:01:11 2020
+    Debug Symbol file exists
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+    Source directory: /home/hsteman/ALU
+    Source file: VHDL/A_input_register.vhd
+    Source modified time: Tue Dec 15 16:01:30 2020
+    HDL source file: VHDL/A_input_register.vhd
+VHDL CONFIGURATION a_input_register_strucutural_cfg
+    Configuration applies to entity: a_input_register
+    Block configuration applies to architecture: strucutural
+    Depends on: E work register_8bit 1f1UR0gjT4?m6i2P;71<f2
+    Depends on: C work register_8bit_behaviour_cfg NaY6WMKhPTCFbSU:N?;ab1
+    Depends on: A work a_input_register strucutural DSF7ckDMHb=fR:=;:m[A82
+    Depends on: P ieee numeric_std :ASDNFgHXf_ih3J@9F3Ze1
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Depends on: E work a_input_register JfPeS>P_5c<ehYg1Hez_m2
+    Source modified time: Wed Dec 16 15:01:26 2020
+    Source directory: /home/hsteman/ALU
+    HDL source file: VHDL/a_input_register_strucutural_cfg.vhd
+    Source file: VHDL/a_input_register_strucutural_cfg.vhd
+    Start location: VHDL/a_input_register_strucutural_cfg.vhd:1
+    Version string: `jWai_E>GG7ReBDfZi5j30
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Wed Dec 16 15:01:26 2020
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+ENTITY adder_hold_register
+    Source modified time: Tue Dec 15 16:01:30 2020
+    Depends on: P ieee numeric_std :ASDNFgHXf_ih3J@9F3Ze1
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Source directory: /home/hsteman/ALU
+    HDL source file: VHDL/adder_hold_register.vhd
+    Source file: VHDL/adder_hold_register.vhd
+    Start location: VHDL/adder_hold_register.vhd:6
+    Version string: 4S?DGg@<G<o_h5Fd<IlIA1
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Wed Dec 16 15:01:08 2020
+    Debug Symbol file exists
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+  ARCHITECTURE BODY arch
+    Depends on: P ieee numeric_std :ASDNFgHXf_ih3J@9F3Ze1
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Depends on: E work adder_hold_register 4S?DGg@<G<o_h5Fd<IlIA1
+    Start location: VHDL/adder_hold_register.vhd:22
+    Version string: oPJ]STGOQdEfSQbaXB;003
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Wed Dec 16 15:01:08 2020
+    Debug Symbol file exists
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+    Source directory: /home/hsteman/ALU
+    Source file: VHDL/adder_hold_register.vhd
+    Source modified time: Tue Dec 15 16:01:30 2020
+    HDL source file: VHDL/adder_hold_register.vhd
+VHDL CONFIGURATION adder_hold_register_arch_cfg
+    Configuration applies to entity: adder_hold_register
+    Block configuration applies to architecture: arch
+    Depends on: E work register_8bit 1f1UR0gjT4?m6i2P;71<f2
+    Depends on: C work register_8bit_behaviour_cfg NaY6WMKhPTCFbSU:N?;ab1
+    Depends on: A work adder_hold_register arch oPJ]STGOQdEfSQbaXB;003
+    Depends on: P ieee numeric_std :ASDNFgHXf_ih3J@9F3Ze1
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Depends on: E work adder_hold_register 4S?DGg@<G<o_h5Fd<IlIA1
+    Source modified time: Wed Dec 16 15:01:27 2020
+    Source directory: /home/hsteman/ALU
+    HDL source file: VHDL/adder_hold_register_arch_cfg.vhd
+    Source file: VHDL/adder_hold_register_arch_cfg.vhd
+    Start location: VHDL/adder_hold_register_arch_cfg.vhd:1
+    Version string: 2agTUZaWUN_]ld0d`L>8G2
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Wed Dec 16 15:01:27 2020
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+ENTITY alu
+    Source modified time: Tue Dec 15 17:10:19 2020
+    Depends on: P ieee numeric_std :ASDNFgHXf_ih3J@9F3Ze1
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Source directory: /home/hsteman/ALU
+    HDL source file: VHDL/alu.vhd
+    Source file: VHDL/alu.vhd
+    Start location: VHDL/alu.vhd:5
+    Version string: J[5BFMWJb6C;6?aOBd1E21
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Wed Dec 16 15:10:34 2020
+    Debug Symbol file exists
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+  ARCHITECTURE BODY structural
+    Depends on: P ieee numeric_std :ASDNFgHXf_ih3J@9F3Ze1
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Depends on: E work alu J[5BFMWJb6C;6?aOBd1E21
+    Start location: VHDL/alu.vhd:41
+    Version string: O]>bcOkV1f8dJI>JiJg[n1
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Wed Dec 16 15:10:34 2020
+    Debug Symbol file exists
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+    Source directory: /home/hsteman/ALU
+    Source file: VHDL/alu.vhd
+    Source modified time: Tue Dec 15 17:10:19 2020
+    HDL source file: VHDL/alu.vhd
+ENTITY alu_logic
+    Source modified time: Wed Dec 16 14:53:53 2020
+    Depends on: P ieee numeric_std :ASDNFgHXf_ih3J@9F3Ze1
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Source directory: /home/hsteman/ALU
+    HDL source file: VHDL/alu_logic.vhd
+    Source file: VHDL/alu_logic.vhd
+    Start location: VHDL/alu_logic.vhd:5
+    Version string: eLcPcoR7?DgbW5W1hJCGF3
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Wed Dec 16 14:53:53 2020
+    Debug Symbol file exists
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+  ARCHITECTURE BODY structural
+    Depends on: P ieee numeric_std :ASDNFgHXf_ih3J@9F3Ze1
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Depends on: E work alu_logic eLcPcoR7?DgbW5W1hJCGF3
+    Start location: VHDL/alu_logic.vhd:28
+    Version string: h_600o_lzF@Em741V`R3c3
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Wed Dec 16 14:53:53 2020
+    Debug Symbol file exists
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+    Source directory: /home/hsteman/ALU
+    Source file: VHDL/alu_logic.vhd
+    Source modified time: Wed Dec 16 14:53:53 2020
+    HDL source file: VHDL/alu_logic.vhd
+VHDL CONFIGURATION alu_logic_structural_cfg
+    Configuration applies to entity: alu_logic
+    Block configuration applies to architecture: structural
+    Depends on: E work eight_bit_shift K@ZHZ1BMk6?G?FDNX4a;H0
+    Depends on: E work eight_bit_and IbKeXE;ZUk94fE`=L[Vko1
+    Depends on: E work eight_bit_xor gCZ;3o=VM<?knBA:SYoY?3
+    Depends on: E work eight_bit_or d<1ik7oOl]Vl5TQK;KoZ80
+    Depends on: E work eight_bit_adder Xc1HPXCjnADX]aVC6ihA>3
+    Depends on: C work eight_bit_shift_behaviour_cfg 3bOfBU6ZS>YiOLRZ_dj=:1
+    Depends on: C work eight_bit_and_behavioural_cfg `JLlc=IV`8=IFaU;2IY323
+    Depends on: C work eight_bit_xor_behavioural_cfg L2XY6f6KS7=h`3FlRBGgL0
+    Depends on: C work eight_bit_or_behavioural_cfg gK^lQ<8HkRj[KQeP[G8?i2
+    Depends on: C work eight_bit_adder_behaviour_cfg HkZ=FcdL46UcXY1L2@TLl1
+    Depends on: A work alu_logic structural h_600o_lzF@Em741V`R3c3
+    Depends on: P ieee numeric_std :ASDNFgHXf_ih3J@9F3Ze1
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Depends on: E work alu_logic eLcPcoR7?DgbW5W1hJCGF3
+    Source modified time: Wed Dec 16 15:32:56 2020
+    Source directory: /home/hsteman/ALU
+    HDL source file: VHDL/alu_logic_structural_cfg.vhd
+    Source file: VHDL/alu_logic_structural_cfg.vhd
+    Start location: VHDL/alu_logic_structural_cfg.vhd:1
+    Version string: ?FXJ36OKDSR>JCJ6HJW_o1
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Wed Dec 16 15:32:56 2020
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+VHDL CONFIGURATION alu_structural_cfg
+    Configuration applies to entity: alu
+    Block configuration applies to architecture: structural
+    Depends on: E work adder_hold_register 4S?DGg@<G<o_h5Fd<IlIA1
+    Depends on: E work a_input_register JfPeS>P_5c<ehYg1Hez_m2
+    Depends on: E work b_input_register FjcLAO54_kehVo[PD>Qb[2
+    Depends on: E work alu_logic eLcPcoR7?DgbW5W1hJCGF3
+    Depends on: C work adder_hold_register_arch_cfg 2agTUZaWUN_]ld0d`L>8G2
+    Depends on: C work a_input_register_strucutural_cfg `jWai_E>GG7ReBDfZi5j30
+    Depends on: C work b_input_register_structural_cfg G`AQDQLVSjo;K1;LiK:3@3
+    Depends on: C work alu_logic_structural_cfg ?FXJ36OKDSR>JCJ6HJW_o1
+    Depends on: A work alu structural O]>bcOkV1f8dJI>JiJg[n1
+    Depends on: P ieee numeric_std :ASDNFgHXf_ih3J@9F3Ze1
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Depends on: E work alu J[5BFMWJb6C;6?aOBd1E21
+    Source modified time: Wed Dec 16 15:32:58 2020
+    Source directory: /home/hsteman/ALU
+    HDL source file: VHDL/alu_structural_cfg.vhd
+    Source file: VHDL/alu_structural_cfg.vhd
+    Start location: VHDL/alu_structural_cfg.vhd:1
+    Version string: Zf7XHm4358eCo<GdEA]K>1
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Wed Dec 16 15:32:58 2020
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+ENTITY b_input_register
+    Source modified time: Tue Dec 15 16:01:30 2020
+    Depends on: P ieee numeric_std :ASDNFgHXf_ih3J@9F3Ze1
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Source directory: /home/hsteman/ALU
+    HDL source file: VHDL/B_input_register.vhd
+    Source file: VHDL/B_input_register.vhd
+    Start location: VHDL/B_input_register.vhd:6
+    Version string: FjcLAO54_kehVo[PD>Qb[2
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Wed Dec 16 15:01:10 2020
+    Debug Symbol file exists
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+  ARCHITECTURE BODY structural
+    Depends on: P ieee numeric_std :ASDNFgHXf_ih3J@9F3Ze1
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Depends on: E work b_input_register FjcLAO54_kehVo[PD>Qb[2
+    Start location: VHDL/B_input_register.vhd:19
+    Version string: Wczi=8>aHUlRHmk<1AHc03
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Wed Dec 16 15:01:10 2020
+    Debug Symbol file exists
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+    Source directory: /home/hsteman/ALU
+    Source file: VHDL/B_input_register.vhd
+    Source modified time: Tue Dec 15 16:01:30 2020
+    HDL source file: VHDL/B_input_register.vhd
+VHDL CONFIGURATION b_input_register_structural_cfg
+    Configuration applies to entity: b_input_register
+    Block configuration applies to architecture: structural
+    Depends on: E work register_8bit 1f1UR0gjT4?m6i2P;71<f2
+    Depends on: C work register_8bit_behaviour_cfg NaY6WMKhPTCFbSU:N?;ab1
+    Depends on: A work b_input_register structural Wczi=8>aHUlRHmk<1AHc03
+    Depends on: P ieee numeric_std :ASDNFgHXf_ih3J@9F3Ze1
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Depends on: E work b_input_register FjcLAO54_kehVo[PD>Qb[2
+    Source modified time: Wed Dec 16 15:01:32 2020
+    Source directory: /home/hsteman/ALU
+    HDL source file: VHDL/b_input_register_structural_cfg.vhd
+    Source file: VHDL/b_input_register_structural_cfg.vhd
+    Start location: VHDL/b_input_register_structural_cfg.vhd:1
+    Version string: G`AQDQLVSjo;K1;LiK:3@3
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Wed Dec 16 15:01:32 2020
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+ENTITY eight_bit_adder
+    Source modified time: Tue Dec 15 16:01:29 2020
+    Depends on: P ieee numeric_std :ASDNFgHXf_ih3J@9F3Ze1
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Source directory: /home/hsteman/ALU
+    HDL source file: VHDL/8_bit_adder.vhd
+    Source file: VHDL/8_bit_adder.vhd
+    Start location: VHDL/8_bit_adder.vhd:9
+    Version string: Xc1HPXCjnADX]aVC6ihA>3
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Wed Dec 16 14:59:15 2020
+    Debug Symbol file exists
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+  ARCHITECTURE BODY behaviour
+    Depends on: P ieee numeric_std :ASDNFgHXf_ih3J@9F3Ze1
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Depends on: E work eight_bit_adder Xc1HPXCjnADX]aVC6ihA>3
+    Start location: VHDL/8_bit_adder.vhd:20
+    Version string: Tm2UWTUkR04N3C7I>gB1W0
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Wed Dec 16 14:59:15 2020
+    Debug Symbol file exists
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+    Source directory: /home/hsteman/ALU
+    Source file: VHDL/8_bit_adder.vhd
+    Source modified time: Tue Dec 15 16:01:29 2020
+    HDL source file: VHDL/8_bit_adder.vhd
+VHDL CONFIGURATION eight_bit_adder_behaviour_cfg
+    Configuration applies to entity: eight_bit_adder
+    Block configuration applies to architecture: behaviour
+    Depends on: A work eight_bit_adder behaviour Tm2UWTUkR04N3C7I>gB1W0
+    Depends on: P ieee numeric_std :ASDNFgHXf_ih3J@9F3Ze1
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Depends on: E work eight_bit_adder Xc1HPXCjnADX]aVC6ihA>3
+    Source modified time: Wed Dec 16 14:59:21 2020
+    Source directory: /home/hsteman/ALU
+    HDL source file: VHDL/eight_bit_adder_behaviour_cfg.vhd
+    Source file: VHDL/eight_bit_adder_behaviour_cfg.vhd
+    Start location: VHDL/eight_bit_adder_behaviour_cfg.vhd:1
+    Version string: HkZ=FcdL46UcXY1L2@TLl1
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Wed Dec 16 14:59:21 2020
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+ENTITY eight_bit_and
+    Source modified time: Tue Dec 15 16:01:29 2020
+    Depends on: P ieee numeric_std :ASDNFgHXf_ih3J@9F3Ze1
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Source directory: /home/hsteman/ALU
+    HDL source file: VHDL/8_bit_and.vhd
+    Source file: VHDL/8_bit_and.vhd
+    Start location: VHDL/8_bit_and.vhd:5
+    Version string: IbKeXE;ZUk94fE`=L[Vko1
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Wed Dec 16 14:59:13 2020
+    Debug Symbol file exists
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+  ARCHITECTURE BODY behavioural
+    Depends on: P ieee numeric_std :ASDNFgHXf_ih3J@9F3Ze1
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Depends on: E work eight_bit_and IbKeXE;ZUk94fE`=L[Vko1
+    Start location: VHDL/8_bit_and.vhd:13
+    Version string: 6F_I[IMS>LHMWHFld@lg?0
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Wed Dec 16 14:59:13 2020
+    Debug Symbol file exists
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+    Source directory: /home/hsteman/ALU
+    Source file: VHDL/8_bit_and.vhd
+    Source modified time: Tue Dec 15 16:01:29 2020
+    HDL source file: VHDL/8_bit_and.vhd
+VHDL CONFIGURATION eight_bit_and_behavioural_cfg
+    Configuration applies to entity: eight_bit_and
+    Block configuration applies to architecture: behavioural
+    Depends on: A work eight_bit_and behavioural 6F_I[IMS>LHMWHFld@lg?0
+    Depends on: P ieee numeric_std :ASDNFgHXf_ih3J@9F3Ze1
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Depends on: E work eight_bit_and IbKeXE;ZUk94fE`=L[Vko1
+    Source modified time: Wed Dec 16 14:59:23 2020
+    Source directory: /home/hsteman/ALU
+    HDL source file: VHDL/eight_bit_and_behavioural_cfg.vhd
+    Source file: VHDL/eight_bit_and_behavioural_cfg.vhd
+    Start location: VHDL/eight_bit_and_behavioural_cfg.vhd:1
+    Version string: `JLlc=IV`8=IFaU;2IY323
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Wed Dec 16 14:59:23 2020
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+ENTITY eight_bit_or
+    Source modified time: Tue Dec 15 16:01:29 2020
+    Depends on: P ieee numeric_std :ASDNFgHXf_ih3J@9F3Ze1
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Source directory: /home/hsteman/ALU
+    HDL source file: VHDL/8_bit_or.vhd
+    Source file: VHDL/8_bit_or.vhd
+    Start location: VHDL/8_bit_or.vhd:5
+    Version string: d<1ik7oOl]Vl5TQK;KoZ80
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Wed Dec 16 14:59:11 2020
+    Debug Symbol file exists
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+  ARCHITECTURE BODY behavioural
+    Depends on: P ieee numeric_std :ASDNFgHXf_ih3J@9F3Ze1
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Depends on: E work eight_bit_or d<1ik7oOl]Vl5TQK;KoZ80
+    Start location: VHDL/8_bit_or.vhd:13
+    Version string: H=eUEYP<9IA5FXHjG2SXZ1
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Wed Dec 16 14:59:11 2020
+    Debug Symbol file exists
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+    Source directory: /home/hsteman/ALU
+    Source file: VHDL/8_bit_or.vhd
+    Source modified time: Tue Dec 15 16:01:29 2020
+    HDL source file: VHDL/8_bit_or.vhd
+VHDL CONFIGURATION eight_bit_or_behavioural_cfg
+    Configuration applies to entity: eight_bit_or
+    Block configuration applies to architecture: behavioural
+    Depends on: A work eight_bit_or behavioural H=eUEYP<9IA5FXHjG2SXZ1
+    Depends on: P ieee numeric_std :ASDNFgHXf_ih3J@9F3Ze1
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Depends on: E work eight_bit_or d<1ik7oOl]Vl5TQK;KoZ80
+    Source modified time: Wed Dec 16 14:59:27 2020
+    Source directory: /home/hsteman/ALU
+    HDL source file: VHDL/eight_bit_or_behavioural_cfg.vhd
+    Source file: VHDL/eight_bit_or_behavioural_cfg.vhd
+    Start location: VHDL/eight_bit_or_behavioural_cfg.vhd:1
+    Version string: gK^lQ<8HkRj[KQeP[G8?i2
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Wed Dec 16 14:59:27 2020
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+ENTITY eight_bit_shift
+    Source modified time: Tue Dec 15 16:01:29 2020
+    Depends on: P ieee numeric_std :ASDNFgHXf_ih3J@9F3Ze1
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Source directory: /home/hsteman/ALU
+    HDL source file: VHDL/8_bit_shift.vhd
+    Source file: VHDL/8_bit_shift.vhd
+    Start location: VHDL/8_bit_shift.vhd:5
+    Version string: K@ZHZ1BMk6?G?FDNX4a;H0
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Wed Dec 16 14:59:09 2020
+    Debug Symbol file exists
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+  ARCHITECTURE BODY behaviour
+    Depends on: P ieee numeric_std :ASDNFgHXf_ih3J@9F3Ze1
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Depends on: E work eight_bit_shift K@ZHZ1BMk6?G?FDNX4a;H0
+    Start location: VHDL/8_bit_shift.vhd:13
+    Version string: X5eRH<nhi@Io?oUiH0nkk1
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Wed Dec 16 14:59:09 2020
+    Debug Symbol file exists
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+    Source directory: /home/hsteman/ALU
+    Source file: VHDL/8_bit_shift.vhd
+    Source modified time: Tue Dec 15 16:01:29 2020
+    HDL source file: VHDL/8_bit_shift.vhd
+VHDL CONFIGURATION eight_bit_shift_behaviour_cfg
+    Configuration applies to entity: eight_bit_shift
+    Block configuration applies to architecture: behaviour
+    Depends on: A work eight_bit_shift behaviour X5eRH<nhi@Io?oUiH0nkk1
+    Depends on: P ieee numeric_std :ASDNFgHXf_ih3J@9F3Ze1
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Depends on: E work eight_bit_shift K@ZHZ1BMk6?G?FDNX4a;H0
+    Source modified time: Wed Dec 16 14:59:29 2020
+    Source directory: /home/hsteman/ALU
+    HDL source file: VHDL/eight_bit_shift_behaviour_cfg.vhd
+    Source file: VHDL/eight_bit_shift_behaviour_cfg.vhd
+    Start location: VHDL/eight_bit_shift_behaviour_cfg.vhd:1
+    Version string: 3bOfBU6ZS>YiOLRZ_dj=:1
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Wed Dec 16 14:59:29 2020
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+ENTITY eight_bit_xor
+    Source modified time: Tue Dec 15 16:01:29 2020
+    Depends on: P ieee numeric_std :ASDNFgHXf_ih3J@9F3Ze1
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Source directory: /home/hsteman/ALU
+    HDL source file: VHDL/8_bit_xor.vhd
+    Source file: VHDL/8_bit_xor.vhd
+    Start location: VHDL/8_bit_xor.vhd:5
+    Version string: gCZ;3o=VM<?knBA:SYoY?3
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Wed Dec 16 14:59:06 2020
+    Debug Symbol file exists
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+  ARCHITECTURE BODY behavioural
+    Depends on: P ieee numeric_std :ASDNFgHXf_ih3J@9F3Ze1
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Depends on: E work eight_bit_xor gCZ;3o=VM<?knBA:SYoY?3
+    Start location: VHDL/8_bit_xor.vhd:13
+    Version string: L]U<ic<Cd=DaP<>L6;T9R2
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Wed Dec 16 14:59:06 2020
+    Debug Symbol file exists
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+    Source directory: /home/hsteman/ALU
+    Source file: VHDL/8_bit_xor.vhd
+    Source modified time: Tue Dec 15 16:01:29 2020
+    HDL source file: VHDL/8_bit_xor.vhd
+VHDL CONFIGURATION eight_bit_xor_behavioural_cfg
+    Configuration applies to entity: eight_bit_xor
+    Block configuration applies to architecture: behavioural
+    Depends on: A work eight_bit_xor behavioural L]U<ic<Cd=DaP<>L6;T9R2
+    Depends on: P ieee numeric_std :ASDNFgHXf_ih3J@9F3Ze1
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Depends on: E work eight_bit_xor gCZ;3o=VM<?knBA:SYoY?3
+    Source modified time: Wed Dec 16 14:59:32 2020
+    Source directory: /home/hsteman/ALU
+    HDL source file: VHDL/eight_bit_xor_behavioural_cfg.vhd
+    Source file: VHDL/eight_bit_xor_behavioural_cfg.vhd
+    Start location: VHDL/eight_bit_xor_behavioural_cfg.vhd:1
+    Version string: L2XY6f6KS7=h`3FlRBGgL0
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Wed Dec 16 14:59:32 2020
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+ENTITY register_8bit
+    Source modified time: Tue Dec 15 16:01:30 2020
+    Depends on: P ieee numeric_std :ASDNFgHXf_ih3J@9F3Ze1
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Source directory: /home/hsteman/ALU
+    HDL source file: VHDL/register_8bit.vhd
+    Source file: VHDL/register_8bit.vhd
+    Start location: VHDL/register_8bit.vhd:5
+    Version string: 1f1UR0gjT4?m6i2P;71<f2
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Wed Dec 16 15:00:24 2020
+    Debug Symbol file exists
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+  ARCHITECTURE BODY behaviour
+    Depends on: P ieee numeric_std :ASDNFgHXf_ih3J@9F3Ze1
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Depends on: E work register_8bit 1f1UR0gjT4?m6i2P;71<f2
+    Start location: VHDL/register_8bit.vhd:14
+    Version string: Qm4l]7<^n4bHR_T`d1cdN2
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Wed Dec 16 15:00:24 2020
+    Debug Symbol file exists
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
+    Source directory: /home/hsteman/ALU
+    Source file: VHDL/register_8bit.vhd
+    Source modified time: Tue Dec 15 16:01:30 2020
+    HDL source file: VHDL/register_8bit.vhd
+VHDL CONFIGURATION register_8bit_behaviour_cfg
+    Configuration applies to entity: register_8bit
+    Block configuration applies to architecture: behaviour
+    Depends on: A work register_8bit behaviour Qm4l]7<^n4bHR_T`d1cdN2
+    Depends on: P ieee numeric_std :ASDNFgHXf_ih3J@9F3Ze1
+    Depends on: P std textio zE1`LPoLg^DX3Oz^4Fj1K3
+    Depends on: P ieee std_logic_1164 eNV`TJ_GofJTzYa?f<@Oe1
+    Depends on: E work register_8bit 1f1UR0gjT4?m6i2P;71<f2
+    Source modified time: Wed Dec 16 15:00:27 2020
+    Source directory: /home/hsteman/ALU
+    HDL source file: VHDL/register_8bit_behaviour_cfg.vhd
+    Source file: VHDL/register_8bit_behaviour_cfg.vhd
+    Start location: VHDL/register_8bit_behaviour_cfg.vhd:1
+    Version string: NaY6WMKhPTCFbSU:N?;ab1
+    Opcode format: 10.5b; VCOM SE-64 Object version 63
+    VHDL language standard: 3 (VHDL-2008)
+    Compile time: Wed Dec 16 15:00:27 2020
+    Compiled in vopt flow
+    Compile options: -quiet -nologo -2008 -lower -explicit -work work
+    Compile defaults: Explicit=1 CvgOpt=0
