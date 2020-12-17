@@ -1,0 +1,255 @@
+(DELAYFILE
+  (SDFVERSION  "OVI 3.0")
+  (DESIGN      "register_8bit")
+  (DATE        "Tue Dec 15 10:31:37 CET 2020")
+  (VENDOR      "Cadence, Inc.")
+  (PROGRAM     "Genus(TM) Synthesis Solution")
+  (VERSION     "17.11-s014_1")
+  (DIVIDER     .)
+  (VOLTAGE     ::1.62)
+  (PROCESS     "::1.0")
+  (TEMPERATURE ::125.0)
+  (TIMESCALE   1ps)
+  (CELL
+     (CELLTYPE "INVD4BWP7T")
+     (INSTANCE g10)
+     (DELAY
+        (ABSOLUTE
+          (PORT I (::0.0))
+          (IOPATH I ZN (::1132) (::636))
+        )
+     )
+  )
+  (CELL
+     (CELLTYPE "INVD4BWP7T")
+     (INSTANCE g6)
+     (DELAY
+        (ABSOLUTE
+          (PORT I (::0.0))
+          (IOPATH I ZN (::1132) (::636))
+        )
+     )
+  )
+  (CELL
+     (CELLTYPE "INVD4BWP7T")
+     (INSTANCE g4)
+     (DELAY
+        (ABSOLUTE
+          (PORT I (::0.0))
+          (IOPATH I ZN (::1132) (::636))
+        )
+     )
+  )
+  (CELL
+     (CELLTYPE "INVD4BWP7T")
+     (INSTANCE g18)
+     (DELAY
+        (ABSOLUTE
+          (PORT I (::0.0))
+          (IOPATH I ZN (::1132) (::636))
+        )
+     )
+  )
+  (CELL
+     (CELLTYPE "INVD4BWP7T")
+     (INSTANCE g14)
+     (DELAY
+        (ABSOLUTE
+          (PORT I (::0.0))
+          (IOPATH I ZN (::1132) (::636))
+        )
+     )
+  )
+  (CELL
+     (CELLTYPE "INVD4BWP7T")
+     (INSTANCE g8)
+     (DELAY
+        (ABSOLUTE
+          (PORT I (::0.0))
+          (IOPATH I ZN (::1132) (::636))
+        )
+     )
+  )
+  (CELL
+     (CELLTYPE "INVD4BWP7T")
+     (INSTANCE g12)
+     (DELAY
+        (ABSOLUTE
+          (PORT I (::0.0))
+          (IOPATH I ZN (::1132) (::636))
+        )
+     )
+  )
+  (CELL
+     (CELLTYPE "INVD4BWP7T")
+     (INSTANCE g16)
+     (DELAY
+        (ABSOLUTE
+          (PORT I (::0.0))
+          (IOPATH I ZN (::1132) (::636))
+        )
+     )
+  )
+  (CELL
+     (CELLTYPE "DFKCND1BWP7T")
+     (INSTANCE reg_out_reg_7)
+     (DELAY
+        (ABSOLUTE
+          (PORT CP (::0.0))
+          (PORT CN (::0.0))
+          (PORT D (::0.0))
+          (IOPATH CP Q (::306) (::364))
+          (IOPATH CP QN (::549) (::469))
+        )
+     )
+     (TIMINGCHECK
+        (SETUPHOLD (negedge CN) (posedge CP) (::454) (::-170))
+        (SETUPHOLD (posedge CN) (posedge CP) (::146) (::-72))
+        (SETUPHOLD (negedge D) (posedge CP) (::228) (::-74))
+        (SETUPHOLD (posedge D) (posedge CP) (::173) (::-96))
+     )
+  )
+  (CELL
+     (CELLTYPE "DFKCND1BWP7T")
+     (INSTANCE reg_out_reg_2)
+     (DELAY
+        (ABSOLUTE
+          (PORT CP (::0.0))
+          (PORT CN (::0.0))
+          (PORT D (::0.0))
+          (IOPATH CP Q (::306) (::364))
+          (IOPATH CP QN (::549) (::469))
+        )
+     )
+     (TIMINGCHECK
+        (SETUPHOLD (negedge CN) (posedge CP) (::454) (::-170))
+        (SETUPHOLD (posedge CN) (posedge CP) (::146) (::-72))
+        (SETUPHOLD (negedge D) (posedge CP) (::228) (::-74))
+        (SETUPHOLD (posedge D) (posedge CP) (::173) (::-96))
+     )
+  )
+  (CELL
+     (CELLTYPE "DFKCND1BWP7T")
+     (INSTANCE reg_out_reg_4)
+     (DELAY
+        (ABSOLUTE
+          (PORT CP (::0.0))
+          (PORT CN (::0.0))
+          (PORT D (::0.0))
+          (IOPATH CP Q (::306) (::364))
+          (IOPATH CP QN (::549) (::469))
+        )
+     )
+     (TIMINGCHECK
+        (SETUPHOLD (negedge CN) (posedge CP) (::454) (::-170))
+        (SETUPHOLD (posedge CN) (posedge CP) (::146) (::-72))
+        (SETUPHOLD (negedge D) (posedge CP) (::228) (::-74))
+        (SETUPHOLD (posedge D) (posedge CP) (::173) (::-96))
+     )
+  )
+  (CELL
+     (CELLTYPE "DFKCND1BWP7T")
+     (INSTANCE reg_out_reg_5)
+     (DELAY
+        (ABSOLUTE
+          (PORT CP (::0.0))
+          (PORT CN (::0.0))
+          (PORT D (::0.0))
+          (IOPATH CP Q (::306) (::364))
+          (IOPATH CP QN (::549) (::469))
+        )
+     )
+     (TIMINGCHECK
+        (SETUPHOLD (negedge CN) (posedge CP) (::454) (::-170))
+        (SETUPHOLD (posedge CN) (posedge CP) (::146) (::-72))
+        (SETUPHOLD (negedge D) (posedge CP) (::228) (::-74))
+        (SETUPHOLD (posedge D) (posedge CP) (::173) (::-96))
+     )
+  )
+  (CELL
+     (CELLTYPE "DFKCND1BWP7T")
+     (INSTANCE reg_out_reg_0)
+     (DELAY
+        (ABSOLUTE
+          (PORT CP (::0.0))
+          (PORT CN (::0.0))
+          (PORT D (::0.0))
+          (IOPATH CP Q (::306) (::364))
+          (IOPATH CP QN (::549) (::469))
+        )
+     )
+     (TIMINGCHECK
+        (SETUPHOLD (negedge CN) (posedge CP) (::454) (::-170))
+        (SETUPHOLD (posedge CN) (posedge CP) (::146) (::-72))
+        (SETUPHOLD (negedge D) (posedge CP) (::228) (::-74))
+        (SETUPHOLD (posedge D) (posedge CP) (::173) (::-96))
+     )
+  )
+  (CELL
+     (CELLTYPE "DFKCND1BWP7T")
+     (INSTANCE reg_out_reg_3)
+     (DELAY
+        (ABSOLUTE
+          (PORT CP (::0.0))
+          (PORT CN (::0.0))
+          (PORT D (::0.0))
+          (IOPATH CP Q (::306) (::364))
+          (IOPATH CP QN (::549) (::469))
+        )
+     )
+     (TIMINGCHECK
+        (SETUPHOLD (negedge CN) (posedge CP) (::454) (::-170))
+        (SETUPHOLD (posedge CN) (posedge CP) (::146) (::-72))
+        (SETUPHOLD (negedge D) (posedge CP) (::228) (::-74))
+        (SETUPHOLD (posedge D) (posedge CP) (::173) (::-96))
+     )
+  )
+  (CELL
+     (CELLTYPE "DFKCND1BWP7T")
+     (INSTANCE reg_out_reg_6)
+     (DELAY
+        (ABSOLUTE
+          (PORT CP (::0.0))
+          (PORT CN (::0.0))
+          (PORT D (::0.0))
+          (IOPATH CP Q (::306) (::364))
+          (IOPATH CP QN (::549) (::469))
+        )
+     )
+     (TIMINGCHECK
+        (SETUPHOLD (negedge CN) (posedge CP) (::454) (::-170))
+        (SETUPHOLD (posedge CN) (posedge CP) (::146) (::-72))
+        (SETUPHOLD (negedge D) (posedge CP) (::228) (::-74))
+        (SETUPHOLD (posedge D) (posedge CP) (::173) (::-96))
+     )
+  )
+  (CELL
+     (CELLTYPE "DFKCND1BWP7T")
+     (INSTANCE reg_out_reg_1)
+     (DELAY
+        (ABSOLUTE
+          (PORT CP (::0.0))
+          (PORT CN (::0.0))
+          (PORT D (::0.0))
+          (IOPATH CP Q (::306) (::364))
+          (IOPATH CP QN (::549) (::469))
+        )
+     )
+     (TIMINGCHECK
+        (SETUPHOLD (negedge CN) (posedge CP) (::454) (::-170))
+        (SETUPHOLD (posedge CN) (posedge CP) (::146) (::-72))
+        (SETUPHOLD (negedge D) (posedge CP) (::228) (::-74))
+        (SETUPHOLD (posedge D) (posedge CP) (::173) (::-96))
+     )
+  )
+  (CELL
+     (CELLTYPE "INVD1BWP7T")
+     (INSTANCE g19)
+     (DELAY
+        (ABSOLUTE
+          (PORT I (::0.0))
+          (IOPATH I ZN (::185) (::123))
+        )
+     )
+  )
+)
