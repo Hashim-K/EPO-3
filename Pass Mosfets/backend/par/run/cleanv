@@ -1,3 +1,0 @@
-rm -f innovus.cmd[0-9]*
-rm -f innovus.log[0-9]*
-rm -f innovus.logv[0-9]*
