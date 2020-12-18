@@ -7,7 +7,8 @@ entity mem_add_reg is -- output logic for external interfacint output first low 
   clk : IN std_logic;
   reset : IN std_logic;
 
-  enable : IN std_logic; -- enable the transition
+  enable : IN std_logic; -- enable the transition This is ADH/ABH - ADL/ABL
+
 
   abl_in : IN std_logic_vector(7 downto 0); -- Addres bus low in
   abh_in : IN std_logic_vector(7 downto 0); -- Addres bus High in

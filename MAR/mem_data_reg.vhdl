@@ -6,8 +6,12 @@ entity mem_data_reg is
   port (
   clk : IN std_logic;
   reset : IN std_logic;
-  enable : IN std_logic; -- store data from external memory into registers
-  control : IN std_logic_vector(1 downto 0); -- control signal for selecting if data has to be put onto db, adh, adl
+  load : IN std_logic; -- store data from external memory into registers
+
+  dl_db : IN std_logic;
+  dl_adl : IN std_logic;
+  dl_adh : IN std_logic;
+
   db : OUT std_logic_vector(7 downto 0); -- to databus
   adl : OUT std_logic_vector(7 downto 0); -- addres low
   adh : OUT std_logic_vector(7 downto 0); -- addres high
@@ -30,22 +34,22 @@ architecture arch of mem_data_reg is
 begin
 
   -- databus
-  with control select db <=
-    reg_out when "01",
+  with dl_db select db <=
+    reg_out when '1',
     "ZZZZZZZZ" when others;
 
   -- Addres low
-  with control select adl <=
-    reg_out when "10",
+  with dl_adl select adl <=
+    reg_out when '1',
     "ZZZZZZZZ" when others;
 
   -- Addres high
-  with control select adh <=
-    reg_out when "11",
+  with dl_adh select adh <=
+    reg_out when '1',
     "ZZZZZZZZ" when others;
 
   -- to register in
-  with enable select data_in <=
+  with load select data_in <=
     external_in when '1',
     reg_out when others;
 

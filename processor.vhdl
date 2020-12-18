@@ -24,6 +24,8 @@ architecture structural of processor is
     clk_2 : OUT std_logic; -- Second phase clock
 
     adb_external : OUT std_logic_vector(7 downto 0);  -- External connection of the addres + data
+    adb_control : OUT std_logic_vector(1 downto 0);   -- Select the external register
+
     db_external : IN std_logic_vector(7 downto 0);    -- External connection of the databus bus in
     );
   end component;
@@ -146,7 +148,7 @@ end component;
       );
   END component;
 
-  -- External Memory
+  -- External addres register
   component mem_add_reg is -- output logic for external interfacint output first low addres, high addres, than data
     port (
     clk : IN std_logic;
@@ -163,6 +165,7 @@ end component;
     );
   end component;
 
+  -- Memory data register
   component mem_data_reg is
     port (
     clk : IN std_logic;
@@ -177,9 +180,8 @@ end component;
   end component;
 
 
-
   -- Instruction decoder
-  entity instruction_decoder is
+  component instruction_decoder is
     port (
           clk : IN std_logic;
           clk_2 : IN std_logic;
@@ -191,7 +193,38 @@ end component;
           sv: IN STD_LOGIC;
           control_out: OUT STD_LOGIC_VECTOR(66 DOWNTO 0)
     );
-  end entity;
+  end component;
+
+
+  component status_register is
+    port (
+      --Input from bus
+      db_in : in STD_LOGIC_VECTOR(7 downto 0);
+      --Inputs from control
+      control : in STD_LOGIC_VECTOR(13 downto 0);
+      --db0_c = control(0);
+      --ir5_c = control(1);
+      --acr_c = control(2);
+      --db1_z = control(3);
+      --dbz_z = control(4);
+      --db2_i = control(5);
+      --ir5_i = control(6);
+      --db3_d = control(7);
+      --ir5_d = control(8);
+      --db6_v = control(9);
+      --avr_v = control(10);
+      --1_v   = control(11);
+      --db7_n = control(12);
+      --p_db  = control(13);
+
+      --Inputs from ALU
+      ir5   : in STD_LOGIC;
+      acr   : in STD_LOGIC;
+      avr   : in STD_LOGIC;
+      --Outputs
+      db_out    : out STD_LOGIC_VECTOR(7 downto 0)
+    );
+  end component;
 
 
 
@@ -264,9 +297,6 @@ begin
   pcl_db      <= control_out(10);-- output count to DB
   adl_pcl     <= control_out(8);-- Load from ADL
 -- PCL_PCL : IN std_logic  -- Questionable if needed maybe obsolite
-  adl_in      <= ;-- adders bus low
-  adl_out     <= ;
-  db_out      <= ;-- databus
 
 
 -- accumulator
@@ -288,17 +318,40 @@ begin
   r_w           <= ;
   sv            <= ;
 
+
+
 -- mem_add_reg
-  enable        <= ;
-  o_to_extern   <= ;
-  control       <= ;
+  enable        <= control_out(5) or control_out(6); -- Put content in the addres register at a rising clock edge
+  adb_external  <= o_to_extern; -- Makes connection to the outside for adderesbus + data
+  adb_control   <= control; -- Multiplex data to enable the external memory register
 
 
--- mem_data_reg
-  enable      <= ;
+-- mem_data_reg also acts as data latch
+  enable      <= ; -- stores data from external input control signal
   control     <= ;
-  external_in <= ;
+   <= external_in ;
 
+
+-- Status register
+  db_in        <= ;
+  control      <= ;
+      --db0_c = control(0);
+      --ir5_c = control(1);
+      --acr_c = control(2);
+      --db1_z = control(3);
+      --dbz_z = control(4);
+      --db2_i = control(5);
+      --ir5_i = control(6);
+      --db3_d = control(7);
+      --ir5_d = control(8);
+      --db6_v = control(9);
+      --avr_v = control(10);
+      --1_v   = control(11);
+      --db7_n = control(12);
+      --p_db  = control(13);
+  ir5          <= ;
+  acr          <= ;
+  avr          <= ;
 
 
 
@@ -368,9 +421,9 @@ program_couter_low  : pc_low  PORT MAP(
                       pcl_adl,
                       pcl_db,
                       adl_pcl,
-                      adl_in,
-                      adl_out,
-                      db_out
+                      adl,
+                      adl,
+                      db
                       );
 
 -- program counter high
@@ -435,6 +488,14 @@ data_reg :mem_data_reg PORT MAP(
                       external_in
 );
 
+flag_reg : status_register PORT MAP(
+                      db_in,
+                      control,
+                      ir5,
+                      acr,
+                      avr,
+                      db
+);
 
 
 end architecture;
