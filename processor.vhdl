@@ -170,8 +170,12 @@ end component;
     port (
     clk : IN std_logic;
     reset : IN std_logic;
-    enable : IN std_logic; -- store data from external memory into registers
-    control : IN std_logic_vector(1 downto 0); -- control signal for selecting if data has to be put onto db, adh, adl
+    load : IN std_logic; -- store data from external memory into registers
+
+    dl_db : IN std_logic;
+    dl_adl : IN std_logic;
+    dl_adh : IN std_logic;
+
     db : OUT std_logic_vector(7 downto 0); -- to databus
     adl : OUT std_logic_vector(7 downto 0); -- addres low
     adh : OUT std_logic_vector(7 downto 0); -- addres high
@@ -308,8 +312,6 @@ begin
                 <=  negative_flag;
 
 
-
--- NOT ABLE TO DO NOW!!! TODO
 -- Instruction decoder
   ir_in         <= ; -- IN STD_LOGIC_VECTOR(15 DOWNTO 0);
   timing        <= ; -- IN STD_LOGIC_VECTOR(5 DOWNTO 0);
@@ -327,28 +329,46 @@ begin
 
 
 -- mem_data_reg also acts as data latch
-  enable      <= ; -- stores data from external input control signal
-  control     <= ;
-   <= external_in ;
+  load        <= ; -- stores data from external input control signal
+  dl_db       <= control_out(0);
+  dl_adl      <= control_out(1);
+  dl_adh      <= control_out(2);
+  external_in <= db_external; -- External Connection to the outside databus
 
 
 -- Status register
-  db_in        <= ;
-  control      <= ;
-      --db0_c = control(0);
-      --ir5_c = control(1);
-      --acr_c = control(2);
-      --db1_z = control(3);
-      --dbz_z = control(4);
-      --db2_i = control(5);
-      --ir5_i = control(6);
-      --db3_d = control(7);
-      --ir5_d = control(8);
-      --db6_v = control(9);
-      --avr_v = control(10);
-      --1_v   = control(11);
-      --db7_n = control(12);
-      --p_db  = control(13);
+  -- This is for all the flags etc
+
+  --db0_c
+    control(0)    <= ;
+  --ir5_c
+    control(1)    <= ;
+  --acr_c
+    control(2)    <= ;
+  --db1_z
+    control(3)    <= ;
+  --dbz_z
+    control(4)    <= ;
+  --db2_i
+    control(5)    <= ;
+  --ir5_i
+    control(6)    <= ;
+  --db3_d
+    control(7)    <= ;
+  --ir5_d
+    control(8)    <= ;
+  --db6_v
+    control(9)    <= ;
+  --avr_v
+    control(10)   <= ;
+  --1_v
+    control(11)   <= ;
+  --db7_n
+    control(12)   <= ;
+  --p_db
+    control(13)   <= ;
+
+  -- alu flags coming from alu
   ir5          <= ;
   acr          <= ;
   avr          <= ;
@@ -481,7 +501,9 @@ data_reg :mem_data_reg PORT MAP(
                       clk,
                       reset,
                       enable,
-                      control,
+                      dl_db,
+                      dl_adl,
+                      dl_adh,
                       db,
                       adl,
                       adh,
@@ -489,13 +511,15 @@ data_reg :mem_data_reg PORT MAP(
 );
 
 flag_reg : status_register PORT MAP(
-                      db_in,
+                      db,
                       control,
                       ir5,
                       acr,
                       avr,
                       db
 );
+
+
 
 
 end architecture;
