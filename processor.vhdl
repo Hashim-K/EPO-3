@@ -24,6 +24,8 @@ architecture structural of processor is
     clk_2 : OUT std_logic; -- Second phase clock
 
     adb_external : OUT std_logic_vector(7 downto 0);  -- External connection of the addres + data
+    adb_control : OUT std_logic_vector(1 downto 0);   -- Select the external register
+
     db_external : IN std_logic_vector(7 downto 0);    -- External connection of the databus bus in
     );
   end component;
@@ -289,15 +291,15 @@ begin
   sv            <= ;
 
 -- mem_add_reg
-  enable        <= ;
-  o_to_extern   <= ;
-  control       <= ;
+  enable        <= control_out(5) or control_out(6); -- Put content in the addres register at a rising clock edge
+  adb_external  <= o_to_extern; -- Makes connection to the outside for adderesbus + data
+  adb_control   <= control; -- Multiplex data to enable the external memory register
 
 
--- mem_data_reg
-  enable      <= ;
+-- mem_data_reg also acts as data latch
+  enable      <= ; -- stores data from external input control signal
   control     <= ;
-  external_in <= ;
+   <= external_in ;
 
 
 
