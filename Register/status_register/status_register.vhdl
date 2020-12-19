@@ -103,7 +103,7 @@ reg_in(5) <= '0';
 WITH control(11 downto 9) SELECT reg_in(6) <=
 db_in (6)   WHEN "001",   -- DB6/V
 acr         WHEN "010", -- AVR/V
-reg_out(2)  WHEN "100", -- I/V,
+'1'  WHEN "100", -- 1/V, IF this should be I instead of 1, change '1' to reg_in(2)
 reg_out (6) WHEN OTHERS;
 
 
@@ -114,16 +114,10 @@ WITH control(12) SELECT reg_in(7) <=
 db_in(7)   WHEN '1', --writes db(7) when db7_n is 1
 reg_out(7)  WHEN OTHERS;
 
-
-
-
 -- out to databus
 WITH control(13) SELECT db_out <=
-reg_in when '1',
+reg_out when '1',
 "ZZZZZZZZ" WHEN OTHERS;
-
-
-
 
 
 l1 : register_8bit PORT MAP(clk, '1', reset, reg_in, reg_out);

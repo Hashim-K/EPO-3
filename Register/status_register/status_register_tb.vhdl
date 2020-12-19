@@ -137,16 +137,16 @@ end architecture;
 
 --reset after 0 ns
 --load db (1's) into reg_out after 30 ns (11111111)
---db_out equals reg_out after 50 ns       SPEEEENNNN
+--db_out equals reg_out after 50 ns       
 --load dbz (0) into reg_out(1) after 90 ns (11111101)
 --db_out equals reg_out after 110 ns
---reg_out is reset after 140 ns (00000000)              -- WORKS TILL HERE (fails to reset status signal after)
---db_out equals reg_out after 160 ns                    -- Writing status to output works
+--reg_out is reset after 140 ns (00000000)              
+--db_out equals reg_out after 160 ns                   
 --ir5 is loaded into reg_out after 190 ns (00001101)
---db_out equals reg_out after 210 ns                    -- Writing status to output works
+--db_out equals reg_out after 210 ns                    
 --reg_out is reset after 240 ns (00000000)
 --acr and avr are loaded into reg_out after 270 ns (01000001)
---db_out equals reg_out after 300 ns                    -- Writing status to output works
+--db_out equals reg_out after 300 ns                    
 --reg_out is reset after 320 ns (00000000)
 --1 is loaded into reg_out(6) after 340 ns (01000000)
---db_out equals reg_out after 360 ns                    -- Writing status to output works
+--db_out equals reg_out after 360 ns                    
