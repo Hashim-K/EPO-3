@@ -274,6 +274,15 @@ end component;
   -- stack pointer
   signal sb_s, s_sb, s_adl : std_logic;
 
+  -- instruction decoer TODO
+  signal ir_in : STD_LOGIC_VECTOR(15 DOWNTO 0);    -- Instruction register in
+  signal timing : STD_LOGIC_VECTOR(2 DOWNTO 0);    -- Cycle select
+  signal interrupt : STD_LOGIC_VECTOR(2 DOWNTO 0); --
+  signal ready, sv, r_w : STD_LOGIC;
+
+  -- Processor Status Register
+  signal ir5 : std_logic;
+
 
   -- flags
   signal avr, acr : std_logic;
@@ -283,7 +292,7 @@ end component;
   signal sb, db, adh, adl : std_logic_vector(7 downto 0);
 
   -- Main control signal
-  signal control_out : STD_LOGIC_VECTOR(64 DOWNTO 0);
+  signal control_out : STD_LOGIC_VECTOR(66 DOWNTO 0);
 
   -- pc_low carry to pc_high_carry
   signal pc_carry : STD_LOGIC;
@@ -532,7 +541,7 @@ instruction_dec : instruction_decoder PORT MAP(
                       ready,
                       r_w,
                       sv,
-                      control_out,
+                      control_out
 );
 
 -- Memory addres register
@@ -540,9 +549,9 @@ add_Reg : mem_add_reg PORT MAP(
                       clk,
                       reset,
                       mem_add_enable,
-                      abl_in,
-                      abh_in,
-                      db_in,
+                      adl,
+                      adh,
+                      db,
                       adb_external,
                       adb_control
 );
@@ -573,7 +582,7 @@ flag_reg : status_register PORT MAP(
 
 -- pass mosfets
 -- SB -> DB
-pass_sb_db : pass_mosfet PORT MAP(
+pass_sb_db : pass PORT MAP(
                       sb,
                       sb_db_pass,
                       db
@@ -581,10 +590,10 @@ pass_sb_db : pass_mosfet PORT MAP(
 
 -- pass mosfets
 -- SB -> ADH
-pass_sb_adh : pass_mosfet PORT MAP(
+pass_sb_adh : pass PORT MAP(
                       sb,
                       sb_adh_pass,
-                      ahd
+                      adh
 );
 
 
