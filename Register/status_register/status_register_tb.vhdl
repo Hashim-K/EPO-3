@@ -41,7 +41,6 @@ COMPONENT status_register is
   END COMPONENT;
 
   signal reset, clk, acr, avr, ir5: STD_LOGIC;
-  signal reg_out, status : STD_LOGIC_VECTOR(7 downto 0);
   signal db_in :  STD_LOGIC_VECTOR(7 downto 0);
   signal control  : STD_LOGIC_VECTOR(13 downto 0);
   signal db_out : STD_LOGIC_VECTOR(7 downto 0);
