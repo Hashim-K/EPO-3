@@ -69,7 +69,7 @@ ARCHITECTURE structural OF alu_logic IS
       a : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
       b : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
       cin : IN STD_LOGIC;
-      shift_control : IN STD_LOGIC(3 DOWNTO 0);
+      shift_control : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
       acr : OUT STD_LOGIC;
       o : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)
     );
@@ -96,7 +96,8 @@ BEGIN
 
   WITH control SELECT o <=
     -- Addition: add (with carry), substraction (with borrow)
-    o_adder WHEN "000000000100" OR "000000000110",
+    o_adder WHEN "000000000100",
+    o_adder WHEN "000000000110",
 
     -- Bitwise AND
     o_and WHEN "000000001000", --DONE
@@ -108,10 +109,19 @@ BEGIN
     o_or WHEN "000000100000", --DONE
 
     --Shift: shift right/left, rotate right/left
-    o_shift WHEN "000001000000" OR "000010000000" OR "000100000000" OR "001000000000", --DONE
+    o_shift WHEN "000001000000",
+    o_shift WHEN "000010000000",
+    o_shift WHEN "000100000000",
+    o_shift when "000100000010",
+    o_shift WHEN "001000000000", 
+    o_shift when "001000000010", --DONE
 
     --Pass: pass A/B
-    o_pass WHEN "010000000000" OR "100000000000", --DONE
+    o_pass WHEN "010000000000",
+    o_pass WHEN "100000000000", --DONE
 
     "00000000" WHEN OTHERS;
+
+    hc <= '0';
+
 END ARCHITECTURE;

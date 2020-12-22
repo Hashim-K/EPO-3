@@ -32,17 +32,19 @@ component alu is
 
   -- control signals
     -- alu logic in
-    control : IN std_logic_vector(9 downto 0); -- alu operation mode
-    --bit(0) = daa
-    --bit(1) = i/addc
+    control : IN std_logic_vector(11 downto 0); -- alu operation mode
+    --bit(0) = daa, not used atm since decimal
+    --bit(1) = i/addc or called carry in
     --bit(2) = sums
     --bit(3) = ands
     --bit(4) = exors
     --bit(5) = ors
     --bit(6) = srs (lsr)
     --bit(7) = sls (asl)
-    --bit(8) = pass1 (rega)
-    --bit(9) = pass2 (regb)
+    --bit(8) = rotate right
+    --bit(9) = rotate left
+    --bit(10) = pass1 (rega)
+    --bit(11) = pass2 (regb)
 
     daa : in std_logic;     -- decimal enable
     i_addc : in std_logic;  -- carry in

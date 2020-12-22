@@ -1,71 +1,78 @@
-library ieee;
-  use ieee.std_logic_1164.all;
-  use ieee.numeric_std.all;
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+USE ieee.numeric_std.ALL;
 
-entity alu is
-  port (
-  clk : in std_logic;
-  reset : in std_logic;
-  adl_in : in std_logic_vector(7 downto 0); -- addres bus low
-  adl_out : out std_logic_vector(7 downto 0); -- addres bus low
-  sb_in : in std_logic_vector(7 downto 0); -- data bus in
-  sb_out : out std_logic_vector(7 downto 0); -- data bus out
-
-
-  -- control signals
+ENTITY alu IS
+  PORT (
+    clk : IN STD_LOGIC;
+    reset : IN STD_LOGIC;
+    adl_in : IN STD_LOGIC_VECTOR(7 DOWNTO 0); -- addres bus low
+    adl_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); -- addres bus low
+    sb_in : IN STD_LOGIC_VECTOR(7 DOWNTO 0); -- data bus in
+    sb_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); -- data bus out
+    -- control signals
     -- alu logic in
-    control : IN std_logic_vector(9 downto 0); -- alu operation mode
-
+    control : IN STD_LOGIC_VECTOR(11 DOWNTO 0); -- alu operation mode
+    --bit(0) = daa, not used atm since decimal
+    --bit(1) = i/addc or called carry in
+    --bit(2) = sums
+    --bit(3) = ands
+    --bit(4) = exors
+    --bit(5) = ors
+    --bit(6) = srs (lsr)
+    --bit(7) = sls (asl)
+    --bit(8) = rotate right
+    --bit(9) = rotate left
+    --bit(10) = pass1 (rega)
+    --bit(11) = pass2 (regb)
     -- alu logic out
-    avr : out std_logic;    -- overflow
-    acr : out std_logic;    -- carry out
-    hc : out std_logic;     -- half carry
+    avr : OUT STD_LOGIC; -- overflow
+    acr : OUT STD_LOGIC; -- carry out
+    hc : OUT STD_LOGIC; -- half carry
 
     -- adder hold register
-    clk_2 : in std_logic;   -- clock phase two input
-    add_adl : in std_logic; --
-    add_sb6 : in std_logic; --
-    add_sb7 : in std_logic; --
+    clk_2 : IN STD_LOGIC; -- clock phase two input
+    add_adl : IN STD_LOGIC; --
+    add_sb6 : IN STD_LOGIC; --
+    add_sb7 : IN STD_LOGIC; --
 
     -- A input register
-    o_add : IN std_logic;  -- Load zero
-    sb_add : IN std_logic; -- Load form SB
+    o_add : IN STD_LOGIC; -- Load zero
+    sb_add : IN STD_LOGIC; -- Load form SB
 
     -- B input register
-    inv_db_add : IN std_logic; -- inverted in from DB
-    db_add : IN std_logic;     -- load from DB
-    adl_add : IN std_logic     -- load from ADL
-);
-end entity;
+    inv_db_add : IN STD_LOGIC; -- inverted in from DB
+    db_add : IN STD_LOGIC; -- load from DB
+    adl_add : IN STD_LOGIC -- load from ADL
+  );
+END ENTITY;
 
-architecture structural of alu is
+ARCHITECTURE structural OF alu IS
 
-  component alu_logic IS
+  COMPONENT alu_logic IS
     PORT (
       a : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
       b : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
-      control : IN STD_LOGIC_VECTOR(11 DOWNTO 0);  -- This is not efficent for number of wires maybe multiplex and demultiplax
-      --bit(0) = daa, not used atm since decimal
-      --bit(1) = i/addc or called carry in
-      --bit(2) = sums
-      --bit(3) = ands
-      --bit(4) = exors
-      --bit(5) = ors
-      --bit(6) = srs (lsr)
-      --bit(7) = sls (asl)
-      --bit(8) = rotate right
-      --bit(9) = rotate left
-      --bit(10) = pass1 (rega)
-      --bit(11) = pass2 (regb)
+      control : IN STD_LOGIC_VECTOR(11 DOWNTO 0); -- This is not efficent for number of wires maybe multiplex and demultiplax
+    --bit(0) = daa, not used atm since decimal
+    --bit(1) = i/addc or called carry in
+    --bit(2) = sums
+    --bit(3) = ands
+    --bit(4) = exors
+    --bit(5) = ors
+    --bit(6) = srs (lsr)
+    --bit(7) = sls (asl)
+    --bit(8) = rotate right
+    --bit(9) = rotate left
+    --bit(10) = pass1 (rega)
+    --bit(11) = pass2 (regb)
       o : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); --output signal
       avr : OUT STD_LOGIC;
       acr : OUT STD_LOGIC; -- cary out
       hc : OUT STD_LOGIC
     );
-  END component;
-
-
-  component A_input_register IS
+  END COMPONENT;
+  COMPONENT A_input_register IS
     PORT (
       clk : IN STD_LOGIC;
       reset : IN STD_LOGIC;
@@ -74,9 +81,9 @@ architecture structural of alu is
       o_add : IN STD_LOGIC; --Load all 0's
       sb_add : IN STD_LOGIC --Load data from bus
     );
-  END component;
+  END COMPONENT;
 
-  component B_input_register IS
+  COMPONENT B_input_register IS
     PORT (
       clk : IN STD_LOGIC;
       reset : IN STD_LOGIC;
@@ -87,10 +94,8 @@ architecture structural of alu is
       db_add : IN STD_LOGIC; -- use databus
       adl_add : IN STD_LOGIC -- use addres line
     );
-  END component;
-
-
-  component adder_hold_register IS
+  END COMPONENT;
+  COMPONENT adder_hold_register IS
     PORT (
       clk : IN STD_LOGIC;
       reset : IN STD_LOGIC;
@@ -104,56 +109,54 @@ architecture structural of alu is
       add_sb6 : IN STD_LOGIC; -- put content to SB bus 0-6
       add_sb7 : IN STD_LOGIC -- put content to sb bus 7
     );
-  END component;
+  END COMPONENT;
 
--- intermidate data signals
-signal output_alu : std_logic_vector(7 downto 0);
-signal a, b : std_logic_vector(7 downto 0);
+  -- intermidate data signals
+  SIGNAL output_alu : STD_LOGIC_VECTOR(7 DOWNTO 0);
+  SIGNAL a, b : STD_LOGIC_VECTOR(7 DOWNTO 0);
 
-begin
-   -- alu part
-  alu_logicmap : alu_logic port map(
-                          a,
-                          b,
-                          control,
-                          output_alu,
-                          avr,
-                          acr,
-                          hc
-                          ); -- portmap done
+BEGIN
+  -- alu part
+  alu_logicmap : alu_logic PORT MAP(
+    a,
+    b,
+    control,
+    output_alu,
+    avr,
+    acr,
+    hc
+  ); -- portmap done
 
   -- B input register
-  B_REGISTER: B_input_register port map(
-                                 clk,
-                                 reset,
-                                 sb_in,
-                                 adl_in,
-                                 b,
-                                 inv_db_add,
-                                 db_add,
-                                 adl_add);
+  B_REGISTER : B_input_register PORT MAP(
+    clk,
+    reset,
+    sb_in,
+    adl_in,
+    b,
+    inv_db_add,
+    db_add,
+    adl_add);
 
   -- a input register
-  A_REGSISTER : A_input_register port map(
-                                 clk,
-                                 reset,
-                                 sb_in,
-                                 a,
-                                 o_add,
-                                 sb_add);
+  A_REGSISTER : A_input_register PORT MAP(
+    clk,
+    reset,
+    sb_in,
+    a,
+    o_add,
+    sb_add);
 
   -- adder hold register
-  HOLD_REGISTER : adder_hold_register port map(
-                                    clk,
-                                    reset,
-                                    output_alu,
-                                    adl_out,
-                                    sb_out,
-                                    clk_2,
-                                    add_adl,
-                                    add_sb6,
-                                    add_sb7);
+  HOLD_REGISTER : adder_hold_register PORT MAP(
+    clk,
+    reset,
+    output_alu,
+    adl_out,
+    sb_out,
+    clk_2,
+    add_adl,
+    add_sb6,
+    add_sb7);
 
-
-
-end architecture;
+END ARCHITECTURE;
