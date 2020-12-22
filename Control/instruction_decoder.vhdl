@@ -31,7 +31,7 @@ begin
       case ir_in(7 downto 5)
         --000xxx00
         when "000" =>
-          case opcode(4 downto 2) is
+          case ir_in(4 downto 2) is
             -- 00 : BRK
             when "000" =>
 
@@ -48,7 +48,7 @@ begin
 
         --001xxx00
         when "001" =>
-          case opcode(4 downto 2) is
+          case ir_in(4 downto 2) is
             -- 20 : JSR
             when "000" =>
 
@@ -71,7 +71,7 @@ begin
 
         --010xxx00
         when "010" =>
-          case opcode(4 downto 2) is
+          case ir_in(4 downto 2) is
             -- 60 : RTS
             when "000" =>
 
@@ -92,7 +92,7 @@ begin
 
         --011xxx00
         when "011" =>
-          case opcode(4 downto 2) is
+          case ir_in(4 downto 2) is
             -- 40 : RTI
             when "000" =>
 
@@ -112,7 +112,7 @@ begin
 
         --100xxx00
         when "100" =>
-          case opcode(4 downto 2) is
+          case ir_in(4 downto 2) is
             -- 84 : STY Z-Page
             when "001" =>
 
@@ -135,7 +135,7 @@ begin
 
         --101xxx00
         when "101" =>
-          case opcode(4 downto 2) is
+          case ir_in(4 downto 2) is
             -- A0 : LDY IMM
             when "000" =>
 
@@ -164,7 +164,7 @@ begin
 
         --110xxx00
         when "110" =>
-          case opcode(4 downto 2) is
+          case ir_in(4 downto 2) is
             -- C0 : CPY IMM
             when "000" =>
 
@@ -187,7 +187,7 @@ begin
 
         --111xxx00
         when "111" =>
-          case opcode(4 downto 2) is
+          case ir_in(4 downto 2) is
             -- E0 : CPX IMM
             when "000" =>
 
@@ -213,7 +213,7 @@ begin
       case ir_in(7 downto 5)
         --000xxx01
         when "000" =>
-          case opcode(4 downto 2) is
+          case ir_in(4 downto 2) is
             --01 : ORA IND,X
             when "000" =>
 
@@ -242,7 +242,7 @@ begin
 
         --001xxx01
         when "001" =>
-          case opcode(4 downto 2) is
+          case ir_in(4 downto 2) is
             --21 : AND IND,X
             when "000" =>
             --25 : AND Z-Page
@@ -264,7 +264,7 @@ begin
 
         --010xxx01
         when "010" =>
-          case opcode(4 downto 2) is
+          case ir_in(4 downto 2) is
             --41 : EOR IND,X
             when "000" =>
 
@@ -293,7 +293,7 @@ begin
 
         --011xxx01
         when "011" =>
-          case opcode(4 downto 2) is
+          case ir_in(4 downto 2) is
             -- 61 : ADC IND,X
             when "000" =>
 
@@ -322,7 +322,7 @@ begin
 
         --100xxx01
         when "100" =>
-          case opcode(4 downto 2) is
+          case ir_in(4 downto 2) is
             -- 81 : STA IND,X
             when "000" =>
 
@@ -348,7 +348,7 @@ begin
 
         --101xxx01
         when "101" =>
-          case opcode(4 downto 2) is
+          case ir_in(4 downto 2) is
             -- A1 : LDA IND,X
             when "000" =>
 
@@ -377,7 +377,7 @@ begin
 
         --110xxx01
         when "110" =>
-          case opcode(4 downto 2) is
+          case ir_in(4 downto 2) is
             -- C1 : CMP IND,X
             when "000" =>
 
@@ -406,7 +406,7 @@ begin
 
         --111xxx01
         when "111" =>
-          case opcode(4 downto 2) is
+          case ir_in(4 downto 2) is
             -- E1 : SBC IND,X
             when "000" =>
 
@@ -439,7 +439,7 @@ begin
       case ir_in(7 downto 5)
         --000xxx11
         when "000" =>
-          case opcode(4 downto 2) is
+          case ir_in(4 downto 2) is
             -- 06 : ASL Z-Page
             when "001" =>
 
@@ -459,7 +459,7 @@ begin
 
         --001xxx11
         when "001" =>
-          case opcode(4 downto 2) is
+          case ir_in(4 downto 2) is
             -- 26 : ROL Z-Page
             when "001" =>
 
@@ -479,7 +479,7 @@ begin
 
         --010xxx11
         when "010" =>
-          case opcode(4 downto 2) is
+          case ir_in(4 downto 2) is
             -- 46 : LSR Z-Page
             when "001" =>
 
@@ -499,7 +499,7 @@ begin
 
         --011xxx11
         when "011" =>
-          case opcode(4 downto 2) is
+          case ir_in(4 downto 2) is
             -- 66 : ROR Z-Page
             when "001" =>
 
@@ -519,7 +519,7 @@ begin
 
         --100xxx11
         when "100" =>
-          case opcode(4 downto 2) is
+          case ir_in(4 downto 2) is
             -- 86 : STX Z-Page
             when "001" =>
 
@@ -539,7 +539,7 @@ begin
 
         --101xxx11
         when "101" =>
-          case opcode(4 downto 2) is
+          case ir_in(4 downto 2) is
             -- A2 : LDX IMM
             when "000" =>
 
@@ -565,7 +565,7 @@ begin
 
         --110xxx11
         when "110" =>
-          case opcode(4 downto 2) is
+          case ir_in(4 downto 2) is
             -- C6 : DEC Z-Page
             when "001" =>
 
@@ -585,12 +585,12 @@ begin
 
         --111xxx11
         when "111" =>
-          case opcode(4 downto 2) is
+          case ir_in(4 downto 2) is
             --E6 : INC Z-Page
             when "001" =>
 
             --EA : NOP
-            when "010" => 
+            when "010" =>
 
             --EE : INC ABS
             when "011" =>
