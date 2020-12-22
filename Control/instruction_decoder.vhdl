@@ -6,7 +6,7 @@ entity instruction_decoder is
   port (
       clk : IN std_logic;
       clk_2 : IN std_logic;
-      ir_in: IN STD_LOGIC_VECTOR(15 DOWNTO 0);    -- Instruction register in
+      ir_in: IN STD_LOGIC_VECTOR(7 DOWNTO 0);    -- Instruction register in
       timing: IN STD_LOGIC_VECTOR(2 DOWNTO 0);    -- Cycle select
       interrupt: IN STD_LOGIC_VECTOR(2 DOWNTO 0); --
       ready: IN STD_LOGIC;
@@ -610,3 +610,5 @@ begin
   end process;
 
 end architecture;
+
+i
