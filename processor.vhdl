@@ -179,19 +179,20 @@ end component;
 
   -- Instruction decoder
   component instruction_decoder is
-    port (clk : IN std_logic;
-          clk_2 : IN std_logic;
-          ir_in: IN STD_LOGIC_VECTOR(15 DOWNTO 0);    -- Instruction register in
-          timing: IN STD_LOGIC_VECTOR(2 DOWNTO 0);    -- Cycle select
-          interrupt: IN STD_LOGIC_VECTOR(2 DOWNTO 0); --
-          ready: IN STD_LOGIC;
-          r_w: IN STD_LOGIC;
-          sv: IN STD_LOGIC;
-          control_out: OUT STD_LOGIC_VECTOR(66 DOWNTO 0)
+    port (
+        clk : IN std_logic;
+        clk_2 : IN std_logic;
+        ir_in: IN STD_LOGIC_VECTOR(7 DOWNTO 0);    -- Instruction register in
+        timing: IN STD_LOGIC_VECTOR(2 DOWNTO 0);    -- Cycle select
+        interrupt: IN STD_LOGIC_VECTOR(2 DOWNTO 0); --
+        ready: IN STD_LOGIC;
+        r_w: IN STD_LOGIC;
+        sv: IN STD_LOGIC;
+        control_out: OUT STD_LOGIC_VECTOR(66 DOWNTO 0)
     );
   end component;
 
-
+  -- status register
   component status_register is
     port (
       --Input from bus
@@ -242,6 +243,16 @@ end component;
   			adl_out	: out std_logic_vector(7 downto 0));
   end component;
 
+-- Timing generation logic
+  component timer is
+    port (
+    clk : IN std_logic;
+    reset : IN std_logic;
+    enable : IN std_logic;
+    timing: OUT STD_LOGIC_VECTOR(2 DOWNTO 0)
+    );
+  end component;
+
 
 --/*************************************************
 --*                    Signals                     *
@@ -273,15 +284,16 @@ end component;
   signal sb_db_pass, sb_adh_pass : std_logic;
   -- stack pointer
   signal sb_s, s_sb, s_adl : std_logic;
-
   -- instruction decoer TODO
   signal ir_in : STD_LOGIC_VECTOR(15 DOWNTO 0);    -- Instruction register in
   signal timing : STD_LOGIC_VECTOR(2 DOWNTO 0);    -- Cycle select
   signal interrupt : STD_LOGIC_VECTOR(2 DOWNTO 0); --
   signal ready, sv, r_w : STD_LOGIC;
-
   -- Processor Status Register
   signal ir5 : std_logic;
+  -- Timing generation logic
+  signal enable_timing_logic : std_logic;
+  signal timing_vector : std_logic_vector(2 downto 0);
 
 
   -- flags
@@ -321,18 +333,6 @@ begin
 -- ALU
   -- checked 18-12-2020 23:48
   alu_control(11 downto 0) <= control_out(40 downto 29); -- more efficient
-  -- old_alu_control(0)  <= control_out(29);  -- TODO FIX!
-  -- old_alu_control(1)  <= control_out(30);
-  -- old_alu_control(2)  <= control_out(31);
-  -- old_alu_control(3)  <= control_out(32);
-  -- old_alu_control(4)  <= control_out(33);
-  -- old_alu_control(5)  <= control_out(34);
-  -- old_alu_control(6)  <= control_out(35);
-  -- old_alu_control(7)  <= control_out(36);
-  -- old_alu_control(8)  <= control_out(37);
-  -- old_alu_control(9)  <= control_out(38);
-  -- old_alu_control(10)  <= control_out(39);
-  -- old_alu_control(11)  <= control_out(40);
 
   add_adl     <= control_out(41);
   add_sb6     <= control_out(42);
@@ -372,11 +372,15 @@ begin
   --              <=  zero_flag;
   --              <=  negative_flag;
 
+  -- Timing generation logic
+  enable_timing_logic <= '1'; --enable logic
+
+
 
 -- Instruction decoder
   -- TODO: FIX Instruction Decoder
   -- ir_in         <= ; -- IN STD_LOGIC_VECTOR(15 DOWNTO 0);
-  -- timing        <= ; -- IN STD_LOGIC_VECTOR(5 DOWNTO 0);
+  timing        <=  timing_vector; -- IN STD_LOGIC_VECTOR(5 DOWNTO 0);
   -- interrupt     <= ;
   -- ready         <= ;
   -- r_w           <= ;
@@ -609,6 +613,12 @@ stk_point :  stack_pointer PORT MAP(
                       adl
 );
 
-
+-- Timing generation logic
+timing_generation_logic : timer PORT MAP(
+                      clk,
+                      reset,
+                      enable_timing_logic,
+                      timing_vector
+                      );
 
 end architecture;
