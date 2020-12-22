@@ -6,10 +6,15 @@ entity register_8bit is
         load    : in  std_logic;
         reset   : in  std_logic;
         data_in : in  std_logic_vector(7 downto 0);
-        write_enable   : in  std_logic;
         reg_out : out std_logic_vector(7 downto 0));
 end register_8bit;
 
+
+architecture behaviour of register_8bit is
+
+signal q : std_logic_vector (7 downto 0);	--adding intermediate signal for output register
+
+begin
 reg: process(clk, reset, load)	--process to determine output register
 		begin
 			if (rising_edge(clk) and load='1') then	--both need to be high to load value from bus
@@ -21,12 +26,5 @@ reg: process(clk, reset, load)	--process to determine output register
 			end if;
 		end process;
 
-output: process(write_enable)		--process to determine when to write_enable to component/bus
-		begin
-			if (write_enable='1') then
-				reg_out <= q;		-- only output when control tells to write_enable, else high impedance
-			elsif (write_enable='0') then
-				reg_out <= "ZZZZZZZZ";
-			end if;
-		end process;
+reg_out <= q;
 end behaviour;

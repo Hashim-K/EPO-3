@@ -6,14 +6,12 @@ ENTITY accumulator IS
     PORT (
         clk : IN STD_LOGIC;
         reset : IN STD_LOGIC;
-        ac_db : IN STD_LOGIC; --accumulator to databus
-        ac_sb : IN STD_LOGIC; --accumulator to systembus
-        sb_ac : IN STD_LOGIC; --systembus to accumulator
-        sb_in : IN STD_LOGIC_VECTOR(7 DOWNTO 0); --systembus in
-        sb_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); --systembus out
-        db : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); --databus out
-        zero_flag : OUT STD_LOGIC;
-        negative_flag : OUT STD_LOGIC
+        ac_db : IN STD_LOGIC;
+        ac_sb : IN STD_LOGIC;
+        sb_ac : IN STD_LOGIC;
+        sb_in : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+        sb_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
+        db : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)
     );
 END ENTITY;
 
@@ -41,12 +39,6 @@ BEGIN
     load <= sb_ac;
     data_in <= sb_in;
 
-    WITH sb_in SELECT zero_flag <=
-        '1' WHEN "00000000",
-        '0' WHEN OTHERS;
-
-    negative_flag <= sb_in(7);
-
     WITH control SELECT sb_out <=
         data_out WHEN "10",
         "ZZZZZZZZ" WHEN OTHERS;
@@ -54,4 +46,5 @@ BEGIN
     WITH control SELECT db <=
         data_out WHEN "01",
         "ZZZZZZZZ" WHEN OTHERS;
+
 END ARCHITECTURE;
