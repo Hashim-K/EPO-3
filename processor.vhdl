@@ -253,6 +253,14 @@ end component;
     );
   end component;
 
+-- Instruction Register
+  component intruction_reg is
+     port(clk      : in  std_logic;
+          reset    : in  std_logic;
+          load     : in  std_logic;
+          data_in  : in  std_logic_vector(7 downto 0);
+          data_out : out std_logic_vector(7 downto 0));
+  end component;
 
 --/*************************************************
 --*                    Signals                     *
@@ -294,7 +302,9 @@ end component;
   -- Timing generation logic
   signal enable_timing_logic : std_logic;
   signal timing_vector : std_logic_vector(2 downto 0);
-
+  -- Instruction Register
+  signal ins_data_in, ins_data_out : std_logic_vector(7 downto 0);;
+  signal inst_load : std_logic;
 
   -- flags
   signal avr, acr : std_logic;
@@ -376,10 +386,13 @@ begin
   enable_timing_logic <= '1'; --enable logic
 
 
+-- instruction register
+  ins_data_in   <= db_external; -- data in from external data
+  inst_load     <= '1'; -- LOAD TODO!
 
 -- Instruction decoder
   -- TODO: FIX Instruction Decoder
-  -- ir_in         <= ; -- IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+  ir_in         <=  ins_data_out; -- IN STD_LOGIC_VECTOR(15 DOWNTO 0);
   timing        <=  timing_vector; -- IN STD_LOGIC_VECTOR(5 DOWNTO 0);
   -- interrupt     <= ;
   -- ready         <= ;
@@ -620,5 +633,14 @@ timing_generation_logic : timer PORT MAP(
                       enable_timing_logic,
                       timing_vector
                       );
+
+-- Instruction Register
+ins_reg : intruction_reg PORT MAP(
+                      clk,
+                      reset,
+                      inst_load,
+                      ins_data_in,
+                      ins_data_out
+);
 
 end architecture;
