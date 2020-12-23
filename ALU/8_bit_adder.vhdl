@@ -19,6 +19,6 @@ BEGIN
   result <= ("0" & a) + ("0" & b) + cin;
   o <= result(7 DOWNTO 0);
   carry <= result(8);
-  overflow <= '0';
+  overflow <= ((a(7) and b(7) and (not result(7))) or ((not a(7)) and (not b(7)) and result(7)));
   --overflow needs to be done
 END ARCHITECTURE;
