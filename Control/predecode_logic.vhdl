@@ -17,7 +17,7 @@ architecture behaviour of predecode_logic is
 begin
   process(databus, reset)
   begin
-    if reset='1' then -- Reset resets the entire sequence,
+    if (reset='1') then -- Reset resets the entire sequence,
       instruction <= "00000000";
       cycles <= "000";
       RWM <= '0';
@@ -80,13 +80,48 @@ begin
         end if;
         ----------------------------------- cc = 00 --------------------------------------
       elsif (databus(1 DOWNTO 0) = "00") then
-        if (databus(4 DOWNTO 2) = "000") then -- #immediate
-        elsif (databus(4 DOWNTO 2) = "001") then -- zero page
-        elsif (databus(4 DOWNTO 2) = "011") then -- absolute
-        elsif (databus(4 DOWNTO 2) = "101") then -- zero page, Y
-        elsif (databus(4 DOWNTO 2) = "111") then -- absolute, Y
+        RMW <= '0';
+        if (databus(4 DOWNTO 2) = "000" and databus(7) = '0') then --interrupt signals 0xx00000
+					 if databus(6 DOWNTO 5) = "00" then  --BRK
+						  cycles<= "111";
+					 else
+						  cycles<= "110";
+					 end if;
+         elsif (databus(3 DOWNTO 2) = "10") then -- all instructions that end with 8 -> xxxx1000
+            if (databus(7 DOWNTO 4) = "0000") then -- PHP instruction
+              cycles <= "011";
+            elsif (databus(7 DOWNTO 4) = "0010") then -- PLP instruction
+              cycles <= "100";
+            elsif (databus(7 DOWNTO 4) = "0100") then -- PHA instruction
+              cycles <= "011";
+            elsif (databus(7 DOWNTO 4) = "0110") then -- PLA instruction
+              cycles <= "100";
+            else -- all the other instructions are implied instructions, meaning that they only take 2 cycles
+              cycles <= "010";
+            end if;
+          elsif databus(4 DOWNTO 2) = "100" then --branch
+						  cycles <= "000"; -- 2 for no branch, 3 for branch, 4 for page cross and branch
+					elsif databus(4 DOWNTO 2) = "000" then --immediate
+						  cycles <= "010";
+					elsif databus(4 DOWNTO 2) = "001" then --zeropage
+						  cycles <= "011";
+					elsif databus(4 DOWNTO 2) = "011" and databus(7 DOWNTO 5) = "010" then -- absolute, JMP abs
+						  cycles <= "011";
+					elsif databus(4 DOWNTO 2) = "011" and databus(7 DOWNTO 5) = "011" then -- absolute, JMP
+						  cycles <= "101";
+					elsif databus(4 DOWNTO 2) = "011" and not(databus(7 DOWNTO 6) = "01") then --the other absolutes, JMP instructions need a special one
+						  cycles <= "100";
+					elsif databus(4 DOWNTO 2) = "101" then -- zero page, X
+						  cycles <= "100";
+					elsif databus(4 DOWNTO 2) = "111" then --absolute, X
+						  cycles <= "101";
+					else
+						cycles<= "000";
         end if;
       end if;
+    else
+      cycles <= "000";
+      RMW <= '0';
     end if;
   end process;
 end behaviour;

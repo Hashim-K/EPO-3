@@ -6,7 +6,7 @@ entity timing_generation is
   port (
     clk: IN STD_LOGIC;
     reset: IN STD_LOGIC;
-  --  BCR: IN STD_LOGIC; -- indicates that there is a branch operation going on (maybe leave this one out for now)
+    BCR: IN STD_LOGIC; -- indicates that there is a branch operation going on (maybe leave this one out for now)
     page_cross: IN STD_LOGIC; -- indicates that there is an instruction in the register that uses page crossing. E.g $0000-$00FF is an interval. If an address gets added to that it could become $01.., which means it is outside of the boundary
     RMW: IN STD_LOGIC;  -- information from the predecoder that there is a RMW value present in the decoder. RMW instructions generally take longer because they read and write to memory
     cycles: IN STD_LOGIC_VECTOR(2 DOWNTO 0); -- Predecode given value, indicates how many cycles the instruction takes
@@ -36,7 +36,7 @@ architecture timing_logic of timing_generation is
 
 begin
 
-  Timing :process (clk, reset)
+  Timing : process (clk, reset)
   begin
     if (reset = '1') then
       state <= T0;
