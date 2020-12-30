@@ -1,6 +1,6 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
-USE IEEE.NUMERIC_STD_UNSIGNED.ALL;
+USE ieee.std_logic_unsigned.ALL;
 
 ENTITY eight_bit_adder IS
   PORT (
@@ -16,9 +16,8 @@ END ENTITY;
 ARCHITECTURE behaviour OF eight_bit_adder IS
   SIGNAL result : STD_LOGIC_VECTOR(8 DOWNTO 0);
 BEGIN
-  result <= a + b + cin;
+  result <= ("0" & a) + ("0" & b) + cin;
   o <= result(7 DOWNTO 0);
   carry <= result(8);
-  overflow <= ((a(7) and b(7) and (not result(7))) or ((not a(7)) and (not b(7)) and result(7)));
-  --overflow needs to be done
+  overflow <= ((a(7) AND b(7) AND (NOT result(7))) OR ((NOT a(7)) AND (NOT b(7)) AND result(7)));
 END ARCHITECTURE;
