@@ -12,8 +12,6 @@ entity predecode_register is
           );
   END ENTITY;
 
-  SIGNAL clk, reset, load : STD_LOGIC;
-  SIGNAL databus, data_out : STD_LOGIC_VECTOR(7 DOWNTO 0);
 
   ARCHITECTURE behaviour OF predecode_register IS
 
