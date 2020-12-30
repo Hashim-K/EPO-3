@@ -6,11 +6,17 @@ entity timing_generation is
   port (
     clk: IN STD_LOGIC;
     reset: IN STD_LOGIC;
+
     BCR: IN STD_LOGIC; -- indicates that there is a branch operation going on (maybe leave this one out for now)
-    page_cross: IN STD_LOGIC; -- indicates that there is an instruction in the register that uses page crossing. E.g $0000-$00FF is an interval. If an address gets added to that it could become $01.., which means it is outside of the boundary
+    page_cross: IN STD_LOGIC;   -- indicates that there is an instruction in the register that uses page crossing. E.g $0000-$00FF is an interval. If an address gets added to that it could become $01.., which means it is outside of the boundary
+
+    -- Coming from predecode #see predicode
     RMW: IN STD_LOGIC;  -- information from the predecoder that there is a RMW value present in the decoder. RMW instructions generally take longer because they read and write to memory
     cycles: IN STD_LOGIC_VECTOR(2 DOWNTO 0); -- Predecode given value, indicates how many cycles the instruction takes
-    tcstate: OUT STD_LOGIC_VECTOR(5 DOWNTO 0); -- Output of the device which tells you what cycle the machine is in
+
+    -- going to the main decoder
+    tcstate: OUT STD_LOGIC_VECTOR(5 DOWNTO 0); -- Output of the device which tells you what cycle the machine is in, This is a invtered signal!!
+
     SYNC, S1, S2: OUT STD_LOGIC; -- Sync indicates that the timing is at T1P_T1 -- SD. indicate that there is a RMW instruction in the instruction register to the decode rom (also an indication to show in what cycle it is the RWM)
     V1: OUT STD_LOGIC -- V1 is an indication for a BRK instruction
   );

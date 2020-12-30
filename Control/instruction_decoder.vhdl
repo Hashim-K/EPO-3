@@ -19,7 +19,9 @@ end entity;
 architecture arch of instruction_decoder is
 
 -- Order of checking
--- CC -> AAA -> BBB
+  -- 1. Check CC
+  -- 2. Check AAA
+  -- 3. Check BBB
 
 begin
 
@@ -27,13 +29,14 @@ begin
   begin
   case ir_in(1 downto 0)
 
-    when "00" =>
+    ----------------------------------- cc = 00 --------------------------------------
+    when "00" => --xxxxxx00
       case ir_in(7 downto 5)
-        --000xxx00
-        when "000" =>
-          case ir_in(4 downto 2) is
+
+        when "000" => --000xxx00
+          case ir_in(4 downto 2)
             -- 00 : BRK
-            when "000" =>
+            when "000" => -- 00000000
 
             -- 08 : PHP
             when "010" =>
@@ -209,6 +212,7 @@ begin
           end case;
       end case;
 
+    ----------------------------------- cc = 01 --------------------------------------
     when "01" =>
       case ir_in(7 downto 5)
         --000xxx01
@@ -433,8 +437,9 @@ begin
 
           end case;
 
-      end case;
+      end case;----------------------------------- cc = 00 --------------------------------------
 
+    ----------------------------------- cc = 10 --------------------------------------
     when "10" =>
       case ir_in(7 downto 5)
         --000xxx11
@@ -604,11 +609,10 @@ begin
           end case;
 
       end case;
+
   end case;
 
 
   end process;
 
 end architecture;
-
-i

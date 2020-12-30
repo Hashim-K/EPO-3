@@ -4,10 +4,10 @@ use ieee.numeric_std.all;
 
 entity predecode_logic is
   port (
-    databus : IN std_logic_vector(7 DOWNTO 0);
+    databus : IN std_logic_vector(7 DOWNTO 0); -- instuction or other data in
     reset : IN std_logic;
-    instruction : OUT std_logic_vector(7 DOWNTO 0);
-    cycles : OUT std_logic_vector(2 DOWNTO 0);
+    instruction : OUT std_logic_vector(7 DOWNTO 0); -- to instruction register
+    cycles : OUT std_logic_vector(2 DOWNTO 0);  -- output the number of cycles it takse to do the instruction
     RMW : OUT std_logic
   );
 end entity;
@@ -21,9 +21,15 @@ begin
       instruction <= "00000000";
       cycles <= "000";
       RMW <= '0';
-    else
+    else 
       instruction <= databus; -- the databus contains the instruction, so this can be routed instantly.
       RMW <= '0'; -- default the RMW is zero, but it can be changed in the rest of this if-statement. Important is that it is set to 0 initially.
+
+
+      -- How this works
+        -- 1. check CC
+        -- 2. check BB
+        -- 3. Output the amound of cycles the instruction need in binary to 'cycles' signal
 
       ----------------------------------- cc = 01 --------------------------------------
       if (databus(1 DOWNTO 0) = "01") then
