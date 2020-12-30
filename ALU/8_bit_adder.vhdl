@@ -16,7 +16,7 @@ END ENTITY;
 ARCHITECTURE behaviour OF eight_bit_adder IS
   SIGNAL result : STD_LOGIC_VECTOR(8 DOWNTO 0);
 BEGIN
-  result <= ("0" & a) + ("0" & b) + cin;
+  result <= a + b + cin;
   o <= result(7 DOWNTO 0);
   carry <= result(8);
   overflow <= ((a(7) and b(7) and (not result(7))) or ((not a(7)) and (not b(7)) and result(7)));
