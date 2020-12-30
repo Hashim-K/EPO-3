@@ -1,6 +1,7 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
+USE ieee.std_logic_unsigned.ALL;
 
 ENTITY eight_bit_adder_tb IS
 END ENTITY;

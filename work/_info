@@ -268,9 +268,9 @@ Vk3;MogASO_ZCTajbOmcE00
 !s100 blb8V]DhSC<`m<?Uc2=dj1
 R7
 32
-Z46 !s110 1608725383
+Z46 !s110 1609323825
 !i10b 1
-Z47 !s108 1608725383.000000
+Z47 !s108 1609323825.000000
 Z48 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/stefa/Documents/GitHub/EPO-3/ALU/alu_logic.vhdl|
 Z49 !s107 C:/Users/stefa/Documents/GitHub/EPO-3/ALU/alu_logic.vhdl|
 !i113 1
@@ -309,9 +309,9 @@ V7[j[2BM[l4N^39>Kj>b=l2
 !s100 gg9c3l[[G_nfQHU0YM>YZ1
 R7
 32
-Z53 !s110 1608725384
+Z53 !s110 1609323826
 !i10b 1
-Z54 !s108 1608725384.000000
+Z54 !s108 1609323826.000000
 Z55 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/stefa/Documents/GitHub/EPO-3/ALU/Testbench/alu_logic_tb.vhdl|
 Z56 !s107 C:/Users/stefa/Documents/GitHub/EPO-3/ALU/Testbench/alu_logic_tb.vhdl|
 !i113 1
@@ -501,54 +501,56 @@ R79
 R12
 R13
 Eeight_bit_adder
-Z80 w1608724912
-R68
+Z80 w1609323791
+Z81 DPx4 ieee 15 std_logic_arith 0 22 [G314=:2zXJ`VORJe1J@Z1
+Z82 DPx4 ieee 18 std_logic_unsigned 0 22 ;eZjO2D4ZDz<]0>8AL<ne1
 R2
 R3
 R4
-Z81 8C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_adder.vhdl
-Z82 FC:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_adder.vhdl
+Z83 8C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_adder.vhdl
+Z84 FC:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_adder.vhdl
 l0
 L5
-VEgF0?;[o3kKZGA<HJVjk71
-!s100 ^X:?g0ei5eUS3R0HbT^NB2
+VmoJ7iJIcMHHIJU<6_B?BQ1
+!s100 IbEajFR?LIhGCPAfj]VQa2
 R7
 32
 R46
 !i10b 1
 R47
-Z83 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_adder.vhdl|
-Z84 !s107 C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_adder.vhdl|
+Z85 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_adder.vhdl|
+Z86 !s107 C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_adder.vhdl|
 !i113 1
 R12
 R13
 Abehaviour
-R68
+R81
+R82
 R2
 R3
-DEx4 work 15 eight_bit_adder 0 22 EgF0?;[o3kKZGA<HJVjk71
+DEx4 work 15 eight_bit_adder 0 22 moJ7iJIcMHHIJU<6_B?BQ1
 l18
 L16
-VaK3kka;FzJ@DWA?UPlRg51
-!s100 0:Z:ENOeU=>U;f`]?86B`1
+VAZQI:KaGJ3iD?A9bZL:4m2
+!s100 H9>]a0Tl>Eg^4]S4jP96?0
 R7
 32
 R46
 !i10b 1
 R47
-R83
-R84
+R85
+R86
 !i113 1
 R12
 R13
 Eeight_bit_adder_tb
-Z85 w1608725371
+Z87 w1608725371
 R1
 R2
 R3
 R4
-Z86 8C:/Users/stefa/Documents/GitHub/EPO-3/ALU/Testbench/eight_bit_adder_tb.vhdl
-Z87 FC:/Users/stefa/Documents/GitHub/EPO-3/ALU/Testbench/eight_bit_adder_tb.vhdl
+Z88 8C:/Users/stefa/Documents/GitHub/EPO-3/ALU/Testbench/eight_bit_adder_tb.vhdl
+Z89 FC:/Users/stefa/Documents/GitHub/EPO-3/ALU/Testbench/eight_bit_adder_tb.vhdl
 l0
 L5
 VPH3om[_W<VV9AWU?SS0i<3
@@ -558,8 +560,8 @@ R7
 R53
 !i10b 1
 R54
-Z88 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/stefa/Documents/GitHub/EPO-3/ALU/Testbench/eight_bit_adder_tb.vhdl|
-Z89 !s107 C:/Users/stefa/Documents/GitHub/EPO-3/ALU/Testbench/eight_bit_adder_tb.vhdl|
+Z90 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/stefa/Documents/GitHub/EPO-3/ALU/Testbench/eight_bit_adder_tb.vhdl|
+Z91 !s107 C:/Users/stefa/Documents/GitHub/EPO-3/ALU/Testbench/eight_bit_adder_tb.vhdl|
 !i113 1
 R12
 R13
@@ -567,29 +569,29 @@ Astructural
 R1
 R2
 R3
-Z90 DEx4 work 18 eight_bit_adder_tb 0 22 PH3om[_W<VV9AWU?SS0i<3
+Z92 DEx4 work 18 eight_bit_adder_tb 0 22 PH3om[_W<VV9AWU?SS0i<3
 l23
 L8
-VB[`727nYn=_5z?Qi<;<KD3
-!s100 9zP4;50V1e7aGaWPeajfc1
+Z93 VB[`727nYn=_5z?Qi<;<KD3
+Z94 !s100 9zP4;50V1e7aGaWPeajfc1
 R7
 32
 R53
 !i10b 1
 R54
-R88
-R89
+R90
+R91
 !i113 1
 R12
 R13
 Eeight_bit_and
-Z91 w1608204635
+Z95 w1608204635
 R1
 R2
 R3
 R4
-Z92 8C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_and.vhdl
-Z93 FC:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_and.vhdl
+Z96 8C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_and.vhdl
+Z97 FC:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_and.vhdl
 l0
 L5
 VL9ffA41bmS=8f@L77BOSz2
@@ -599,8 +601,8 @@ R7
 R46
 !i10b 1
 R47
-Z94 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_and.vhdl|
-Z95 !s107 C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_and.vhdl|
+Z98 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_and.vhdl|
+Z99 !s107 C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_and.vhdl|
 !i113 1
 R12
 R13
@@ -618,30 +620,30 @@ R7
 R46
 !i10b 1
 R47
-R94
-R95
+R98
+R99
 !i113 1
 R12
 R13
 Eeight_bit_or
-R91
+R95
 R1
 R2
 R3
 R4
-Z96 8C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_or.vhdl
-Z97 FC:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_or.vhdl
+Z100 8C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_or.vhdl
+Z101 FC:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_or.vhdl
 l0
 L5
 VSFOf=Z6]AMf2@T_i3@PbR0
 !s100 KmkCZ19KCzmKeL3Ybi8[I2
 R7
 32
-R46
+R53
 !i10b 1
 R47
-Z98 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_or.vhdl|
-Z99 !s107 C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_or.vhdl|
+Z102 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_or.vhdl|
+Z103 !s107 C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_or.vhdl|
 !i113 1
 R12
 R13
@@ -656,33 +658,33 @@ Vb^:4QJO<1G6_oj5FI?`BD3
 !s100 3::Sl2>hI1>oE`DzL1MQ43
 R7
 32
-R46
+R53
 !i10b 1
 R47
-R98
-R99
+R102
+R103
 !i113 1
 R12
 R13
 Eeight_bit_pass
-R91
+R95
 R1
 R2
 R3
 R4
-Z100 8C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_pass.vhd
-Z101 FC:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_pass.vhd
+Z104 8C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_pass.vhd
+Z105 FC:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_pass.vhd
 l0
 L5
 VHBRlIHS[75D@:M2c5QXLJ0
 !s100 L6YoXHAj3K71d_><Z8Y?S0
 R7
 32
-R46
+R53
 !i10b 1
-R47
-Z102 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_pass.vhd|
-Z103 !s107 C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_pass.vhd|
+R54
+Z106 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_pass.vhd|
+Z107 !s107 C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_pass.vhd|
 !i113 1
 R12
 R13
@@ -697,33 +699,33 @@ V?HQh^0CjZ1bbHkP97kT;`2
 !s100 VEZg46BN@<k:@aGLQkDZV3
 R7
 32
-R46
+R53
 !i10b 1
-R47
-R102
-R103
+R54
+R106
+R107
 !i113 1
 R12
 R13
 Eeight_bit_shift
-Z104 w1608661974
+Z108 w1608661974
 R1
 R2
 R3
 R4
-Z105 8C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_shift.vhdl
-Z106 FC:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_shift.vhdl
+Z109 8C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_shift.vhdl
+Z110 FC:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_shift.vhdl
 l0
 L5
 VHjSeSI5_`WQk^1lD<9cSX0
 !s100 5`3>_dBVMSDKOCJ2_eCG`3
 R7
 32
-R46
+R53
 !i10b 1
-R47
-Z107 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_shift.vhdl|
-Z108 !s107 C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_shift.vhdl|
+R54
+Z111 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_shift.vhdl|
+Z112 !s107 C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_shift.vhdl|
 !i113 1
 R12
 R13
@@ -738,22 +740,22 @@ VgY>:Y<6aiXX:kYFjzFeVB2
 !s100 mV03^c8J51UV<eehHl1Lk1
 R7
 32
-R46
+R53
 !i10b 1
-R47
-R107
-R108
+R54
+R111
+R112
 !i113 1
 R12
 R13
 Eeight_bit_xor
-R91
+R95
 R1
 R2
 R3
 R4
-Z109 8C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_xor.vhdl
-Z110 FC:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_xor.vhdl
+Z113 8C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_xor.vhdl
+Z114 FC:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_xor.vhdl
 l0
 L5
 VElYEKZcSM=co7GF>GEn6P3
@@ -762,9 +764,9 @@ R7
 32
 R53
 !i10b 1
-R47
-Z111 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_xor.vhdl|
-Z112 !s107 C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_xor.vhdl|
+R54
+Z115 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_xor.vhdl|
+Z116 !s107 C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_xor.vhdl|
 !i113 1
 R12
 R13
@@ -781,20 +783,20 @@ R7
 32
 R53
 !i10b 1
-R47
-R111
-R112
+R54
+R115
+R116
 !i113 1
 R12
 R13
 Eregister_8bit
-Z113 w1607587138
+Z117 w1607587138
 R1
 R2
 R3
 R4
-Z114 8C:/Users/stefa/Documents/GitHub/EPO-3/ALU/register_8bit.vhd
-Z115 FC:/Users/stefa/Documents/GitHub/EPO-3/ALU/register_8bit.vhd
+Z118 8C:/Users/stefa/Documents/GitHub/EPO-3/ALU/register_8bit.vhd
+Z119 FC:/Users/stefa/Documents/GitHub/EPO-3/ALU/register_8bit.vhd
 l0
 L5
 VEhAU>X0kCeZb^lzKa4h<C2
@@ -804,8 +806,8 @@ R7
 R8
 !i10b 1
 R9
-Z116 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/stefa/Documents/GitHub/EPO-3/ALU/register_8bit.vhd|
-Z117 !s107 C:/Users/stefa/Documents/GitHub/EPO-3/ALU/register_8bit.vhd|
+Z120 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/stefa/Documents/GitHub/EPO-3/ALU/register_8bit.vhd|
+Z121 !s107 C:/Users/stefa/Documents/GitHub/EPO-3/ALU/register_8bit.vhd|
 !i113 1
 R12
 R13
@@ -823,8 +825,8 @@ R7
 R8
 !i10b 1
 R9
-R116
-R117
+R120
+R121
 !i113 1
 R12
 R13

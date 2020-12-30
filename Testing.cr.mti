@@ -1,11 +1,11 @@
-C:/Users/stefa/Documents/GitHub/EPO-3/ALU/Testbench/eight_bit_adder_tb.vhdl {1 {vcom -work work -2002 -explicit -stats=none C:/Users/stefa/Documents/GitHub/EPO-3/ALU/Testbench/eight_bit_adder_tb.vhdl
+C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_or.vhdl {1 {vcom -work work -2002 -explicit -stats=none C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_or.vhdl
 Model Technology ModelSim PE Student Edition vcom 10.4a Compiler 2015.03 Apr  7 2015
 -- Loading package STANDARD
 -- Loading package TEXTIO
 -- Loading package std_logic_1164
 -- Loading package NUMERIC_STD
--- Compiling entity eight_bit_adder_tb
--- Compiling architecture structural of eight_bit_adder_tb
+-- Compiling entity eight_bit_or
+-- Compiling architecture behavioural of eight_bit_or
 
 } {} {}} C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_xor.vhdl {1 {vcom -work work -2002 -explicit -stats=none C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_xor.vhdl
 Model Technology ModelSim PE Student Edition vcom 10.4a Compiler 2015.03 Apr  7 2015
@@ -16,23 +16,14 @@ Model Technology ModelSim PE Student Edition vcom 10.4a Compiler 2015.03 Apr  7 
 -- Compiling entity eight_bit_xor
 -- Compiling architecture behavioural of eight_bit_xor
 
-} {} {}} C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_or.vhdl {1 {vcom -work work -2002 -explicit -stats=none C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_or.vhdl
+} {} {}} C:/Users/stefa/Documents/GitHub/EPO-3/ALU/Testbench/alu_logic_tb.vhdl {1 {vcom -work work -2002 -explicit -stats=none C:/Users/stefa/Documents/GitHub/EPO-3/ALU/Testbench/alu_logic_tb.vhdl
 Model Technology ModelSim PE Student Edition vcom 10.4a Compiler 2015.03 Apr  7 2015
 -- Loading package STANDARD
 -- Loading package TEXTIO
 -- Loading package std_logic_1164
 -- Loading package NUMERIC_STD
--- Compiling entity eight_bit_or
--- Compiling architecture behavioural of eight_bit_or
-
-} {} {}} C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_shift.vhdl {1 {vcom -work work -2002 -explicit -stats=none C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_shift.vhdl
-Model Technology ModelSim PE Student Edition vcom 10.4a Compiler 2015.03 Apr  7 2015
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Loading package NUMERIC_STD
--- Compiling entity eight_bit_shift
--- Compiling architecture behavioural of eight_bit_shift
+-- Compiling entity alu_logic_tb
+-- Compiling architecture arch of alu_logic_tb
 
 } {} {}} C:/Users/stefa/Documents/GitHub/EPO-3/ALU/alu_logic.vhdl {1 {vcom -work work -2002 -explicit -stats=none C:/Users/stefa/Documents/GitHub/EPO-3/ALU/alu_logic.vhdl
 Model Technology ModelSim PE Student Edition vcom 10.4a Compiler 2015.03 Apr  7 2015
@@ -43,23 +34,14 @@ Model Technology ModelSim PE Student Edition vcom 10.4a Compiler 2015.03 Apr  7 
 -- Compiling entity alu_logic
 -- Compiling architecture structural of alu_logic
 
-} {} {}} C:/Users/stefa/Documents/GitHub/EPO-3/ALU/Testbench/alu_logic_tb.vhdl {1 {vcom -work work -2002 -explicit -stats=none C:/Users/stefa/Documents/GitHub/EPO-3/ALU/Testbench/alu_logic_tb.vhdl
+} {} {}} C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_shift.vhdl {1 {vcom -work work -2002 -explicit -stats=none C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_shift.vhdl
 Model Technology ModelSim PE Student Edition vcom 10.4a Compiler 2015.03 Apr  7 2015
 -- Loading package STANDARD
 -- Loading package TEXTIO
 -- Loading package std_logic_1164
 -- Loading package NUMERIC_STD
--- Compiling entity alu_logic_tb
--- Compiling architecture arch of alu_logic_tb
-
-} {} {}} C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_pass.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_pass.vhd
-Model Technology ModelSim PE Student Edition vcom 10.4a Compiler 2015.03 Apr  7 2015
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Loading package NUMERIC_STD
--- Compiling entity eight_bit_pass
--- Compiling architecture behavioural of eight_bit_pass
+-- Compiling entity eight_bit_shift
+-- Compiling architecture behavioural of eight_bit_shift
 
 } {} {}} C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_and.vhdl {1 {vcom -work work -2002 -explicit -stats=none C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_and.vhdl
 Model Technology ModelSim PE Student Edition vcom 10.4a Compiler 2015.03 Apr  7 2015
@@ -70,12 +52,22 @@ Model Technology ModelSim PE Student Edition vcom 10.4a Compiler 2015.03 Apr  7 
 -- Compiling entity eight_bit_and
 -- Compiling architecture behavioural of eight_bit_and
 
+} {} {}} C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_pass.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_pass.vhd
+Model Technology ModelSim PE Student Edition vcom 10.4a Compiler 2015.03 Apr  7 2015
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity eight_bit_pass
+-- Compiling architecture behavioural of eight_bit_pass
+
 } {} {}} C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_adder.vhdl {1 {vcom -work work -2002 -explicit -stats=none C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_adder.vhdl
 Model Technology ModelSim PE Student Edition vcom 10.4a Compiler 2015.03 Apr  7 2015
 -- Loading package STANDARD
 -- Loading package TEXTIO
 -- Loading package std_logic_1164
--- Loading package NUMERIC_STD_UNSIGNED
+-- Loading package std_logic_arith
+-- Loading package STD_LOGIC_UNSIGNED
 -- Compiling entity eight_bit_adder
 -- Compiling architecture behaviour of eight_bit_adder
 
