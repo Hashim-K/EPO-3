@@ -8,7 +8,7 @@ entity predecode_logic is
     reset : IN std_logic;
     instruction : OUT std_logic_vector(7 DOWNTO 0);
     cycles : OUT std_logic_vector(2 DOWNTO 0);
-    RWM : OUT std_logic
+    RMW : OUT std_logic
   );
 end entity;
 
@@ -20,7 +20,7 @@ begin
     if (reset='1') then -- Reset resets the entire sequence,
       instruction <= "00000000";
       cycles <= "000";
-      RWM <= '0';
+      RMW <= '0';
     else
       instruction <= databus; -- the databus contains the instruction, so this can be routed instantly.
       RMW <= '0'; -- default the RMW is zero, but it can be changed in the rest of this if-statement. Important is that it is set to 0 initially.
@@ -49,7 +49,7 @@ begin
       ----------------------------------- cc = 10 --------------------------------------
       elsif (databus(1 DOWNTO 0) = "10") then
         if (databus(7 DOWNTO 5) = "100" or databus(7 DOWNTO 5) = "101") then -- STX and LDX are not RMV-instructions so seperate statement
-          RMW <= '0'
+          RMW <= '0';
           if (databus(4 DOWNTO 2) = "000") then -- #immediate
             cycles <= "010";
           elsif (databus(4 DOWNTO 2) = "001") then -- zero page
@@ -117,11 +117,11 @@ begin
 						  cycles <= "101";
 					else
 						cycles<= "000";
-        end if;
-      end if;
-    else
-      cycles <= "000";
-      RMW <= '0';
+          end if;
+        else
+          cycles <= "000";
+          RMW <= '0';
+       end if;
     end if;
   end process;
 end behaviour;
