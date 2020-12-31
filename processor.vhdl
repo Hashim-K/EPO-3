@@ -262,6 +262,38 @@ end component;
           data_out : out std_logic_vector(7 downto 0));
   end component;
 
+  component predecode_logic is
+    port (
+      databus : IN std_logic_vector(7 DOWNTO 0); -- instuction or other data in
+      reset : IN std_logic;
+      instruction : OUT std_logic_vector(7 DOWNTO 0); -- to instruction register
+      cycles : OUT std_logic_vector(2 DOWNTO 0);  -- output the number of cycles it takse to do the instruction
+      RMW : OUT std_logic
+    );
+  end component;
+
+  component timing_generation is
+    port (
+      clk: IN STD_LOGIC;
+      reset: IN STD_LOGIC;
+
+      BCR: IN STD_LOGIC; -- indicates that there is a branch operation going on (maybe leave this one out for now)
+      page_cross: IN STD_LOGIC;   -- indicates that there is an instruction in the register that uses page crossing. E.g $0000-$00FF is an interval. If an address gets added to that it could become $01.., which means it is outside of the boundary
+
+      -- Coming from predecode #see predicode
+      RMW: IN STD_LOGIC;  -- information from the predecoder that there is a RMW value present in the decoder. RMW instructions generally take longer because they read and write to memory
+      cycles: IN STD_LOGIC_VECTOR(2 DOWNTO 0); -- Predecode given value, indicates how many cycles the instruction takes
+
+      -- going to the main decoder
+      tcstate: OUT STD_LOGIC_VECTOR(5 DOWNTO 0); -- Output of the device which tells you what cycle the machine is in, This is a invtered signal!!
+
+      SYNC, S1, S2: OUT STD_LOGIC; -- Sync indicates that the timing is at T1P_T1 -- SD. indicate that there is a RMW instruction in the instruction register to the decode rom (also an indication to show in what cycle it is the RWM)
+      V1: OUT STD_LOGIC -- V1 is an indication for a BRK instruction
+    );
+  end component;
+
+
+
 --/*************************************************
 --*                    Signals                     *
 --*************************************************/
@@ -318,6 +350,23 @@ end component;
 
   -- pc_low carry to pc_high_carry
   signal pc_carry : STD_LOGIC;
+
+  -- timing_generation
+  signal BCR : STD_LOGIC; -- indicates that there is a branch operation going on (maybe leave this one out for now)
+  signal page_cross : STD_LOGIC;   -- indicates that there is an instruction in the register that uses page crossing. E.g $0000-$00FF is an interval. If an address gets added to that it could become $01.., which means it is outside of the boundary
+  signal RMW : STD_LOGIC;  -- information from the predecoder that there is a RMW value present in the decoder. RMW instructions generally take longer because they read and write to memory
+  signal cycles : STD_LOGIC_VECTOR(2 DOWNTO 0); -- Predecode given value, indicates how many cycles the instruction takes
+  signal tcstate :  STD_LOGIC_VECTOR(5 DOWNTO 0); -- Output of the device which tells you what cycle the machine is in, This is a invtered signal!!
+  signal SYNC, S1, S2 :  STD_LOGIC; -- Sync indicates that the timing is at T1P_T1 -- SD. indicate that there is a RMW instruction in the instruction register to the decode rom (also an indication to show in what cycle it is the RWM)
+  signal V1 :  STD_LOGIC -- V1 is an indication for a BRK instruction
+
+
+  -- predecode_logic
+  signal instruction : std_logic_vector(7 DOWNTO 0); -- to instruction register
+  --signal cycles : std_logic_vector(2 DOWNTO 0);  -- output the number of cycles it takse to do the instruction
+  --signal RMW : std_logic;
+
+
 
 begin
 
@@ -434,6 +483,28 @@ begin
   sb_s        <= control_out(22);
   s_sb        <= control_out(24);
   s_adl       <= control_out(21);
+
+
+
+-- predecode_logic
+instruction <=
+    --<= cycles
+    --<= RMW
+
+-- timing_generation
+    BCR        <=
+    page_cross <=
+    --RMW        <=
+    --cycles     <=
+
+
+    <= tcstate
+    <= SYNC
+    <=S1
+    <=S2
+    <=V1
+
+
 
 
 --/*************************************************
@@ -642,5 +713,25 @@ ins_reg : intruction_reg PORT MAP(
                       ins_data_in,
                       ins_data_out
 );
+
+pr_logic : predecode_logic PORT MAP(
+                      db,
+                      reset,
+                      instruction,
+                      cycles,
+                      RMW
+);
+tim_gen : timing_generation PORT MAP(
+                      clk,
+                      reset,
+                      BCR,
+                      page_cross,
+                      RMW,
+                      cycles,
+                      tcstate,
+                      SYNC,
+                      V1
+);
+
 
 end architecture;
