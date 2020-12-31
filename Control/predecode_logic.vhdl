@@ -1,3 +1,10 @@
+--/*************************************************
+--* This code is originaly originated from:        *
+--* http://www.cs.columbia.edu/~sedwards/classes/2013/4840/ *
+--* But has been fitted to our implementation     *
+--*************************************************/
+
+
 library IEEE;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
@@ -21,8 +28,8 @@ begin
       instruction <= "00000000";
       cycles <= "000";
       RMW <= '0';
-    else 
-      instruction <= databus; -- the databus contains the instruction, so this can be routed instantly.
+    else
+      instruction <= databus;
       RMW <= '0'; -- default the RMW is zero, but it can be changed in the rest of this if-statement. Important is that it is set to 0 initially.
 
 

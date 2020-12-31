@@ -1,3 +1,9 @@
+--/*************************************************
+--* This code is originaly originated from:        *
+--* http://www.cs.columbia.edu/~sedwards/classes/2013/4840/ *
+--* But has been fitted to our implementation     *
+--*************************************************/
+
 library ieee;
   use ieee.std_logic_1164.all;
   use ieee.numeric_std.all;
