@@ -7,7 +7,7 @@ ENTITY B_input_register IS
   PORT (
     clk : IN STD_LOGIC;
     reset : IN STD_LOGIC;
-    sb : IN STD_LOGIC_VECTOR(7 DOWNTO 0); -- data bus
+    db : IN STD_LOGIC_VECTOR(7 DOWNTO 0); -- data bus
     adl : IN STD_LOGIC_VECTOR(7 DOWNTO 0); -- addres bus
     out_to_alu : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
     inv_db_add : IN STD_LOGIC; -- use databus inverse
@@ -41,12 +41,12 @@ BEGIN
 
   load <= '1';
 
-  data_bus_inv <= NOT sb;
+  data_bus_inv <= NOT db;
   out_to_alu <= reg_out;
 
   WITH control SELECT data_in <=
     data_bus_inv WHEN "001",
-    sb WHEN "010",
+    db WHEN "010",
     adl WHEN "100",
     reg_out WHEN OTHERS;
 

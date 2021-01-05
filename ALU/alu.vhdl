@@ -10,6 +10,7 @@ ENTITY alu IS
     adl_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); -- addres bus low
     sb_in : IN STD_LOGIC_VECTOR(7 DOWNTO 0); -- data bus in
     sb_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); -- data bus out
+    db_in : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
     -- control signals
     -- alu logic in
     control : IN STD_LOGIC_VECTOR(11 DOWNTO 0); -- alu operation mode
@@ -87,7 +88,7 @@ ARCHITECTURE structural OF alu IS
     PORT (
       clk : IN STD_LOGIC;
       reset : IN STD_LOGIC;
-      sb : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+      db : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
       adl : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
       out_to_alu : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
       inv_db_add : IN STD_LOGIC; -- use databus inverse
@@ -131,7 +132,7 @@ BEGIN
   B_REGISTER : B_input_register PORT MAP(
     clk,
     reset,
-    sb_in,
+    db_in,
     adl_in,
     b,
     inv_db_add,

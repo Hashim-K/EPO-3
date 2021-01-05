@@ -62,6 +62,7 @@ architecture structural of processor is
           adl_out : out std_logic_vector(7 downto 0); -- addres bus low
           sb_in : in std_logic_vector(7 downto 0); -- data bus in
           sb_out : out std_logic_vector(7 downto 0); -- data bus out
+          db_in : in std_logic_vector(7 downto 0);
 
           -- control signals
           -- alu logic in
@@ -563,6 +564,7 @@ Algorithmic_Unit : alu PORT MAP(
                       adl,
                       sb,
                       sb,
+                      db,
                       alu_control,
                       avr,
                       acr,
