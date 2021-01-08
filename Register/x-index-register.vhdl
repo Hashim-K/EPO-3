@@ -7,10 +7,15 @@ entity x_index is
         reset   : in  std_logic;
         data_in : in  std_logic_vector(7 downto 0);
         x_sb   : in  std_logic;
-        sb : out std_logic_vector(7 downto 0));
+        sb : out std_logic_vector(7 downto 0)
+        );
 end x_index;
 
-reg: process(clk, reset, sb_x)	--process to determine output register
+architecture behaviour of x_index is
+  signal q : std_logic_vector(7 downto 0);
+begin
+
+reg : process(clk, reset, sb_x)	--process to determine output register
 		begin
 			if (rising_edge(clk) and sb_x='1') then	--both need to be high to sb_x value from bus
 				if (reset='1') then
@@ -21,7 +26,7 @@ reg: process(clk, reset, sb_x)	--process to determine output register
 			end if;
 		end process;
 
-output: process(x_sb)		--process to determine when to x_sb to component/bus
+output : process(x_sb)		--process to determine when to x_sb to component/bus
 		begin
 			if (x_sb='1') then
 				sb <= q;		-- only output when control tells to x_sb, else high impedance

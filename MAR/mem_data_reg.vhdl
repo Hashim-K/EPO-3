@@ -6,7 +6,7 @@ entity mem_data_reg is
   port (
   clk : IN std_logic;
   reset : IN std_logic;
-  load : IN std_logic; -- store data from external memory into registers
+  load : IN std_logic; -- store data from external memory into registers (control signal)
 
   dl_db : IN std_logic;
   dl_adl : IN std_logic;
@@ -29,7 +29,7 @@ architecture arch of mem_data_reg is
       reg_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0));
   END component;
 
-  signal  load : std_logic;
+  -- signal  load : std_logic;
   signal data_in, reg_out : std_logic_vector(7 downto 0);
 begin
 

@@ -10,6 +10,10 @@ entity y_index is
         sb : out std_logic_vector(7 downto 0)); -- Serial Bus
 end y_index;
 
+architecture behaviour of y_index is
+  signal q : std_logic_vector(7 downto 0);
+begin
+
 reg: process(clk, reset, sb_y)	--process to determine output register
 		begin
 			if (rising_edge(clk) and sb_y='1') then	--both need to be high to sb_y value from bus
