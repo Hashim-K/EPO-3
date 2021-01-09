@@ -22,13 +22,13 @@ entity timing_generation is
   );
 end entity;
 
--- T2_B, T3_B;
+-- T2_B, T3_B; They are left out for now in the implementation because they seem cumbersome.
 
 architecture timing_logic of timing_generation is
 
   -- different timing_states for different instructions
   -- TIMING(CYCLE)-(TOTAL AMOUNT OF CYCLES)
-  type instructions is (T0, T1P, T1P_T1, T2_T0, T2_B, T3_B,
+  type instructions is (T0, T1P, T1P_T1, T2_T0,
                       T2_3, T2_4, T2_5, T2_6, T2_7,
                       T3_4, T3_5, T3_6, T3_7,
                       T4_5, T4_6, T4_7,
@@ -64,8 +64,6 @@ begin
               state <= T2_6;
             elsif to_integer(unsigned(cycles)) = 7 then
               state <= T2_7;
-            elsif to_integer(unsigned(cycles)) = 0 then -- no cycles is an indication that there is a branch instruction
-              state <= T2_B;
             end if;
 
           when T1P_T1 =>
@@ -82,8 +80,6 @@ begin
                 state <= T2_6;
               elsif to_integer(unsigned(cycles)) = 7 then
                 state <= T2_7;
-              elsif to_integer(unsigned(cycles)) = 0 then
-                state <= T2_B;
               end if;
             elsif RMW='1' then
               if to_integer(unsigned(cycles)) = 2 then

@@ -17,9 +17,9 @@ architecture behaviour of predecode_logic is
 begin
   process(databus, reset)
   begin
-    if (reset='1') then -- Reset resets the entire sequence,
+    if (reset='1') then -- Reset resets the entire sequence, pushes out a BRK instruction
       instruction <= "00000000";
-      cycles <= "000";
+      cycles <= "111";
       RMW <= '0';
     else
       instruction <= databus;
