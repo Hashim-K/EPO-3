@@ -1,8 +1,3 @@
---/*************************************************
---* This code is nearly the same as:        *
---* http://www.cs.columbia.edu/~sedwards/classes/2013/4840/ *
---*************************************************/
-
 library ieee;
   use ieee.std_logic_1164.all;
   use ieee.numeric_std.all;
