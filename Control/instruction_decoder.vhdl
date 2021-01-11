@@ -472,17 +472,18 @@ begin
 
             -- A9 : LDA IMM
             when "010" =>
+              --Timing: T0
+              if tcstate(2)='0') then
+                control_out<="100001110101100100010000000000000000000000000000100000000000000000000";
+              end if;
+              --Timing: T1
+              if tcstate(1)='0' ) then
+                control_out<="000001110101100100000000000000000000000000000000010000000000100000001";
+              end if;
 
             -- AD : LDA ABS
             when "011" =>
-              --Timing: T2
-              if tcstate(2)='0' ) then
-                control_out<="";
-              end if;
-              --Timing: T3
-              if tcstate(3)='0' ) then
-                control_out<="";
-              end if;
+
 
             -- B1 : LDA IND,Y
             when "100" =>
