@@ -13,6 +13,7 @@ entity instruction_decoder is
       r_w: IN STD_LOGIC;
       sv: IN STD_LOGIC;
       ACR : IN STD_LOGIC;
+      Cin : IN STD_LOGIC;
       control_out: OUT STD_LOGIC_VECTOR(68 DOWNTO 0)
   );
 end entity;
