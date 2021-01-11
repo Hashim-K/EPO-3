@@ -233,38 +233,19 @@ begin
 
             -- 0D : ORA ABS
             when "011" =>
-              --Timing: T2
-              if tcstate(2)='0' ) then
-                control_out<="";
-              end if;
-              --Timing: T3
-              if tcstate(3)='0' ) then
-                control_out<="";
-              end if;
+
 
             -- 11 : ORA IND,Y
             when "100" =>
 
             -- 15 : ORA Z-Page,X
             when "101" =>
-              --Timing: T2
-              if tcstate(2)='0' ) then
-                control_out<="";
-              end if;
-              --Timing: T3
-              if tcstate(3)='0' ) then
-                control_out<="";
-              end if;
 
             -- 19 : ORA ABS,Y
             when "110" =>
 
             -- 1D : ORA ABS,X
             when "111" =>
-              --Timing: T2
-              if tcstate(2)='0' ) then
-                control_out<="";
-              end if;
 
           end case;
 
@@ -282,38 +263,21 @@ begin
 
             --2D : AND ABS
             when "011" =>
-              --Timing: T2
-              if tcstate(2)='0' ) then
-                control_out<="";
-              end if;
-              --Timing: T3
-              if tcstate(3)='0' ) then
-                control_out<="";
-              end if;
+
 
             --31 : AND IND,Y
             when "100" =>
 
             -- 35 : AND Z-Page,X
             when "101" =>
-              --Timing: T2
-              if tcstate(2)='0' ) then
-                control_out<="";
-              end if;
-              --Timing: T3
-              if tcstate(3)='0' ) then
-                control_out<="";
-              end if;
+
 
             -- 39 : AND ABS,Y
             when "110" =>
 
             -- 3D : AND ABS,X
             when "111" =>
-              --Timing: T2
-              if tcstate(2)='0' ) then
-                control_out<="";
-              end if;
+
 
           end case;
 
@@ -331,38 +295,21 @@ begin
 
             --4D : EOR ABS
             when "011" =>
-              --Timing: T2
-              if tcstate(2)='0' ) then
-                control_out<="";
-              end if;
-              --Timing: T3
-              if tcstate(3)='0' ) then
-                control_out<="";
-              end if;
+
 
             --51 : EOR IND,Y
             when "100" =>
 
             --55 : EOR Z-Page,X
             when "101" =>
-              --Timing: T2
-              if tcstate(2)='0' ) then
-                control_out<="";
-              end if;
-              --Timing: T3
-              if tcstate(3)='0' ) then
-                control_out<="";
-              end if;
+
 
             --59 : EOR ABS,Y
             when "110" =>
 
             --5D : EOR ABS,X
             when "111" =>
-              --Timing: T2
-              if tcstate(2)='0' ) then
-                control_out<="";
-              end if;
+
 
           end case;
 
@@ -380,38 +327,21 @@ begin
 
             -- 6D : ADC ABS
             when "011" =>
-              --Timing: T2
-              if tcstate(2)='0' ) then
-                control_out<="";
-              end if;
-              --Timing: T3
-              if tcstate(3)='0' ) then
-                control_out<="";
-              end if;
+
 
             -- 71 : ADC IND,Y
             when "100" =>
 
             -- 75 : ADC Z-Page,X
             when "101" =>
-              --Timing: T2
-              if tcstate(2)='0' ) then
-                control_out<="";
-              end if;
-              --Timing: T3
-              if tcstate(3)='0' ) then
-                control_out<="";
-              end if;
+
 
             -- 79 : ADC ABS,Y
             when "110" =>
 
             -- 7D : ADC ABS,X
             when "111" =>
-              --Timing: T2
-              if tcstate(2)='0' ) then
-                control_out<="";
-              end if;
+
 
           end case;
 
@@ -426,38 +356,19 @@ begin
 
             -- 8D : STA ABS
             when "011" =>
-              --Timing: T2
-              if tcstate(2)='0' ) then
-                control_out<="";
-              end if;
-              --Timing: T3
-              if tcstate(3)='0' ) then
-                control_out<="";
-              end if;
+
 
             -- 91 : STA IND,Y
             when "100" =>
 
             -- 95 : STA Z-Page,X
             when "101" =>
-              --Timing: T2
-              if tcstate(2)='0' ) then
-                control_out<="";
-              end if;
-              --Timing: T3
-              if tcstate(3)='0' ) then
-                control_out<="";
-              end if;
+
 
             -- 99 : STA ABS,Y
             when "110" =>
 
             -- 9D : STA ABS,X
-            when "111" =>
-              --Timing: T2
-              if tcstate(2)='0' ) then
-                control_out<="";
-              end if;
 
           end case;
 
@@ -473,11 +384,11 @@ begin
             -- A9 : LDA IMM
             when "010" =>
               --Timing: T0
-              if tcstate(2)='0') then
+              if (tcstate(2)='0') then
                 control_out<="100001110101100100010000000000000000000000000000100000000000000000000";
               end if;
               --Timing: T1
-              if tcstate(1)='0' ) then
+              if (tcstate(1)='0' ) then
                 control_out<="000001110101100100000000000000000000000000000000010000000000100000001";
               end if;
 
@@ -490,24 +401,13 @@ begin
 
             -- B5 : LDA Z-Page,X
             when "101" =>
-              --Timing: T2
-              if tcstate(2)='0' ) then
-                control_out<="";
-              end if;
-              --Timing: T3
-              if tcstate(3)='0' ) then
-                control_out<="";
-              end if;
+
 
             -- B9 : LDA ABS,Y
             when "110" =>
 
             -- BD : LDA ABS,X
             when "111" =>
-              --Timing: T2
-              if tcstate(2)='0' ) then
-                control_out<="";
-              end if;
 
           end case;
 
@@ -525,38 +425,21 @@ begin
 
             -- CD : CMP ABS
             when "011" =>
-              --Timing: T2
-              if tcstate(2)='0' ) then
-                control_out<="";
-              end if;
-              --Timing: T3
-              if tcstate(3)='0' ) then
-                control_out<="";
-              end if;
+
 
             -- D1 : CMP IND,Y
             when "100" =>
 
             -- D5 : CMP Z-Page,X
             when "101" =>
-              --Timing: T2
-              if tcstate(2)='0' ) then
-                control_out<="";
-              end if;
-              --Timing: T3
-              if tcstate(3)='0' ) then
-                control_out<="";
-              end if;
+
 
             -- D9 : CMP ABS,Y
             when "110" =>
 
             -- DD : CMP ABS,X
             when "111" =>
-              --Timing: T2
-              if tcstate(2)='0' ) then
-                control_out<="";
-              end if;
+
 
           end case;
 
@@ -574,38 +457,20 @@ begin
 
             -- ED : SBC ABS
             when "011" =>
-              --Timing: T2
-              if tcstate(2)='0' ) then
-                control_out<="";
-              end if;
-              --Timing: T3
-              if tcstate(3)='0' ) then
-                control_out<="";
-              end if;
+
 
             -- F1 : SBC IND,Y
             when "100" =>
 
             -- F5 : SBC Z-Page,X
             when "101" =>
-              --Timing: T2
-              if tcstate(2)='0' ) then
-                control_out<="";
-              end if;
-              --Timing: T3
-              if tcstate(3)='0' ) then
-                control_out<="";
-              end if;
+
 
             -- F9 : SBC ABS,Y
             when "110" =>
 
             -- FD : SBC ABS,X
             when "111" =>
-              --Timing: T2
-              if tcstate(2)='0' ) then
-                control_out<="";
-              end if;
 
           end case;
 
@@ -626,32 +491,15 @@ begin
 
             -- 0E : ASL ABS
             when "011" =>
-              --Timing: T2
-              if tcstate(2)='0' ) then
-                control_out<="";
-              end if;
-              --Timing: T3
-              if tcstate(3)='0' ) then
-                control_out<="";
-              end if;
+
 
             -- 16 : ASL Z-Page,X
             when "101" =>
-              --Timing: T2
-              if tcstate(2)='0' ) then
-                control_out<="";
-              end if;
-              --Timing: T3
-              if tcstate(3)='0' ) then
-                control_out<="";
-              end if;
+
 
             -- 1E : ASL ABS,X
             when "111" =>
-              --Timing: T2
-              if tcstate(2)='0' ) then
-                control_out<="";
-              end if;
+
 
           end case;
 
@@ -666,32 +514,15 @@ begin
 
             -- 2E : ROL ABS
             when "011" =>
-              --Timing: T2
-              if tcstate(2)='0' ) then
-                control_out<="";
-              end if;
-              --Timing: T3
-              if tcstate(3)='0' ) then
-                control_out<="";
-              end if;
+
 
             -- 36 : ROL Z-Page,X
             when "101" =>
-              --Timing: T2
-              if tcstate(2)='0' ) then
-                control_out<="";
-              end if;
-              --Timing: T3
-              if tcstate(3)='0' ) then
-                control_out<="";
-              end if;
+
 
             -- 3E : ROL ABS,X
             when "111" =>
-              --Timing: T2
-              if tcstate(2)='0' ) then
-                control_out<="";
-              end if;
+
 
           end case;
 
@@ -706,32 +537,14 @@ begin
 
             -- 4E : LSR ABS
             when "011" =>
-              --Timing: T2
-              if tcstate(2)='0' ) then
-                control_out<="";
-              end if;
-              --Timing: T3
-              if tcstate(3)='0' ) then
-                control_out<="";
-              end if;
+
 
             -- 56 : LSR Z-Page,X
             when "101" =>
-              --Timing: T2
-              if tcstate(2)='0' ) then
-                control_out<="";
-              end if;
-                --Timing: T3
-              if tcstate(3)='0' ) then
-                control_out<="";
-              end if;
+
 
             -- 5E : LSR ABS,X
             when "111" =>
-              --Timing: T2
-              if tcstate(2)='0' ) then
-                control_out<="";
-              end if;
 
           end case;
 
@@ -746,32 +559,15 @@ begin
 
             -- 6E : ROR ABS
             when "011" =>
-              --Timing: T2
-              if tcstate(2)='0' ) then
-                control_out<="";
-              end if;
-              --Timing: T3
-              if tcstate(3)='0' ) then
-                control_out<="";
-              end if;
+
 
             -- 76 : ROR Z-Page,X
             when "101" =>
-              --Timing: T2
-              if tcstate(2)='0' ) then
-                control_out<="";
-              end if;
-              --Timing: T3
-              if tcstate(3)='0' ) then
-                control_out<="";
-              end if;
+
 
             -- 7E : ROR ABS,X
             when "111" =>
-              --Timing: T2
-              if tcstate(2)='0' ) then
-                control_out<="";
-              end if;
+
 
           end case;
 
@@ -786,21 +582,11 @@ begin
 
             -- 8E : STX ABS
             when "011" =>
-              --Timing: T2
-              if tcstate(2)='0' ) then
-                control_out<="";
-              end if;
-              --Timing: T3
-              if tcstate(3)='0' ) then
-                control_out<="";
-              end if;
+
 
             -- 96 : STX Z-Page,Y
             when "101" =>
-              --Timing: T3
-              if tcstate(3)='0' ) then
-                control_out<="";
-              end if;
+
 
             -- 9A : TXS
             when "110" =>
@@ -821,21 +607,10 @@ begin
 
             -- AE : LDX ABS
             when "011" =>
-              --Timing: T2
-              if tcstate(2)='0' ) then
-                control_out<="";
-              end if;
-              --Timing: T3
-              if tcstate(3)='0' ) then
-                control_out<="";
-              end if;
+
 
             -- B6 : LDX Z-Page,Y
             when "101" =>
-              --Timing: T3
-              if tcstate(3)='0' ) then
-                control_out<="";
-              end if;
 
             -- BA : TSX
             when "110" =>
@@ -856,32 +631,14 @@ begin
 
             -- CE : DEC ABS
             when "011" =>
-              --Timing: T2
-              if tcstate(2)='0' ) then
-                control_out<="";
-              end if;
-              --Timing: T3
-              if tcstate(3)='0' ) then
-                control_out<="";
-              end if;
+
 
             -- D6 : DEC Z-Page,X
             when "101" =>
-              --Timing: T2
-              if tcstate(2)='0' ) then
-                control_out<="";
-              end if;
-              --Timing: T3
-              if tcstate(3)='0' ) then
-                control_out<="";
-              end if;
 
             -- DE : DEC ABS,X
             when "111" =>
-              --Timing: T2
-              if tcstate(2)='0' ) then
-                control_out<="";
-              end if;
+
 
           end case;
 
@@ -896,32 +653,15 @@ begin
 
             --EE : INC ABS
             when "011" =>
-              --Timing: T2
-              if tcstate(2)='0' ) then
-                control_out<="";
-              end if;
-              --Timing: T3
-              if tcstate(3)='0' ) then
-                control_out<="";
-              end if;
+
 
             --F6 : INC Z-Page,X
             when "101" =>
-              --Timing: T2
-              if tcstate(2)='0' ) then
-                control_out<="";
-              end if;
-              --Timing: T3
-              if tcstate(3)='0' ) then
-                control_out<="";
-              end if;
+
 
             --FE : INC ABS,X
             when "111" =>
-              --Timing: T2
-              if tcstate(2)='0' ) then
-                control_out<="";
-              end if;
+
 
           end case;
 
