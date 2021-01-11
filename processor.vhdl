@@ -189,40 +189,45 @@ end component;
   --       ready: IN STD_LOGIC;
   --       r_w: IN STD_LOGIC;
   --       sv: IN STD_LOGIC;
-  --       control_out: OUT STD_LOGIC_VECTOR(66 DOWNTO 0)
+  --       control_out: OUT STD_LOGIC_VECTOR(68 DOWNTO 0)
   --   );
   -- end component;
 
   -- status register
   component status_register is
-    port (
-      --Input from bus
-      db_in : in STD_LOGIC_VECTOR(7 downto 0);
-      --Inputs from control
-      control : in STD_LOGIC_VECTOR(13 downto 0);
-      --db0_c = control(0);
-      --ir5_c = control(1);
-      --acr_c = control(2);
-      --db1_z = control(3);
-      --dbz_z = control(4);
-      --db2_i = control(5);
-      --ir5_i = control(6);
-      --db3_d = control(7);
-      --ir5_d = control(8);
-      --db6_v = control(9);
-      --avr_v = control(10);
-      --1_v   = control(11);
-      --db7_n = control(12);
-      --p_db  = control(13);
+      port (
+        clk : in STD_LOGIC;
+        reset : in STD_LOGIC;
+        --Input from bus
+        db_in : in STD_LOGIC_VECTOR(7 downto 0);
+        --Inputs from control
+        control : in STD_LOGIC_VECTOR(13 downto 0);
+        --db0_c = control(0);
+        --ir5_c = control(1);
+        --acr_c = control(2);
+        --db1_z = control(3);
+        --dbz_z = control(4);
+        --db2_i = control(5);
+        --ir5_i = control(6);
+        --db3_d = control(7);
+        --ir5_d = control(8);
+        --db6_v = control(9);
+        --avr_v = control(10);
+        --1_v   = control(11);
+        --db7_n = control(12);
 
-      --Inputs from ALU
-      ir5   : in STD_LOGIC;
-      acr   : in STD_LOGIC;
-      avr   : in STD_LOGIC;
-      --Outputs
-      db_out    : out STD_LOGIC_VECTOR(7 downto 0)
-    );
-  end component;
+        -- databus control signal
+        --p_db  = control(13);
+
+        --Inputs from ALU
+        acr   : in STD_LOGIC;
+        avr   : in STD_LOGIC;
+
+        ir5   : in STD_LOGIC;
+        --Outputs
+        db_out    : out STD_LOGIC_VECTOR(7 downto 0)
+      );
+  END component;
 
   -- Pass Mosfets
   component pass is
@@ -255,13 +260,14 @@ end component;
   end component;
 
 -- Instruction Register
-  component intruction_reg is
-     port(clk      : in  std_logic;
-          reset    : in  std_logic;
-          load     : in  std_logic;
-          data_in  : in  std_logic_vector(7 downto 0);
-          data_out : out std_logic_vector(7 downto 0));
-  end component;
+component intruction_reg is
+   port(clk      : in  std_logic; -- first phase clock
+        reset    : in  std_logic;
+        rdy      : in std_logic;
+        sync     : in  std_logic;
+        data_in  : in  std_logic_vector(7 downto 0);
+        data_out : out std_logic_vector(7 downto 0));
+end component;
 
   -- component predecode_logic is
   --   port (
@@ -325,7 +331,7 @@ end component;
   -- processor status register
   signal status_reg_control : std_logic_vector(13 downto 0);
   -- pass mosfets
-  signal sb_db_pass, sb_adh_pass : std_logic;
+  signal sb_db_pass, sb_adh_pass, adh_sb_pass, db_sb_pass : std_logic;
   -- stack pointer
   signal sb_s, s_sb, s_adl : std_logic;
   -- instruction decoer TODO
@@ -341,6 +347,7 @@ end component;
   -- Instruction Register
   signal ins_data_in, ins_data_out : std_logic_vector(7 downto 0);
   signal inst_load : std_logic;
+  signal rdy : std_logic;
 
   -- flags
   signal avr, acr : std_logic;
@@ -350,10 +357,11 @@ end component;
   signal sb, db, adh, adl : std_logic_vector(7 downto 0);
 
   -- Main control signal
-  signal control_out : STD_LOGIC_VECTOR(66 DOWNTO 0);
+  signal control_out : STD_LOGIC_VECTOR(68 DOWNTO 0);
 
   -- pc_low carry to pc_high_carry
   signal pc_carry : STD_LOGIC;
+
 
   -- timing_generation dissabled becaus probelems
   -- signal BCR : STD_LOGIC; -- indicates that there is a branch operation going on (maybe leave this one out for now)
@@ -384,52 +392,56 @@ begin
 
 -- x index register
   -- checked 18-12-2020 23:47
-  sb_x        <= control_out(49);
-  x_sb        <= control_out(50);
+  sb_x        <= control_out(51);
+  x_sb        <= control_out(52);
 
 -- Y index REGISTER
   -- checked 18-12-2020 23:47
-  sb_y        <= control_out(51);
-  y_sb        <= control_out(52);
+  sb_y        <= control_out(53);
+  y_sb        <= control_out(54);
 
 
 -- ALU
   -- checked 18-12-2020 23:48
-  alu_control(11 downto 0) <= control_out(40 downto 29); -- more efficient
+  alu_control(11 downto 0) <= control_out(42 downto 31); -- more efficient
 
-  add_adl     <= control_out(41);
-  add_sb6     <= control_out(42);
-  add_sb7     <= control_out(43);
-  o_add       <= control_out(44);
-  sb_add      <= control_out(45);
-  inv_db_add  <= control_out(25);
-  db_add      <= control_out(26);
-  adl_add     <= control_out(27);
+  add_adl     <= control_out(43);
+  add_sb6     <= control_out(44);
+  add_sb7     <= control_out(45);
+  o_add       <= control_out(46);
+  sb_add      <= control_out(47);
+  inv_db_add  <= control_out(27);
+  db_add      <= control_out(28);
+  adl_add     <= control_out(29);
 
 
 -- Program Counter High
   -- checked 18-12-2020 23:48
+  pch_pch     <= control_out(12)
   adh_pch     <= control_out(13);
-  pch_adh     <= control_out(15);
   pch_db      <= control_out(14);
-  h_pclc      <= pc_carry; -- cary in from program counter low
+  pch_adh     <= control_out(15);
+
+  h_pclc      <= pc_carry; -- carry in from program counter low
 
 
 -- Program Counter Low
   -- checked 18-12-2020 23:51
   l_pclc        <= pc_carry;-- Carry out
+  pcl_pcl     <= control_out(7);-- Load from PCL
+  adl_pcl     <= control_out(8);-- Load from ADL
   i_pc        <= control_out(9);-- Enable Increment program counter
   pcl_adl     <= control_out(11);-- output count to ADL
   pcl_db      <= control_out(10);-- output count to DB
-  adl_pcl     <= control_out(8);-- Load from ADL
+
 -- PCL_PCL : IN std_logic  -- Questionable if needed maybe obsolite
 
 
 -- accumulator
   -- checked 18-12-2020 23:51
-  ac_db         <=  control_out(47);
-  ac_sb         <=  control_out(48);
-  sb_ac         <=  control_out(46);
+  sb_ac         <=  control_out(48);
+  ac_db         <=  control_out(49);
+  ac_sb         <=  control_out(50);
 
   -- TODO: FIX
   --              <=  zero_flag;
@@ -470,23 +482,26 @@ begin
 -- Processor Status register
   -- checked 18-12-2020 23:58
   -- This is for all the flags etc
-    status_reg_control(12 downto 0) <= control_out(66 downto 54);
+    status_reg_control(12 downto 0) <= control_out(68 downto 56);
     --p_db
-    status_reg_control(13) <= control_out(53);
+    status_reg_control(13) <= control_out(55);
 
 -- Pass Mosfets
   -- checked 19-12-2020 00:00
-  -- SB -> DB
-  sb_db_pass <= control_out(17);
   -- SB -> ADH
   sb_adh_pass <= control_out(16);
-
+  -- ADH -> SB
+  adh_sb_pass <= control_out(17);
+  -- SB -> DB
+  sb_db_pass <= control_out(18);
+  -- DB -> SB
+  db_sb_pass <= control_out(19);
 
 -- Stack Pointer
   -- checked 19-12-2020 00:05
-  sb_s        <= control_out(22);
-  s_sb        <= control_out(24);
-  s_adl       <= control_out(21);
+  s_adl       <= control_out(23);
+  sb_s        <= control_out(24);
+  s_sb        <= control_out(26);
 
 
 
@@ -653,6 +668,8 @@ data_reg :mem_data_reg PORT MAP(
 
 -- Processor Status Register
 flag_reg : status_register PORT MAP(
+                      clk,
+                      reset,
                       db,
                       status_reg_control,
                       ir5,
@@ -675,6 +692,20 @@ pass_sb_adh : pass PORT MAP(
                       sb,
                       sb_adh_pass,
                       adh
+);
+-- pass mosfets
+-- ADH -> SB
+pass_sb_adh : pass PORT MAP(
+                      adh,
+                      adh_sb_pass,
+                      sb
+);
+-- pass mosfets
+-- DB -> SB
+db_sb_adh : pass PORT MAP(
+                      db,
+                      db_sb_pass,
+                      sb
 );
 
 
@@ -702,6 +733,7 @@ timing_generation_logic : timer PORT MAP(
 ins_reg : intruction_reg PORT MAP(
                       clk,
                       reset,
+                      rdy,
                       inst_load,
                       ins_data_in,
                       ins_data_out
