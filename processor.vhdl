@@ -6,11 +6,11 @@ library ieee;
 
 entity processor is
   port (
-  clk_25mhz : IN std_logic;
-  reset : IN std_logic;
-  adb_external : OUT std_logic_vector(7 downto 0);  -- External connection of the addres + data
-  adb_control : OUT std_logic_vector(1 downto 0);   -- Select the external register
-  db_external : IN std_logic_vector(7 downto 0)    -- External connection of the databus bus in
+  clk_25mhz : in std_logic;
+  reset : in std_logic;
+  adb_external : out std_logic_vector(7 downto 0);  -- External connection of the addres + data
+  adb_control : out std_logic_vector(1 downto 0);   -- Select the external register
+  db_external : in std_logic_vector(7 downto 0)    -- External connection of the databus bus in
   );
 end entity;
 
@@ -23,10 +23,10 @@ architecture structural of processor is
 
   -- clock circuit for generating a two phase clock signal
   component clock is
-    port (clk_25mhz : IN std_logic; -- External cock in
-          reset : IN std_logic;
-          clk : OUT std_logic;  -- first phase clock
-          clk_2 : OUT std_logic -- Second phase clock
+    port (clk_25mhz : in std_logic; -- External cock in
+          reset : in std_logic;
+          clk : out std_logic;  -- first phase clock
+          clk_2 : out std_logic -- Second phase clock
           );
   end component;
 
@@ -66,7 +66,7 @@ architecture structural of processor is
 
           -- control signals
           -- alu logic in
-          control : IN std_logic_vector(11 downto 0); -- alu operation mode
+          control : in std_logic_vector(11 downto 0); -- alu operation mode
 
           -- alu logic out
           avr : out std_logic;    -- overflow
@@ -79,129 +79,131 @@ architecture structural of processor is
           add_sb7 : in std_logic; --
 
           -- A input register
-          o_add : IN std_logic;  -- Load zero
-          sb_add : IN std_logic; -- Load form SB
+          o_add : in std_logic;  -- Load zero
+          sb_add : in std_logic; -- Load form SB
 
           -- B input register
-          inv_db_add : IN std_logic; -- inverted in from DB
-          db_add : IN std_logic;     -- load from DB
-          adl_add : IN std_logic     -- load from ADL
+          inv_db_add : in std_logic; -- inverted in from DB
+          db_add : in std_logic;     -- load from DB
+          adl_add : in std_logic     -- load from ADL
   );
 end component;
 
   -- program counter low
   component pc_low is
-    port (clk : IN std_logic;
-          reset : IN std_logic;
+    port (clk : in std_logic;
+          reset : in std_logic;
 
           -- Program counter low
-          pclc : OUT std_logic;   -- Carry out
+          pclc : out std_logic;   -- Carry out
 
-          i_pc : IN std_logic;    -- Enable Increment program counter
-          pcl_adl : IN std_logic; -- output count to ADL
-          pcl_db : IN std_logic;  -- output count to DB
-          adl_pcl : IN std_logic; -- Load from ADL
-          -- PCL_PCL : IN std_logic  -- Questionable if needed maybe obsolite
+          i_pc : in std_logic;    -- Enable Increment program counter
+          pcl_adl : in std_logic; -- output count to ADL
+          pcl_db : in std_logic;  -- output count to DB
+          adl_pcl : in std_logic; -- Load from ADL
+          -- PCL_PCL : in std_logic  -- Questionable if needed maybe obsolite
 
           -- buss conections
-          adl_in : IN std_logic_vector(7 downto 0); -- adders bus low
-          adl_out : OUT std_logic_vector(7 downto 0);
-          db_out : OUT std_logic_vector(7 downto 0) -- databus
+          adl_in : in std_logic_vector(7 downto 0); -- adders bus low
+          adl_out : out std_logic_vector(7 downto 0);
+          db_out : out std_logic_vector(7 downto 0) -- databus
     );
   end component;
 
 
   -- program counter high
   component pc_high is
-    port (clk : IN std_logic;
-          reset : IN std_logic;
+    port (clk : in std_logic;
+          reset : in std_logic;
 
           -- Program counter high
-          adh_pch : IN std_logic; -- load from ADH
-          pch_adh : IN std_logic; -- output to adh
-          pch_db : IN std_logic; -- output to databus
-          pclc : IN std_logic;    -- increment "Carry in from pc low"
+          adh_pch : in std_logic; -- load from ADH
+          pch_adh : in std_logic; -- output to adh
+          pch_db : in std_logic; -- output to databus
+          pclc : in std_logic;    -- increment "Carry in from pc low"
 
-          adh_in : IN std_logic_vector(7 downto 0);  -- addres bus low in
-          adh_out : OUT std_logic_vector(7 downto 0); -- addres bus high out
-          db_out : OUT std_logic_vector(7 downto 0) -- databus out
+          adh_in : in std_logic_vector(7 downto 0);  -- addres bus low in
+          adh_out : out std_logic_vector(7 downto 0); -- addres bus high out
+          db_out : out std_logic_vector(7 downto 0) -- databus out
     );
   end component;
 
 
   -- accumulator
   component accumulator IS
-     port (clk : IN STD_LOGIC;
-          reset : IN STD_LOGIC;
-          ac_db : IN STD_LOGIC; --accumulator to databus
-          ac_sb : IN STD_LOGIC; --accumulator to systembus
-          sb_ac : IN STD_LOGIC; --systembus to accumulator
-          sb_in : IN STD_LOGIC_VECTOR(7 DOWNTO 0); --systembus in
-          sb_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); --systembus out
-          db : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); --databus out
-          zero_flag : OUT STD_LOGIC;
-          negative_flag : OUT STD_LOGIC
+     port (clk : in std_logic;
+          reset : in std_logic;
+          ac_db : in std_logic; --accumulator to databus
+          ac_sb : in std_logic; --accumulator to systembus
+          sb_ac : in std_logic; --systembus to accumulator
+          sb_in : in std_logic_vector(7 downto 0); --systembus in
+          sb_out : out std_logic_vector(7 downto 0); --systembus out
+          db : out std_logic_vector(7 downto 0); --databus out
+          zero_flag : out std_logic;
+          negative_flag : out std_logic
       );
   END component;
 
   -- External addres register
   component mem_add_reg is -- output logic for external interfacint output first low addres, high addres, than data
-    port (clk : IN std_logic;
-          reset : IN std_logic;
+    port (clk : in std_logic;
+          reset : in std_logic;
 
-          enable : IN std_logic; -- enable the transition
+          enable : in std_logic; -- enable the transition
 
-          abl_in : IN std_logic_vector(7 downto 0); -- Addres bus low in
-          abh_in : IN std_logic_vector(7 downto 0); -- Addres bus High in
-          db_in : IN std_logic_vector(7 downto 0); -- Data bus in
+          abl_in : in std_logic_vector(7 downto 0); -- Addres bus low in
+          abh_in : in std_logic_vector(7 downto 0); -- Addres bus High in
+          db_in : in std_logic_vector(7 downto 0); -- Data bus in
 
-          o_to_extern : OUT std_logic_vector(7 downto 0); -- output to external component
-          control : OUT std_logic_vector(1 downto 0) -- multiplex data
+          o_to_extern : out std_logic_vector(7 downto 0); -- output to external component
+          control : out std_logic_vector(1 downto 0) -- multiplex data
     );
   end component;
 
   -- Memory data register
   component mem_data_reg is
-    port (clk : IN std_logic;
-          reset : IN std_logic;
-          load : IN std_logic; -- store data from external memory into registers
+    port (clk : in std_logic;
+          reset : in std_logic;
+          load : in std_logic; -- store data from external memory into registers
 
-          dl_db : IN std_logic;
-          dl_adl : IN std_logic;
-          dl_adh : IN std_logic;
+          dl_db : in std_logic;
+          dl_adl : in std_logic;
+          dl_adh : in std_logic;
 
-          db : OUT std_logic_vector(7 downto 0); -- to databus
-          adl : OUT std_logic_vector(7 downto 0); -- addres low
-          adh : OUT std_logic_vector(7 downto 0); -- addres high
-          external_in : IN std_logic_vector(7 downto 0) -- external input databus
+          db : out std_logic_vector(7 downto 0); -- to databus
+          adl : out std_logic_vector(7 downto 0); -- addres low
+          adh : out std_logic_vector(7 downto 0); -- addres high
+          external_in : in std_logic_vector(7 downto 0) -- external input databus
     );
   end component;
 
 
-  -- -- Instruction decoder
-  -- component instruction_decoder is
-  --   port (
-  --       clk : IN std_logic;
-  --       clk_2 : IN std_logic;
-  --       ir_in: IN STD_LOGIC_VECTOR(7 DOWNTO 0);    -- Instruction register in
-  --       timing: IN STD_LOGIC_VECTOR(2 DOWNTO 0);    -- Cycle select
-  --       interrupt: IN STD_LOGIC_VECTOR(2 DOWNTO 0); --
-  --       ready: IN STD_LOGIC;
-  --       r_w: IN STD_LOGIC;
-  --       sv: IN STD_LOGIC;
-  --       control_out: OUT STD_LOGIC_VECTOR(68 DOWNTO 0)
-  --   );
-  -- end component;
+   -- Instruction decoder
+   component instruction_decoder is
+     port (
+         clk : in std_logic;
+         clk_2 : in std_logic;
+         ir_in: in std_logic_vector(7 downto 0);    -- Instruction register in
+         tcstate: in std_logic_vector(2 downto 0);    -- Cycle select
+         interrupt: in std_logic_vector(2 downto 0); --
+         ready: in std_logic;
+         r_w: in std_logic;
+         sv: in std_logic;
+         ACR : in std_logic;
+         Cin : in std_logic;
+         control_out: out std_logic_vector(68 downto 0)
+     );
+   end component;
 
   -- status register
   component status_register is
       port (
-        clk : in STD_LOGIC;
-        reset : in STD_LOGIC;
+        clk : in std_logic;
+        reset : in std_logic;
         --Input from bus
-        db_in : in STD_LOGIC_VECTOR(7 downto 0);
+        db_in : in std_logic_vector(7 downto 0);
         --Inputs from control
-        control : in STD_LOGIC_VECTOR(13 downto 0);
+        control : in std_logic_vector(14 downto 0);
         --db0_c = control(0);
         --ir5_c = control(1);
         --acr_c = control(2);
@@ -209,32 +211,63 @@ end component;
         --dbz_z = control(4);
         --db2_i = control(5);
         --ir5_i = control(6);
-        --db3_d = control(7);
-        --ir5_d = control(8);
-        --db6_v = control(9);
-        --avr_v = control(10);
-        --1_v   = control(11);
-        --db7_n = control(12);
+        --1_i   = control(7);
+        --db3_d = control(8);
+        --ir5_d = control(9);
+        --db6_v = control(10);
+        --avr_v = control(11);
+        --1_v   = control(12);
+        --db7_n = control(13);
 
         -- databus control signal
         --p_db  = control(13);
 
         --Inputs from ALU
-        acr   : in STD_LOGIC;
-        avr   : in STD_LOGIC;
+        acr   : in std_logic;
+        avr   : in std_logic;
 
-        ir5   : in STD_LOGIC;
+        ir5   : in std_logic;
         --Outputs
-        db_out    : out STD_LOGIC_VECTOR(7 downto 0)
+        c         : out std_logic;
+        i         : out std_logic;
+        db_out    : out std_logic_vector(7 downto 0)
       );
-  END component;
+  end component;
 
   -- Pass Mosfets
-  component pass is
-     port(buss_in   : in  std_logic_vector(7 downto 0);
-          enable_pass   : in  std_logic;
-          buss_out  : out std_logic_vector(7 downto 0));
-  end component;
+    component pass is
+       port(buss_in   : in  std_logic_vector(7 downto 0);
+            enable_pass   : in  std_logic;
+            buss_out  : out std_logic_vector(7 downto 0));
+    end component;
+
+  -- Open Drain MOSFET ADH
+    component open_drain_ADL is
+      port(control : in std_logic_vector(2 downto 0);
+          --bit 0 <= ADL0
+          --bit 1 <= ADL1
+          --bit 2 <= ADL2
+           ADL     : out std_logic_vector(7 downto 0)
+      );
+    end component;
+
+  -- Open Drain MOSFET ADL
+    component open_drain_ADH is
+      port(control : in std_logic_vector(1 downto 0);
+          --bit 0 <= 0_ADH0
+          --bit 1 <= 0_ADH1-7
+           ADH     : out std_logic_vector(7 downto 0)
+      );
+    end component;
+
+    -- Precharge MOSFET
+    component precharge is
+      port( clk : in std_logic;
+            reset : in std_logic;
+            bus_in: in std_logic_vector(7 downto 0);
+            bus_out : out std_logic_vector(7 downto 0)
+      );
+    end component;
 
   -- Stack Pointer
   component stack_pointer is
@@ -249,58 +282,60 @@ end component;
   			adl_out	: out std_logic_vector(7 downto 0));
   end component;
 
--- Timing generation logic
-  component timer is
-    port (
-    clk : IN std_logic;
-    reset : IN std_logic;
-    enable : IN std_logic;
-    timing: OUT STD_LOGIC_VECTOR(2 DOWNTO 0)
-    );
-  end component;
+  -- Instruction Register
+  component intruction_reg is
+     port(clk      : in  std_logic; -- first phase clock
+          reset    : in  std_logic;
+          rdy      : in std_logic;
+          sync     : in  std_logic;
+          data_in  : in  std_logic_vector(7 downto 0);
+          data_out : out std_logic_vector(7 downto 0));
+    end component;
 
--- Instruction Register
-component intruction_reg is
-   port(clk      : in  std_logic; -- first phase clock
-        reset    : in  std_logic;
-        rdy      : in std_logic;
-        sync     : in  std_logic;
-        data_in  : in  std_logic_vector(7 downto 0);
-        data_out : out std_logic_vector(7 downto 0));
-end component;
+  -- Predecode Logic
+   component predecode_logic is
+     port (
+       databus : in std_logic_vector(7 downto 0); -- instuction or other data in
+       reset : in std_logic;
+       instruction : out std_logic_vector(7 downto 0); -- to instruction register
+       cycles : out std_logic_vector(2 downto 0);  -- output the number of cycles it takse to do the instruction
+       rmw : out std_logic
+     );
+   end component;
 
-  -- component predecode_logic is
-  --   port (
-  --     databus : IN std_logic_vector(7 DOWNTO 0); -- instuction or other data in
-  --     reset : IN std_logic;
-  --     instruction : OUT std_logic_vector(7 DOWNTO 0); -- to instruction register
-  --     cycles : OUT std_logic_vector(2 DOWNTO 0);  -- output the number of cycles it takse to do the instruction
-  --     RMW : OUT std_logic
-  --   );
-  -- end component;
+   -- Predecode Register
+   component predecode_register is
+         PORT (
+             clk : IN STD_LOGIC; -- phase 2 of the clock
+             load : IN STD_LOGIC;
+             reset : IN STD_LOGIC;
+             databus : IN STD_LOGIC_VECTOR(7 DOWNTO 0); -- databus connection
+             data_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)-- data to the predecode_logic
+             );
+     end component;
 
+    -- Timing generation
+   component timing_generation is
+     port (
+     clk: IN STD_LOGIC;
+     reset: IN STD_LOGIC;
 
+     bcr: IN STD_LOGIC; -- indicates that there is a branch operation going on (maybe leave this one out for now)
+     page_cross: IN STD_LOGIC;   -- indicates that there is an instruction in the register that uses page crossing. E.g $0000-$00FF is an interval. If an address gets added to that it could become $01.., which means it is outside of the boundary
 
--- This is now dissabled
-  -- component timing_generation is
-  --   port (
-  --     clk: IN STD_LOGIC;
-  --     reset: IN STD_LOGIC;
-  --
-  --     BCR: IN STD_LOGIC; -- indicates that there is a branch operation going on (maybe leave this one out for now)
-  --     page_cross: IN STD_LOGIC;   -- indicates that there is an instruction in the register that uses page crossing. E.g $0000-$00FF is an interval. If an address gets added to that it could become $01.., which means it is outside of the boundary
-  --
-  --     -- Coming from predecode #see predicode
-  --     RMW: IN STD_LOGIC;  -- information from the predecoder that there is a RMW value present in the decoder. RMW instructions generally take longer because they read and write to memory
-  --     cycles: IN STD_LOGIC_VECTOR(2 DOWNTO 0); -- Predecode given value, indicates how many cycles the instruction takes
-  --
-  --     -- going to the main decoder
-  --     tcstate: OUT STD_LOGIC_VECTOR(5 DOWNTO 0); -- Output of the device which tells you what cycle the machine is in, This is a invtered signal!!
-  --
-  --     SYNC, S1, S2: OUT STD_LOGIC; -- Sync indicates that the timing is at T1P_T1 -- SD. indicate that there is a RMW instruction in the instruction register to the decode rom (also an indication to show in what cycle it is the RWM)
-  --     V1: OUT STD_LOGIC -- V1 is an indication for a BRK instruction
-  --   );
-  -- end component;
+     -- Coming from predecode #see predicode
+     rmw: IN STD_LOGIC;  -- information from the predecoder that there is a rmw value present in the decoder. rmw instructions generally take longer because they read and write to memory
+     cycles: IN STD_LOGIC_VECTOR(2 DOWNTO 0); -- Predecode given value, indicates how many cycles the instruction takes
+
+     -- going to the main decoder
+     tcstate: OUT STD_LOGIC_VECTOR(5 DOWNTO 0); -- Output of the device which tells you what cycle the machine is in, This is a invtered signal!!
+
+     sync : OUT STD_LOGIC; -- Sync indicates that the timing is at T1P_T1
+     s1 : OUT STD_LOGIC; -- s. indicate that there is a rmw instruction in the instruction register to the decode rom (also an indication to show in what cycle it is the RWM)
+     s2 : OUT STD_LOGIC;
+     v1: OUT STD_LOGIC -- v1 is an indication for a BRK instruction
+     );
+   end component;
 
 
 
@@ -329,16 +364,19 @@ end component;
   -- memory data register
   signal dl_db, dl_adl, dl_adh, mem_data_load : std_logic;
   -- processor status register
-  signal status_reg_control : std_logic_vector(13 downto 0);
+  signal c, i : std_logic;
+  signal status_reg_control : std_logic_vector(14 downto 0);
   -- pass mosfets
   signal sb_db_pass, sb_adh_pass, adh_sb_pass, db_sb_pass : std_logic;
+  -- open drain mosfet
+  signal od_high_control, od_low_control : std_logic_vector(1 downto 0);
   -- stack pointer
   signal sb_s, s_sb, s_adl : std_logic;
   -- instruction decoer TODO
-  signal ir_in : STD_LOGIC_VECTOR(15 DOWNTO 0);    -- Instruction register in
-  signal timing : STD_LOGIC_VECTOR(2 DOWNTO 0);    -- Cycle select
-  signal interrupt : STD_LOGIC_VECTOR(2 DOWNTO 0); --
-  signal ready, sv, r_w : STD_LOGIC;
+  signal ir_in : std_logic_vector(15 downto 0);    -- Instruction register in
+  signal timing : std_logic_vector(2 downto 0);    -- Cycle select
+  signal interrupt : std_logic_vector(2 downto 0); --
+  signal ready, sv, r_w : std_logic;
   -- Processor Status Register
   signal ir5 : std_logic;
   -- Timing generation logic
@@ -348,6 +386,8 @@ end component;
   signal ins_data_in, ins_data_out : std_logic_vector(7 downto 0);
   signal inst_load : std_logic;
   signal rdy : std_logic;
+  -- Predecode logic
+  signal predecode_bus : std_logic_vector(7 downto 0);
 
   -- flags
   signal avr, acr : std_logic;
@@ -357,26 +397,24 @@ end component;
   signal sb, db, adh, adl : std_logic_vector(7 downto 0);
 
   -- Main control signal
-  signal control_out : STD_LOGIC_VECTOR(68 DOWNTO 0);
+  signal control_out : std_logic_vector(68 downto 0);
 
   -- pc_low carry to pc_high_carry
-  signal pc_carry : STD_LOGIC;
+  signal pc_carry : std_logic;
 
 
-  -- timing_generation dissabled becaus probelems
-  -- signal BCR : STD_LOGIC; -- indicates that there is a branch operation going on (maybe leave this one out for now)
-  -- signal page_cross : STD_LOGIC;   -- indicates that there is an instruction in the register that uses page crossing. E.g $0000-$00FF is an interval. If an address gets added to that it could become $01.., which means it is outside of the boundary
-  -- signal RMW : STD_LOGIC;  -- information from the predecoder that there is a RMW value present in the decoder. RMW instructions generally take longer because they read and write to memory
-  -- signal cycles : STD_LOGIC_VECTOR(2 DOWNTO 0); -- Predecode given value, indicates how many cycles the instruction takes
-  -- signal tcstate :  STD_LOGIC_VECTOR(5 DOWNTO 0); -- Output of the device which tells you what cycle the machine is in, This is a invtered signal!!
-  -- signal SYNC, S1, S2 :  STD_LOGIC; -- Sync indicates that the timing is at T1P_T1 -- SD. indicate that there is a RMW instruction in the instruction register to the decode rom (also an indication to show in what cycle it is the RWM)
-  -- signal V1 :  STD_LOGIC; -- V1 is an indication for a BRK instruction
+   signal bcr : std_logic; -- indicates that there is a branch operation going on (NOT USED AT ALL FOR NOW)
+   signal rmw : std_logic;  -- information from the predecoder that there is a rmw value present in the decoder. rmw instructions generally take longer because they read and write to memory
+   signal cycles : std_logic_vector(2 downto 0); -- Predecode given value, indicates how many cycles the instruction takes
+   signal tcstate :  std_logic_vector(5 downto 0); -- Output of the device which tells you what cycle the machine is in, This is a invtered signal!!
+   signal sync, s1, s2 :  std_logic; -- Sync indicates that the timing is at T1P_T1 -- SD. indicate that there is a rmw instruction in the instruction register to the decode rom (also an indication to show in what cycle it is the RWM)
+   signal v1 :  std_logic; -- v1 is an indication for a BRK instruction
 
 
   -- predecode_logic (dissabled)
-  -- signal instruction : std_logic_vector(7 DOWNTO 0); -- to instruction register
-  --signal cycles : std_logic_vector(2 DOWNTO 0);  -- output the number of cycles it takse to do the instruction
-  --signal RMW : std_logic;
+  -- signal instruction : std_logic_vector(7 downto 0); -- to instruction register
+  --signal cycles : std_logic_vector(2 downto 0);  -- output the number of cycles it takse to do the instruction
+  --signal rmw : std_logic;
 
 
 
@@ -434,7 +472,8 @@ begin
   pcl_adl     <= control_out(11);-- output count to ADL
   pcl_db      <= control_out(10);-- output count to DB
 
--- PCL_PCL : IN std_logic  -- Questionable if needed maybe obsolite
+-- PCL_PCL : in std_logic  -- Questionable if needed maybe obsolite
+
 
 
 -- accumulator
@@ -447,18 +486,11 @@ begin
   --              <=  zero_flag;
   --              <=  negative_flag;
 
-  -- Timing generation logic
-  enable_timing_logic <= '1'; --enable logic
-
-
--- instruction register
-  ins_data_in   <= db_external; -- data in from external data
-  inst_load     <= '1'; -- LOAD TODO!
 
 -- Instruction decoder
   -- TODO: FIX Instruction Decoder
-  -- ir_in         <=  ins_data_out; -- IN STD_LOGIC_VECTOR(15 DOWNTO 0);
-  -- timing        <=  timing_vector; -- IN STD_LOGIC_VECTOR(5 DOWNTO 0);
+  -- ir_in         <=  ins_data_out; -- in std_logic_vector(15 downto 0);
+  -- timing        <=  timing_vector; -- in std_logic_vector(5 downto 0);
   -- interrupt     <= ;
   -- ready         <= ;
   -- r_w           <= ;
@@ -482,9 +514,11 @@ begin
 -- Processor Status register
   -- checked 18-12-2020 23:58
   -- This is for all the flags etc
-    status_reg_control(12 downto 0) <= control_out(68 downto 56);
+    status_reg_control(6 downto 0) <= control_out(62 downto 56);
+    status_reg_control(7) <= 1_i;
+    status_reg_control(13 downto 8) <= control_out(68 downto 63);
     --p_db
-    status_reg_control(13) <= control_out(55);
+    status_reg_control(14) <= control_out(55);
 
 -- Pass Mosfets
   -- checked 19-12-2020 00:00
@@ -493,9 +527,9 @@ begin
   -- ADH -> SB
   adh_sb_pass <= control_out(17);
   -- SB -> DB
-  sb_db_pass <= control_out(18);
+  sb_db_pass  <= control_out(18);
   -- DB -> SB
-  db_sb_pass <= control_out(19);
+  db_sb_pass  <= control_out(19);
 
 -- Stack Pointer
   -- checked 19-12-2020 00:05
@@ -503,25 +537,30 @@ begin
   sb_s        <= control_out(24);
   s_sb        <= control_out(26);
 
+-- Open Drain MOSFET ADH
+  od_high_control(1 downto 0)     <= control(4 downto 3);
+
+-- Open Drain MOSFET ADL
+  od_low_control(1 downto 0)      <= control(22 downto 20);
 
 
 -- predecode_logic
 -- instruction <=
     --<= cycles
-    --<= RMW
+    --<= rmw
 
 -- timing_generation
-    -- BCR        <=
+    -- bcr        <=
     -- page_cross <=
-    --RMW        <=
+    --rmw        <=
     --cycles     <=
 
 
     -- <= tcstate
-    -- <= SYNC
-    -- <=S1
-    -- <=S2
-    -- <=V1
+    -- <= sync
+    -- <=s1
+    -- <=s2
+    -- <=v1
 
 
 
@@ -535,7 +574,7 @@ begin
   -- Processor status register
 
   -- TODO Fix these flags ?!
-  -- ir5
+   ir5 <= ins_data_out(5);
   -- hc;
 
 
@@ -599,7 +638,7 @@ Algorithmic_Unit : alu PORT MAP(
                       );
 
 -- program counter low
-program_couter_low  : pc_low  PORT MAP(
+program_counter_low  : pc_low  PORT MAP(
                       clk,
                       reset,
                       l_pclc,
@@ -613,7 +652,7 @@ program_couter_low  : pc_low  PORT MAP(
                       );
 
 -- program counter high
-program_couter_high : pc_high PORT MAP(
+program_counter_high : pc_high PORT MAP(
                       clk,
                       reset,
                       adh_pch,
@@ -672,10 +711,48 @@ flag_reg : status_register PORT MAP(
                       reset,
                       db,
                       status_reg_control,
-                      ir5,
                       acr,
                       avr,
+                      ir5,
+                      c,
+                      i,
                       db
+);
+
+--precharge mosfet
+-- SB
+pre_sb : precharge PORT MAP(
+                      clk_2,
+                      reset,
+                      sb,
+                      sb
+);
+
+--precharge mosfet
+-- DB
+pre_db : precharge PORT MAP(
+                      clk_2,
+                      reset,
+                      db,
+                      db
+);
+
+--precharge mosfet
+-- ADL
+pre_adl : precharge PORT MAP(
+                      clk_2,
+                      reset,
+                      adl,
+                      adl
+);
+
+--precharge mosfet
+-- ADH
+pre_adh : precharge PORT MAP(
+                      clk_2,
+                      reset,
+                      adh,
+                      adh
 );
 
 -- pass mosfets
@@ -708,6 +785,17 @@ db_sb_adh : pass PORT MAP(
                       sb
 );
 
+-- open drain mosfet high
+od_adh : open_drain_ADH PORT MAP(
+                      od_high_control,
+                      adh
+);
+
+-- open drain mosfet low
+od_adl : open_drain_ADL PORT MAP(
+                      od_low_control,
+                      adl
+);
 
 -- stack pointer
 stk_point :  stack_pointer PORT MAP(
@@ -721,55 +809,60 @@ stk_point :  stack_pointer PORT MAP(
                       adl
 );
 
--- for the timing generation
-timing_generation_logic : timer PORT MAP(
-                      clk,
-                      reset,
-                      enable_timing_logic,
-                      timing_vector
-                      );
-
 -- Instruction Register
 ins_reg : intruction_reg PORT MAP(
                       clk,
                       reset,
                       rdy,
-                      inst_load,
+                      sync,
                       ins_data_in,
                       ins_data_out
 );
 
--- pr_logic : predecode_logic PORT MAP(
---                       db,
---                       reset,
---                       instruction,
---                       cycles,
---                       RMW
--- );
--- -- Timing generation logic  (Dissabled becaus problems)
--- tim_gen : timing_generation PORT MAP(
---                       clk,
---                       reset,
---                       BCR,
---                       page_cross,
---                       RMW,
---                       cycles,
---                       tcstate,
---                       SYNC,
---                       V1
--- );
+-- Predecode Register
+pre_reg : predecode_register PORT MAP(
+                        clk_2,
+                        1,
+                        reset,
+                        db,
+                        predecode_bus
+);
+-- Predecode logic
+ pr_logic : predecode_logic PORT MAP(
+                       predecode_bus,
+                       reset,
+                       ins_data_in,
+                       cycles,
+                       rmw
+ );
+ -- Timing generation logic
+ tim_gen : timing_generation PORT MAP(
+                       clk,
+                       reset,
+                       bcr,
+                       acr,
+                       rmw,
+                       cycles,
+                       tcstate,
+                       sync,
+                       s1,
+                       s2,
+                       v1
+ );
 
--- -- Instruction Decoder
--- instruction_dec : instruction_decoder PORT MAP(
---                       clk,
---                       clk_2,
---                       ir_in,
---                       timing,
---                       interrupt,
---                       ready,
---                       r_w,
---                       sv,
---                       control_out
--- );
+ -- Instruction Decoder
+ instruction_dec : instruction_decoder PORT MAP(
+                       clk,
+                       clk_2,
+                       ins_data_out,
+                       tcstate,
+                       interrupt,
+                       ready,
+                       r_w,
+                       sv,
+                       acr,
+                       c,
+                       control_out
+ );
 
 end architecture;

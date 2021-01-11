@@ -8,7 +8,8 @@ entity predecode_logic is
     reset : IN std_logic;
     instruction : OUT std_logic_vector(7 DOWNTO 0); -- to instruction register
     cycles : OUT std_logic_vector(2 DOWNTO 0);  -- output the number of cycles it takse to do the instruction
-    RMW : OUT std_logic
+    RMW : OUT std_logic;
+    BCR : OUT std_logic -- NOT USED YET Indication that a branch instruction is going on
   );
 end entity;
 
@@ -106,6 +107,7 @@ begin
               cycles <= "010";
             end if;
           --   elsif databus(4 DOWNTO 2) = "100" then --branch
+          --    BCR <= '1';
 					--	  cycles <= "000"; -- 2 for no branch, 3 for branch, 4 for page cross and branch
 					elsif databus(4 DOWNTO 2) = "000" then --immediate
 						  cycles <= "010";

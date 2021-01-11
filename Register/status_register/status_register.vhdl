@@ -9,7 +9,7 @@ entity status_register is
       --Input from bus
       db_in : in STD_LOGIC_VECTOR(7 downto 0);
       --Inputs from control
-      control : in STD_LOGIC_VECTOR(13 downto 0);
+      control : in STD_LOGIC_VECTOR(14 downto 0);
       --db0_c = control(0);
       --ir5_c = control(1);
       --acr_c = control(2);
@@ -17,15 +17,16 @@ entity status_register is
       --dbz_z = control(4);
       --db2_i = control(5);
       --ir5_i = control(6);
-      --db3_d = control(7);
-      --ir5_d = control(8);
-      --db6_v = control(9);
-      --avr_v = control(10);
-      --1_v   = control(11);
-      --db7_n = control(12);
+      --1_i   = control(7); <= This comes from interupt logic!!
+      --db3_d = control(8);
+      --ir5_d = control(9);
+      --db6_v = control(10);
+      --avr_v = control(11);
+      --1_v   = control(12);
+      --db7_n = control(13);
 
       -- databus control signal
-      --p_db  = control(13);
+      --p_db  = control(14)
 
       --Inputs from ALU
       acr   : in STD_LOGIC;
@@ -33,6 +34,8 @@ entity status_register is
 
       ir5   : in STD_LOGIC;
       --Outputs
+      c         : out STD_LOGIC;
+      i         : out STD_LOGIC;
       db_out    : out STD_LOGIC_VECTOR(7 downto 0)
     );
 END ENTITY;
@@ -79,15 +82,16 @@ reg_out (1) WHEN OTHERS;
 
 --bit 2
   -- I FLAG
-WITH control(6 downto 5) SELECT reg_in(2) <=
-db_in(2) 	 WHEN "01", -- DB2/I
-ir5        WHEN "10", -- IR5/I
+WITH control(7 downto 5) SELECT reg_in(2) <=
+db_in(2) 	 WHEN "001", -- DB2/I
+ir5        WHEN "010", -- IR5/I
+'1'        WHEN "100", -- 1/I (from interrupt logic)
 reg_out(2) WHEN OTHERS;
 
 
 --bit 3
   -- D FLAG
-WITH control(8 downto 7) SELECT reg_in(3) <=
+WITH control(9 downto 8) SELECT reg_in(3) <=
 db_in(3)    WHEN "01", -- DB3/D
 ir5         WHEN "10", -- IR5/D
 reg_out(3)  WHEN OTHERS;
@@ -100,7 +104,7 @@ reg_in(5) <= '0';
 
 
 --bit 6
-WITH control(11 downto 9) SELECT reg_in(6) <=
+WITH control(12 downto 10) SELECT reg_in(6) <=
 db_in (6)   WHEN "001",   -- DB6/V
 acr         WHEN "010", -- AVR/V
 '1'  WHEN "100", -- 1/V, IF this should be I instead of 1, change '1' to reg_in(2)
@@ -110,15 +114,18 @@ reg_out (6) WHEN OTHERS;
 --bit 7
   -- N FLAG
   -- DB7/N
-WITH control(12) SELECT reg_in(7) <=
+WITH control(13) SELECT reg_in(7) <=
 db_in(7)   WHEN '1', --writes db(7) when db7_n is 1
 reg_out(7)  WHEN OTHERS;
 
 -- out to databus
-WITH control(13) SELECT db_out <=
+WITH control(14) SELECT db_out <=
 reg_out when '1',
 "ZZZZZZZZ" WHEN OTHERS;
 
+--port bit 0 and 2 to a seperate Output
+c <= reg_out(0);
+i <= reg_out(2);
 
 l1 : register_8bit PORT MAP(clk, '1', reset, reg_in, reg_out);
 
