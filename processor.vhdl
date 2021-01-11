@@ -195,34 +195,39 @@ end component;
 
   -- status register
   component status_register is
-    port (
-      --Input from bus
-      db_in : in STD_LOGIC_VECTOR(7 downto 0);
-      --Inputs from control
-      control : in STD_LOGIC_VECTOR(13 downto 0);
-      --db0_c = control(0);
-      --ir5_c = control(1);
-      --acr_c = control(2);
-      --db1_z = control(3);
-      --dbz_z = control(4);
-      --db2_i = control(5);
-      --ir5_i = control(6);
-      --db3_d = control(7);
-      --ir5_d = control(8);
-      --db6_v = control(9);
-      --avr_v = control(10);
-      --1_v   = control(11);
-      --db7_n = control(12);
-      --p_db  = control(13);
+      port (
+        clk : in STD_LOGIC;
+        reset : in STD_LOGIC;
+        --Input from bus
+        db_in : in STD_LOGIC_VECTOR(7 downto 0);
+        --Inputs from control
+        control : in STD_LOGIC_VECTOR(13 downto 0);
+        --db0_c = control(0);
+        --ir5_c = control(1);
+        --acr_c = control(2);
+        --db1_z = control(3);
+        --dbz_z = control(4);
+        --db2_i = control(5);
+        --ir5_i = control(6);
+        --db3_d = control(7);
+        --ir5_d = control(8);
+        --db6_v = control(9);
+        --avr_v = control(10);
+        --1_v   = control(11);
+        --db7_n = control(12);
 
-      --Inputs from ALU
-      ir5   : in STD_LOGIC;
-      acr   : in STD_LOGIC;
-      avr   : in STD_LOGIC;
-      --Outputs
-      db_out    : out STD_LOGIC_VECTOR(7 downto 0)
-    );
-  end component;
+        -- databus control signal
+        --p_db  = control(13);
+
+        --Inputs from ALU
+        acr   : in STD_LOGIC;
+        avr   : in STD_LOGIC;
+
+        ir5   : in STD_LOGIC;
+        --Outputs
+        db_out    : out STD_LOGIC_VECTOR(7 downto 0)
+      );
+  END component;
 
   -- Pass Mosfets
   component pass is
@@ -255,13 +260,14 @@ end component;
   end component;
 
 -- Instruction Register
-  component intruction_reg is
-     port(clk      : in  std_logic;
-          reset    : in  std_logic;
-          load     : in  std_logic;
-          data_in  : in  std_logic_vector(7 downto 0);
-          data_out : out std_logic_vector(7 downto 0));
-  end component;
+component intruction_reg is
+   port(clk      : in  std_logic; -- first phase clock
+        reset    : in  std_logic;
+        rdy      : in std_logic;
+        sync     : in  std_logic;
+        data_in  : in  std_logic_vector(7 downto 0);
+        data_out : out std_logic_vector(7 downto 0));
+end component;
 
   -- component predecode_logic is
   --   port (
@@ -341,6 +347,7 @@ end component;
   -- Instruction Register
   signal ins_data_in, ins_data_out : std_logic_vector(7 downto 0);
   signal inst_load : std_logic;
+  signal rdy : std_logic;
 
   -- flags
   signal avr, acr : std_logic;
@@ -354,6 +361,10 @@ end component;
 
   -- pc_low carry to pc_high_carry
   signal pc_carry : STD_LOGIC;
+
+  -- pass mosfets
+  -- ADH -> SB
+  signal : adh_sb_pass : STD_LOGIC;
 
   -- timing_generation dissabled becaus probelems
   -- signal BCR : STD_LOGIC; -- indicates that there is a branch operation going on (maybe leave this one out for now)
@@ -481,6 +492,7 @@ begin
   -- SB -> ADH
   sb_adh_pass <= control_out(16);
 
+  adh_sb_pass <= control_out(17);
 
 -- Stack Pointer
   -- checked 19-12-2020 00:05
@@ -653,6 +665,8 @@ data_reg :mem_data_reg PORT MAP(
 
 -- Processor Status Register
 flag_reg : status_register PORT MAP(
+                      clk,
+                      reset,
                       db,
                       status_reg_control,
                       ir5,
@@ -675,6 +689,13 @@ pass_sb_adh : pass PORT MAP(
                       sb,
                       sb_adh_pass,
                       adh
+);
+-- pass mosfets
+-- ADH -> SB
+pass_sb_adh : pass PORT MAP(
+                      adh,
+                      adh_sb_pass,
+                      sb
 );
 
 
@@ -702,6 +723,7 @@ timing_generation_logic : timer PORT MAP(
 ins_reg : intruction_reg PORT MAP(
                       clk,
                       reset,
+                      rdy,
                       inst_load,
                       ins_data_in,
                       ins_data_out

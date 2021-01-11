@@ -34,7 +34,7 @@ begin
       ----------------------------------- cc = 01 --------------------------------------
       if (databus(1 DOWNTO 0) = "01") then
         RMW <= '0';
-        if (databus(4 DOWNTO 2) = "000") then -- (zero page, X)
+        if (databus(4 DOWNTO 2) = "000") then -- (Indirect, X)
           cycles <= "110";
         elsif (databus(4 DOWNTO 2) = "001") then -- (zero page)
           cycles <= "011";
@@ -42,7 +42,7 @@ begin
           cycles <= "010";
         elsif (databus (4 DOWNTO 2) = "010") then -- (absolute)
           cycles <= "100";
-        elsif (databus (4 DOWNTO 2) = "010") then -- (zero page), Y
+        elsif (databus (4 DOWNTO 2) = "010") then -- (Indirect), Y
           cycles <= "110";
         elsif (databus (4 DOWNTO 2) = "010") then -- zero page, X
           cycles <= "100";
@@ -54,14 +54,14 @@ begin
 
       ----------------------------------- cc = 10 --------------------------------------
       elsif (databus(1 DOWNTO 0) = "10") then
-        if (databus(7 DOWNTO 5) = "100" or databus(7 DOWNTO 5) = "101") then -- STX and LDX are not RMV-instructions so seperate statement
+        if (databus(7 DOWNTO 5) = "100" or databus(7 DOWNTO 5) = "101") then -- STX and LDX are not RMW-instructions so seperate statement
           RMW <= '0';
           if (databus(4 DOWNTO 2) = "000") then -- #immediate
             cycles <= "010";
           elsif (databus(4 DOWNTO 2) = "001") then -- zero page
             cycles <= "011";
           elsif (databus(4 DOWNTO 2) = "010") then -- accumulator
-            cycles <= "010"; -- non-existent for these two functions
+            cycles <= "010"; -- non-existent for these two functions, added in for consistency
           elsif (databus(4 DOWNTO 2) = "011") then --absolute
             cycles <= "100";
           elsif (databus(4 DOWNTO 2) = "101") then -- zero page, X/Y
@@ -102,11 +102,11 @@ begin
               cycles <= "011";
             elsif (databus(7 DOWNTO 4) = "0110") then -- PLA instruction
               cycles <= "100";
-            else -- all the other instructions are implied instructions, meaning that they only take 2 cycles
+            else -- all the other instructions are non-stack related instructions, which only take 2 cycles.
               cycles <= "010";
             end if;
-          elsif databus(4 DOWNTO 2) = "100" then --branch
-						  cycles <= "000"; -- 2 for no branch, 3 for branch, 4 for page cross and branch
+          --   elsif databus(4 DOWNTO 2) = "100" then --branch
+					--	  cycles <= "000"; -- 2 for no branch, 3 for branch, 4 for page cross and branch
 					elsif databus(4 DOWNTO 2) = "000" then --immediate
 						  cycles <= "010";
 					elsif databus(4 DOWNTO 2) = "001" then --zeropage
