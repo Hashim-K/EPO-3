@@ -189,7 +189,7 @@ end component;
   --       ready: IN STD_LOGIC;
   --       r_w: IN STD_LOGIC;
   --       sv: IN STD_LOGIC;
-  --       control_out: OUT STD_LOGIC_VECTOR(66 DOWNTO 0)
+  --       control_out: OUT STD_LOGIC_VECTOR(68 DOWNTO 0)
   --   );
   -- end component;
 
@@ -331,7 +331,7 @@ end component;
   -- processor status register
   signal status_reg_control : std_logic_vector(13 downto 0);
   -- pass mosfets
-  signal sb_db_pass, sb_adh_pass : std_logic;
+  signal sb_db_pass, sb_adh_pass, adh_sb_pass, db_sb_pass : std_logic;
   -- stack pointer
   signal sb_s, s_sb, s_adl : std_logic;
   -- instruction decoer TODO
@@ -357,14 +357,11 @@ end component;
   signal sb, db, adh, adl : std_logic_vector(7 downto 0);
 
   -- Main control signal
-  signal control_out : STD_LOGIC_VECTOR(66 DOWNTO 0);
+  signal control_out : STD_LOGIC_VECTOR(68 DOWNTO 0);
 
   -- pc_low carry to pc_high_carry
   signal pc_carry : STD_LOGIC;
 
-  -- pass mosfets
-  -- ADH -> SB
-  signal : adh_sb_pass : STD_LOGIC;
 
   -- timing_generation dissabled becaus probelems
   -- signal BCR : STD_LOGIC; -- indicates that there is a branch operation going on (maybe leave this one out for now)
@@ -395,52 +392,56 @@ begin
 
 -- x index register
   -- checked 18-12-2020 23:47
-  sb_x        <= control_out(49);
-  x_sb        <= control_out(50);
+  sb_x        <= control_out(51);
+  x_sb        <= control_out(52);
 
 -- Y index REGISTER
   -- checked 18-12-2020 23:47
-  sb_y        <= control_out(51);
-  y_sb        <= control_out(52);
+  sb_y        <= control_out(53);
+  y_sb        <= control_out(54);
 
 
 -- ALU
   -- checked 18-12-2020 23:48
-  alu_control(11 downto 0) <= control_out(40 downto 29); -- more efficient
+  alu_control(11 downto 0) <= control_out(42 downto 31); -- more efficient
 
-  add_adl     <= control_out(41);
-  add_sb6     <= control_out(42);
-  add_sb7     <= control_out(43);
-  o_add       <= control_out(44);
-  sb_add      <= control_out(45);
-  inv_db_add  <= control_out(25);
-  db_add      <= control_out(26);
-  adl_add     <= control_out(27);
+  add_adl     <= control_out(43);
+  add_sb6     <= control_out(44);
+  add_sb7     <= control_out(45);
+  o_add       <= control_out(46);
+  sb_add      <= control_out(47);
+  inv_db_add  <= control_out(27);
+  db_add      <= control_out(28);
+  adl_add     <= control_out(29);
 
 
 -- Program Counter High
   -- checked 18-12-2020 23:48
+  pch_pch     <= control_out(12)
   adh_pch     <= control_out(13);
-  pch_adh     <= control_out(15);
   pch_db      <= control_out(14);
-  h_pclc      <= pc_carry; -- cary in from program counter low
+  pch_adh     <= control_out(15);
+
+  h_pclc      <= pc_carry; -- carry in from program counter low
 
 
 -- Program Counter Low
   -- checked 18-12-2020 23:51
   l_pclc        <= pc_carry;-- Carry out
+  pcl_pcl     <= control_out(7);-- Load from PCL
+  adl_pcl     <= control_out(8);-- Load from ADL
   i_pc        <= control_out(9);-- Enable Increment program counter
   pcl_adl     <= control_out(11);-- output count to ADL
   pcl_db      <= control_out(10);-- output count to DB
-  adl_pcl     <= control_out(8);-- Load from ADL
+
 -- PCL_PCL : IN std_logic  -- Questionable if needed maybe obsolite
 
 
 -- accumulator
   -- checked 18-12-2020 23:51
-  ac_db         <=  control_out(47);
-  ac_sb         <=  control_out(48);
-  sb_ac         <=  control_out(46);
+  sb_ac         <=  control_out(48);
+  ac_db         <=  control_out(49);
+  ac_sb         <=  control_out(50);
 
   -- TODO: FIX
   --              <=  zero_flag;
@@ -481,24 +482,26 @@ begin
 -- Processor Status register
   -- checked 18-12-2020 23:58
   -- This is for all the flags etc
-    status_reg_control(12 downto 0) <= control_out(66 downto 54);
+    status_reg_control(12 downto 0) <= control_out(68 downto 56);
     --p_db
-    status_reg_control(13) <= control_out(53);
+    status_reg_control(13) <= control_out(55);
 
 -- Pass Mosfets
   -- checked 19-12-2020 00:00
-  -- SB -> DB
-  sb_db_pass <= control_out(17);
   -- SB -> ADH
   sb_adh_pass <= control_out(16);
-
+  -- ADH -> SB
   adh_sb_pass <= control_out(17);
+  -- SB -> DB
+  sb_db_pass <= control_out(18);
+  -- DB -> SB
+  db_sb_pass <= control_out(19);
 
 -- Stack Pointer
   -- checked 19-12-2020 00:05
-  sb_s        <= control_out(22);
-  s_sb        <= control_out(24);
-  s_adl       <= control_out(21);
+  s_adl       <= control_out(23);
+  sb_s        <= control_out(24);
+  s_sb        <= control_out(26);
 
 
 
@@ -695,6 +698,13 @@ pass_sb_adh : pass PORT MAP(
 pass_sb_adh : pass PORT MAP(
                       adh,
                       adh_sb_pass,
+                      sb
+);
+-- pass mosfets
+-- DB -> SB
+db_sb_adh : pass PORT MAP(
+                      db,
+                      db_sb_pass,
                       sb
 );
 
