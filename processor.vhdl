@@ -7,7 +7,10 @@ library ieee;
 entity processor is
   port (
   clk_25mhz : in std_logic;
-  reset : in std_logic;
+  nmi : in std_logic;
+  res : in std_logic;
+  irq : in std_logic;
+  sv  : in std_logic;
   adb_external : out std_logic_vector(7 downto 0);  -- External connection of the addres + data
   adb_control : out std_logic_vector(1 downto 0);   -- Select the external register
   db_external : in std_logic_vector(7 downto 0)    -- External connection of the databus bus in
@@ -177,6 +180,35 @@ end component;
     );
   end component;
 
+   -- Interrupt control
+   component interr_res is
+     port(clk1		  : in	std_logic;
+          clk2	    : in	std_logic;
+  	      nmi       : in  std_logic;
+          irq       : in  std_logic;
+          res       : in  std_logic;
+  	      time	    : in	std_logic_vector(5 downto 0);
+  	      v1	      : in	std_logic;
+	        I	        : in	std_logic;
+	        bcr	      : in	std_logic;
+	        page_cross: in	std_logic;
+          --interrupt : out std_logic_vector(2 downto 0);
+          --nmig      : out std_logic;
+          --nmil      : out std_logic;
+          --irqp      : out std_logic;
+          --nmip      : out std_logic;
+          --resp      : out std_logic;
+          --intg      : out std_logic;
+          --resg      : out std_logic);
+        	I_flag	  : out	std_logic;
+        	nmi_out	  : out	std_logic;
+        	irq_out	  : out	std_logic;
+        	res_out	  : out	std_logic;
+        	interrupt	: out	std_logic;
+        	reset	    : out	std_logic;
+        	rw	      : out	std_logic
+    );
+  end component;
 
    -- Instruction decoder
    component instruction_decoder is
@@ -345,7 +377,10 @@ end component;
 
   -- first and second phase clock
   signal clk, clk_2 : std_logic;
-
+  -- external reset Signals
+  signal nmi, res, irq : std_logic;
+  -- the unknown external signal
+  signal sv: std_logic;
   -- x index register
   signal sb_x, x_sb : std_logic;
   -- Y index REGISTER
@@ -375,7 +410,7 @@ end component;
   -- instruction decoer TODO
   signal ir_in : std_logic_vector(15 downto 0);    -- Instruction register in
   signal interrupt : std_logic_vector(2 downto 0); --
-  signal ready, sv, r_w : std_logic;
+  signal ready, r_w : std_logic;
   -- Processor Status Register
   signal ir5 : std_logic;
   -- Timing generation logic
@@ -388,6 +423,8 @@ end component;
   -- Predecode logic
   signal predecode_bus : std_logic_vector(7 downto 0);
 
+  --interrupt control
+  signal 1_i, nmi_out, irq_out, res_out: std_logic;
   -- flags
   signal avr, acr : std_logic;
   signal zero_flag, negative_flag : std_logic;
@@ -401,7 +438,7 @@ end component;
   -- pc_low carry to pc_high_carry
   signal pc_carry : std_logic;
 
-
+  -- timing generation / predecode
    signal bcr : std_logic; -- indicates that there is a branch operation going on (NOT USED AT ALL FOR NOW)
    signal rmw : std_logic;  -- information from the predecoder that there is a rmw value present in the decoder. rmw instructions generally take longer because they read and write to memory
    signal cycles : std_logic_vector(2 downto 0); -- Predecode given value, indicates how many cycles the instruction takes
@@ -409,11 +446,7 @@ end component;
    signal sync, s1, s2 :  std_logic; -- Sync indicates that the timing is at T1P_T1 -- SD. indicate that there is a rmw instruction in the instruction register to the decode rom (also an indication to show in what cycle it is the RWM)
    signal v1 :  std_logic; -- v1 is an indication for a BRK instruction
 
-
-  -- predecode_logic (dissabled)
-  -- signal instruction : std_logic_vector(7 downto 0); -- to instruction register
-  --signal cycles : std_logic_vector(2 downto 0);  -- output the number of cycles it takse to do the instruction
-  --signal rmw : std_logic;
+   --
 
 
 
@@ -807,6 +840,27 @@ stk_point :  stack_pointer PORT MAP(
                       sb,
                       adl
 );
+
+-- Interrupt Control
+int_ctl : interr_res PORT MAP(
+                      clk,
+                      clk_2,
+                      nmi, 
+                      irq,
+                      res,
+                      tcstate,
+                      v1,
+                      i,
+                      bcr,
+                      acr,
+                      1_i,
+                      nmi_out,
+                      irq_out,
+                      res_out,
+                      interrupt,
+                      reset,
+                      r_w
+)
 
 -- Instruction Register
 ins_reg : intruction_reg PORT MAP(
