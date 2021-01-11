@@ -22,7 +22,7 @@ architecture arch of instruction_decoder_tb is
     );
   end component;
 
-  component clk is
+  component clock is
     port (
     clk_25mhz : IN std_logic; -- External cock in
     reset : IN std_logic;
@@ -46,7 +46,7 @@ signal c :  std_logic;
 signal control_out : std_logic_vector(68 DOWNTO 0);
 
 begin
-c1 : clk PORT MAP(clk_25mhz, reset, clk, clk_2, clk_3);
+c1 : clock PORT MAP(clk_25mhz, reset, clk, clk_2, clk_3);
 i1 : instruction_decoder PORT MAP(clk, clk_2, ir_in, tcstate, interrupt, ready, r_w, sv, acr, c, control_out);
 
 reset <= '1' after 0 ns,
