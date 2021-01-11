@@ -14,7 +14,7 @@ COMPONENT status_register is
         --Input from bus
         db_in : in STD_LOGIC_VECTOR(7 downto 0);
         --Inputs from control
-        control : in STD_LOGIC_VECTOR(13 downto 0);
+        control : in STD_LOGIC_VECTOR(14 downto 0);
         --db0_c = control(0);
         --ir5_c = control(1);
         --acr_c = control(2);
@@ -42,7 +42,7 @@ COMPONENT status_register is
 
   signal reset, clk, acr, avr, ir5: STD_LOGIC;
   signal db_in :  STD_LOGIC_VECTOR(7 downto 0);
-  signal control  : STD_LOGIC_VECTOR(13 downto 0);
+  signal control  : STD_LOGIC_VECTOR(14 downto 0);
   signal db_out : STD_LOGIC_VECTOR(7 downto 0);
 
   begin
@@ -94,30 +94,34 @@ COMPONENT status_register is
                   '0' after 210 ns; -- DONE
 
     control(7) <= '0' after 0 ns,
-                  '1' after 30 ns,
-                  '0' after 50 ns; --DONE
-
-    control(8) <= '0' after 0 ns,
-                  '1' after 190 ns,
-                  '0' after 210 ns; -- DONE
-
-    control(9) <= '0' after 0 ns,
-                  '1' after 30 ns,
-                  '0' after 50 ns; --DONE
-
-    control(10) <= '0' after 0 ns,
-                   '1' after 270 ns,
-                   '0' after 290 ns; --DONE
-
-    control(11) <= '0' after 0 ns,
                    '1' after 340 ns,
                    '0' after 360 ns; --DONE
 
+    control(8) <= '0' after 0 ns,
+                  '1' after 30 ns,
+                  '0' after 50 ns; --DONE
+
+    control(9) <= '0' after 0 ns,
+                  '1' after 190 ns,
+                  '0' after 210 ns; -- DONE
+
+    control(10) <= '0' after 0 ns,
+                  '1' after 30 ns,
+                  '0' after 50 ns; --DONE
+
+    control(11) <= '0' after 0 ns,
+                   '1' after 270 ns,
+                   '0' after 290 ns; --DONE
+
     control(12) <= '0' after 0 ns,
+                   '1' after 340 ns,
+                   '0' after 360 ns; --DONE
+
+    control(13) <= '0' after 0 ns,
                    '1' after 30 ns,
                    '0' after 50 ns; --DONE
 
-    control(13) <= '0' after 0 ns,
+    control(14) <= '0' after 0 ns,
                    '1' after 50 ns,
                    '0' after 80 ns,
                    '1' after 110 ns,
@@ -137,16 +141,16 @@ end architecture;
 
 --reset after 0 ns
 --load db (1's) into reg_out after 30 ns (11111111)
---db_out equals reg_out after 50 ns       
+--db_out equals reg_out after 50 ns
 --load dbz (0) into reg_out(1) after 90 ns (11111101)
 --db_out equals reg_out after 110 ns
---reg_out is reset after 140 ns (00000000)              
---db_out equals reg_out after 160 ns                   
+--reg_out is reset after 140 ns (00000000)
+--db_out equals reg_out after 160 ns
 --ir5 is loaded into reg_out after 190 ns (00001101)
---db_out equals reg_out after 210 ns                    
+--db_out equals reg_out after 210 ns
 --reg_out is reset after 240 ns (00000000)
 --acr and avr are loaded into reg_out after 270 ns (01000001)
---db_out equals reg_out after 300 ns                    
+--db_out equals reg_out after 300 ns
 --reg_out is reset after 320 ns (00000000)
---1 is loaded into reg_out(6) after 340 ns (01000000)
---db_out equals reg_out after 360 ns                    
+--1 is loaded into reg_out(6) and reg_out(2) after 340 ns (01000100)
+--db_out equals reg_out after 360 ns
