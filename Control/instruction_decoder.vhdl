@@ -10,10 +10,10 @@ entity instruction_decoder is
       tcstate: IN STD_LOGIC_VECTOR(5 DOWNTO 0);
       interrupt: IN STD_LOGIC_VECTOR(2 DOWNTO 0);
       ready: IN STD_LOGIC;
-      r_w: IN STD_LOGIC;
       sv: IN STD_LOGIC;
       ACR : IN STD_LOGIC;
       Cin : IN STD_LOGIC;
+      r_w: OUT STD_LOGIC;
       control_out: OUT STD_LOGIC_VECTOR(68 DOWNTO 0)
   );
 end entity;
