@@ -187,7 +187,7 @@ end component;
          tcstate: in std_logic_vector(2 downto 0);    -- Cycle select
          interrupt: in std_logic_vector(2 downto 0); --
          ready: in std_logic;
-         r_w: in std_logic;
+         r_w: out std_logic;
          sv: in std_logic;
          ACR : in std_logic;
          Cin : in std_logic;
@@ -374,7 +374,6 @@ end component;
   signal sb_s, s_sb, s_adl : std_logic;
   -- instruction decoer TODO
   signal ir_in : std_logic_vector(15 downto 0);    -- Instruction register in
-  signal timing : std_logic_vector(2 downto 0);    -- Cycle select
   signal interrupt : std_logic_vector(2 downto 0); --
   signal ready, sv, r_w : std_logic;
   -- Processor Status Register
