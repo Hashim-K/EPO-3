@@ -845,18 +845,18 @@ stk_point :  stack_pointer PORT MAP(
 int_ctl : interr_res PORT MAP(
                       clk,
                       clk_2,
-                      nmi, -- add to top
-                      irq, -- add to top
-                      res, -- add to top
+                      nmi, 
+                      irq,
+                      res,
                       tcstate,
                       v1,
                       i,
                       bcr,
                       acr,
-                      1_i, -- add sig
-                      nmi_out, -- add sig
-                      irq_out, -- add sig
-                      res_out, -- add sig
+                      1_i,
+                      nmi_out,
+                      irq_out,
+                      res_out,
                       interrupt,
                       reset,
                       r_w
