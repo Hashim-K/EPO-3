@@ -9,19 +9,19 @@ architecture arch of system_tb is
   component system is
     port (
     clk_25mhz : std_logic;
-    reset : std_logic
+    extern_reset : std_logic
     );
   end component;
 
   signal clk_25mhz : std_logic :='0';
-  signal reset : std_logic;
+  signal extern_reset : std_logic;
 begin
 
   clk_25mhz <= not clk_25mhz after 5 ns;
-  reset <= '1' after 0 ns,
-           '0' after 20 ns;
+  extern_reset <= '0' after 0 ns,
+                  '1' after 200 ns;
 
-  mem : system PORT MAP(clk_25mhz, reset);
+  sy : system PORT MAP(clk_25mhz, extern_reset);
 
 
 end architecture;

@@ -14,7 +14,7 @@ ENTITY A_input_register IS
 END ENTITY;
 ARCHITECTURE structural OF A_input_register IS
 
-  COMPONENT register_8bit IS
+  COMPONENT register_8bit_A IS
     PORT (
       clk : IN STD_LOGIC;
       load : IN STD_LOGIC;
@@ -27,10 +27,11 @@ ARCHITECTURE structural OF A_input_register IS
   SIGNAL control : STD_LOGIC_VECTOR(1 DOWNTO 0);
   SIGNAL temp_control : STD_LOGIC;
 BEGIN
-  L1 : register_8bit PORT MAP(clk => clk, load => temp_control, reset => reset, data_in => temp_data, reg_out => reg_out);
+  L1 : register_8bit_A PORT MAP(clk => clk, load => temp_control, reset => reset, data_in => temp_data, reg_out => reg_out);
 
-  control(1) <= o_add;
-  control(0) <= sb_add;
+  control(1) <= o_add; --load zero
+  control(0) <= sb_add;-- load from databus
+
   bus_data <= in_sb;
   out_alu <= reg_out;
 

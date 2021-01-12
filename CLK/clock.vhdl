@@ -17,12 +17,15 @@ architecture arch of clock is
   signal s_clk, s_clk_2 : std_logic;
 begin
 
+
+
 sec : process(clk_25mhz, reset)
 begin
+  if rising_edge(reset) then
+    count <= 1;
+  end if;
   if rising_edge(clk_25mhz) then
-    if (reset = '1')  then
-      count <= 1;
-    elsif (count = 4) then
+    if (count = 4) then
       count <= 1;
     else
       count <= count + 1;

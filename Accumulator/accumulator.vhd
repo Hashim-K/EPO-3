@@ -19,7 +19,7 @@ END ENTITY;
 
 ARCHITECTURE structural OF accumulator IS
 
-    COMPONENT register_8bit IS
+    COMPONENT register_8bit_C IS
         PORT (
             clk : IN STD_LOGIC;
             load : IN STD_LOGIC;
@@ -33,7 +33,7 @@ ARCHITECTURE structural OF accumulator IS
     SIGNAL control : STD_LOGIC_VECTOR(1 DOWNTO 0);
 
 BEGIN
-    l1 : register_8bit PORT MAP(clk, load, reset, data_in, data_out);
+    l1 : register_8bit_C PORT MAP(clk, load, reset, data_in, data_out);
 
     control(0) <= ac_db;
     control(1) <= ac_sb;

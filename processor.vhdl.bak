@@ -21,7 +21,6 @@ end entity;
 architecture structural of processor is
 
 
-
   --/*************************************************
   --*                    component                   *
   --*************************************************/
@@ -209,9 +208,9 @@ end component;
         	I_flag	  : out	std_logic;
         	nmi_out	  : out	std_logic;
         	irq_out	  : out	std_logic;
-        	res_out	  : out	std_logic; -- This is the real reset
+        	res_out	  : out	std_logic;
         	interrupt	: out	std_logic; --IRQG
-        	reset	    : out	std_logic; --:C THIS IS RESG
+        	reset	    : out	std_logic; --RESG
         	rw	      : out	std_logic
     );
   end component;
@@ -229,7 +228,7 @@ end component;
         sv: IN STD_LOGIC;
         acr : IN STD_LOGIC;
         cin : IN STD_LOGIC;
-        control_out: OUT STD_LOGIC_VECTOR(68 DOWNTO 0);
+        control_out: OUT STD_LOGIC_VECTOR(68 DOWNTO 0)
         s1 : IN STD_LOGIC;
         s2 : IN STD_LOGIC;
         v1: IN STD_LOGIC
@@ -452,14 +451,12 @@ end component;
    signal sync, s1, s2 :  std_logic; -- Sync indicates that the timing is at T1P_T1 -- SD. indicate that there is a rmw instruction in the instruction register to the decode rom (also an indication to show in what cycle it is the RWM)
    signal v1 :  std_logic; -- v1 is an indication for a BRK instruction
 
-   signal inv_res : std_logic;
-
-   signal resg : std_logic; -- from Interrupt to predecode
+   --
 
 
 
 begin
-  inv_res <= not res;
+
 
 --/*************************************************
 --*                    Signal Assignment           *
@@ -630,7 +627,7 @@ begin
 -- three phase clock generator
 clo: clock PORT MAP(
                       clk_25mhz,
-                      inv_res, -- external reset with not gate
+                      reset,
                       clk,
                       clk_2
                       );
@@ -860,7 +857,7 @@ int_ctl : interr_res PORT MAP(
                       clk_2,
                       nmi,
                       irq,
-                      res,    -- external reset
+                      res,
                       tcstate,
                       v1,
                       i,
@@ -869,9 +866,9 @@ int_ctl : interr_res PORT MAP(
                       i_1,
                       nmi_out,
                       irq_out,
-                      reset,
+                      res_out,
                       interrupt,
-                      resg,
+                      reset,
                       r_w
 );
 
