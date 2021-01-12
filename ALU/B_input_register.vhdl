@@ -1,4 +1,3 @@
--- Verified working!! Tom
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
@@ -9,10 +8,10 @@ ENTITY B_input_register IS
     reset : IN STD_LOGIC;
     db : IN STD_LOGIC_VECTOR(7 DOWNTO 0); -- data bus
     adl : IN STD_LOGIC_VECTOR(7 DOWNTO 0); -- addres bus
-    out_to_alu : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
-    inv_db_add : IN STD_LOGIC; -- use databus inverse
-    db_add : IN STD_LOGIC; -- use databus
-    adl_add : IN STD_LOGIC -- use addres line
+    out_to_alu : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); -- output to ALU
+    inv_db_add : IN STD_LOGIC; -- load databus inverse
+    db_add : IN STD_LOGIC; -- load databus
+    adl_add : IN STD_LOGIC -- load addres line
   );
 END ENTITY;
 

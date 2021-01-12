@@ -1,4 +1,3 @@
--- Verified working!! Tom
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
@@ -8,12 +7,12 @@ ENTITY A_input_register IS
     clk : IN STD_LOGIC;
     reset : IN STD_LOGIC;
     in_sb : IN STD_LOGIC_VECTOR(7 DOWNTO 0); -- databus in
-    out_alu : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); -- output to alu
-    o_add : IN STD_LOGIC; --Load all 0's
-    sb_add : IN STD_LOGIC --Load data from bus
+    out_alu : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); -- output to ALU
+    o_add : IN STD_LOGIC; --load all 0's
+    sb_add : IN STD_LOGIC --load data from SB
   );
 END ENTITY;
-ARCHITECTURE strucutural OF A_input_register IS
+ARCHITECTURE structural OF A_input_register IS
 
   COMPONENT register_8bit IS
     PORT (

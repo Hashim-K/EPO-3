@@ -6,24 +6,23 @@ ENTITY alu_logic IS
   PORT (
     a : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
     b : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
-    control : IN STD_LOGIC_VECTOR(11 DOWNTO 0); -- This is not efficent for number of wires maybe multiplex and demultiplax
-    --bit(0) = daa, not used atm since decimal
-    --bit(1) = i/addc or called carry in
-    --bit(2) = sums
-    --bit(3) = ands
-    --bit(4) = exors
-    --bit(5) = ors
-    --bit(6) = srs (lsr)
-    --bit(7) = sls (asl)
+    control : IN STD_LOGIC_VECTOR(11 DOWNTO 0);
+    --bit(0) = daa, not used since decimal is not implemented
+    --bit(1) = i/addc (carry in)
+    --bit(2) = sums (add)
+    --bit(3) = ands (and)
+    --bit(4) = exors (exor)
+    --bit(5) = ors (or)
+    --bit(6) = srs (shift right)
+    --bit(7) = sls (shift left)
     --bit(8) = rotate right
     --bit(9) = rotate left
-    --bit(10) = pass1 (rega)
-    --bit(11) = pass2 (regb)
-    o : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); --output signal
-    avr : OUT STD_LOGIC; --overflow
-    acr : OUT STD_LOGIC; --carry out
-    hc : OUT STD_LOGIC --half carry out, not used atm since decimal
-
+    --bit(10) = pass1 (register a)
+    --bit(11) = pass2 (register b)
+    o : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); --ALU output signal to adder hold register
+    avr : OUT STD_LOGIC; --overflow flag
+    acr : OUT STD_LOGIC; --carry out flag
+    hc : OUT STD_LOGIC --half carry out flag, not used since decimal is not implemented
   );
 END ENTITY;
 
@@ -100,28 +99,28 @@ BEGIN
     o_adder WHEN "000000000110",
 
     -- Bitwise AND
-    o_and WHEN "000000001000", --DONE
+    o_and WHEN "000000001000",
 
     -- Bitwise XOR
-    o_xor WHEN "000000010000", --DONE
+    o_xor WHEN "000000010000",
 
     -- Bitwise OR
-    o_or WHEN "000000100000", --DONE
+    o_or WHEN "000000100000",
 
     --Shift: shift right/left, rotate right/left
     o_shift WHEN "000001000000",
     o_shift WHEN "000010000000",
     o_shift WHEN "000100000000",
-    o_shift when "000100000010",
-    o_shift WHEN "001000000000", 
-    o_shift when "001000000010", --DONE
+    o_shift WHEN "000100000010",
+    o_shift WHEN "001000000000",
+    o_shift WHEN "001000000010",
 
     --Pass: pass A/B
     o_pass WHEN "010000000000",
-    o_pass WHEN "100000000000", --DONE
+    o_pass WHEN "100000000000",
 
     "00000000" WHEN OTHERS;
 
-    hc <= '0';
+  hc <= '0'; -- pulled to low since it is not implemented
 
 END ARCHITECTURE;
