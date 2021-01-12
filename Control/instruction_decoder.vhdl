@@ -14,7 +14,7 @@ entity instruction_decoder is
       sv: IN STD_LOGIC;
       acr : IN STD_LOGIC;
       cin : IN STD_LOGIC;
-      control_out: OUT STD_LOGIC_VECTOR(68 DOWNTO 0)
+      controtl_out: OUT STD_LOGIC_VECTOR(68 DOWNTO 0)
   );
 end entity;
 
@@ -26,83 +26,83 @@ architecture arch of instruction_decoder is
   -- 3. Check BBB
   signal dl_db, dl_adl, dl_adh, zero_adh_0, zero_adh_17, adh_abh, adl_abl, pcl_pcl, adl_pcl, one_pc, pcl_db, pcl_adl, pch_pch, adh_pch, pch_db, pch_adh,
   sb_adh, adh_sb, sb_db, db_sb, zero_adl_0, zero_adl_1, zero_adl_2, s_adl, sb_s, s_s, s_sb, inv_db_add, db_add, adl_add, dsa, daa, one_addc, sums, ands,
-  xors, ors, lsr, asl, ror, rol, pass1_a, pass2_b, add_adl, add_sb_06, add_sb_7, zero_add, sb_add, sb_ac, ad_db, ac_sb, sb_x, x_sb, sb_y, y_sb,
+  xors, ors, lsr, asl, rotr, rotl, pass1_a, pass2_b, add_adl, add_sb_06, add_sb_7, zero_add, sb_add, sb_ac, ad_db, ac_sb, sb_x, x_sb, sb_y, y_sb,
   p_db, db0_c, ir5_c, acr_c, dbi_z, dbz_z, db2_1, ir5_1, db3_d, ir5_d, db6_v, avr_v, one_v, db7_n: std_logic;
 
 begin
-  dl_db <= control_out(0);
-  dl_adl <= control_out(1);
-  dl_adh <= control_out(2);
-  zero_adh_0 <= control_out(3);
-  zero_adh_17 <= control_out(4);
-  adh_abh <= control_out(5);
-  adl_abl <= control_out(6);
-  pcl_pcl <= control_out(7);
-  adl_pcl <= control_out(8);
-  one_pc <= control_out(9);
-  pcl_db <= control_out(10);
-  pcl_adl <= control_out(11);
-  pch_pch <= control_out(12);
-  adh_pch <= control_out(13);
-  pch_db <= control_out(14);
-  pch_adh <= control_out(15);
-  sb_adh <= control_out(16);
-  adh_sb <= control_out(17);
-  sb_db <= control_out(18);
-  db_sb <= control_out(19);
-  zero_adl_0 <= control_out(20);
-  zero_adl_1 <= control_out(21);
-  zero_adl_2 <= control_out(22);
-  s_adl <= control_out(23);
-  sb_s <= control_out(24);
-  s_s <= control_out(25);
-  s_sb <= control_out(26);
-  inv_db_add <= control_out(27);
-  db_add <= control_out(28);
-  adl_add <= control_out(29);
-  dsa <= control_out(30);
-  daa <= control_out(31);
-  one_addc <= control_out(32);
-  sums <= control_out(33);
-  ands <= control_out(34);
-  xors <= control_out(35);
-  ors <= control_out(36);
-  lsr <= control_out(37);
-  asl <= control_out(38);
-  ror <= control_out(39);
-  rol <= control_out(40);
-  pass1_a <= control_out(41);
-  pass2_b <= control_out(42);
-  add_adl <= control_out(43);
-  add_sb_06 <= control_out(44);
-  add_sb_7 <= control_out(45);
-  zero_add <= control_out(46);
-  sb_add <= control_out(47);
-  sb_ac <= control_out(48);
-  ac_db <= control_out(49);
-  ac_sb <= control_out(50);
-  sb_x <= control_out(51);
-  x_sb <= control_out(52);
-  sb_y <= control_out(53);
-  y_sb <= control_out(54);
-  p_db <= control_out(55);
-  db0_c <= control_out(56);
-  ir5_c <= control_out(57);
-  acr_c <= control_out(58);
-  dbi_z <= control_out(59);
-  dbz_z <= control_out(60);
-  db2_1 <= control_out(61);
-  ir5_1 <= control_out(62);
-  db3_d <= control_out(63);
-  ir5_d <= control_out(64);
-  db6_v <= control_out(65);
-  avr_v <= control_out(66);
-  one_v <= control_out(67);
-  db7_n <= control_out(68);
+  dl_db <= controtl_out(0);
+  dl_adl <= controtl_out(1);
+  dl_adh <= controtl_out(2);
+  zero_adh_0 <= controtl_out(3);
+  zero_adh_17 <= controtl_out(4);
+  adh_abh <= controtl_out(5);
+  adl_abl <= controtl_out(6);
+  pcl_pcl <= controtl_out(7);
+  adl_pcl <= controtl_out(8);
+  one_pc <= controtl_out(9);
+  pcl_db <= controtl_out(10);
+  pcl_adl <= controtl_out(11);
+  pch_pch <= controtl_out(12);
+  adh_pch <= controtl_out(13);
+  pch_db <= controtl_out(14);
+  pch_adh <= controtl_out(15);
+  sb_adh <= controtl_out(16);
+  adh_sb <= controtl_out(17);
+  sb_db <= controtl_out(18);
+  db_sb <= controtl_out(19);
+  zero_adl_0 <= controtl_out(20);
+  zero_adl_1 <= controtl_out(21);
+  zero_adl_2 <= controtl_out(22);
+  s_adl <= controtl_out(23);
+  sb_s <= controtl_out(24);
+  s_s <= controtl_out(25);
+  s_sb <= controtl_out(26);
+  inv_db_add <= controtl_out(27);
+  db_add <= controtl_out(28);
+  adl_add <= controtl_out(29);
+  dsa <= controtl_out(30);
+  daa <= controtl_out(31);
+  one_addc <= controtl_out(32);
+  sums <= controtl_out(33);
+  ands <= controtl_out(34);
+  xors <= controtl_out(35);
+  ors <= controtl_out(36);
+  lsr <= controtl_out(37);
+  asl <= controtl_out(38);
+  rotr <= controtl_out(39);
+  rotl <= controtl_out(40);
+  pass1_a <= controtl_out(41);
+  pass2_b <= controtl_out(42);
+  add_adl <= controtl_out(43);
+  add_sb_06 <= controtl_out(44);
+  add_sb_7 <= controtl_out(45);
+  zero_add <= controtl_out(46);
+  sb_add <= controtl_out(47);
+  sb_ac <= controtl_out(48);
+  ac_db <= controtl_out(49);
+  ac_sb <= controtl_out(50);
+  sb_x <= controtl_out(51);
+  x_sb <= controtl_out(52);
+  sb_y <= controtl_out(53);
+  y_sb <= controtl_out(54);
+  p_db <= controtl_out(55);
+  db0_c <= controtl_out(56);
+  ir5_c <= controtl_out(57);
+  acr_c <= controtl_out(58);
+  dbi_z <= controtl_out(59);
+  dbz_z <= controtl_out(60);
+  db2_1 <= controtl_out(61);
+  ir5_1 <= controtl_out(62);
+  db3_d <= controtl_out(63);
+  ir5_d <= controtl_out(64);
+  db6_v <= controtl_out(65);
+  avr_v <= controtl_out(66);
+  one_v <= controtl_out(67);
+  db7_n <= controtl_out(68);
 
-  Control : process(tcstate)
+  Controtl : process(tcstate)
   begin
-    control_out<="000000000000000000000000000000000000000000000000000000000000000000000";
+    controtl_out<="000000000000000000000000000000000000000000000000000000000000000000000";
   case ir_in(1 downto 0) is
 
     ----------------------------------- cc = 00 --------------------------------------
@@ -2007,7 +2007,7 @@ begin
         --001xxx11
         when "001" =>
           case ir_in(4 downto 2) is
-            -- 26 : ROL Z-Page
+            -- 26 : rotl Z-Page
             when "001" =>
               --Timing: T2
               if (tcstate(2)='0') then
@@ -2025,7 +2025,7 @@ begin
               if (tcstate(1)='0') then
               end if;
 
-            -- 2A : ROL A
+            -- 2A : rotl A
             when "010" =>
               --Timing: T2
               if (tcstate(2)='0') then
@@ -2037,7 +2037,7 @@ begin
               if (tcstate(1)='0') then
               end if;
 
-            -- 2E : ROL ABS
+            -- 2E : rotl ABS
             when "011" =>
               --Timing: T2
               if (tcstate(2)='0') then
@@ -2058,7 +2058,7 @@ begin
               if (tcstate(1)='0') then
               end if;
 
-            -- 36 : ROL Z-Page,X
+            -- 36 : rotl Z-Page,X
             when "101" =>
               --Timing: T2
               if (tcstate(2)='0') then
@@ -2079,7 +2079,7 @@ begin
               if (tcstate(1)='0') then
               end if;
 
-            -- 3E : ROL ABS,X
+            -- 3E : rotl ABS,X
             when "111" =>
               --Timing: T2
               if (tcstate(2)='0') then
@@ -2213,7 +2213,7 @@ begin
         --011xxx11
         when "011" =>
           case ir_in(4 downto 2) is
-            -- 66 : ROR Z-Page
+            -- 66 : rotr Z-Page
             when "001" =>
               --Timing: T2
               if (tcstate(2)='0') then
@@ -2231,7 +2231,7 @@ begin
               if (tcstate(1)='0') then
               end if;
 
-            -- 6A : ROR A
+            -- 6A : rotr A
             when "010" =>
               --Timing: T2
               if (tcstate(2)='0') then
@@ -2243,7 +2243,7 @@ begin
               if (tcstate(1)='0') then
               end if;
 
-            -- 6E : ROR ABS
+            -- 6E : rotr ABS
             when "011" =>
               --Timing: T2
               if (tcstate(2)='0') then
@@ -2264,7 +2264,7 @@ begin
               if (tcstate(1)='0') then
               end if;
 
-            -- 76 : ROR Z-Page,X
+            -- 76 : rotr Z-Page,X
             when "101" =>
               --Timing: T2
               if (tcstate(2)='0') then
@@ -2285,7 +2285,7 @@ begin
               if (tcstate(1)='0') then
               end if;
 
-            -- 7E : ROR ABS,X
+            -- 7E : rotr ABS,X
             when "111" =>
               --Timing: T2
               if (tcstate(2)='0') then
