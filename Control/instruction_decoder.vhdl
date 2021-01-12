@@ -28,85 +28,86 @@ architecture arch of instruction_decoder is
   -- 1. Check CC
   -- 2. Check AAA
   -- 3. Check BBB
+  signal control_temp_out : std_logic_vector(68 DOWNTO 0);
   signal dl_db, dl_adl, dl_adh, zero_adh_0, zero_adh_17, adh_abh, adl_abl, pcl_pcl, adl_pcl, one_pc, pcl_db, pcl_adl, pch_pch, adh_pch, pch_db, pch_adh,
   sb_adh, adh_sb, sb_db, db_sb, zero_adl_0, zero_adl_1, zero_adl_2, s_adl, sb_s, s_s, s_sb, inv_db_add, db_add, adl_add, dsa, daa, one_addc, sums, ands,
   xors, ors, lsr, asl, rotr, rotl, pass1_a, pass2_b, add_adl, add_sb_06, add_sb_7, zero_add, sb_add, sb_ac, ad_db, ac_sb, sb_x, x_sb, sb_y, y_sb,
   p_db, db0_c, ir5_c, acr_c, dbi_z, dbz_z, db2_1, ir5_1, db3_d, ir5_d, db6_v, avr_v, one_v, db7_n: std_logic;
 
 begin
-  dl_db <= control_out(0);
-  dl_adl <= control_out(1);
-  dl_adh <= control_out(2);
-  zero_adh_0 <= control_out(3);
-  zero_adh_17 <= control_out(4);
-  adh_abh <= control_out(5);
-  adl_abl <= control_out(6);
-  pcl_pcl <= control_out(7);
-  adl_pcl <= control_out(8);
-  one_pc <= control_out(9);
-  pcl_db <= control_out(10);
-  pcl_adl <= control_out(11);
-  pch_pch <= control_out(12);
-  adh_pch <= control_out(13);
-  pch_db <= control_out(14);
-  pch_adh <= control_out(15);
-  sb_adh <= control_out(16);
-  adh_sb <= control_out(17);
-  sb_db <= control_out(18);
-  db_sb <= control_out(19);
-  zero_adl_0 <= control_out(20);
-  zero_adl_1 <= control_out(21);
-  zero_adl_2 <= control_out(22);
-  s_adl <= control_out(23);
-  sb_s <= control_out(24);
-  s_s <= control_out(25);
-  s_sb <= control_out(26);
-  inv_db_add <= control_out(27);
-  db_add <= control_out(28);
-  adl_add <= control_out(29);
-  dsa <= control_out(30);
-  daa <= control_out(31);
-  one_addc <= control_out(32);
-  sums <= control_out(33);
-  ands <= control_out(34);
-  xors <= control_out(35);
-  ors <= control_out(36);
-  lsr <= control_out(37);
-  asl <= control_out(38);
-  rotr <= control_out(39);
-  rotl <= control_out(40);
-  pass1_a <= control_out(41);
-  pass2_b <= control_out(42);
-  add_adl <= control_out(43);
-  add_sb_06 <= control_out(44);
-  add_sb_7 <= control_out(45);
-  zero_add <= control_out(46);
-  sb_add <= control_out(47);
-  sb_ac <= control_out(48);
-  ac_db <= control_out(49);
-  ac_sb <= control_out(50);
-  sb_x <= control_out(51);
-  x_sb <= control_out(52);
-  sb_y <= control_out(53);
-  y_sb <= control_out(54);
-  p_db <= control_out(55);
-  db0_c <= control_out(56);
-  ir5_c <= control_out(57);
-  acr_c <= control_out(58);
-  dbi_z <= control_out(59);
-  dbz_z <= control_out(60);
-  db2_1 <= control_out(61);
-  ir5_1 <= control_out(62);
-  db3_d <= control_out(63);
-  ir5_d <= control_out(64);
-  db6_v <= control_out(65);
-  avr_v <= control_out(66);
-  one_v <= control_out(67);
-  db7_n <= control_out(68);
+  dl_db <= control_temp_out(0);
+  dl_adl <= control_temp_out(1);
+  dl_adh <= control_temp_out(2);
+  zero_adh_0 <= control_temp_out(3);
+  zero_adh_17 <= control_temp_out(4);
+  adh_abh <= control_temp_out(5);
+  adl_abl <= control_temp_out(6);
+  pcl_pcl <= control_temp_out(7);
+  adl_pcl <= control_temp_out(8);
+  one_pc <= control_temp_out(9);
+  pcl_db <= control_temp_out(10);
+  pcl_adl <= control_temp_out(11);
+  pch_pch <= control_temp_out(12);
+  adh_pch <= control_temp_out(13);
+  pch_db <= control_temp_out(14);
+  pch_adh <= control_temp_out(15);
+  sb_adh <= control_temp_out(16);
+  adh_sb <= control_temp_out(17);
+  sb_db <= control_temp_out(18);
+  db_sb <= control_temp_out(19);
+  zero_adl_0 <= control_temp_out(20);
+  zero_adl_1 <= control_temp_out(21);
+  zero_adl_2 <= control_temp_out(22);
+  s_adl <= control_temp_out(23);
+  sb_s <= control_temp_out(24);
+  s_s <= control_temp_out(25);
+  s_sb <= control_temp_out(26);
+  inv_db_add <= control_temp_out(27);
+  db_add <= control_temp_out(28);
+  adl_add <= control_temp_out(29);
+  dsa <= control_temp_out(30);
+  daa <= control_temp_out(31);
+  one_addc <= control_temp_out(32);
+  sums <= control_temp_out(33);
+  ands <= control_temp_out(34);
+  xors <= control_temp_out(35);
+  ors <= control_temp_out(36);
+  lsr <= control_temp_out(37);
+  asl <= control_temp_out(38);
+  rotr <= control_temp_out(39);
+  rotl <= control_temp_out(40);
+  pass1_a <= control_temp_out(41);
+  pass2_b <= control_temp_out(42);
+  add_adl <= control_temp_out(43);
+  add_sb_06 <= control_temp_out(44);
+  add_sb_7 <= control_temp_out(45);
+  zero_add <= control_temp_out(46);
+  sb_add <= control_temp_out(47);
+  sb_ac <= control_temp_out(48);
+  ac_db <= control_temp_out(49);
+  ac_sb <= control_temp_out(50);
+  sb_x <= control_temp_out(51);
+  x_sb <= control_temp_out(52);
+  sb_y <= control_temp_out(53);
+  y_sb <= control_temp_out(54);
+  p_db <= control_temp_out(55);
+  db0_c <= control_temp_out(56);
+  ir5_c <= control_temp_out(57);
+  acr_c <= control_temp_out(58);
+  dbi_z <= control_temp_out(59);
+  dbz_z <= control_temp_out(60);
+  db2_1 <= control_temp_out(61);
+  ir5_1 <= control_temp_out(62);
+  db3_d <= control_temp_out(63);
+  ir5_d <= control_temp_out(64);
+  db6_v <= control_temp_out(65);
+  avr_v <= control_temp_out(66);
+  one_v <= control_temp_out(67);
+  db7_n <= control_temp_out(68);
 
   Controtl : process(tcstate)
   begin
-    control_out<="000000000000000000000000000000000000000000000000000000000000000000000";
+    control_temp_out<="000000000000000000000000000000000000000000000000000000000000000000000";
   case ir_in(1 downto 0) is
 
     ----------------------------------- cc = 00 --------------------------------------
@@ -2709,7 +2710,7 @@ begin
 
   end case;
 
-
+  control_out <= control_temp_out;
   end process;
 
 end architecture;
