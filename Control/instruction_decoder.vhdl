@@ -24,22 +24,22 @@ architecture arch of instruction_decoder is
   -- 1. Check CC
   -- 2. Check AAA
   -- 3. Check BBB
-  signal dl_db, dl_adl, dl_adh, 0_adh_0, 0_adh_17, adh_abh, adl_abl, pcl_pcl, adl_pcl, 1_pc, pcl_db, pcl_adl, pch_pch, adh_pch, pch_db, pch_adh,
-  sb_adh, adh_sb, sb_db, db_sb, 0_adl_0, 0_adl_1, 0_adl_2, s_adl, sb_s, s_s, s_sb, inv_db_add, db_add, adl_add, dsa, daa, 1_addc, sums, ands,
-  xors, ors, lsr, asl, ror, rol, pass1_a, pass2_b, add_adl, add_sb_06, add_sb_7, 0_add, sb_add, sb_ac, ad_db, ac_sb, sb_x, x_sb, sb_y, y_sb,
-  p_db, db0_c, ir5_c, acr_c, dbi_z, dbz_z, db2_1, ir5_1, db3_d, ir5_d, db6_v, avr_v, 1_v, db7_n: std_logic;
+  signal dl_db, dl_adl, dl_adh, zero_adh_0, zero_adh_17, adh_abh, adl_abl, pcl_pcl, adl_pcl, one_pc, pcl_db, pcl_adl, pch_pch, adh_pch, pch_db, pch_adh,
+  sb_adh, adh_sb, sb_db, db_sb, zero_adl_0, zero_adl_1, zero_adl_2, s_adl, sb_s, s_s, s_sb, inv_db_add, db_add, adl_add, dsa, daa, one_addc, sums, ands,
+  xors, ors, lsr, asl, ror, rol, pass1_a, pass2_b, add_adl, add_sb_06, add_sb_7, zero_add, sb_add, sb_ac, ad_db, ac_sb, sb_x, x_sb, sb_y, y_sb,
+  p_db, db0_c, ir5_c, acr_c, dbi_z, dbz_z, db2_1, ir5_1, db3_d, ir5_d, db6_v, avr_v, one_v, db7_n: std_logic;
 
 begin
   dl_db <= control_out(0);
   dl_adl <= control_out(1);
   dl_adh <= control_out(2);
-  0_adh_0 <= control_out(3);
-  0_adh_17 <= control_out(4);
+  zero_adh_0 <= control_out(3);
+  zero_adh_17 <= control_out(4);
   adh_abh <= control_out(5);
   adl_abl <= control_out(6);
   pcl_pcl <= control_out(7);
   adl_pcl <= control_out(8);
-  1_pc <= control_out(9);
+  one_pc <= control_out(9);
   pcl_db <= control_out(10);
   pcl_adl <= control_out(11);
   pch_pch <= control_out(12);
@@ -50,9 +50,9 @@ begin
   adh_sb <= control_out(17);
   sb_db <= control_out(18);
   db_sb <= control_out(19);
-  0_adl_0 <= control_out(20);
-  0_adl_1 <= control_out(21);
-  0_adl_2 <= control_out(22);
+  zero_adl_0 <= control_out(20);
+  zero_adl_1 <= control_out(21);
+  zero_adl_2 <= control_out(22);
   s_adl <= control_out(23);
   sb_s <= control_out(24);
   s_s <= control_out(25);
@@ -62,7 +62,7 @@ begin
   adl_add <= control_out(29);
   dsa <= control_out(30);
   daa <= control_out(31);
-  1_addc <= control_out(32);
+  one_addc <= control_out(32);
   sums <= control_out(33);
   ands <= control_out(34);
   xors <= control_out(35);
@@ -76,7 +76,7 @@ begin
   add_adl <= control_out(43);
   add_sb_06 <= control_out(44);
   add_sb_7 <= control_out(45);
-  0_add <= control_out(46);
+  zero_add <= control_out(46);
   sb_add <= control_out(47);
   sb_ac <= control_out(48);
   ac_db <= control_out(49);
@@ -97,7 +97,7 @@ begin
   ir5_d <= control_out(64);
   db6_v <= control_out(65);
   avr_v <= control_out(66);
-  1_v <= control_out(67);
+  one_v <= control_out(67);
   db7_n <= control_out(68);
 
   Control : process(tcstate)
@@ -1502,7 +1502,7 @@ begin
                 adh_abh<=1;
                 adl_abl<=1;
                 pcl_pcl<=1;
-                1_pc<=1;
+                one_pc<=1;
                 pcl_adl<=1;
                 pch_pch<=1;
                 pch_adh<=1;
@@ -1514,7 +1514,7 @@ begin
                 adh_abh<=1;
                 adl_abl<=1;
                 pcl_pcl<=1;
-                1_pc<=1;
+                one_pc<=1;
                 pcl_adl<=1;
                 pch_pch<=1;
                 pch_adh<=1;
