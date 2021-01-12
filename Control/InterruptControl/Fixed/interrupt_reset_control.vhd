@@ -58,7 +58,7 @@ begin
 
 --I	<= I_in;
 
-process (clk1, clk2, res, RESP, timer, res_rec)
+process (clk2, res)
 begin
 	-- RES:
 	if (rising_edge(clk2)) then
@@ -67,6 +67,24 @@ begin
 		elsif (res = '1') then
 			res_rec	<= '1';		-- Clear: clear recognition			-- iguess
 		end if;
+	end if;
+end process;
+
+process (clk1, res_rec)
+begin
+	if (rising_edge(clk1)) then
+		if (res_rec = '0') then -- or (RESG = '1' and res = '0')) then								-- i guess?
+			RESP	<= '1';		-- Stage 1: set 6502 clock to T0 state in 1 cycle @ phi1
+		elsif (res_rec = '1') then
+			RESP	<= '0';		-- Clear: clear stage 1
+		--elsif (res = '1' and RESG = '1') then
+		--	res_rec	<= '1';
+		end if;
+	end if;
+end process;
+
+process(RESP, timer)
+begin
 		if (RESP = '1') then
 			RESG	<= '1';		-- Stage 2: putting 6502 into write disabled mode starting @ next phi1
 			r_w	<= '1';		-- write disable
@@ -81,27 +99,9 @@ begin
 			-- BRK_vector	<= RES';
 			out2	<= '0';
 		end if;
-	end if;
-
-	if (rising_edge(clk1)) then
-		if (res_rec = '0') then -- or (RESG = '1' and res = '0')) then								-- i guess?
-			RESP	<= '1';		-- Stage 1: set 6502 clock to T0 state in 1 cycle @ phi1
-		elsif (res_rec = '1') then
-			RESP	<= '0';		-- Clear: clear stage 1
-		--elsif (res = '1' and RESG = '1') then
-		--	res_rec	<= '1';
-		end if;
-		if (RESP = '0' and timer(0) = '0') then
-			RESG	<= '0';		-- Clear: clear stage 2 if stage 1 is cleared before or while T6 phi1
-			r_w	<= '0';
-			--BRK_vector	<= RES';
-			out2	<= '0';
-		end if;
-	end if;
 end process;
 
-
-process (clk1, clk2, irq, nmi, timer, INTG, NMIG, irq2, nmi2, irq_rec, nmi_rec, i, IRQP, blk, bcr, page_cross, v1)
+process (clk2, irq, nmi, timer, INTG, NMIG, irq2, nmi2, irq_rec, nmi_rec, i, IRQP, blk, bcr, page_cross, v1)
 begin
 	if (rising_edge(clk2)) then
 	-- IRQ:
@@ -115,7 +115,7 @@ begin
 		else
 			blk	<= '0';
 		end if;
-			
+
 	-- NMI:
 		if (nmi = '0') then
 			nmi_rec	<= '1';		-- Stage 0: recognition
@@ -160,7 +160,10 @@ begin
 			end if;
 		end if;
 	end if;
+end process;
 
+process (clk1, irq, nmi, timer, INTG, NMIG, irq2, nmi2, irq_rec, nmi_rec, i, IRQP, blk, bcr, page_cross, v1)
+begin
 	if (rising_edge(clk1)) then
 	-- IRQ:
 		if (irq_rec = '1') then
