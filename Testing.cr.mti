@@ -1,56 +1,11 @@
-C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_or.vhdl {1 {vcom -work work -2002 -explicit -stats=none C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_or.vhdl
+C:/Users/stefa/Documents/GitHub/EPO-3/ALU/register_8bit.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/stefa/Documents/GitHub/EPO-3/ALU/register_8bit.vhd
 Model Technology ModelSim PE Student Edition vcom 10.4a Compiler 2015.03 Apr  7 2015
 -- Loading package STANDARD
 -- Loading package TEXTIO
 -- Loading package std_logic_1164
 -- Loading package NUMERIC_STD
--- Compiling entity eight_bit_or
--- Compiling architecture behavioural of eight_bit_or
-
-} {} {}} C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_xor.vhdl {1 {vcom -work work -2002 -explicit -stats=none C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_xor.vhdl
-Model Technology ModelSim PE Student Edition vcom 10.4a Compiler 2015.03 Apr  7 2015
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Loading package NUMERIC_STD
--- Compiling entity eight_bit_xor
--- Compiling architecture behavioural of eight_bit_xor
-
-} {} {}} C:/Users/stefa/Documents/GitHub/EPO-3/ALU/Testbench/alu_logic_tb.vhdl {1 {vcom -work work -2002 -explicit -stats=none C:/Users/stefa/Documents/GitHub/EPO-3/ALU/Testbench/alu_logic_tb.vhdl
-Model Technology ModelSim PE Student Edition vcom 10.4a Compiler 2015.03 Apr  7 2015
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Loading package NUMERIC_STD
--- Compiling entity alu_logic_tb
--- Compiling architecture arch of alu_logic_tb
-
-} {} {}} C:/Users/stefa/Documents/GitHub/EPO-3/ALU/alu_logic.vhdl {1 {vcom -work work -2002 -explicit -stats=none C:/Users/stefa/Documents/GitHub/EPO-3/ALU/alu_logic.vhdl
-Model Technology ModelSim PE Student Edition vcom 10.4a Compiler 2015.03 Apr  7 2015
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Loading package NUMERIC_STD
--- Compiling entity alu_logic
--- Compiling architecture structural of alu_logic
-
-} {} {}} C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_shift.vhdl {1 {vcom -work work -2002 -explicit -stats=none C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_shift.vhdl
-Model Technology ModelSim PE Student Edition vcom 10.4a Compiler 2015.03 Apr  7 2015
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Loading package NUMERIC_STD
--- Compiling entity eight_bit_shift
--- Compiling architecture behavioural of eight_bit_shift
-
-} {} {}} C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_and.vhdl {1 {vcom -work work -2002 -explicit -stats=none C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_and.vhdl
-Model Technology ModelSim PE Student Edition vcom 10.4a Compiler 2015.03 Apr  7 2015
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Loading package NUMERIC_STD
--- Compiling entity eight_bit_and
--- Compiling architecture behavioural of eight_bit_and
+-- Compiling entity register_8bit
+-- Compiling architecture behaviour of register_8bit
 
 } {} {}} C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_pass.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_pass.vhd
 Model Technology ModelSim PE Student Edition vcom 10.4a Compiler 2015.03 Apr  7 2015
@@ -61,14 +16,125 @@ Model Technology ModelSim PE Student Edition vcom 10.4a Compiler 2015.03 Apr  7 
 -- Compiling entity eight_bit_pass
 -- Compiling architecture behavioural of eight_bit_pass
 
+} {} {}} C:/Users/stefa/Documents/GitHub/EPO-3/ALU/adder_hold_register.vhdl {1 {vcom -work work -2002 -explicit -stats=none C:/Users/stefa/Documents/GitHub/EPO-3/ALU/adder_hold_register.vhdl
+Model Technology ModelSim PE Student Edition vcom 10.4a Compiler 2015.03 Apr  7 2015
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity adder_hold_register
+-- Compiling architecture arch of adder_hold_register
+
+} {} {}} C:/Users/stefa/Documents/GitHub/EPO-3/CLK/clock.vhdl {1 {vcom -work work -2002 -explicit -stats=none C:/Users/stefa/Documents/GitHub/EPO-3/CLK/clock.vhdl
+Model Technology ModelSim PE Student Edition vcom 10.4a Compiler 2015.03 Apr  7 2015
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity clock
+-- Compiling architecture arch of clock
+
+} {} {}} C:/Users/stefa/Documents/GitHub/EPO-3/ALU/A_input_register.vhdl {1 {vcom -work work -2002 -explicit -stats=none C:/Users/stefa/Documents/GitHub/EPO-3/ALU/A_input_register.vhdl
+Model Technology ModelSim PE Student Edition vcom 10.4a Compiler 2015.03 Apr  7 2015
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity A_input_register
+-- Compiling architecture structural of A_input_register
+
+} {} {}} C:/Users/stefa/Documents/GitHub/EPO-3/ALU/B_input_register.vhdl {1 {vcom -work work -2002 -explicit -stats=none C:/Users/stefa/Documents/GitHub/EPO-3/ALU/B_input_register.vhdl
+Model Technology ModelSim PE Student Edition vcom 10.4a Compiler 2015.03 Apr  7 2015
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity B_input_register
+-- Compiling architecture structural of B_input_register
+
 } {} {}} C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_adder.vhdl {1 {vcom -work work -2002 -explicit -stats=none C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_adder.vhdl
 Model Technology ModelSim PE Student Edition vcom 10.4a Compiler 2015.03 Apr  7 2015
 -- Loading package STANDARD
 -- Loading package TEXTIO
 -- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
 -- Loading package std_logic_arith
 -- Loading package STD_LOGIC_UNSIGNED
 -- Compiling entity eight_bit_adder
 -- Compiling architecture behaviour of eight_bit_adder
+
+} {} {}} C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_xor.vhdl {1 {vcom -work work -2002 -explicit -stats=none C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_xor.vhdl
+Model Technology ModelSim PE Student Edition vcom 10.4a Compiler 2015.03 Apr  7 2015
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity eight_bit_xor
+-- Compiling architecture behavioural of eight_bit_xor
+
+} {} {}} C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_or.vhdl {1 {vcom -work work -2002 -explicit -stats=none C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_or.vhdl
+Model Technology ModelSim PE Student Edition vcom 10.4a Compiler 2015.03 Apr  7 2015
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity eight_bit_or
+-- Compiling architecture behavioural of eight_bit_or
+
+} {} {}} C:/Users/stefa/Documents/GitHub/EPO-3/ALU/alu_logic.vhdl {1 {vcom -work work -2002 -explicit -stats=none C:/Users/stefa/Documents/GitHub/EPO-3/ALU/alu_logic.vhdl
+Model Technology ModelSim PE Student Edition vcom 10.4a Compiler 2015.03 Apr  7 2015
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity alu_logic
+-- Compiling architecture structural of alu_logic
+
+} {} {}} C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_and.vhdl {1 {vcom -work work -2002 -explicit -stats=none C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_and.vhdl
+Model Technology ModelSim PE Student Edition vcom 10.4a Compiler 2015.03 Apr  7 2015
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity eight_bit_and
+-- Compiling architecture behavioural of eight_bit_and
+
+} {} {}} C:/Users/stefa/Documents/GitHub/EPO-3/ALU/alu.vhdl {1 {vcom -work work -2002 -explicit -stats=none C:/Users/stefa/Documents/GitHub/EPO-3/ALU/alu.vhdl
+Model Technology ModelSim PE Student Edition vcom 10.4a Compiler 2015.03 Apr  7 2015
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity alu
+-- Compiling architecture structural of alu
+
+} {} {}} C:/Users/stefa/Documents/GitHub/EPO-3/ALU/Testbench/eight_bit_adder_tb.vhdl {1 {vcom -work work -2002 -explicit -stats=none C:/Users/stefa/Documents/GitHub/EPO-3/ALU/Testbench/eight_bit_adder_tb.vhdl
+Model Technology ModelSim PE Student Edition vcom 10.4a Compiler 2015.03 Apr  7 2015
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package std_logic_arith
+-- Loading package STD_LOGIC_UNSIGNED
+-- Compiling entity eight_bit_adder_tb
+-- Compiling architecture structural of eight_bit_adder_tb
+
+} {} {}} C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_shift.vhdl {1 {vcom -work work -2002 -explicit -stats=none C:/Users/stefa/Documents/GitHub/EPO-3/ALU/8_bit_shift.vhdl
+Model Technology ModelSim PE Student Edition vcom 10.4a Compiler 2015.03 Apr  7 2015
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity eight_bit_shift
+-- Compiling architecture behavioural of eight_bit_shift
+
+} {} {}} C:/Users/stefa/Documents/GitHub/EPO-3/ALU/Testbench/alu_logic_tb.vhdl {1 {vcom -work work -2002 -explicit -stats=none C:/Users/stefa/Documents/GitHub/EPO-3/ALU/Testbench/alu_logic_tb.vhdl
+Model Technology ModelSim PE Student Edition vcom 10.4a Compiler 2015.03 Apr  7 2015
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity alu_logic_tb
+-- Compiling architecture arch of alu_logic_tb
 
 } {} {}}
