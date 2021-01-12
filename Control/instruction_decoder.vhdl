@@ -31,7 +31,7 @@ architecture arch of instruction_decoder is
   signal control_temp_out : std_logic_vector(68 DOWNTO 0);
   signal dl_db, dl_adl, dl_adh, zero_adh_0, zero_adh_17, adh_abh, adl_abl, pcl_pcl, adl_pcl, one_pc, pcl_db, pcl_adl, pch_pch, adh_pch, pch_db, pch_adh,
   sb_adh, adh_sb, sb_db, db_sb, zero_adl_0, zero_adl_1, zero_adl_2, s_adl, sb_s, s_s, s_sb, inv_db_add, db_add, adl_add, dsa, daa, one_addc, sums, ands,
-  xors, ors, lsr, asl, rotr, rotl, pass1_a, pass2_b, add_adl, add_sb_06, add_sb_7, zero_add, sb_add, sb_ac, ad_db, ac_sb, sb_x, x_sb, sb_y, y_sb,
+  xors, ors, lsr, asl, rotr, rotl, pass1_a, pass2_b, add_adl, add_sb_06, add_sb_7, zero_add, sb_add, sb_ac, ac_db, ac_sb, sb_x, x_sb, sb_y, y_sb,
   p_db, db0_c, ir5_c, acr_c, dbi_z, dbz_z, db2_1, ir5_1, db3_d, ir5_d, db6_v, avr_v, one_v, db7_n: std_logic;
 
 begin
@@ -132,7 +132,7 @@ begin
               if (tcstate(5)='0') then
               end if;
               --Timing: T6
-              if (tcstate(0)='1'&tcstate(1)='1'&tcstate(2)='1'&tcstate(3)='1'&tcstate(4)='1'&tcstate(5)='1') then
+              if (tcstate(0)='1' and tcstate(1)='1' and tcstate(2)='1' and tcstate(3)='1' and tcstate(4)='1' and tcstate(5)='1') then
               end if;
               --Timing: T0
               if (tcstate(0)='0') then
@@ -1503,29 +1503,29 @@ begin
             when "010" =>
               --Timing: T0
               if (tcstate(0)='0') then
-                dl_db<=1;
-                adh_abh<=1;
-                adl_abl<=1;
-                pcl_pcl<=1;
-                one_pc<=1;
-                pcl_adl<=1;
-                pch_pch<=1;
-                pch_adh<=1;
-                db_sb<=1;
-                sb_ac<=1;
+                dl_db<='1';
+                adh_abh<='1';
+                adl_abl<='1';
+                pcl_pcl<='1';
+                one_pc<='1';
+                pcl_adl<='1';
+                pch_pch<='1';
+                pch_adh<='1';
+                db_sb<='1';
+                sb_ac<='1';
               end if;
               --Timing: T1
               if (tcstate(1)='0') then
-                adh_abh<=1;
-                adl_abl<=1;
-                pcl_pcl<=1;
-                one_pc<=1;
-                pcl_adl<=1;
-                pch_pch<=1;
-                pch_adh<=1;
-                ac_db<=1;
-                dbz_z<=1;
-                db7_n<=1;
+                adh_abh<='1';
+                adl_abl<='1';
+                pcl_pcl<='1';
+                one_pc<='1';
+                pcl_adl<='1';
+                pch_pch<='1';
+                pch_adh<='1';
+                ac_db<='1';
+                dbz_z<='1';
+                db7_n<='1';
               end if;
 
             -- AD : LDA ABS
@@ -1996,7 +1996,7 @@ begin
               if (tcstate(5)='0') then
               end if;
               --Timing: T6
-              if (tcstate(0)='1'&tcstate(1)='1'&tcstate(2)='1'&tcstate(3)='1'&tcstate(4)='1'&tcstate(5)='1') then
+              if (tcstate(0)='1' and tcstate(1)='1' and tcstate(2)='1' and tcstate(3)='1' and tcstate(4)='1' and tcstate(5)='1') then
               end if;
               --Timing: T0
               if (tcstate(0)='0') then
@@ -2099,7 +2099,7 @@ begin
               if (tcstate(5)='0') then
               end if;
               --Timing: T6
-              if (tcstate(0)='1'&tcstate(1)='1'&tcstate(2)='1'&tcstate(3)='1'&tcstate(4)='1'&tcstate(5)='1') then
+              if (tcstate(0)='1' and tcstate(1)='1' and tcstate(2)='1' and tcstate(3)='1' and tcstate(4)='1' and tcstate(5)='1') then
               end if;
               --Timing: T0
               if (tcstate(0)='0') then
@@ -2202,7 +2202,7 @@ begin
               if (tcstate(5)='0') then
               end if;
               --Timing: T6
-              if (tcstate(0)='1'&tcstate(1)='1'&tcstate(2)='1'&tcstate(3)='1'&tcstate(4)='1'&tcstate(5)='1') then
+              if (tcstate(0)='1' and tcstate(1)='1' and tcstate(2)='1' and tcstate(3)='1' and tcstate(4)='1' and tcstate(5)='1') then
               end if;
               --Timing: T0
               if (tcstate(0)='0') then
@@ -2305,7 +2305,7 @@ begin
               if (tcstate(5)='0') then
               end if;
               --Timing: T6
-              if (tcstate(0)='1'&tcstate(1)='1'&tcstate(2)='1'&tcstate(3)='1'&tcstate(4)='1'&tcstate(5)='1') then
+              if (tcstate(0)='1' and tcstate(1)='1' and tcstate(2)='1' and tcstate(3)='1' and tcstate(4)='1' and tcstate(5)='1') then
               end if;
               --Timing: T0
               if (tcstate(0)='0') then
@@ -2584,7 +2584,7 @@ begin
               if (tcstate(5)='0') then
               end if;
               --Timing: T6
-              if (tcstate(0)='1'&tcstate(1)='1'&tcstate(2)='1'&tcstate(3)='1'&tcstate(4)='1'&tcstate(5)='1') then
+              if (tcstate(0)='1' and tcstate(1)='1' and tcstate(2)='1' and tcstate(3)='1' and tcstate(4)='1' and tcstate(5)='1') then
               end if;
               --Timing: T0
               if (tcstate(0)='0') then
@@ -2687,7 +2687,7 @@ begin
               if (tcstate(5)='0') then
               end if;
               --Timing: T6
-              if (tcstate(0)='1'&tcstate(1)='1'&tcstate(2)='1'&tcstate(3)='1'&tcstate(4)='1'&tcstate(5)='1') then
+              if (tcstate(0)='1' and tcstate(1)='1' and tcstate(2)='1' and tcstate(3)='1' and tcstate(4)='1' and tcstate(5)='1') then
               end if;
               --Timing: T0
               if (tcstate(0)='0') then
