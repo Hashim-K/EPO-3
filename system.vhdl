@@ -19,11 +19,14 @@ architecture arch of system is
 
   component processor is
     port (
-    clk_25mhz : IN std_logic;
-    reset : IN std_logic;
-    adb_external : OUT std_logic_vector(7 downto 0);  -- External connection of the addres + data
-    adb_control : OUT std_logic_vector(1 downto 0);   -- Select the external register
-    db_external : IN std_logic_vector(7 downto 0)    -- External connection of the databus bus in
+    clk_25mhz : in std_logic;
+    nmi : in std_logic;
+    res : in std_logic;
+    irq : in std_logic;
+    sv  : in std_logic;
+    adb_external : out std_logic_vector(7 downto 0);  -- External connection of the addres + data
+    adb_control : out std_logic_vector(1 downto 0);   -- Select the external register
+    db_external : in std_logic_vector(7 downto 0)    -- External connection of the databus bus in
     );
   end component;
 
@@ -35,16 +38,18 @@ architecture arch of system is
     addres_data_in : IN std_logic_vector(7 downto 0);
     control : IN std_logic_vector(1 downto 0);
 
-    data : OUT std_logic_vector(7 downto 0)
+    data_out : OUT std_logic_vector(7 downto 0)
     );
   end component;
 
   signal addres_data, data : std_logic_vector(7 downto 0);
   signal control : std_logic_vector(1 downto 0);
+
+  signal nmi, res, irq, sv : std_logic;
 begin
 
 
-  pro : processor PORT MAP(clk_25mhz, reset, addres_data, control, data);
+  pro : processor PORT MAP(clk_25mhz, nmi, res, irq, sv, addres_data, control, data);
   mem : mem_dummy PORT MAP(clk_25mhz, reset, addres_data, control, data);
 
 end architecture;

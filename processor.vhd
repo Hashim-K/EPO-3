@@ -11,6 +11,7 @@ entity processor is
   res : in std_logic;
   irq : in std_logic;
   sv  : in std_logic;
+  r	  : in std_logic;
   adb_external : out std_logic_vector(7 downto 0);  -- External connection of the addres + data
   adb_control : out std_logic_vector(1 downto 0);   -- Select the external register
   db_external : in std_logic_vector(7 downto 0)    -- External connection of the databus bus in
@@ -149,21 +150,17 @@ end component;
 
   -- External addres register
   component mem_add_reg is -- output logic for external interfacint output first low addres, high addres, than data
-    port (
-    clk : IN std_logic;
-    reset : IN std_logic;
+    port (clk : in std_logic;
+          reset : in std_logic;
 
-    enable : IN std_logic; -- enable the transition This is ADH/ABH, ADL/ABL and DB/DOR
-    r_w   : IN std_logic;  -- Internal write write signal
-                            -- High= Read
-                            -- low = Write
+          enable : in std_logic; -- enable the transition
 
-    abl_in : IN std_logic_vector(7 downto 0); -- Addres bus low in
-    abh_in : IN std_logic_vector(7 downto 0); -- Addres bus High in
-    db_in : IN std_logic_vector(7 downto 0); -- Data bus in
+          abl_in : in std_logic_vector(7 downto 0); -- Addres bus low in
+          abh_in : in std_logic_vector(7 downto 0); -- Addres bus High in
+          db_in : in std_logic_vector(7 downto 0); -- Data bus in
 
-    o_to_extern : OUT std_logic_vector(7 downto 0); -- output to external component
-    control : OUT std_logic_vector(1 downto 0) -- multiplex data
+          o_to_extern : out std_logic_vector(7 downto 0); -- output to external component
+          control : out std_logic_vector(1 downto 0) -- multiplex data
     );
   end component;
 
@@ -208,8 +205,8 @@ end component;
         	nmi_out	  : out	std_logic;
         	irq_out	  : out	std_logic;
         	res_out	  : out	std_logic;
-        	interrupt	: out	std_logic; --IRQG
-        	reset	    : out	std_logic; --RESG
+        	interrupt_reset	: out	std_logic;
+        	reset	    : out	std_logic;
         	rw	      : out	std_logic
     );
   end component;
@@ -222,7 +219,7 @@ end component;
          ir_in: in std_logic_vector(7 downto 0);    -- Instruction register in
          tcstate: in std_logic_vector(5 downto 0);    -- Cycle select
          interrupt: in std_logic_vector(2 downto 0); --
-         ready: in std_logic;
+         rdy: in std_logic;
          r_w: out std_logic;
          sv: in std_logic;
          ACR : in std_logic;
@@ -272,9 +269,9 @@ end component;
 
   -- Pass Mosfets
     component pass is
-       port(buss_in   : in  std_logic_vector(7 downto 0);
-            enable_pass   : in  std_logic;
-            buss_out  : out std_logic_vector(7 downto 0));
+       port(input  : in  std_logic_vector(7 downto 0);
+            control   : in  std_logic;
+            output  : out std_logic_vector(7 downto 0));
     end component;
 
   -- Open Drain MOSFET ADH
@@ -356,7 +353,7 @@ end component;
      clk: IN STD_LOGIC;
      reset: IN STD_LOGIC;
 
-     bcr: IN STD_LOGIC; -- indicates that there is a branch operation going on (maybe leave this one out for now)
+     --bcr: IN STD_LOGIC; -- indicates that there is a branch operation going on (maybe leave this one out for now)
      page_cross: IN STD_LOGIC;   -- indicates that there is an instruction in the register that uses page crossing. E.g $0000-$00FF is an interval. If an address gets added to that it could become $01.., which means it is outside of the boundary
 
      -- Coming from predecode #see predicode
@@ -373,6 +370,12 @@ end component;
      );
    end component;
 
+component ready is
+   port(clk	  :	in  std_logic;
+	      r     : in  std_logic;
+        r_w   : in  std_logic;
+        rdy   : out std_logic);
+end component;
 
 
 --/*************************************************
@@ -410,8 +413,8 @@ end component;
   signal sb_s, s_sb, s_adl : std_logic;
   -- instruction decoer TODO
   signal ir_in : std_logic_vector(15 downto 0);    -- Instruction register in
-  signal interrupt_vec : std_logic_vector(2 downto 0); --
-  signal ready, r_w : std_logic;
+  signal interrupt : std_logic_vector(2 downto 0); --
+  signal r_w : std_logic;
   -- Processor Status Register
   signal ir5 : std_logic;
   -- Timing generation logic
@@ -425,7 +428,7 @@ end component;
   signal predecode_bus : std_logic_vector(7 downto 0);
 
   --interrupt control
-  signal i_1, nmi_out, irq_out, res_out, reset, interrupt: std_logic;
+  signal reset, i_1, nmi_out, irq_out, res_out: std_logic;
   -- flags
   signal avr, acr : std_logic;
   signal zero_flag, negative_flag : std_logic;
@@ -447,7 +450,8 @@ end component;
    signal sync, s1, s2 :  std_logic; -- Sync indicates that the timing is at T1P_T1 -- SD. indicate that there is a rmw instruction in the instruction register to the decode rom (also an indication to show in what cycle it is the RWM)
    signal v1 :  std_logic; -- v1 is an indication for a BRK instruction
 
-   --
+	--interrupt control
+	signal interrupt_reset : std_logic;
 
 
 
@@ -529,10 +533,6 @@ begin
   -- r_w           <= ;
   -- sv            <= ;
 
--- interrupt control
-       interrupt_vec(0) <=	nmi_out;
-       interrupt_vec(1) <= irq_out;
-       interrupt_vec(2) <= res_out;
 
 
 -- mem_add_reg
@@ -579,6 +579,11 @@ begin
 
 -- Open Drain MOSFET ADL
   od_low_control(2 downto 0)      <= control_out(22 downto 20);
+
+--Interrupt control
+  interrupt(0) <= nmi_out;
+  interrupt(1) <= irq_out;
+  interrupt(2) <= res_out;
 
 
 -- predecode_logic
@@ -721,7 +726,6 @@ add_Reg : mem_add_reg PORT MAP(
                       clk,
                       reset,
                       mem_add_enable,
-                      r_w,
                       adl,
                       adh,
                       db,
@@ -817,7 +821,7 @@ pass_adh_sb : pass PORT MAP(
 );
 -- pass mosfets
 -- DB -> SB
-db_sb_adh : pass PORT MAP(
+pass_db_sb : pass PORT MAP(
                       db,
                       db_sb_pass,
                       sb
@@ -851,7 +855,7 @@ stk_point :  stack_pointer PORT MAP(
 int_ctl : interr_res PORT MAP(
                       clk,
                       clk_2,
-                      nmi,
+                      nmi, 
                       irq,
                       res,
                       tcstate,
@@ -863,7 +867,7 @@ int_ctl : interr_res PORT MAP(
                       nmi_out,
                       irq_out,
                       res_out,
-                      interrupt,
+                      interrupt_reset,
                       reset,
                       r_w
 );
@@ -898,7 +902,7 @@ pre_reg : predecode_register PORT MAP(
  tim_gen : timing_generation PORT MAP(
                        clk,
                        reset,
-                       bcr,
+                       --bcr,
                        acr,
                        rmw,
                        cycles,
@@ -915,13 +919,21 @@ pre_reg : predecode_register PORT MAP(
                        clk_2,
                        ins_data_out,
                        tcstate,
-                       interrupt_vec,
-                       ready,
+                       interrupt,
+                       rdy,
                        r_w,
                        sv,
                        acr,
                        c,
                        control_out
  );
+
+-- Ready control
+ rdy_control: ready PORT MAP(
+                       clk,
+                       r,
+                       r_w,
+                       rdy
+);
 
 end architecture;
