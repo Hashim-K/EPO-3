@@ -895,7 +895,7 @@ int_ctl : interr_res PORT MAP(
 
 -- Instruction Register
 ins_reg : intruction_reg PORT MAP(
-                      clk,
+                      clk_2, -- loaded into rising edge of the second phase
                       reset,
                       rdy,
                       sync,
@@ -921,7 +921,7 @@ pre_reg : predecode_register PORT MAP(
  );
  -- Timing generation logic
  tim_gen : timing_generation PORT MAP(
-                       clk,
+                       clk_2, -- second phase 
                        reset,
                        --bcr,
                        acr,

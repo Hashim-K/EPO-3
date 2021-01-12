@@ -24,7 +24,7 @@ architecture arch of pla is
   signal address : std_logic_vector(11 downto 0);
 begin
 
-  address <= instruction & timing & carry_flag;
+  address <= instruction & timing & carry_flag & interupt;
 
   main : process(address)
   begin

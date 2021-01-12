@@ -24,7 +24,7 @@ architecture arch of system is
     res : in std_logic;
     irq : in std_logic;
     sv  : in std_logic;
-    r	  : in std_logic;
+    r	  : in std_logic; -- ready
     adb_external : out std_logic_vector(7 downto 0);  -- External connection of the addres + data
     adb_control : out std_logic_vector(1 downto 0);   -- Select the external register
     db_external : in std_logic_vector(7 downto 0)    -- External connection of the databus bus in
@@ -50,7 +50,7 @@ architecture arch of system is
   signal r : std_logic;
 begin
 
-
+  r <= '1';
   processor_m : processor PORT MAP(clk_25mhz, nmi, extern_reset, irq, sv, r, addres_data, control, data);
   mem_dummy_m : mem_dummy PORT MAP(clk_25mhz, extern_reset, addres_data, control, data);
 

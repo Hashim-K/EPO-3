@@ -378,6 +378,14 @@ end component;
      );
    end component;
 
+   -- ready control
+   component ready is
+      port(clk	  :	in  std_logic;
+   	       r     : in  std_logic;
+           r_w   : in  std_logic;
+           rdy   : out std_logic);
+   end component;
+
 
 
 --/*************************************************
@@ -416,7 +424,7 @@ end component;
   -- instruction decoer TODO
   signal ir_in : std_logic_vector(15 downto 0);    -- Instruction register in
   signal interrupt_vec : std_logic_vector(2 downto 0); --
-  signal ready, r_w : std_logic;
+  signal r_w : std_logic;
   -- Processor Status Register
   signal ir5 : std_logic;
   -- Timing generation logic
@@ -923,7 +931,7 @@ pre_reg : predecode_register PORT MAP(
                        ins_data_out,
                        tcstate,
                        interrupt_vec,
-                       ready,
+                       rdy,
                        r_w,
                        sv,
                        acr,
@@ -933,5 +941,14 @@ pre_reg : predecode_register PORT MAP(
                        s2,
                        v1
  );
+
+
+ ready_map : ready PORT MAP(
+                        clk,
+                        r,
+                        r_w,
+                        rdy
+ );
+
 
 end architecture;
