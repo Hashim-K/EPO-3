@@ -25,7 +25,7 @@ entity interr_res is
 	irq_out	  : out	std_logic;
 	res_out	  : out	std_logic;
 	interrupt	: out	std_logic;
-	reset	  : out	std_logic;
+	reset	  : out	std_logic; -- fake reset to predicode
 	rw	  : out	std_logic);
 end interr_res;
 

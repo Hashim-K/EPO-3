@@ -33,9 +33,9 @@ architecture arch of mem_dummy is
 
   type rom is array (0 to 3) of std_logic_vector(7 downto 0);
   constant pla : rom := (
-      x"FF",
-      x"FF",
-      x"FF",
+      x"A9",
+      x"20",
+      x"4A",
       x"FF"
   );
 

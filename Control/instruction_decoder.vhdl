@@ -14,8 +14,7 @@ entity instruction_decoder is
       sv: IN STD_LOGIC;
       acr : IN STD_LOGIC;
       cin : IN STD_LOGIC;
-      control_out: OUT STD_LOGIC_VECTOR(68 DOWNTO 0)
-      sync : IN STD_LOGIC;
+      control_out: OUT STD_LOGIC_VECTOR(68 DOWNTO 0);
       s1 : IN STD_LOGIC;
       s2 : IN STD_LOGIC;
       v1: IN STD_LOGIC

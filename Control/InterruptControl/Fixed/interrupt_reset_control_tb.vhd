@@ -6,13 +6,13 @@ end interr_res_tb;
 
 architecture behaviour of interr_res_tb is
    component interr_res
-      port(clk1		  : in	std_logic;
+    port(clk1		  : in	std_logic;
    	clk2	  : in	std_logic;
    	nmi       : in  std_logic;
-           irq       : in  std_logic;
-           res       : in  std_logic;
+    irq       : in  std_logic;
+    res       : in  std_logic;
    	timer	  : in	std_logic_vector(5 downto 0);
-	v1	  : in	std_logic;
+	  v1	  : in	std_logic;
    	i	  : in	std_logic;
    	bcr	  : in	std_logic;
    	page_cross	: in	std_logic;

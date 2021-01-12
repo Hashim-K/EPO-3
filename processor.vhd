@@ -1,5 +1,22 @@
 -- Highest entity
 
+
+
+
+--/*************************************************
+--*                    WARNING TO PROCESSOR FILES  *
+--*************************************************/
+
+
+
+
+
+
+
+
+
+
+
 library ieee;
   use ieee.std_logic_1164.all;
   use ieee.numeric_std.all;
@@ -188,7 +205,7 @@ end component;
   	      nmi       : in  std_logic;
           irq       : in  std_logic;
           res       : in  std_logic;
-  	      timer	    : in	std_logic_vector(5 downto 0);
+  	      timer	    : in	std_logic_vector(5 downto 0); -- timing generation
   	      v1	      : in	std_logic;
 	        I	        : in	std_logic;
 	        bcr	      : in	std_logic;
@@ -214,17 +231,20 @@ end component;
    -- Instruction decoder
    component instruction_decoder is
      port (
-         clk : in std_logic;
-         clk_2 : in std_logic;
-         ir_in: in std_logic_vector(7 downto 0);    -- Instruction register in
-         tcstate: in std_logic_vector(5 downto 0);    -- Cycle select
-         interrupt: in std_logic_vector(2 downto 0); --
-         rdy: in std_logic;
-         r_w: out std_logic;
-         sv: in std_logic;
-         ACR : in std_logic;
-         Cin : in std_logic;
-         control_out: out std_logic_vector(68 downto 0)
+        clk : IN std_logic;
+        clk_2 : IN std_logic;
+        ir_in: IN STD_LOGIC_VECTOR(7 DOWNTO 0);    -- Instruction register in
+        tcstate: IN STD_LOGIC_VECTOR(5 DOWNTO 0);
+        interrupt: IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+        ready: IN STD_LOGIC;
+        r_w: OUT STD_LOGIC;
+        sv: IN STD_LOGIC;
+        acr : IN STD_LOGIC;
+        cin : IN STD_LOGIC;
+        control_out: OUT STD_LOGIC_VECTOR(68 DOWNTO 0)
+        s1 : IN STD_LOGIC;
+        s2 : IN STD_LOGIC;
+        v1: IN STD_LOGIC
      );
    end component;
 
@@ -453,11 +473,12 @@ end component;
 	--interrupt control
 	signal interrupt_reset : std_logic;
 
+  signal off_reset : std_logic; -- temporary signal not in desing! TODO
 
 
 begin
 
-
+  reset <= res;
 --/*************************************************
 --*                    Signal Assignment           *
 --*************************************************/
@@ -855,7 +876,7 @@ stk_point :  stack_pointer PORT MAP(
 int_ctl : interr_res PORT MAP(
                       clk,
                       clk_2,
-                      nmi, 
+                      nmi,
                       irq,
                       res,
                       tcstate,
@@ -868,7 +889,7 @@ int_ctl : interr_res PORT MAP(
                       irq_out,
                       res_out,
                       interrupt_reset,
-                      reset,
+                      off_reset, -- todo fix!!
                       r_w
 );
 
@@ -925,7 +946,10 @@ pre_reg : predecode_register PORT MAP(
                        sv,
                        acr,
                        c,
-                       control_out
+                       control_out,
+                       s1,
+                       s2,
+                       v1
  );
 
 -- Ready control

@@ -10,7 +10,7 @@ library ieee;
 entity system is
   port (
   clk_25mhz : std_logic;
-  reset : std_logic
+  extern_reset : std_logic
   );
 end entity;
 
@@ -24,6 +24,7 @@ architecture arch of system is
     res : in std_logic;
     irq : in std_logic;
     sv  : in std_logic;
+    r	  : in std_logic;
     adb_external : out std_logic_vector(7 downto 0);  -- External connection of the addres + data
     adb_control : out std_logic_vector(1 downto 0);   -- Select the external register
     db_external : in std_logic_vector(7 downto 0)    -- External connection of the databus bus in
@@ -45,11 +46,12 @@ architecture arch of system is
   signal addres_data, data : std_logic_vector(7 downto 0);
   signal control : std_logic_vector(1 downto 0);
 
-  signal nmi, res, irq, sv : std_logic;
+  signal nmi, irq, sv : std_logic;
+  signal r : std_logic;
 begin
 
 
-  pro : processor PORT MAP(clk_25mhz, nmi, res, irq, sv, addres_data, control, data);
-  mem : mem_dummy PORT MAP(clk_25mhz, reset, addres_data, control, data);
+  processor_m : processor PORT MAP(clk_25mhz, nmi, extern_reset, irq, sv, r, addres_data, control, data);
+  mem_dummy_m : mem_dummy PORT MAP(clk_25mhz, extern_reset, addres_data, control, data);
 
 end architecture;
