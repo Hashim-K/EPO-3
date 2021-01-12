@@ -44,10 +44,12 @@ architecture arch of system is
 
   signal addres_data, data : std_logic_vector(7 downto 0);
   signal control : std_logic_vector(1 downto 0);
+
+  signal nmi, res, irq, sv : std_logic;
 begin
 
 
-  pro : processor PORT MAP(clk_25mhz, reset, addres_data, control, data);
+  pro : processor PORT MAP(clk_25mhz, nmi, res, irq, sv, addres_data, control, data);
   mem : mem_dummy PORT MAP(clk_25mhz, reset, addres_data, control, data);
 
 end architecture;

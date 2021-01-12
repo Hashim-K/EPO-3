@@ -149,17 +149,21 @@ end component;
 
   -- External addres register
   component mem_add_reg is -- output logic for external interfacint output first low addres, high addres, than data
-    port (clk : in std_logic;
-          reset : in std_logic;
+    port (
+    clk : IN std_logic;
+    reset : IN std_logic;
 
-          enable : in std_logic; -- enable the transition
+    enable : IN std_logic; -- enable the transition This is ADH/ABH, ADL/ABL and DB/DOR
+    r_w   : IN std_logic;  -- Internal write write signal
+                            -- High= Read
+                            -- low = Write
 
-          abl_in : in std_logic_vector(7 downto 0); -- Addres bus low in
-          abh_in : in std_logic_vector(7 downto 0); -- Addres bus High in
-          db_in : in std_logic_vector(7 downto 0); -- Data bus in
+    abl_in : IN std_logic_vector(7 downto 0); -- Addres bus low in
+    abh_in : IN std_logic_vector(7 downto 0); -- Addres bus High in
+    db_in : IN std_logic_vector(7 downto 0); -- Data bus in
 
-          o_to_extern : out std_logic_vector(7 downto 0); -- output to external component
-          control : out std_logic_vector(1 downto 0) -- multiplex data
+    o_to_extern : OUT std_logic_vector(7 downto 0); -- output to external component
+    control : OUT std_logic_vector(1 downto 0) -- multiplex data
     );
   end component;
 
@@ -187,7 +191,7 @@ end component;
   	      nmi       : in  std_logic;
           irq       : in  std_logic;
           res       : in  std_logic;
-  	      time	    : in	std_logic_vector(5 downto 0);
+  	      timer	    : in	std_logic_vector(5 downto 0);
   	      v1	      : in	std_logic;
 	        I	        : in	std_logic;
 	        bcr	      : in	std_logic;
@@ -204,8 +208,8 @@ end component;
         	nmi_out	  : out	std_logic;
         	irq_out	  : out	std_logic;
         	res_out	  : out	std_logic;
-        	interrupt	: out	std_logic;
-        	reset	    : out	std_logic;
+        	interrupt	: out	std_logic; --IRQG
+        	reset	    : out	std_logic; --RESG
         	rw	      : out	std_logic
     );
   end component;
@@ -216,7 +220,7 @@ end component;
          clk : in std_logic;
          clk_2 : in std_logic;
          ir_in: in std_logic_vector(7 downto 0);    -- Instruction register in
-         tcstate: in std_logic_vector(2 downto 0);    -- Cycle select
+         tcstate: in std_logic_vector(5 downto 0);    -- Cycle select
          interrupt: in std_logic_vector(2 downto 0); --
          ready: in std_logic;
          r_w: out std_logic;
@@ -243,7 +247,7 @@ end component;
         --dbz_z = control(4);
         --db2_i = control(5);
         --ir5_i = control(6);
-        --1_i   = control(7);
+        --i_1   = control(7);
         --db3_d = control(8);
         --ir5_d = control(9);
         --db6_v = control(10);
@@ -377,10 +381,6 @@ end component;
 
   -- first and second phase clock
   signal clk, clk_2 : std_logic;
-  -- external reset Signals
-  signal nmi, res, irq : std_logic;
-  -- the unknown external signal
-  signal sv: std_logic;
   -- x index register
   signal sb_x, x_sb : std_logic;
   -- Y index REGISTER
@@ -389,9 +389,9 @@ end component;
   signal daa, i_addc, srs, hc, add_adl, add_sb6, add_sb7, o_add, sb_add, inv_db_add, db_add, adl_add : std_logic;
   signal alu_control : std_logic_vector(11 downto 0);
   -- Program counter High
-  signal adh_pch, pch_adh, pch_db, h_pclc : std_logic;
+  signal pch_pch, adh_pch, pch_adh, pch_db, h_pclc : std_logic;
   -- Program counter low
-  signal l_pclc, i_pc, pcl_adl, pcl_db, adl_pcl : std_logic;
+  signal pcl_pcl, l_pclc, i_pc, pcl_adl, pcl_db, adl_pcl : std_logic;
   -- accumulator
   signal ac_db, ac_sb, sb_ac : std_logic;
   -- memory addres register
@@ -404,12 +404,13 @@ end component;
   -- pass mosfets
   signal sb_db_pass, sb_adh_pass, adh_sb_pass, db_sb_pass : std_logic;
   -- open drain mosfet
-  signal od_high_control, od_low_control : std_logic_vector(1 downto 0);
+  signal od_high_control : std_logic_vector(1 downto 0);
+  signal od_low_control : std_logic_vector(2 downto 0);
   -- stack pointer
   signal sb_s, s_sb, s_adl : std_logic;
   -- instruction decoer TODO
   signal ir_in : std_logic_vector(15 downto 0);    -- Instruction register in
-  signal interrupt : std_logic_vector(2 downto 0); --
+  signal interrupt_vec : std_logic_vector(2 downto 0); --
   signal ready, r_w : std_logic;
   -- Processor Status Register
   signal ir5 : std_logic;
@@ -424,7 +425,7 @@ end component;
   signal predecode_bus : std_logic_vector(7 downto 0);
 
   --interrupt control
-  signal 1_i, nmi_out, irq_out, res_out: std_logic;
+  signal i_1, nmi_out, irq_out, res_out, reset, interrupt: std_logic;
   -- flags
   signal avr, acr : std_logic;
   signal zero_flag, negative_flag : std_logic;
@@ -487,7 +488,7 @@ begin
 
 -- Program Counter High
   -- checked 18-12-2020 23:48
-  pch_pch     <= control_out(12)
+  pch_pch     <= control_out(12);
   adh_pch     <= control_out(13);
   pch_db      <= control_out(14);
   pch_adh     <= control_out(15);
@@ -528,6 +529,10 @@ begin
   -- r_w           <= ;
   -- sv            <= ;
 
+-- interrupt control
+       interrupt_vec(0) <=	nmi_out;
+       interrupt_vec(1) <= irq_out;
+       interrupt_vec(2) <= res_out;
 
 
 -- mem_add_reg
@@ -547,7 +552,7 @@ begin
   -- checked 18-12-2020 23:58
   -- This is for all the flags etc
     status_reg_control(6 downto 0) <= control_out(62 downto 56);
-    status_reg_control(7) <= 1_i;
+    status_reg_control(7) <= i_1;
     status_reg_control(13 downto 8) <= control_out(68 downto 63);
     --p_db
     status_reg_control(14) <= control_out(55);
@@ -570,10 +575,10 @@ begin
   s_sb        <= control_out(26);
 
 -- Open Drain MOSFET ADH
-  od_high_control(1 downto 0)     <= control(4 downto 3);
+  od_high_control(1 downto 0)     <= control_out(4 downto 3);
 
 -- Open Drain MOSFET ADL
-  od_low_control(1 downto 0)      <= control(22 downto 20);
+  od_low_control(2 downto 0)      <= control_out(22 downto 20);
 
 
 -- predecode_logic
@@ -716,6 +721,7 @@ add_Reg : mem_add_reg PORT MAP(
                       clk,
                       reset,
                       mem_add_enable,
+                      r_w,
                       adl,
                       adh,
                       db,
@@ -804,7 +810,7 @@ pass_sb_adh : pass PORT MAP(
 );
 -- pass mosfets
 -- ADH -> SB
-pass_sb_adh : pass PORT MAP(
+pass_adh_sb : pass PORT MAP(
                       adh,
                       adh_sb_pass,
                       sb
@@ -845,7 +851,7 @@ stk_point :  stack_pointer PORT MAP(
 int_ctl : interr_res PORT MAP(
                       clk,
                       clk_2,
-                      nmi, 
+                      nmi,
                       irq,
                       res,
                       tcstate,
@@ -853,14 +859,14 @@ int_ctl : interr_res PORT MAP(
                       i,
                       bcr,
                       acr,
-                      1_i,
+                      i_1,
                       nmi_out,
                       irq_out,
                       res_out,
                       interrupt,
                       reset,
                       r_w
-)
+);
 
 -- Instruction Register
 ins_reg : intruction_reg PORT MAP(
@@ -875,7 +881,7 @@ ins_reg : intruction_reg PORT MAP(
 -- Predecode Register
 pre_reg : predecode_register PORT MAP(
                         clk_2,
-                        1,
+                        '1',
                         reset,
                         db,
                         predecode_bus
@@ -909,7 +915,7 @@ pre_reg : predecode_register PORT MAP(
                        clk_2,
                        ins_data_out,
                        tcstate,
-                       interrupt,
+                       interrupt_vec,
                        ready,
                        r_w,
                        sv,
