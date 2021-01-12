@@ -7,8 +7,10 @@ entity mem_add_reg is -- output logic for external interfacint output first low 
   clk : IN std_logic;
   reset : IN std_logic;
 
-  enable : IN std_logic; -- enable the transition This is ADH/ABH - ADL/ABL
-
+  enable : IN std_logic; -- enable the transition This is ADH/ABH, ADL/ABL and DB/DOR
+  r_w   : IN std_logic;  -- Internal write write signal
+                          -- High= Read
+                          -- low = Write
 
   abl_in : IN std_logic_vector(7 downto 0); -- Addres bus low in
   abh_in : IN std_logic_vector(7 downto 0); -- Addres bus High in
@@ -50,33 +52,35 @@ begin
       control <= "11"; -- means not in operation
 
       if enable = '1' then
-        next_state <= state1;
+        if r_w = '1' then
+            next_state <= state1;
+        else
+            next_state <= state3;
+        end if;
       else
         next_state <= reset_state;
       end if;
 
     when state1 =>
-          -- output addres low
+          -- output addres low to external
           o_to_extern <= abl_in;
           control <= "00";
           next_state <= state2;
     when state2 =>
-          -- output addres high
+          -- output addres high to external
           o_to_extern <= abh_in;
           control <= "01";
 
-          next_state <= state3;
+          next_state <= reset_state;
+
     when state3 =>
-          -- output databus
+          -- output databus to external
           o_to_extern <= db_in;
           control <= "10";
 
           next_state <= reset_state;
     when others =>
-
+          next_state <= reset_state;
   end case;
 end process;
-
-
-
 end architecture;
