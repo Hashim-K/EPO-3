@@ -31,7 +31,7 @@ architecture arch of instruction_decoder is
   p_db, db0_c, ir5_c, acr_c, dbi_z, dbz_z, db2_1, ir5_1, db3_d, ir5_d, db6_v, avr_v, one_v, db7_n: std_logic := '0' ;
 
 begin
-     
+
 
   Control : process(tcstate)
   begin
@@ -2638,142 +2638,75 @@ begin
 
   end case;
   end process;
-  control_temp_out(0)<=	dl_db;
-control_temp_out(1)<=	dl_adl;	
+control_temp_out(0)<=	dl_db;
+control_temp_out(1)<=	dl_adl;
 control_temp_out(2)<=	dl_adh;
-	
 control_temp_out(3)<=	zero_adh_0;
-	
 control_temp_out(4)<=	zero_adh_17;
-	
 control_temp_out(5)<=	adh_abh;
-	
 control_temp_out(6)<=	adl_abl;
-	
 control_temp_out(7)<=	pcl_pcl;
-	
 control_temp_out(8)<=	adl_pcl;
-	
 control_temp_out(9)<=	one_pc;
-	
 control_temp_out(10)<=	pcl_db;
-	
 control_temp_out(11)<=	pcl_adl;
-	
 control_temp_out(12)<=	pch_pch;
-	
 control_temp_out(13)<=	adh_pch;
-	
 control_temp_out(14)<=	pch_db;
-	
 control_temp_out(15)<=	pch_adh;
-	
 control_temp_out(16)<=	sb_adh;
-	
 control_temp_out(17)<=	adh_sb;
-	
 control_temp_out(18)<=	sb_db;
-	
 control_temp_out(19)<=	db_sb;
-	
 control_temp_out(20)<=	zero_adl_0;
-	
 control_temp_out(21)<=	zero_adl_1;
-	
 control_temp_out(22)<=	zero_adl_2;
-	
 control_temp_out(23)<=	s_adl;
-	
 control_temp_out(24)<=	sb_s;
-	
 control_temp_out(25)<=	s_s;
-	
 control_temp_out(26)<=	s_sb;
-	
 control_temp_out(27)<=	inv_db_add;
-	
 control_temp_out(28)<=	db_add;
-	
 control_temp_out(29)<=	adl_add;
-	
 control_temp_out(30)<=	dsa;
-	
 control_temp_out(31)<=	daa;
-	
 control_temp_out(32)<=	one_addc;
-	
 control_temp_out(33)<=	sums;
-	
 control_temp_out(34)<=	ands;
-	
 control_temp_out(35)<=	xors;
-	
 control_temp_out(36)<=	ors;
-	
 control_temp_out(37)<=	lsr;
-	
 control_temp_out(38)<=	asl;
-	
 control_temp_out(39)<=	rotr;
-	
 control_temp_out(40)<=	rotl;
-	
 control_temp_out(41)<=	pass1_a;
-	
 control_temp_out(42)<=	pass2_b;
-	
 control_temp_out(43)<=	add_adl;
-	
 control_temp_out(44)<=	add_sb_06;
-	
 control_temp_out(45)<=	add_sb_7;
-	
 control_temp_out(46)<=	zero_add;
-	
 control_temp_out(47)<=	sb_add;
-	
 control_temp_out(48)<=	sb_ac;
-	
 control_temp_out(49)<=	ac_db;
-	
 control_temp_out(50)<=	ac_sb;
-	
 control_temp_out(51)<=	sb_x;
-	
 control_temp_out(52)<=	x_sb;
-	
 control_temp_out(53)<=	sb_y;
-	
 control_temp_out(54)<=	y_sb;
-	
 control_temp_out(55)<=	p_db;
-	
 control_temp_out(56)<=	db0_c;
-	
 control_temp_out(57)<=	ir5_c;
-	
 control_temp_out(58)<=	acr_c;
-	
 control_temp_out(59)<=	dbi_z;
-	
 control_temp_out(60)<=	dbz_z;
-	
 control_temp_out(61)<=	db2_1;
-	
 control_temp_out(62)<=	ir5_1;
-	
 control_temp_out(63)<=	db3_d;
-	
 control_temp_out(64)<=	ir5_d;
-	
 control_temp_out(65)<=	db6_v;
-	
 control_temp_out(66)<=	avr_v;
-	
 control_temp_out(67)<=	one_v;
-	
-control_temp_out(68)<=	db7_n; 
-
-  control_out <= control_temp_out;
+control_temp_out(68)<=	db7_n;
+control_out <= control_temp_out;
 
 end architecture;
