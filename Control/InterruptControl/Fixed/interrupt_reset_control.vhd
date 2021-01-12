@@ -101,7 +101,7 @@ begin
 		end if;
 end process;
 
-process (clk1, clk2, irq, nmi, timer, INTG, NMIG, irq2, nmi2, irq_rec, nmi_rec, i, IRQP, blk, bcr, page_cross, v1)
+process (clk2, irq, nmi, timer, INTG, NMIG, irq2, nmi2, irq_rec, nmi_rec, i, IRQP, blk, bcr, page_cross, v1)
 begin
 	if (rising_edge(clk2)) then
 	-- IRQ:
@@ -115,7 +115,7 @@ begin
 		else
 			blk	<= '0';
 		end if;
-			
+
 	-- NMI:
 		if (nmi = '0') then
 			nmi_rec	<= '1';		-- Stage 0: recognition
@@ -160,7 +160,10 @@ begin
 			end if;
 		end if;
 	end if;
+end process;
 
+process (clk1, irq, nmi, timer, INTG, NMIG, irq2, nmi2, irq_rec, nmi_rec, i, IRQP, blk, bcr, page_cross, v1)
+begin
 	if (rising_edge(clk1)) then
 	-- IRQ:
 		if (irq_rec = '1') then
