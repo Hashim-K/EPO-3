@@ -84,13 +84,14 @@ ARCHITECTURE structural OF alu_logic IS
   END COMPONENT;
 
   SIGNAL o_adder, o_or, o_xor, o_and, o_shift, o_pass : STD_LOGIC_VECTOR(7 DOWNTO 0);
+  SIGNAL acr1, acr2 : STD_LOGIC;
 
 BEGIN
-  ADDER : eight_bit_adder PORT MAP(a, b, control(1), o_adder, acr, avr);
+  ADDER : eight_bit_adder PORT MAP(a, b, control(1), o_adder, acr1, avr);
   ORR : eight_bit_or PORT MAP(a, b, o_or);
   XORR : eight_bit_xor PORT MAP(a, b, o_xor);
   ANDD : eight_bit_and PORT MAP(a, b, o_and);
-  SHIFT : eight_bit_shift PORT MAP(a, b, control(1), control(9 DOWNTO 6), acr, o_shift);
+  SHIFT : eight_bit_shift PORT MAP(a, b, control(1), control(9 DOWNTO 6), acr2, o_shift);
   PASS : eight_bit_pass PORT MAP(a, b, control(11 DOWNTO 10), o_pass);
 
   WITH control SELECT o <=
@@ -121,6 +122,18 @@ BEGIN
 
     "00000000" WHEN OTHERS;
 
+  WITH control SELECT acr <=
+    acr1 WHEN "000000000100",
+    acr1 WHEN "000000000110",
+
+    acr2 WHEN "000001000000",
+    acr2 WHEN "000010000000",
+    acr2 WHEN "000100000000",
+    acr2 WHEN "000100000010",
+    acr2 WHEN "001000000000",
+    acr2 WHEN "001000000010",
+
+    'Z' WHEN OTHERS;
   hc <= '0'; -- pulled to low since it is not implemented
 
 END ARCHITECTURE;
