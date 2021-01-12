@@ -1498,12 +1498,29 @@ begin
             when "010" =>
               --Timing: T0
               if (tcstate(0)='0') then
+                dl_db<=1;
+                adh_abh<=1;
+                adl_abl<=1;
+                pcl_pcl<=1;
+                1_pc<=1;
+                pcl_adl<=1;
+                pch_pch<=1;
+                pch_adh<=1;
+                db_sb<=1;
+                sb_ac<=1;
               end if;
               --Timing: T1
               if (tcstate(1)='0') then
-              end if;
-              --Timing: T2
-              if (tcstate(2)='0') then
+                adh_abh<=1;
+                adl_abl<=1;
+                pcl_pcl<=1;
+                1_pc<=1;
+                pcl_adl<=1;
+                pch_pch<=1;
+                pch_adh<=1;
+                ac_db<=1;
+                dbz_z<=1;
+                db7_n<=1;
               end if;
 
             -- AD : LDA ABS
