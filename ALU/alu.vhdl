@@ -40,7 +40,6 @@ ENTITY alu IS
     -- A input register
     o_add : IN STD_LOGIC; --load all 0's
     sb_add : IN STD_LOGIC; --load data from SB
-    ff_add : IN STD_LOGIC; --load FF
 
     -- B input register
     inv_db_add : IN STD_LOGIC; -- load databus inverse
@@ -81,8 +80,7 @@ ARCHITECTURE structural OF alu IS
       in_sb : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
       out_alu : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
       o_add : IN STD_LOGIC; --load all 0's
-      sb_add : IN STD_LOGIC; --load data from SB
-      ff_add : IN STD_LOGIC --load FF
+      sb_add : IN STD_LOGIC --load data from SB
     );
   END COMPONENT;
 
@@ -129,7 +127,7 @@ BEGIN
     avr,
     acr,
     hc
-  );
+  ); 
 
   -- B input register
   B_REGISTER : B_input_register PORT MAP(
@@ -149,8 +147,7 @@ BEGIN
     sb_in,
     a,
     o_add,
-    sb_add,
-    ff_add);
+    sb_add);
 
   -- adder hold register
   HOLD_REGISTER : adder_hold_register PORT MAP(
