@@ -15,7 +15,8 @@ entity instruction_decoder is
       control_out: OUT STD_LOGIC_VECTOR(68 DOWNTO 0);
       s1 : IN STD_LOGIC;
       s2 : IN STD_LOGIC;
-      v1: IN STD_LOGIC
+      v1: IN STD_LOGIC;
+      ff_add: IN STD_Logic
   );
 end entity;
 
