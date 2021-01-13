@@ -22,7 +22,7 @@ architecture arch of mem_dummy is
 
   component register_8bit IS
   	PORT (
-  		clk : IN STD_LOGIC;
+  		clk : IN STD_LOGIC; -- 25 mhz
   		load : IN STD_LOGIC;
   		reset : IN STD_LOGIC;
   		data_in : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
@@ -31,12 +31,15 @@ architecture arch of mem_dummy is
 
 
   -- update array size acourdingly
-  type rom is array (0 to 3) of std_logic_vector(7 downto 0);
+  type rom is array (0 to 6) of std_logic_vector(7 downto 0);
   constant pla : rom := (
+      x"00",
       x"A9",
       x"20",
       x"4A",
-      x"FF"
+      x"00",
+      x"00",
+      x"00"
   );
 
   signal address : std_logic_vector(15 downto 0);

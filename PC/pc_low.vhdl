@@ -37,9 +37,7 @@ architecture arch of pc_low is
   END component;
 
 
-signal data_in, reg_out : std_logic_vector(7 downto 0);
-
-signal controll : std_logic_vector(1 downto 0);
+signal reg_out : std_logic_vector(7 downto 0);
 
 signal to_increment, to_register : std_logic_vector(7 downto 0);
 begin

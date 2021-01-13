@@ -4,8 +4,6 @@ library ieee;
 
 entity instruction_decoder is
   port (
-      clk : IN std_logic;
-      clk_2 : IN std_logic;
       ir_in: IN STD_LOGIC_VECTOR(7 DOWNTO 0);    -- Instruction register in
       tcstate: IN STD_LOGIC_VECTOR(5 DOWNTO 0);
       interrupt: IN STD_LOGIC_VECTOR(2 DOWNTO 0);
@@ -452,12 +450,15 @@ begin
             when "001" =>
               --Timing: T0
               if (tcstate(0)='0') then
+                control_out<="000000000000000000000000000000000000000000000000000000000000000000000";
               end if;
               --Timing: T1
               if (tcstate(1)='0') then
+                control_out<="000000000000000000000000000000000000000000000000000000000000000000000";
               end if;
               --Timing: T2
               if (tcstate(2)='0') then
+                control_out<="000000000000000000000000000000000000000000000000000001001101011100000";
               end if;
 
             -- A8 : TAY
@@ -1441,11 +1442,11 @@ begin
             when "010" =>
               --Timing: T0
               if (tcstate(0)='0') then
-                control_out<="000000000000000000100100000000000100000010000000000001001101011100001";
+                control_out<="000000000000000000000000000000000000000000000000000001001101011100001";
               end if;
               --Timing: T1
               if (tcstate(1)='0') then
-                control_out<="100000001000000000001001100000000000000000000000001001001101011100000";
+                control_out<="100000001000000000001000000000000000000000000000010001001101011100000";
               end if;
 
             -- AD : LDA ABS
@@ -2057,12 +2058,15 @@ begin
             when "010" =>
               --Timing: T2
               if (tcstate(2)='0') then
+                control_out<="000000000000000000000000000000000000000000000000000001001101011100000";
               end if;
               --Timing: T0
               if (tcstate(0)='0') then
+                control_out<="000000000000000000000000000000000000000000000000000000000000000000000";
               end if;
               --Timing: T1
               if (tcstate(1)='0') then
+                control_out<="000000000000000000000000000000000000000000000000000000000000000000000";
               end if;
 
             -- 4E : LSR ABS

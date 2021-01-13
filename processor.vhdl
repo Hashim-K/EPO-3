@@ -219,8 +219,6 @@ end component;
    -- Instruction decoder
    component instruction_decoder is
      port (
-        clk : IN std_logic;
-        clk_2 : IN std_logic;
         ir_in: IN STD_LOGIC_VECTOR(7 DOWNTO 0);    -- Instruction register in
         tcstate: IN STD_LOGIC_VECTOR(5 DOWNTO 0);
         interrupt: IN STD_LOGIC_VECTOR(2 DOWNTO 0);
@@ -434,8 +432,10 @@ end component;
   signal ins_data_in, ins_data_out : std_logic_vector(7 downto 0);
   signal inst_load : std_logic;
   signal rdy : std_logic;
+
+  signal ins_reg_clk : std_logic; --special signal
   -- Predecode logic
-  --
+  signal instruction_to_instr_reg : std_logic_vector(7 downto 0);
 
   --interrupt control
   signal i_1, nmi_out, irq_out, res_out, reset, interrupt: std_logic;
@@ -464,6 +464,8 @@ end component;
 
    signal resg : std_logic; -- from Interrupt to predecode
 
+
+   signal switch : std_logic;
 
 
 begin
@@ -557,7 +559,7 @@ begin
 
 -- mem_data_reg also acts as data latch
   -- checked 19-12-2020 00:22
-  mem_data_load <= clk_2; -- stores data from external input control signal
+  mem_data_load <= '1'; -- stores data from external input control signal
   dl_db         <= control_out(0);
   dl_adl        <= control_out(1);
   dl_adh        <= control_out(2);
@@ -746,12 +748,12 @@ add_Reg : mem_add_reg PORT MAP(
 
 -- Memory data register
 data_reg :mem_data_reg PORT MAP(
-                      clk,
+                      clk_2,
                       reset,
                       mem_data_load,
-                      dl_db,
-                      dl_adl,
-                      dl_adh,
+                      dl_db, -- control signal
+                      dl_adl, -- control signal
+                      dl_adh, -- control signal
                       db,
                       adl,
                       adh,
@@ -885,15 +887,7 @@ int_ctl : interr_res PORT MAP(
                       r_wded -- TODO FIX!!!
 );
 
--- Instruction Register
-ins_reg : intruction_reg PORT MAP(
-                      clk_2,  -- second phase
-                      reset,
-                      rdy,
-                      sync,
-                      db_external,
-                      ins_data_out
-);
+
 
 -- Predecode Register
 pre_reg : predecode_register PORT MAP(
@@ -905,31 +899,28 @@ pre_reg : predecode_register PORT MAP(
 );
 -- Predecode logic
  pr_logic : predecode_logic PORT MAP(
-                       db_external,
-                       reset,
                        ins_data_in,
+                       reset,
+                       instruction_to_instr_reg,
                        cycles,
                        rmw
  );
- -- Timing generation logic
- tim_gen : timing_generation PORT MAP(
-                       clk_2, -- second phase
+
+
+
+ -- Instruction Register
+ ins_reg : intruction_reg PORT MAP(
+                       ins_reg_clk,  -- special clock signal
                        reset,
-                       bcr,
-                       acr,
-                       rmw,
-                       cycles,
-                       tcstate,
+                       rdy,
                        sync,
-                       s1,
-                       s2,
-                       v1
+                       instruction_to_instr_reg,
+                       ins_data_out
  );
+
 
  -- Instruction Decoder
  instruction_dec : instruction_decoder PORT MAP(
-                       clk,
-                       clk_2,
                        ins_data_out,
                        tcstate,
                        interrupt_vec,
@@ -945,12 +936,44 @@ pre_reg : predecode_register PORT MAP(
  );
 
 
+ -- Timing generation logic
+ tim_gen : timing_generation PORT MAP(
+                       ins_reg_clk,  -- special clock signal
+                       reset,
+                       bcr,
+                       acr,
+                       rmw,
+                       cycles,
+                       tcstate,
+                       sync,
+                       s1,
+                       s2,
+                       v1
+ );
+
  ready_map : ready PORT MAP(
                         clk,
                         r,
                         r_w,
                         rdy
  );
+
+
+
+
+
+ins_redy : process(clk_2)
+begin
+  if rising_edge(clk_2) then
+    switch <= '1';
+  else
+    switch <= '0';
+  end if;
+end process;
+
+ins_reg_clk <= (clk nor clk_2) when switch = '1';
+
+
 
 
 end architecture;

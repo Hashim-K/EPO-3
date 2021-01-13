@@ -19,7 +19,7 @@ begin
 
   clk_25mhz <= not clk_25mhz after 5 ns;
   extern_reset <= '0' after 0 ns,
-                  '1' after 200 ns;
+                  '1' after 50 ns;
 
   sy : system PORT MAP(clk_25mhz, extern_reset);
 

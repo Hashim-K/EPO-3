@@ -2,11 +2,12 @@ library IEEE;
 use IEEE.std_logic_1164.ALL;
 
 entity interr_res is
-   port(clk1		  : in	std_logic;
+port(
+  clk1		  : in	std_logic;
 	clk2	  : in	std_logic;
 	nmi       : in  std_logic;
-        irq       : in  std_logic;
-        res       : in  std_logic;
+  irq       : in  std_logic;
+  res       : in  std_logic;
 	timer	  : in	std_logic_vector(5 downto 0);
 	v1	  : in	std_logic;
 	i	  : in	std_logic;
