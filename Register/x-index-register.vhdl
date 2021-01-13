@@ -7,8 +7,7 @@ entity x_index is
         reset   : in  std_logic;
         data_in : in  std_logic_vector(7 downto 0);
         x_sb   : in  std_logic;
-        sb : out std_logic_vector(7 downto 0)
-        );
+        sb : out std_logic_vector(7 downto 0));
 end x_index;
 
 architecture behaviour of x_index is

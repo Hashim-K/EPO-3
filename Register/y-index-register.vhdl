@@ -7,7 +7,7 @@ entity y_index is
         reset   : in  std_logic;
         data_in : in  std_logic_vector(7 downto 0);
         y_sb   : in  std_logic;
-        sb : out std_logic_vector(7 downto 0)); -- Serial Bus
+        sb : out std_logic_vector(7 downto 0));
 end y_index;
 
 architecture behaviour of y_index is

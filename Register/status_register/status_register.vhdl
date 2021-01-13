@@ -17,7 +17,7 @@ entity status_register is
       --dbz_z = control(4);
       --db2_i = control(5);
       --ir5_i = control(6);
-      --1_i   = control(7); <= This comes from interupt logic!!
+      --1_i   = control(7); <= This comes from interrupt logic!
       --db3_d = control(8);
       --ir5_d = control(9);
       --db6_v = control(10);
@@ -51,7 +51,7 @@ ARCHITECTURE behaviour of status_register is
       reg_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0));
   END COMPONENT;
 
-signal reg_out : STD_LOGIC_VECTOR(7 downto 0); --intermediate signal
+signal reg_out : STD_LOGIC_VECTOR(7 downto 0); --intermediate signals
 signal reg_in : STD_LOGIC_VECTOR(7 downto 0);
 
 signal dbz  : STD_LOGIC;
@@ -85,7 +85,7 @@ reg_out (1) WHEN OTHERS;
 WITH control(7 downto 5) SELECT reg_in(2) <=
 db_in(2) 	 WHEN "001", -- DB2/I
 ir5        WHEN "010", -- IR5/I
-'1'        WHEN "100", -- 1/I (from interrupt logic)
+'1'        WHEN "100", -- 1/I
 reg_out(2) WHEN OTHERS;
 
 
@@ -97,17 +97,17 @@ ir5         WHEN "10", -- IR5/D
 reg_out(3)  WHEN OTHERS;
 
 --bit 4 and 5 are "dont care"
-  -- I update this to '0' instead of dont care Tom (19-12-2020 15:13)
--- These are additional
-reg_in(4) <= '0'; -- B ?
+  --'0' has been chosen as their value
+reg_in(4) <= '0';
 reg_in(5) <= '0';
 
 
 --bit 6
+  --V FLAG
 WITH control(12 downto 10) SELECT reg_in(6) <=
 db_in (6)   WHEN "001",   -- DB6/V
 acr         WHEN "010", -- AVR/V
-'1'  WHEN "100", -- 1/V, IF this should be I instead of 1, change '1' to reg_in(2)
+'1'  WHEN "100", -- 1/V,
 reg_out (6) WHEN OTHERS;
 
 
@@ -115,7 +115,7 @@ reg_out (6) WHEN OTHERS;
   -- N FLAG
   -- DB7/N
 WITH control(13) SELECT reg_in(7) <=
-db_in(7)   WHEN '1', --writes db(7) when db7_n is 1
+db_in(7)   WHEN '1',
 reg_out(7)  WHEN OTHERS;
 
 -- out to databus
@@ -123,7 +123,7 @@ WITH control(14) SELECT db_out <=
 reg_out when '1',
 "ZZZZZZZZ" WHEN OTHERS;
 
---port bit 0 and 2 to a seperate Output
+--port bit 0 and 2 to a seperate output
 c <= reg_out(0);
 i <= reg_out(2);
 
