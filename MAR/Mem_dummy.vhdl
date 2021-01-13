@@ -30,7 +30,7 @@ architecture arch of mem_dummy is
   END component;
 
 
-
+  -- update array size acourdingly
   type rom is array (0 to 3) of std_logic_vector(7 downto 0);
   constant pla : rom := (
       x"A9",
@@ -42,13 +42,19 @@ architecture arch of mem_dummy is
   signal address : std_logic_vector(15 downto 0);
   signal clk_inv : std_logic;
   signal mal_out, mah_out, data_reg_out : std_logic_vector(7 downto 0);
-  signal en_mal, en_mah, en_data : std_logic;
+  signal en_mal, en_mah, en_data, res : std_logic;
 begin
 
+  en_mal  <= (NOT control(0)) AND (NOT control(1));
+  en_mah  <=  control(0) AND NOT control(1);
+  en_data <=  control(1) AND NOT control(0);
+
   clk_inv <= not clk;
-  MAL : register_8bit PORT MAP(clk_inv, en_mal, reset, addres_data_in, mal_out);
-  MAH : register_8bit PORT MAP(clk_inv, en_mah, reset, addres_data_in, mah_out);
-  DATA : register_8bit PORT MAP(clk_inv, en_data, reset, addres_data_in, data_reg_out);
+  res <= not reset;
+
+  MAL : register_8bit PORT MAP(clk_inv, en_mal, res, addres_data_in, mal_out);
+  MAH : register_8bit PORT MAP(clk_inv, en_mah, res, addres_data_in, mah_out);
+  DATA : register_8bit PORT MAP(clk_inv, en_data, res, addres_data_in, data_reg_out);
 
   address <= mah_out & mal_out;
 

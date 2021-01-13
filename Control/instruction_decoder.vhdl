@@ -34,7 +34,7 @@ architecture arch of instruction_decoder is
   -- p_db, db0_c, ir5_c, acr_c, dbi_z, dbz_z, db2_1, ir5_1, db3_d, ir5_d, db6_v, avr_v, one_v, db7_n: std_logic := '0' ;
 
 begin
-
+  r_w <= '1'; -- TODO FIX R_W SIGNAL
 
   Control : process(tcstate)
   begin
@@ -1441,11 +1441,11 @@ begin
             when "010" =>
               --Timing: T0
               if (tcstate(0)='0') then
-                control_out<="100001110101100100000000000010000001000000000001001000000000000000000";
+                control_out<="000000000000000000100100000000000100000010000000000001001101011100001";
               end if;
               --Timing: T1
               if (tcstate(1)='0') then
-                control_out<="000001110101100100100000000000000000000000001100100000000000100000001";
+                control_out<="100000001000000000001001100000000000000000000000001001001101011100000";
               end if;
 
             -- AD : LDA ABS
