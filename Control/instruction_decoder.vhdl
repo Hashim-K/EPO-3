@@ -16,7 +16,8 @@ entity instruction_decoder is
       s1 : IN STD_LOGIC;
       s2 : IN STD_LOGIC;
       v1: IN STD_LOGIC;
-      ff_add: IN STD_Logic
+      ff_add: IN STD_Logic;
+      zeroone_adh: IN STD_LOGIC
   );
 end entity;
 
