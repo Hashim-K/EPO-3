@@ -475,6 +475,7 @@ end component;
 
   signal off_reset : std_logic; -- temporary signal not in desing! TODO
 
+  signal ac_clk : std_logic; -- This is the Acumulator clk signal
 
 begin
 
@@ -727,9 +728,11 @@ program_counter_high : pc_high PORT MAP(
                       adh
                       );
 
+
+ac_clk <= clk xor clk_2;
 -- accumulator
 accumu : accumulator PORT MAP(
-                      clk,
+                      ac_clk,
                       reset,
                       ac_db,
                       ac_sb,
@@ -921,7 +924,7 @@ pre_reg : predecode_register PORT MAP(
  );
  -- Timing generation logic
  tim_gen : timing_generation PORT MAP(
-                       clk_2, -- second phase 
+                       clk_2, -- second phase
                        reset,
                        --bcr,
                        acr,

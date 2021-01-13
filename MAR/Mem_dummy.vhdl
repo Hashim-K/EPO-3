@@ -33,10 +33,10 @@ architecture arch of mem_dummy is
   -- update array size acourdingly
   type rom is array (0 to 52) of std_logic_vector(7 downto 0);
   constant pla : rom := (
+      x"11",
+      x"11",
       x"00",
-      x"A5",
-      x"20",
-      x"A9", x"20", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
+      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
       x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
       x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"FF",
       x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",

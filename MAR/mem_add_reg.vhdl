@@ -7,7 +7,10 @@ entity mem_add_reg is -- output logic for external interfacint output first low 
   clk : IN std_logic;
   reset : IN std_logic;
 
-  enable : IN std_logic; -- enable the transition This is ADH/ABH, ADL/ABL and DB/DOR
+  --enable : IN std_logic; -- enable the transition This is ADH/ABH, ADL/ABL and DB/DOR
+  adh_abh : IN std_logic;
+  adl_abl : IN std_logic;
+  db_dor : IN std_logic;  -- External data out!!
   r_w   : IN std_logic;  -- Internal write write signal
                           -- High= Read
                           -- low = Write
@@ -24,9 +27,13 @@ end entity;
 architecture arch of mem_add_reg is
   type statetype is (reset_state, pr_state, state1, state2, state3);
   signal state, next_state : statetype := reset_state;
-
+  signal enable : std_logic;
   signal c, c_next : integer;
+  signal rw : std_logic;
 begin
+
+  enable <= adl_abl or adh_abh;
+  rw <= db_dor;
 
 comb_proc : process(clk)
 begin
@@ -42,7 +49,7 @@ begin
   end if;
 end process;
 
-seq_proc : process(state, enable)
+seq_proc : process(state, enable, rw)
 begin
 
   case state is
@@ -58,7 +65,7 @@ begin
       end if;
 
     when pr_state =>
-      if r_w = '1' then
+      if rw = '0' then
         next_state <= state1;
       else
         next_state <= state3;

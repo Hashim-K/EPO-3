@@ -97,7 +97,6 @@ architecture structural of processor is
     -- A input register
     o_add : IN STD_LOGIC; --load all 0's
     sb_add : IN STD_LOGIC; --load data from SB
-    ff_add : IN STD_LOGIC; --load FF
 
     -- B input register
     inv_db_add : IN STD_LOGIC; -- load databus inverse
@@ -167,7 +166,11 @@ end component;
     clk : IN std_logic;
     reset : IN std_logic;
 
-    enable : IN std_logic; -- enable the transition This is ADH/ABH, ADL/ABL and DB/DOR
+    -- enable : IN std_logic; -- enable the transition This is ADH/ABH, ADL/ABL and DB/DOR
+    adh_abh : IN std_logic;
+    adl_abl : IN std_logic;
+    db_dor : IN std_logic;  -- External data out!!
+
     r_w   : IN std_logic;  -- Internal write write signal
                             -- High= Read
                             -- low = Write
@@ -239,7 +242,7 @@ end component;
         sv: IN STD_LOGIC;
         acr : IN STD_LOGIC;
         cin : IN STD_LOGIC;
-        control_out: OUT STD_LOGIC_VECTOR(68 DOWNTO 0);
+        control_out: OUT STD_LOGIC_VECTOR(69 DOWNTO 0);
         s1 : IN STD_LOGIC;
         s2 : IN STD_LOGIC;
         v1: IN STD_LOGIC
@@ -459,7 +462,7 @@ end component;
   signal sb, db, adh, adl : std_logic_vector(7 downto 0);
 
   -- Main control signal
-  signal control_out : std_logic_vector(68 downto 0);
+  signal control_out : std_logic_vector(69 downto 0);
 
   -- pc_low carry to pc_high_carry
   signal pc_carry : std_logic;
@@ -479,7 +482,9 @@ end component;
 
    signal switch : std_logic;
 
+   signal accumulator_clk : std_logic; -- special reset for the accumulator
 
+   signal adh_abh, adl_abl, db_dor : std_logic; -- memory signals
 begin
   inv_res <= not res;
 
@@ -565,9 +570,9 @@ begin
 
 
 -- mem_add_reg
-  -- checked 18-12-2020 23:54
-  mem_add_enable<= control_out(5) or control_out(6); -- Put content in the addres register at a rising clock edge
-
+  adh_abh <= control_out(5);
+  adl_abl <= control_out(6);
+  db_dor  <= control_out(69);
 
 -- mem_data_reg also acts as data latch
   -- checked 19-12-2020 00:22
@@ -698,7 +703,6 @@ Algorithmic_Unit : alu PORT MAP(
                       add_sb7,
                       o_add,
                       sb_add,
-                      ff_add,
                       inv_db_add,
                       db_add,
                       adl_add
@@ -731,9 +735,11 @@ program_counter_high : pc_high PORT MAP(
                       adh
                       );
 
+accumulator_clk <= clk xor clk_2;
+
 -- accumulator
 accumu : accumulator PORT MAP(
-                      clk,
+                      accumulator_clk,
                       reset,
                       ac_db,
                       ac_sb,
@@ -750,7 +756,9 @@ accumu : accumulator PORT MAP(
 add_Reg : mem_add_reg PORT MAP(
                       clk_25mhz,
                       reset,
-                      mem_add_enable,
+                      adh_abh,
+                      adl_abl,
+                      db_dor,
                       r_w,
                       adl,
                       adh,

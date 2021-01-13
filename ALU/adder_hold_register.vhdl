@@ -46,7 +46,7 @@ BEGIN
     reg_out WHEN "11",
     '0' & reg_out(6 DOWNTO 0) WHEN "01",
     reg_out(7) & "0000000" WHEN "10",
-    "ZZZZZZZZ" WHEN OTHERS;
-  l1 : register_8bit PORT MAP(clk_2, '1', reset, alu_data_in, reg_out);
+    "ZZZZZZZZ" WHEN OTHERS; -- this is now inverted 1 phase clock ask Tom
+  l1 : register_8bit PORT MAP(clk, '1', reset, alu_data_in, reg_out);
 
 END ARCHITECTURE;

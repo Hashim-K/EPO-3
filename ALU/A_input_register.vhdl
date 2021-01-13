@@ -27,7 +27,7 @@ ARCHITECTURE structural OF A_input_register IS
   SIGNAL control : STD_LOGIC_VECTOR(1 DOWNTO 0);
   SIGNAL temp_control : STD_LOGIC;
 BEGIN
-  L1 : register_8bit_A PORT MAP(clk => clk, load => temp_control, reset => reset, data_in => temp_data, reg_out => reg_out);
+  L1 : register_8bit_A PORT MAP(clk, temp_control, reset, temp_data, reg_out);
 
   control(1) <= o_add; --load zero
   control(0) <= sb_add;-- load from databus

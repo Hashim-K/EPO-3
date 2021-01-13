@@ -7,12 +7,12 @@ ENTITY alu IS
     clk : IN STD_LOGIC;
     reset : IN STD_LOGIC;
     adl_in : IN STD_LOGIC_VECTOR(7 DOWNTO 0); -- addres bus low in
-    adl_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); -- addres bus low out 
+    adl_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); -- addres bus low out
     sb_in : IN STD_LOGIC_VECTOR(7 DOWNTO 0); -- system bus in
     sb_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); -- system bus out
     db_in : IN STD_LOGIC_VECTOR(7 DOWNTO 0); -- data bus in
 
-    -- ALU logic 
+    -- ALU logic
     control : IN STD_LOGIC_VECTOR(11 DOWNTO 0); -- control signals for ALU
     --bit(0) = daa, not used since decimal is not implemented
     --bit(1) = i/addc (carry in)
@@ -116,8 +116,12 @@ ARCHITECTURE structural OF alu IS
   -- intermidate data signals
   SIGNAL output_alu : STD_LOGIC_VECTOR(7 DOWNTO 0);
   SIGNAL a, b : STD_LOGIC_VECTOR(7 DOWNTO 0);
+  SIGNAL inv_clk : std_logic;
 
 BEGIN
+
+  inv_clk <= not clk;
+
   -- ALU logic
   alu_logicmap : alu_logic PORT MAP(
     a,
@@ -149,9 +153,9 @@ BEGIN
     o_add,
     sb_add);
 
-  -- adder hold register
+  -- adder hold register THIS IS TRIGGERED AT INV_Q1
   HOLD_REGISTER : adder_hold_register PORT MAP(
-    clk,
+    inv_clk,
     reset,
     output_alu,
     adl_out,
