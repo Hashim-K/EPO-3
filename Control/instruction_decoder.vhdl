@@ -34,7 +34,7 @@ architecture arch of instruction_decoder is
   -- p_db, db0_c, ir5_c, acr_c, dbi_z, dbz_z, db2_1, ir5_1, db3_d, ir5_d, db6_v, avr_v, one_v, db7_n: std_logic := '0' ;
 
 begin
-
+  r_w <= '1'; -- TODO FIX R_W SIGNAL
 
   Control : process(tcstate)
   begin
