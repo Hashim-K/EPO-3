@@ -36,11 +36,13 @@ COMPONENT status_register is
 
         ir5   : in STD_LOGIC;
         --Outputs
+        c     : out STD_LOGIC;
+        i     : out STD_LOGIC;
         db_out    : out STD_LOGIC_VECTOR(7 downto 0)
       );
   END COMPONENT;
 
-  signal reset, clk, acr, avr, ir5: STD_LOGIC;
+  signal reset, clk, acr, avr, ir5, c, i: STD_LOGIC;
   signal db_in :  STD_LOGIC_VECTOR(7 downto 0);
   signal control  : STD_LOGIC_VECTOR(14 downto 0);
   signal db_out : STD_LOGIC_VECTOR(7 downto 0);
@@ -135,7 +137,7 @@ COMPONENT status_register is
                    '1' after 360 ns,
                    '0' after 380 ns; --DONE
 
- L1 : status_register PORT MAP(clk, reset, db_in, control, acr, avr, ir5, db_out);
+ L1 : status_register PORT MAP(clk, reset, db_in, control, acr, avr, ir5, c, i, db_out);
 
 end architecture;
 
