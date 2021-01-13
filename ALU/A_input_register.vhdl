@@ -40,7 +40,7 @@ BEGIN
   WITH control SELECT temp_data <=
     bus_data WHEN "001",
     "00000000" WHEN "010",
-    "11111111" WHEN "100"
+    "11111111" WHEN "100",
     reg_out WHEN OTHERS;
 
   WITH control SELECT temp_control <=

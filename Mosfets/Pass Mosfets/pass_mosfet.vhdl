@@ -10,12 +10,9 @@ end pass;
 
 architecture behaviour of pass is
 begin
-  lb11: process (enable_pass)
-  begin
-	if (enable_pass = '1') then
-		buss_out <= buss_in;
-	else
-		buss_out <= "ZZZZZZZZ";
-	end if;
-   end process;
+   with enable_pass select buss_out <=
+	  buss_in when '1',
+	  "ZZZZZZZZ" when others;
+
+
 end behaviour;

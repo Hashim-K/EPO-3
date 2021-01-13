@@ -62,35 +62,47 @@ architecture structural of processor is
   -- Alu block including register A and B and memory hold register
   component alu is
     port (clk : in std_logic;
-          reset : in std_logic;
-          adl_in : in std_logic_vector(7 downto 0); -- addres bus low
-          adl_out : out std_logic_vector(7 downto 0); -- addres bus low
-          sb_in : in std_logic_vector(7 downto 0); -- data bus in
-          sb_out : out std_logic_vector(7 downto 0); -- data bus out
-          db_in : in std_logic_vector(7 downto 0);
+    reset : IN STD_LOGIC;
+    adl_in : IN STD_LOGIC_VECTOR(7 DOWNTO 0); -- addres bus low in
+    adl_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); -- addres bus low out
+    sb_in : IN STD_LOGIC_VECTOR(7 DOWNTO 0); -- system bus in
+    sb_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); -- system bus out
+    db_in : IN STD_LOGIC_VECTOR(7 DOWNTO 0); -- data bus in
 
-          -- control signals
-          -- alu logic in
-          control : in std_logic_vector(11 downto 0); -- alu operation mode
+    -- ALU logic
+    control : IN STD_LOGIC_VECTOR(11 DOWNTO 0); -- control signals for ALU
+    --bit(0) = daa, not used since decimal is not implemented
+    --bit(1) = i/addc (carry in)
+    --bit(2) = sums (add)
+    --bit(3) = ands (and)
+    --bit(4) = exors (exor)
+    --bit(5) = ors (or)
+    --bit(6) = srs (shift right)
+    --bit(7) = sls (shift left)
+    --bit(8) = rotate right
+    --bit(9) = rotate left
+    --bit(10) = pass1 (register a)
+    --bit(11) = pass2 (register b)
 
-          -- alu logic out
-          avr : out std_logic;    -- overflow
-          acr : out std_logic;    -- carry out
-          hc : out std_logic;     -- half carry
-          -- adder hold register
-          clk_2 : in std_logic;   -- clock phase two input
-          add_adl : in std_logic; --
-          add_sb6 : in std_logic; --
-          add_sb7 : in std_logic; --
+    avr : OUT STD_LOGIC; -- overflow flag
+    acr : OUT STD_LOGIC; -- carry out flag
+    hc : OUT STD_LOGIC; -- half carry flag
 
-          -- A input register
-          o_add : in std_logic;  -- Load zero
-          sb_add : in std_logic; -- Load form SB
+    -- adder hold register
+    clk_2 : IN STD_LOGIC; -- second phase clock, used as load signal
+    add_adl : IN STD_LOGIC; -- output to addres low bus
+    add_sb6 : IN STD_LOGIC; -- output to SB bus 0-6
+    add_sb7 : IN STD_LOGIC; -- output to SB bus 7
 
-          -- B input register
-          inv_db_add : in std_logic; -- inverted in from DB
-          db_add : in std_logic;     -- load from DB
-          adl_add : in std_logic     -- load from ADL
+    -- A input register
+    o_add : IN STD_LOGIC; --load all 0's
+    sb_add : IN STD_LOGIC; --load data from SB
+    ff_add : IN STD_LOGIC; --load FF
+
+    -- B input register
+    inv_db_add : IN STD_LOGIC; -- load databus inverse
+    db_add : IN STD_LOGIC; -- load databus
+    adl_add : IN STD_LOGIC -- load addres line
   );
 end component;
 
@@ -397,7 +409,7 @@ end component;
   -- Y index REGISTER
   signal sb_y, y_sb : std_logic;
   -- ALU
-  signal daa, i_addc, srs, hc, add_adl, add_sb6, add_sb7, o_add, sb_add, inv_db_add, db_add, adl_add : std_logic;
+  signal daa, i_addc, srs, hc, add_adl, add_sb6, add_sb7, o_add, sb_add, inv_db_add, db_add, adl_add, ff_add : std_logic;
   signal alu_control : std_logic_vector(11 downto 0);
   -- Program counter High
   signal pch_pch, adh_pch, pch_adh, pch_db, h_pclc : std_logic;
@@ -686,6 +698,7 @@ Algorithmic_Unit : alu PORT MAP(
                       add_sb7,
                       o_add,
                       sb_add,
+                      ff_add,
                       inv_db_add,
                       db_add,
                       adl_add

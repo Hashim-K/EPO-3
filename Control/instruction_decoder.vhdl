@@ -15,8 +15,8 @@ entity instruction_decoder is
       control_out: OUT STD_LOGIC_VECTOR(68 DOWNTO 0);
       s1 : IN STD_LOGIC;
       s2 : IN STD_LOGIC;
-      v1: IN STD_LOGIC;
-      ff_add: IN STD_Logic
+      v1: IN STD_LOGIC
+    --  ff_add: IN STD_Logic
   );
 end entity;
 
@@ -1431,23 +1431,26 @@ begin
             when "001" =>
               --Timing: T2
               if (tcstate(2)='0') then
+                control_out<="000000000000000000000000000000000000000000000000000001000101001100000";
               end if;
               --Timing: T0
               if (tcstate(0)='0') then
+                control_out<="000000000000000000000000000000000000000000000000000000000000001111010";
               end if;
               --Timing: T1
               if (tcstate(1)='0') then
+                control_out<="000000000000000000001000000000000000000000000000010001000101001100001";
               end if;
 
-            -- A9 : LDA IMM
+            -- A9 : LDA IMM  WORKING!
             when "010" =>
               --Timing: T0
               if (tcstate(0)='0') then
-                control_out<="000000000000000000000000000000000000000000000000000001001101011100001";
+                control_out<="000000000000000000000000000000000000000000000000000001000101001100000";
               end if;
               --Timing: T1
               if (tcstate(1)='0') then
-                control_out<="100000001000000000001000000000000000000000000000010001001101011100000";
+                control_out<="000000000000000000001000000000000000000000000000010001000101001100001";
               end if;
 
             -- AD : LDA ABS
