@@ -424,7 +424,7 @@ end component;
   -- instruction decoer TODO
   signal ir_in : std_logic_vector(15 downto 0);    -- Instruction register in
   signal interrupt_vec : std_logic_vector(2 downto 0); --
-  signal r_w : std_logic;
+  signal r_w, r_wded : std_logic;
   -- Processor Status Register
   signal ir5 : std_logic;
   -- Timing generation logic
@@ -435,7 +435,7 @@ end component;
   signal inst_load : std_logic;
   signal rdy : std_logic;
   -- Predecode logic
-  signal predecode_bus : std_logic_vector(7 downto 0);
+  --
 
   --interrupt control
   signal i_1, nmi_out, irq_out, res_out, reset, interrupt: std_logic;
@@ -733,7 +733,7 @@ accumu : accumulator PORT MAP(
 
 -- Memory addres register
 add_Reg : mem_add_reg PORT MAP(
-                      clk,
+                      clk_25mhz,
                       reset,
                       mem_add_enable,
                       r_w,
@@ -772,41 +772,43 @@ flag_reg : status_register PORT MAP(
                       db
 );
 
+-- todo : FIX precharge mosfets!!
+
 --precharge mosfet
 -- SB
-pre_sb : precharge PORT MAP(
-                      clk_2,
-                      reset,
-                      sb,
-                      sb
-);
-
---precharge mosfet
--- DB
-pre_db : precharge PORT MAP(
-                      clk_2,
-                      reset,
-                      db,
-                      db
-);
-
---precharge mosfet
--- ADL
-pre_adl : precharge PORT MAP(
-                      clk_2,
-                      reset,
-                      adl,
-                      adl
-);
-
---precharge mosfet
--- ADH
-pre_adh : precharge PORT MAP(
-                      clk_2,
-                      reset,
-                      adh,
-                      adh
-);
+-- pre_sb : precharge PORT MAP(
+--                       clk_2,
+--                       reset,
+--                       sb,
+--                       sb
+-- );
+--
+-- --precharge mosfet
+-- -- DB
+-- pre_db : precharge PORT MAP(
+--                       clk_2,
+--                       reset,
+--                       db,
+--                       db
+-- );
+--
+-- --precharge mosfet
+-- -- ADL
+-- pre_adl : precharge PORT MAP(
+--                       clk_2,
+--                       reset,
+--                       adl,
+--                       adl
+-- );
+--
+-- --precharge mosfet
+-- -- ADH
+-- pre_adh : precharge PORT MAP(
+--                       clk_2,
+--                       reset,
+--                       adh,
+--                       adh
+-- );
 
 -- pass mosfets
 -- SB -> DB
@@ -880,30 +882,30 @@ int_ctl : interr_res PORT MAP(
                       reset,
                       interrupt,
                       resg,
-                      r_w
+                      r_wded -- TODO FIX!!!
 );
 
 -- Instruction Register
 ins_reg : intruction_reg PORT MAP(
-                      clk,
+                      clk_2,  -- second phase
                       reset,
                       rdy,
                       sync,
-                      ins_data_in,
+                      db_external,
                       ins_data_out
 );
 
 -- Predecode Register
 pre_reg : predecode_register PORT MAP(
-                        clk_2,
+                        clk_2,  -- second phase
                         '1',
                         reset,
-                        db,
-                        predecode_bus
+                        db_external,
+                        ins_data_in
 );
 -- Predecode logic
  pr_logic : predecode_logic PORT MAP(
-                       predecode_bus,
+                       db_external,
                        reset,
                        ins_data_in,
                        cycles,
@@ -911,7 +913,7 @@ pre_reg : predecode_register PORT MAP(
  );
  -- Timing generation logic
  tim_gen : timing_generation PORT MAP(
-                       clk,
+                       clk_2, -- second phase
                        reset,
                        bcr,
                        acr,

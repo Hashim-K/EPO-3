@@ -26,7 +26,7 @@ entity interr_res is
 	res_out	  : out	std_logic;
 	interrupt	: out	std_logic;
 	reset	  : out	std_logic; -- fake reset to predicode
-	rw	  : out	std_logic);
+	rw	  : out	std_logic); -- TODO FIX!!!!!!
 end interr_res;
 
 architecture behaviour of interr_res is

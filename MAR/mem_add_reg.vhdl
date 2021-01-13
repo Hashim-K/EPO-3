@@ -22,7 +22,7 @@ entity mem_add_reg is -- output logic for external interfacint output first low 
 end entity;
 
 architecture arch of mem_add_reg is
-  type statetype is (reset_state, state1, state2, state3);
+  type statetype is (reset_state, pr_state, state1, state2, state3);
   signal state, next_state : statetype := reset_state;
 
   signal c, c_next : integer;
@@ -52,13 +52,16 @@ begin
       control <= "11"; -- means not in operation
 
       if enable = '1' then
-        if r_w = '1' then
-            next_state <= state1;
-        else
-            next_state <= state3;
-        end if;
+        next_state <= pr_state;
       else
         next_state <= reset_state;
+      end if;
+
+    when pr_state =>
+      if r_w = '1' then
+        next_state <= state1;
+      else
+        next_state <= state3;
       end if;
 
     when state1 =>
