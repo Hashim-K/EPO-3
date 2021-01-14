@@ -133,7 +133,7 @@ BEGIN
     acr2 WHEN "001000000000",
     acr2 WHEN "001000000010",
 
-    'Z' WHEN OTHERS;
+    control(1) WHEN OTHERS;
   hc <= '0'; -- pulled to low since it is not implemented
 
 END ARCHITECTURE;
