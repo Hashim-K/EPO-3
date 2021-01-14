@@ -11,7 +11,8 @@ entity processor is
   res : in std_logic;
   irq : in std_logic;
   sv  : in std_logic;
-  r	  : in std_logic;
+  r	  : in std_logic; -- Reset signal
+  -- r_w : OUT std_logic; -- Read/Write Signal
   adb_external : out std_logic_vector(7 downto 0);  -- External connection of the addres + data
   adb_control : out std_logic_vector(1 downto 0);   -- Select the external register
   db_external : in std_logic_vector(7 downto 0)    -- External connection of the databus bus in
@@ -226,7 +227,7 @@ end component;
         	irq_out	  : out	std_logic;
         	res_out	  : out	std_logic; -- This is the real reset
         	interrupt	: out	std_logic; --IRQG
-        	reset	    : out	std_logic; --:C THIS IS RESG
+        	reset	    : out	std_logic; --:C THIS IS RESG signal
         	rw	      : out	std_logic
     );
   end component;
