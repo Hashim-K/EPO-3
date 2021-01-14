@@ -73,6 +73,8 @@ ARCHITECTURE structural OF alu IS
     );
   END COMPONENT;
 
+
+
   COMPONENT A_input_register IS
     PORT (
       clk : IN STD_LOGIC;
@@ -109,18 +111,26 @@ ARCHITECTURE structural OF alu IS
       clk_2 : IN STD_LOGIC; -- second phase clock, used as load signal
       add_adl : IN STD_LOGIC; -- output to ADL
       add_sb6 : IN STD_LOGIC; -- output to SB bus 0-6
-      add_sb7 : IN STD_LOGIC -- output to SB bus 7
+      add_sb7 : IN STD_LOGIC; -- output to SB bus 7
+      load_signal : IN std_logic
     );
   END COMPONENT;
 
   -- intermidate data signals
   SIGNAL output_alu : STD_LOGIC_VECTOR(7 DOWNTO 0);
   SIGNAL a, b : STD_LOGIC_VECTOR(7 DOWNTO 0);
-  SIGNAL inv_clk : std_logic;
+  signal load_signal : std_logic;
 
 BEGIN
 
-  inv_clk <= not clk;
+
+load_signal <= control(0)
+               or control(1) or control(2)
+               or control(3) or control(4)
+               or control(5) or control(6)
+               or control(7) or control(8)
+               or control(9) or control(10)
+               or control(11);
 
   -- ALU logic
   alu_logicmap : alu_logic PORT MAP(
@@ -131,7 +141,7 @@ BEGIN
     avr,
     acr,
     hc
-  ); 
+  );
 
   -- B input register
   B_REGISTER : B_input_register PORT MAP(
@@ -155,7 +165,7 @@ BEGIN
 
   -- adder hold register THIS IS TRIGGERED AT INV_Q1
   HOLD_REGISTER : adder_hold_register PORT MAP(
-    inv_clk,
+    clk,
     reset,
     output_alu,
     adl_out,
@@ -163,6 +173,7 @@ BEGIN
     clk_2,
     add_adl,
     add_sb6,
-    add_sb7);
+    add_sb7,
+    load_signal);
 
 END ARCHITECTURE;

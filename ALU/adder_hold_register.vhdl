@@ -14,7 +14,8 @@ ENTITY adder_hold_register IS
     clk_2 : IN STD_LOGIC; -- second phase clock, used as load signal
     add_adl : IN STD_LOGIC; -- output to ADL
     add_sb6 : IN STD_LOGIC; -- output to SB bus 0-6
-    add_sb7 : IN STD_LOGIC -- output to SB bus 7
+    add_sb7 : IN STD_LOGIC; -- output to SB bus 7
+    load_signal : IN std_logic
   );
 END ENTITY;
 
@@ -47,6 +48,6 @@ BEGIN
     '0' & reg_out(6 DOWNTO 0) WHEN "01",
     reg_out(7) & "0000000" WHEN "10",
     "ZZZZZZZZ" WHEN OTHERS; -- this is now inverted 1 phase clock ask Tom
-  l1 : register_8bit PORT MAP(clk, '1', reset, alu_data_in, reg_out);
+  l1 : register_8bit PORT MAP(clk_2, load_signal, reset, alu_data_in, reg_out);
 
 END ARCHITECTURE;
