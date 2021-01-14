@@ -33,7 +33,7 @@ architecture arch of instruction_decoder is
   -- p_db, db0_c, ir5_c, acr_c, dbi_z, dbz_z, db2_1, ir5_1, db3_d, ir5_d, db6_v, avr_v, one_v, db7_n: std_logic := '0' ;
 
 begin
-  r_w <= '1'; -- TODO FIX R_W SIGNAL
+   -- TODO FIX R_W SIGNAL
 
   Control : process(tcstate)
   begin
@@ -49,6 +49,7 @@ begin
           case ir_in(4 downto 2) is
             -- 00 : BRK
             when "000" =>
+              r_w <= '1';
               --Timing: T2
               if (tcstate(2)='0') then
                 control_out<="0000000000000000000000000000000000000000000000000000001000101001100000";
@@ -437,6 +438,7 @@ begin
           case ir_in(4 downto 2) is
             -- A0 : LDY IMM  V
             when "000" =>
+              r_w <= '1';
               --Timing: T0
               if (tcstate(0)='0') then
                 control_out<="0000000000000000000000000000000000000000000000000000001000101001100000";
@@ -757,11 +759,14 @@ begin
 
             -- 09 : ORA IMM
             when "010" =>
+              r_w <= '1';
               --Timing: T0
               if (tcstate(0)='0') then
+                control_out <= "0000000000000000000100100000000000000000000000000000001000101001100000";
               end if;
               --Timing: T1
               if (tcstate(1)='0') then
+                  control_out <= "0101000001010000000001001100000001000000010000000000001000101001100001";
               end if;
               --Timing: T2
               if (tcstate(2)='0') then
@@ -896,14 +901,17 @@ begin
 
             --29 : AND IMM
             when "010" =>
+              r_w <= '1';
               --Timing: T2
               if (tcstate(2)='0') then
+                control_out <= "0000000000000000000100100000000000000000000000000000001000101001100000";
               end if;
               --Timing: T0
               if (tcstate(0)='0') then
               end if;
               --Timing: T1
               if (tcstate(1)='0') then
+                control_out <= "0101000001010000000001001100000000010000010000000000001000101001100001";
               end if;
 
             --2D : AND ABS
@@ -1037,12 +1045,14 @@ begin
             when "010" =>
               --Timing: T2
               if (tcstate(2)='0') then
+                control_out <= "0000000000000000000100100000000000000000000000000000001000101001100000";
               end if;
               --Timing: T0
               if (tcstate(0)='0') then
               end if;
               --Timing: T1
               if (tcstate(1)='0') then
+                control_out <= "0101000001010000000001001100000000100000010000000000001000101001100001";
               end if;
 
             --4D : EOR ABS
@@ -1177,13 +1187,18 @@ begin
 
             -- 69 : ADC IMM
             when "010" =>
+              r_w <= '1';
               --Timing: T0
               if (tcstate(0)='0') then
                 control_out<="0000000000000000000100100000000000000000000000000000001000101001100000";
               end if;
               --Timing: T1
               if (tcstate(1)='0') then
-                control_out<="0000000000000000000001001100000000001000010000000000001000101001100001";
+                if cin = '1' THEN
+                control_out<="0101000001010000000001001100000000001100010000000000001000101001100001";
+                else
+                control_out<="0101000001010000000001001100000000001000010000000000001000101001100001";
+                end if;
               end if;
 
             -- 6D : ADC ABS
@@ -1303,14 +1318,18 @@ begin
 
             -- 85 : STA Z-Page
             when "001" =>
+              r_w <= '0';
               --Timing: T2
               if (tcstate(2)='0') then
+                control_out <= "0000000000000000000000000000000000000000000000000000001000101001100000";
               end if;
               --Timing: T0
               if (tcstate(0)='0') then
+                control_out <= "1000000000000000000010000000000000000000000000000000000000000001111010";
               end if;
               --Timing: T1
               if (tcstate(1)='0') then
+                control_out <= "0000000000000000000000000000000000000000000000000000001000101001100000";
               end if;
 
             -- 8D : STA ABS
@@ -1430,6 +1449,7 @@ begin
 
             -- A5 : LDA Z-Page  V
             when "001" =>
+              r_w <= '1';
               --Timing: T2
               if (tcstate(2)='0') then
                 control_out<="0000000000000000000000000000000000000000000000000000001000101001100000";
@@ -1445,6 +1465,7 @@ begin
 
             -- A9 : LDA IMM  V
             when "010" =>
+              r_w <= '1';
               --Timing: T0
               if (tcstate(0)='0') then
                 control_out<="0000000000000000000000000000000000000000000000000000001000101001100000";
@@ -1855,14 +1876,17 @@ begin
 
             -- 0A : ASL A
             when "010" =>
+              r_w <= '1';
               --Timing: T2
               if (tcstate(2)='0') then
+                control_out <= "0000000000000000000100100000000100000000000000000000000000000000000000";
               end if;
               --Timing: T0
               if (tcstate(0)='0') then
               end if;
               --Timing: T1
               if (tcstate(1)='0') then
+                control_out <= "0100000001010000000001001100000000000000000000000001001000101001100000";
               end if;
 
             -- 0E : ASL ABS
@@ -1958,14 +1982,17 @@ begin
 
             -- 2A : rotl A
             when "010" =>
+              r_w <= '1';
               --Timing: T2
-              if (tcstate(2)='0') then
+              if (tcstate(2)='0') THEN
+                control_out <= "0000000000000000000100100000010000000000000000000000000000000000000000";
               end if;
               --Timing: T0
               if (tcstate(0)='0') then
               end if;
               --Timing: T1
               if (tcstate(1)='0') then
+                control_out <= "0100000001010000000001001100000000000000000000000001001000101001100000";
               end if;
 
             -- 2E : rotl ABS
@@ -2061,17 +2088,17 @@ begin
 
             -- 4A : LSR A
             when "010" =>
+              r_w <= '1';
               --Timing: T2
               if (tcstate(2)='0') then
-                control_out<="0000000000000000000000000000000000000000000000000000001001101011100000";
+                control_out<="0000000000000000000100100000000010000000000000000000000000000000000000";
               end if;
               --Timing: T0
               if (tcstate(0)='0') then
-                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               end if;
               --Timing: T1
               if (tcstate(1)='0') then
-                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+                control_out<="0100000001010000000001001100000000000000000000000001001000101001100000";
               end if;
 
             -- 4E : LSR ABS
@@ -2167,14 +2194,17 @@ begin
 
             -- 6A : rotr A
             when "010" =>
+              r_w <= '1';
               --Timing: T2
               if (tcstate(2)='0') then
+                control_out <= "0000000000000000000100100000001000000000000000000000000000000000000000";
               end if;
               --Timing: T0
               if (tcstate(0)='0') then
               end if;
               --Timing: T1
               if (tcstate(1)='0') then
+                control_out <= "0100000001010000000001001100000000000000000000000001001000101001100000";
               end if;
 
             -- 6E : rotr ABS
@@ -2325,6 +2355,7 @@ begin
           case ir_in(4 downto 2) is
             -- A2 : LDX IMM
             when "000" =>
+              r_w <= '1';
               -- --Timing: T2
               -- if (tcstate(2)='0') then
               -- end if;

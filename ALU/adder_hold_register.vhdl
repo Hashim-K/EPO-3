@@ -33,7 +33,10 @@ ARCHITECTURE arch OF adder_hold_register IS
 
   SIGNAL reg_out : STD_LOGIC_VECTOR(7 DOWNTO 0);
   SIGNAL control : STD_LOGIC_VECTOR(1 DOWNTO 0);
+
+  signal clk_inv : std_logic;
 BEGIN
+  clk_inv <= NOT clk;
   control(0) <= add_sb6;
   control(1) <= add_sb7;
 
@@ -48,6 +51,6 @@ BEGIN
     '0' & reg_out(6 DOWNTO 0) WHEN "01",
     reg_out(7) & "0000000" WHEN "10",
     "ZZZZZZZZ" WHEN OTHERS; -- this is now inverted 1 phase clock ask Tom
-  l1 : register_8bit PORT MAP(clk_2, load_signal, reset, alu_data_in, reg_out);
+  l1 : register_8bit PORT MAP(clk_inv, load_signal, reset, alu_data_in, reg_out);
 
 END ARCHITECTURE;
