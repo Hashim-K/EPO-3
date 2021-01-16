@@ -41,15 +41,15 @@ begin
           cycles <= "011";
         elsif (databus (4 DOWNTO 2) = "010") then -- (#immediate)
           cycles <= "010";
-        elsif (databus (4 DOWNTO 2) = "010") then -- (absolute)
+        elsif (databus (4 DOWNTO 2) = "011") then -- (absolute)
           cycles <= "100";
-        elsif (databus (4 DOWNTO 2) = "010") then -- (Indirect), Y
+        elsif (databus (4 DOWNTO 2) = "100") then -- (Indirect), Y
           cycles <= "110";
-        elsif (databus (4 DOWNTO 2) = "010") then -- zero page, X
+        elsif (databus (4 DOWNTO 2) = "101") then -- zero page, X
           cycles <= "100";
-        elsif (databus (4 DOWNTO 2) = "010") then -- absolute, Y
+        elsif (databus (4 DOWNTO 2) = "110") then -- absolute, Y
           cycles <= "101";
-        elsif (databus (4 DOWNTO 2) = "010") then -- absolute, X
+        elsif (databus (4 DOWNTO 2) = "111") then -- absolute, X
           cycles <= "101";
         end if;
 
