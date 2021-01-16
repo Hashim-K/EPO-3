@@ -16,6 +16,10 @@ end entity;
 architecture behaviour of predecode_logic is
 -- Things that it is going to tell: What type of instruction, what addressing mode, how many cycles, is it a RMW-instruction.
 begin
+
+	BCR <= '0'; -- Temp fix TOM
+
+
   process(databus, reset)
   begin
     if (reset='1') then -- Reset resets the entire sequence, pushes out a BRK instruction

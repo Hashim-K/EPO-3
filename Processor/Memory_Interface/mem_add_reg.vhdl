@@ -22,7 +22,7 @@ entity mem_add_reg is -- output logic for external interfacint output first low 
 end entity;
 
 architecture arch of mem_add_reg is
-	type statetype is (reset_state, pr_state, state1, state2, state3);
+	type statetype is (reset_state,  state1, state2, state3, wait_1, wait_2, wait_3); -- pr_state,
 	signal state, next_state : statetype := reset_state;
 	signal c, c_next : integer;
 	signal rw : std_logic;
@@ -41,31 +41,47 @@ begin
 		end if;
 	end process;
 
-	seq_proc : process (state, adl_abl, adh_abh, db_dor)
+	seq_proc : process (state, adl_abl, adh_abh, db_dor, abl_in, abh_in, db_in)
 	begin
 		case state is
+
+			-- when reset_state =>
+			-- 	o_to_extern <= "00000000";
+			-- 	control <= "11"; -- means not in operation
+			--
+			-- 	if (adl_abl or adh_abh or db_dor) = '1' then
+			-- 		next_state <= pr_state;
+			-- 	else
+			-- 		next_state <= reset_state;
+			-- 	end if;
+			--
+			--
+			-- when pr_state => -- for timing wait one clock cycle
+			-- 	o_to_extern <= "00000000";
+			-- 	control <= "11";
+			-- 	if adl_abl = '1' then
+			-- 		next_state <= state1;
+			-- 	elsif adh_abh = '1' then
+			-- 		next_state <= state2;
+			-- 	elsif db_dor = '1' then
+			-- 		next_state <= state3;
+			-- 	else
+			-- 		next_state <= reset_state;
+			-- 	end if;
+
 
 			when reset_state =>
 				o_to_extern <= "00000000";
 				control <= "11"; -- means not in operation
-
-				if (adl_abl or adh_abh or db_dor) = '1' then
-					next_state <= pr_state;
-				else
-					next_state <= reset_state;
-				end if;
-
-
-			when pr_state => -- for timing wait one clock cycle
-				if adl_abl = '1' then
-					next_state <= state1;
-				elsif adh_abh = '1' then
-					next_state <= state2;
-				elsif db_dor = '1' then
-					next_state <= state3;
-				else
-					next_state <= reset_state;
-				end if;
+					if adl_abl = '1' then
+						next_state <= state1;
+					elsif adh_abh = '1' then
+						next_state <= state2;
+					elsif db_dor = '1' then
+						next_state <= state3;
+					else
+						next_state <= reset_state;
+					end if;
 
 			when state1 =>
 				-- ABL
@@ -76,7 +92,7 @@ begin
 				elsif db_dor = '1' then
 					next_state <= state3;
 				else
-					next_state <= reset_state;
+					next_state <= wait_1;
 				end if;
 
 			when state2 =>
@@ -86,7 +102,7 @@ begin
 				if db_dor = '1' then
 					next_state <= state3;
 				else
-					next_state <= reset_state;
+					next_state <= wait_2;
 				end if;
 
 			when state3 =>
@@ -94,6 +110,18 @@ begin
 				o_to_extern <= db_in;
 				control <= "10";
 				next_state <= reset_state;
+
+			when wait_1 =>
+					o_to_extern <= "00000000";
+					control <= "11";
+					next_state <= wait_2;
+
+			when wait_2 =>
+					o_to_extern <= "00000000";
+					control <= "11";
+					next_state <= reset_state;
+
+
 
 			when others =>
 				next_state <= reset_state;

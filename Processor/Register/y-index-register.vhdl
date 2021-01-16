@@ -25,12 +25,8 @@ reg: process(clk, reset, sb_y)	--process to determine output register
 			end if;
 		end process;
 
-output: process(y_sb)		--process to determine when to y_sb to component/bus
-		begin
-			if (y_sb='1') then
-				sb <= q;		-- only output when control tells to y_sb, else high impedance
-			elsif (y_sb='0') then
-				sb <= "ZZZZZZZZ";
-			end if;
-		end process;
+with y_sb select sb <=
+	q when '1',
+	"ZZZZZZZZ" when others;
+	
 end behaviour;

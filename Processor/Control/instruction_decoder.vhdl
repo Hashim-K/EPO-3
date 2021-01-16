@@ -35,7 +35,7 @@ architecture arch of instruction_decoder is
 begin
    -- TODO FIX R_W SIGNAL
 
-  Control : process(tcstate)
+  Control : process(tcstate, ir_in) -- Fix TOM added IR
   begin
   --  control_temp_out<="000000000000000000000000000000000000000000000000000000000000000000000";
   case ir_in(1 downto 0) is
@@ -76,7 +76,7 @@ begin
               end if;
               --Timing: T1
               if (tcstate(1)='0') then
-                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+                control_out<="0000000000000000000000000000000000000000000000000000000000001000000000";
               end if;
 
             -- 08 : PHP

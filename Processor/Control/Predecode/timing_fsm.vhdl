@@ -47,8 +47,8 @@ begin
   Timing : process (clk, reset)
   begin
     if (reset = '1') then
-      state <= T0;
-    elsif (rising_edge(clk)) then
+      state <= T2_7; -- T1P_T1 -> T2_7 now its correct break is 7 cycles!! TOM
+    elsif (rising_edge(clk)) then 
         case state is
           when T0 =>
             state <= T1P_T1;

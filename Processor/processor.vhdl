@@ -539,12 +539,13 @@ begin
   pch_db      <= control_out(14);
   pch_adh     <= control_out(15);
 
-  h_pclc      <= pc_carry; -- carry in from program counter low
+  -- carry in from program counter low
+  h_pclc      <= pc_carry;
 
 
 -- Program Counter Low
   -- checked 18-12-2020 23:51
-  l_pclc        <= pc_carry;-- Carry out
+  pc_carry    <= l_pclc;-- Carry out
   pcl_pcl     <= control_out(7);-- Load from PCL
   adl_pcl     <= control_out(8);-- Load from ADL
   i_pc        <= control_out(9);-- Enable Increment program counter
@@ -576,9 +577,10 @@ begin
   -- sv            <= ;
 
 -- interrupt control
+       res_out <='1';
        interrupt_vec(0) <=	nmi_out;
-       interrupt_vec(1) <= irq_out;
-       interrupt_vec(2) <= res_out;
+       interrupt_vec(1) <=  irq_out;
+       interrupt_vec(2) <=  res_out;
 
 
 -- mem_add_reg
@@ -633,7 +635,7 @@ begin
     --<= rmw
 
 -- timing_generation
-    -- bcr        <=
+    bcr <= '0';  -- TODO assing value
     -- page_cross <=
     --rmw        <=
     --cycles     <=
@@ -723,7 +725,7 @@ Algorithmic_Unit : alu PORT MAP(
 
 -- program counter low
 program_counter_low  : pc_low  PORT MAP(
-                      clk,
+                      clk_2,  -- increment on second phase
                       reset,
                       l_pclc,
                       i_pc,
@@ -737,7 +739,7 @@ program_counter_low  : pc_low  PORT MAP(
 
 -- program counter high
 program_counter_high : pc_high PORT MAP(
-                      clk,
+                      clk_2, -- increment on second phase
                       reset,
                       adh_pch,
                       pch_adh,
