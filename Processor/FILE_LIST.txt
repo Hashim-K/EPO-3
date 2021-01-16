@@ -1,0 +1,46 @@
+# Thise files are needed to simulate the processor
+
+
+\ALU\B_input_register.vhdl
+\ALU\A_input_register.vhdl
+\ALU\register_8bit.vhd
+\ALU\8_bit_or.vhdl
+\ALU\8_bit_xor.vhdl
+\ALU\adder_hold_register.vhdl
+\ALU\8_bit_adder
+\ALU\alu_lgic.vhdl
+\ALU\8_bit_shift.vhdl
+\ALU\alu.vhdl
+\ALU\8_bit_pass.vhd
+\ALU\8_bit_and.vhdl
+
+
+\Program_Counter\pc_low.vhdl
+\Program_Counter\pc_high.vhdl
+
+\Clock_Generator\clock.vhdl
+
+\Accumulator\accumulator.vhd
+
+\Memory_Interface\mem_data_reg.vhdl
+\Memory_Interface\mem_add_reg.vhdl
+
+\Control\ready_control.vhdl
+\Control\timing.vhdl
+\Control\predecode_logic.vhdl
+\Control\timing_fsm.vhdl
+\Control\8_bit_register.vhdl
+
+\Mosfets\Drain Mosfets\open_drain_ADH.vhdl
+\Mosfets\Drain Mosfets\open_drain_ADL.vhdl
+
+\Mosfets\Pass Mosfets\pass_mosfet.vhdl
+
+\Control\InterruptControl\interrupt_reset_control.vhd
+\Control\Instruction_decoder.vhdl
+
+processor.vhdl
+
+system.vhdl
+Mem_dummy.vhdl
+

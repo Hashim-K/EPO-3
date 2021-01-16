@@ -9,3 +9,7 @@ Examples/
 .idea/vcs.xml
 
 Control/c00/timing
+
+Mosfets/Pass Mosfets/pass_mosfets_test.vhdl
+
+Mosfets/Pass Mosfets/pass_mosfets_test_tb.vhdl.vhdl
