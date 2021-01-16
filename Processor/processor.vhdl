@@ -290,11 +290,16 @@ end component;
   end component;
 
   -- Pass Mosfets
-    component pass is
-       port(buss_in   : in  std_logic_vector(7 downto 0);
-            enable_pass   : in  std_logic;
-            buss_out  : out std_logic_vector(7 downto 0));
-    end component;
+component pass is
+     port(bus_in_1   : in  std_logic_vector(7 downto 0);
+          bus_in_2   : in std_logic_vector(7 downto 0);
+          enable_pass: in  std_logic_vector(1 downto 0);
+          --enable_pass(0) db -> sb and adh -> sb
+          --enable_pass(1) sb -> db and sb -> adh
+          bus_out_1  : out std_logic_vector(7 downto 0);
+          bus_out_2  : out std_logic_vector(7 downto 0)
+          );
+  end component;
 
   -- Open Drain MOSFET ADH
     component open_drain_ADL is
@@ -490,6 +495,8 @@ end component;
    signal system_reset : std_logic;
 
    signal reset_off : std_logic;
+
+   signal pass_1, pass_2 : std_logic_vector(1 downto 0);
 begin
   inv_res <= not res;
 
@@ -840,33 +847,60 @@ flag_reg : status_register PORT MAP(
 
 -- pass mosfets
 -- SB -> DB
+
+pass_1 <= db_sb_pass & sb_db_pass;
+
+
 pass_sb_db : pass PORT MAP(
-                      sb,
-                      sb_db_pass,
-                      db
+             sb,
+             db,
+             pass_1,
+             db,
+             sb
 );
 
--- pass mosfets
--- SB -> ADH
+pass_2 <= sb_adh_pass & adh_sb_pass;
 pass_sb_adh : pass PORT MAP(
-                      sb,
-                      sb_adh_pass,
-                      adh
+             adh,
+             sb,
+             pass_2,
+             sb,
+             adh
 );
--- pass mosfets
--- ADH -> SB
-pass_adh_sb : pass PORT MAP(
-                      adh,
-                      adh_sb_pass,
-                      sb
-);
--- pass mosfets
--- DB -> SB
-db_sb_adh : pass PORT MAP(
-                      db,
-                      db_sb_pass,
-                      sb
-);
+
+
+-- pass_sb_db : pass PORT MAP(
+--                       sb,
+--                       sb_db_pass,
+--                       db
+-- );
+--
+-- -- pass mosfets
+-- -- SB -> ADH
+-- pass_sb_adh : pass PORT MAP(
+--                       sb,
+--                       sb_adh_pass,
+--                       adh
+-- );
+-- -- pass mosfets
+-- -- ADH -> SB
+-- pass_adh_sb : pass PORT MAP(
+--                       adh,
+--                       adh_sb_pass,
+--                       sb
+-- );
+-- -- pass mosfets
+-- -- DB -> SB
+-- db_sb_adh : pass PORT MAP(
+--                       db,
+--                       db_sb_pass,
+--                       sb
+-- );
+
+
+
+
+
 
 -- open drain mosfet high
 od_adh : open_drain_ADH PORT MAP(
