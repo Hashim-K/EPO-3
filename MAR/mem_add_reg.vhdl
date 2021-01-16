@@ -1,96 +1,102 @@
 library ieee;
-  use ieee.std_logic_1164.all;
-  use ieee.numeric_std.all;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
 
 entity mem_add_reg is -- output logic for external interfacint output first low addres, high addres, than data
-  port (
-  clk : IN std_logic;
-  reset : IN std_logic;
+	port (
+		clk : in std_logic;
+		reset : in std_logic;
 
-  --enable : IN std_logic; -- enable the transition This is ADH/ABH, ADL/ABL and DB/DOR
-  adh_abh : IN std_logic;
-  adl_abl : IN std_logic;
-  db_dor : IN std_logic;  -- External data out!!
-  r_w   : IN std_logic;  -- Internal write write signal
-                          -- High= Read
-                          -- low = Write
+		--enable : IN std_logic; -- enable the transition This is ADH/ABH, ADL/ABL and DB/DOR
+		adh_abh : in std_logic;
+		adl_abl : in std_logic;
+		db_dor : in std_logic; -- External data out!!
 
-  abl_in : IN std_logic_vector(7 downto 0); -- Addres bus low in
-  abh_in : IN std_logic_vector(7 downto 0); -- Addres bus High in
-  db_in : IN std_logic_vector(7 downto 0); -- Data bus in
+		abl_in : in std_logic_vector(7 downto 0); -- Addres bus low in
+		abh_in : in std_logic_vector(7 downto 0); -- Addres bus High in
+		db_in : in std_logic_vector(7 downto 0); -- Data bus in
 
-  o_to_extern : OUT std_logic_vector(7 downto 0); -- output to external component
-  control : OUT std_logic_vector(1 downto 0) -- multiplex data
-  );
+		o_to_extern : out std_logic_vector(7 downto 0); -- output to external component
+		control : out std_logic_vector(1 downto 0) -- multiplex data
+	);
 end entity;
 
 architecture arch of mem_add_reg is
-  type statetype is (reset_state, pr_state, state1, state2, state3);
-  signal state, next_state : statetype := reset_state;
-  signal enable : std_logic;
-  signal c, c_next : integer;
-  signal rw : std_logic;
+	type statetype is (reset_state, pr_state, state1, state2, state3);
+	signal state, next_state : statetype := reset_state;
+	signal c, c_next : integer;
+	signal rw : std_logic;
 begin
+	comb_proc : process (clk)
+	begin
+		if rising_edge(clk) then
+			if reset = '1' then
+				state <= reset_state;
+				c <= 0;
+				c_next <= 0;
+			else
+				state <= next_state;
+				c <= c_next;
+			end if;
+		end if;
+	end process;
 
-  enable <= adl_abl or adh_abh;
-  rw <= db_dor;
+	seq_proc : process (state, adl_abl, adh_abh, db_dor)
+	begin
+		case state is
 
-comb_proc : process(clk)
-begin
-  if rising_edge(clk) then
-    if reset = '1' then
-      state <= reset_state;
-      c <= 0;
-      c_next <= 0;
-    else
-      state <= next_state;
-      c <= c_next;
-    end if;
-  end if;
-end process;
+			when reset_state =>
+				o_to_extern <= "00000000";
+				control <= "11"; -- means not in operation
 
-seq_proc : process(state, enable, rw)
-begin
+				if (adl_abl or adh_abh or db_dor) = '1' then
+					next_state <= pr_state;
+				else
+					next_state <= reset_state;
+				end if;
 
-  case state is
-    when reset_state =>
 
-      o_to_extern <= "00000000";
-      control <= "11"; -- means not in operation
+			when pr_state => -- for timing wait one clock cycle
+				if adl_abl = '1' then
+					next_state <= state1;
+				elsif adh_abh = '1' then
+					next_state <= state2;
+				elsif db_dor = '1' then
+					next_state <= state3;
+				else
+					next_state <= reset_state;
+				end if;
 
-      if enable = '1' then
-        next_state <= pr_state;
-      else
-        next_state <= reset_state;
-      end if;
+			when state1 =>
+				-- ABL
+				o_to_extern <= abl_in;
+				control <= "00";
+				if adh_abh = '1' then
+					next_state <= state2;
+				elsif db_dor = '1' then
+					next_state <= state3;
+				else
+					next_state <= reset_state;
+				end if;
 
-    when pr_state =>
-      if rw = '0' then
-        next_state <= state1;
-      else
-        next_state <= state3;
-      end if;
+			when state2 =>
+				-- ABH
+				o_to_extern <= abh_in;
+				control <= "01";
+				if db_dor = '1' then
+					next_state <= state3;
+				else
+					next_state <= reset_state;
+				end if;
 
-    when state1 =>
-          -- output addres low to external
-          o_to_extern <= abl_in;
-          control <= "00";
-          next_state <= state2;
-    when state2 =>
-          -- output addres high to external
-          o_to_extern <= abh_in;
-          control <= "01";
+			when state3 =>
+				-- DOR
+				o_to_extern <= db_in;
+				control <= "10";
+				next_state <= reset_state;
 
-          next_state <= reset_state;
-
-    when state3 =>
-          -- output databus to external
-          o_to_extern <= db_in;
-          control <= "10";
-
-          next_state <= reset_state;
-    when others =>
-          next_state <= reset_state;
-  end case;
-end process;
+			when others =>
+				next_state <= reset_state;
+		end case;
+	end process;
 end architecture;

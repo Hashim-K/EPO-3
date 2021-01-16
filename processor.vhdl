@@ -29,11 +29,14 @@ architecture structural of processor is
 
   -- clock circuit for generating a two phase clock signal
   component clock is
-    port (clk_25mhz : in std_logic; -- External cock in
-          reset : in std_logic;
-          clk : out std_logic;  -- first phase clock
-          clk_2 : out std_logic -- Second phase clock
-          );
+    port (
+    clk_25mhz : IN std_logic; -- External cock in
+    reset : IN std_logic;
+
+    system_reset : OUT std_logic;
+    clk : OUT std_logic;  -- first phase clock
+    clk_2 : OUT std_logic -- Second phase clock
+    );
   end component;
 
 
@@ -172,9 +175,6 @@ end component;
     adl_abl : IN std_logic;
     db_dor : IN std_logic;  -- External data out!!
 
-    r_w   : IN std_logic;  -- Internal write write signal
-                            -- High= Read
-                            -- low = Write
 
     abl_in : IN std_logic_vector(7 downto 0); -- Addres bus low in
     abh_in : IN std_logic_vector(7 downto 0); -- Addres bus High in
@@ -486,6 +486,10 @@ end component;
    signal accumulator_clk : std_logic; -- special reset for the accumulator
 
    signal adh_abh, adl_abl, db_dor : std_logic; -- memory signals
+
+   signal system_reset : std_logic;
+
+   signal reset_off : std_logic;
 begin
   inv_res <= not res;
 
@@ -634,7 +638,7 @@ begin
     -- <=s2
     -- <=v1
 
-
+reset <= system_reset;
 
 
 --/*************************************************
@@ -659,6 +663,7 @@ begin
 clo: clock PORT MAP(
                       clk_25mhz,
                       inv_res, -- external reset with not gate
+                      system_reset,
                       clk,
                       clk_2
                       );
@@ -760,7 +765,6 @@ add_Reg : mem_add_reg PORT MAP(
                       adh_abh,
                       adl_abl,
                       db_dor,
-                      r_w,
                       adl,
                       adh,
                       db,
@@ -903,7 +907,7 @@ int_ctl : interr_res PORT MAP(
                       i_1,
                       nmi_out,
                       irq_out,
-                      reset,
+                      reset_off,
                       interrupt,
                       resg,
                       r_wded -- TODO FIX!!!

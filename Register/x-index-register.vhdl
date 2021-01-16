@@ -16,10 +16,10 @@ begin
 
 reg : process(clk, reset, sb_x)	--process to determine output register
 		begin
-			if (rising_edge(clk) and sb_x='1') then	--both need to be high to sb_x value from bus
+			if (rising_edge(clk)) then	--both need to be high to sb_x value from bus
 				if (reset='1') then
 					q <= "00000000";		--clears the value in q
-				elsif (reset='0') then
+				elsif (reset='0' and sb_x='1') then
 					q <= data_in;			--data from bus stored in q
 				end if;
 			end if;
