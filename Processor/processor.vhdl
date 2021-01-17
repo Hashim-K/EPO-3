@@ -11,11 +11,16 @@ entity processor is
   res : in std_logic;
   irq : in std_logic;
   sv  : in std_logic;
-  r	  : in std_logic; -- Reset signal
-  -- r_w : OUT std_logic; -- Read/Write Signal
+  r	  : in std_logic; -- ready
+
   adb_external : out std_logic_vector(7 downto 0);  -- External connection of the addres + data
   adb_control : out std_logic_vector(1 downto 0);   -- Select the external register
-  db_external : in std_logic_vector(7 downto 0)    -- External connection of the databus bus in
+  db_external : in std_logic_vector(7 downto 0);    -- External connection of the databus bus in
+
+  sys_cont : OUT std_logic_vector(2 downto 0);
+  sys_inst : OUT std_logic_vector(7 downto 0);
+  sys_acc : OUT std_logic_vector(7 downto 0)
+
   );
 end entity;
 
@@ -151,17 +156,20 @@ end component;
 
   -- accumulator
   component accumulator IS
-     port (clk : in std_logic;
-          reset : in std_logic;
-          ac_db : in std_logic; --accumulator to databus
-          ac_sb : in std_logic; --accumulator to systembus
-          sb_ac : in std_logic; --systembus to accumulator
-          sb_in : in std_logic_vector(7 downto 0); --systembus in
-          sb_out : out std_logic_vector(7 downto 0); --systembus out
-          db : out std_logic_vector(7 downto 0); --databus out
-          zero_flag : out std_logic;
-          negative_flag : out std_logic
-      );
+  PORT (
+      clk : IN STD_LOGIC;
+      reset : IN STD_LOGIC;
+      ac_db : IN STD_LOGIC; --accumulator to databus
+      ac_sb : IN STD_LOGIC; --accumulator to systembus
+      sb_ac : IN STD_LOGIC; --systembus to accumulator
+      sb_in : IN STD_LOGIC_VECTOR(7 DOWNTO 0); --systembus in
+      sb_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); --systembus out
+      db : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); --databus out
+      zero_flag : OUT STD_LOGIC;
+      negative_flag : OUT STD_LOGIC;
+
+      content : OUT std_logic_vector(7 downto 0)
+  );
   END component;
 
   -- External addres register
@@ -202,35 +210,35 @@ end component;
     );
   end component;
 
-   -- Interrupt control
-   component interr_res is
-     port(clk1		  : in	std_logic;
-          clk2	    : in	std_logic;
-  	      nmi       : in  std_logic;
-          irq       : in  std_logic;
-          res       : in  std_logic;
-  	      timer	    : in	std_logic_vector(5 downto 0);
-  	      v1	      : in	std_logic;
-	        I	        : in	std_logic;
-	        bcr	      : in	std_logic;
-	        page_cross: in	std_logic;
-          --interrupt : out std_logic_vector(2 downto 0);
-          --nmig      : out std_logic;
-          --nmil      : out std_logic;
-          --irqp      : out std_logic;
-          --nmip      : out std_logic;
-          --resp      : out std_logic;
-          --intg      : out std_logic;
-          --resg      : out std_logic);
-        	I_flag	  : out	std_logic;
-        	nmi_out	  : out	std_logic;
-        	irq_out	  : out	std_logic;
-        	res_out	  : out	std_logic; -- This is the real reset
-        	interrupt	: out	std_logic; --IRQG
-        	reset	    : out	std_logic; --:C THIS IS RESG signal
-        	rw	      : out	std_logic
-    );
-  end component;
+  --  -- Interrupt control
+  --  component interr_res is
+  --    port(clk1		  : in	std_logic;
+  --         clk2	    : in	std_logic;
+  -- 	      nmi       : in  std_logic;
+  --         irq       : in  std_logic;
+  --         res       : in  std_logic;
+  -- 	      timer	    : in	std_logic_vector(5 downto 0);
+  -- 	      v1	      : in	std_logic;
+	--         I	        : in	std_logic;
+	--         bcr	      : in	std_logic;
+	--         page_cross: in	std_logic;
+  --         --interrupt : out std_logic_vector(2 downto 0);
+  --         --nmig      : out std_logic;
+  --         --nmil      : out std_logic;
+  --         --irqp      : out std_logic;
+  --         --nmip      : out std_logic;
+  --         --resp      : out std_logic;
+  --         --intg      : out std_logic;
+  --         --resg      : out std_logic);
+  --       	I_flag	  : out	std_logic;
+  --       	nmi_out	  : out	std_logic;
+  --       	irq_out	  : out	std_logic;
+  --       	res_out	  : out	std_logic; -- This is the real reset
+  --       	interrupt	: out	std_logic; --IRQG
+  --       	reset	    : out	std_logic; --:C THIS IS RESG signal
+  --       	rw	      : out	std_logic
+  --   );
+  -- end component;
 
    -- Instruction decoder
    component instruction_decoder is
@@ -441,7 +449,6 @@ component pass is
   -- stack pointer
   signal sb_s, s_sb, s_adl : std_logic;
   -- instruction decoer TODO
-  signal ir_in : std_logic_vector(15 downto 0);    -- Instruction register in
   signal interrupt_vec : std_logic_vector(2 downto 0); --
   signal r_w, r_wded : std_logic;
   -- Processor Status Register
@@ -497,8 +504,17 @@ component pass is
    signal reset_off : std_logic;
 
    signal pass_1, pass_2 : std_logic_vector(1 downto 0);
+
+   signal acc_content : std_logic_vector(7 downto 0);
 begin
   inv_res <= not res;
+
+
+  sys_cont <= clk_2 & clk & reset;
+  sys_inst <= ins_data_out;
+
+  sys_acc <= acc_content;
+
 
 --/*************************************************
 --*                    Signal Assignment           *
@@ -569,16 +585,13 @@ begin
 
 -- Instruction decoder
   -- TODO: FIX Instruction Decoder
-  -- ir_in         <=  ins_data_out; -- in std_logic_vector(15 downto 0);
-  -- timing        <=  timing_vector; -- in std_logic_vector(5 downto 0);
-  -- interrupt     <= ;
-  -- ready         <= ;
-  -- r_w           <= ;
-  -- sv            <= ;
+
 
 -- interrupt control
        res_out <='1';
+		 nmi_out <= '0';
        interrupt_vec(0) <=	nmi_out;
+		 irq_out <= '0';
        interrupt_vec(1) <=  irq_out;
        interrupt_vec(2) <=  res_out;
 
@@ -600,7 +613,9 @@ begin
   -- checked 18-12-2020 23:58
   -- This is for all the flags etc
     status_reg_control(6 downto 0) <= control_out(62 downto 56);
+	 i_1 <= '0';
     status_reg_control(7) <= i_1;
+
     status_reg_control(13 downto 8) <= control_out(68 downto 63);
     --p_db
     status_reg_control(14) <= control_out(55);
@@ -763,7 +778,8 @@ accumu : accumulator PORT MAP(
                       sb,
                       db,
                       zero_flag,
-                      negative_flag
+                      negative_flag,
+                      acc_content
                       );
 
 
@@ -928,26 +944,26 @@ stk_point :  stack_pointer PORT MAP(
                       adl
 );
 
--- Interrupt Control
-int_ctl : interr_res PORT MAP(
-                      clk,
-                      clk_2,
-                      nmi,
-                      irq,
-                      res,    -- external reset
-                      tcstate,
-                      v1,
-                      i,
-                      bcr,
-                      acr,
-                      i_1,
-                      nmi_out,
-                      irq_out,
-                      reset_off,
-                      interrupt,
-                      resg,
-                      r_wded -- TODO FIX!!!
-);
+-- -- Interrupt Control
+-- int_ctl : interr_res PORT MAP(
+--                       clk,
+--                       clk_2,
+--                       nmi,
+--                       irq,
+--                       res,    -- external reset
+--                       tcstate,
+--                       v1,
+--                       i,
+--                       bcr,
+--                       acr,
+--                       i_1,
+--                       nmi_out,
+--                       irq_out,
+--                       reset_off,
+--                       interrupt,
+--                       resg,
+--                       r_wded -- TODO FIX!!!
+-- );
 
 
 
@@ -1023,17 +1039,7 @@ pre_reg : predecode_register PORT MAP(
 
 
 
-
-ins_redy : process(clk_2)
-begin
-  if rising_edge(clk_2) then
-    switch <= '1';
-  else
-    switch <= '0';
-  end if;
-end process;
-
-ins_reg_clk <= (clk nor clk_2) when switch = '1';
+ins_reg_clk <= not clk_2;
 
 
 

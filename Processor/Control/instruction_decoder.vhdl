@@ -34,8 +34,9 @@ architecture arch of instruction_decoder is
 
 begin
    -- TODO FIX R_W SIGNAL
+   r_w <= '0';
 
-  Control : process(tcstate, ir_in) -- Fix TOM added IR
+  Control : process(tcstate, ir_in, cin) -- Fix TOM added IR, cin
   begin
   --  control_temp_out<="000000000000000000000000000000000000000000000000000000000000000000000";
   case ir_in(1 downto 0) is
@@ -49,50 +50,57 @@ begin
           case ir_in(4 downto 2) is
             -- 00 : BRK
             when "000" =>
-              r_w <= '1';
               --Timing: T2
               if (tcstate(2)='0') then
                 control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              end if;
+
               --Timing: T3
-              if (tcstate(3)='0') then
+              elsif (tcstate(3)='0') then
                 control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              end if;
+
               --Timing: T4
-              if (tcstate(4)='0') then
+              elsif (tcstate(4)='0') then
                 control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              end if;
+
               --Timing: T5
-              if (tcstate(5)='0') then
+              elsif (tcstate(5)='0') then
                 control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              end if;
+
               --Timing: T6
-              if (tcstate(0)='1' and tcstate(1)='1' and tcstate(2)='1' and tcstate(3)='1' and tcstate(4)='1' and tcstate(5)='1') then
+              elsif (tcstate(0)='1' and tcstate(1)='1' and tcstate(2)='1' and tcstate(3)='1' and tcstate(4)='1' and tcstate(5)='1') then
                 control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              end if;
+
               --Timing: T0
-              if (tcstate(0)='0') then
+              elsif (tcstate(0)='0') then
                 control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              end if;
+
               --Timing: T1
-              if (tcstate(1)='0') then
+              elsif (tcstate(1)='0') then
                 control_out<="0000000000000000000000000000000000000000000000000000000000001000000000";
+
+              else
+                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               end if;
 
             -- 08 : PHP
             when "010" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
+
               end if;
               --Timing: T0
               if (tcstate(0)='0') then
+
               end if;
               --Timing: T1
               if (tcstate(1)='0') then
+
               end if;
 
             -- 10 : BPL
             when "100" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T0
               if (tcstate(0)='0') then
               end if;
@@ -108,6 +116,7 @@ begin
 
             -- 18 : CLC
             when "110" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T0
               if (tcstate(0)='0') then
               end if;
@@ -119,6 +128,7 @@ begin
               end if;
 
             when others =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
 
           end case;
 
@@ -127,6 +137,7 @@ begin
           case ir_in(4 downto 2) is
             -- 20 : JSR
             when "000" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -148,6 +159,7 @@ begin
 
             -- 24 : BIT Z-Page
             when "001" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T0
               if (tcstate(0)='0') then
               end if;
@@ -160,6 +172,7 @@ begin
 
             -- 28 : PLP
             when "010" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T0
               if (tcstate(0)='0') then
               end if;
@@ -175,6 +188,7 @@ begin
 
             -- 2c : BIT ABS
             when "011" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T0
               if (tcstate(0)='0') then
               end if;
@@ -190,6 +204,7 @@ begin
 
             -- 30 : BMI
             when "100" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T0
               if (tcstate(0)='0') then
               end if;
@@ -205,6 +220,7 @@ begin
 
             -- 38 : SEC
             when "110" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T0
               if (tcstate(0)='0') then
               end if;
@@ -216,6 +232,7 @@ begin
               end if;
 
             when others =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
 
           end case;
 
@@ -224,6 +241,7 @@ begin
           case ir_in(4 downto 2) is
             -- 60 : RTS
             when "000" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -245,6 +263,7 @@ begin
 
             -- 68 : PLA
             when "010" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T0
               if (tcstate(0)='0') then
               end if;
@@ -260,6 +279,7 @@ begin
 
             -- 4C : JMP ABS
             when "011" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T0
               if (tcstate(0)='0') then
               end if;
@@ -272,6 +292,7 @@ begin
 
             -- 70 : BVS
             when "100" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T0
               if (tcstate(0)='0') then
               end if;
@@ -287,6 +308,7 @@ begin
 
             -- 78 : SEI
             when "110" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T0
               if (tcstate(0)='0') then
               end if;
@@ -298,6 +320,7 @@ begin
               end if;
 
             when others =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
 
           end case;
 
@@ -305,43 +328,49 @@ begin
         when "011" =>
           case ir_in(4 downto 2) is
               -- 40 : RTI
-              when "000" =>
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T5
-              if (tcstate(5)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
+            when "000" =>
+                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+                --Timing: T2
+                  if (tcstate(2)='0') then
+                  end if;
+                  --Timing: T3
+                  if (tcstate(3)='0') then
+                  end if;
+                  --Timing: T4
+                  if (tcstate(4)='0') then
+                  end if;
+                  --Timing: T5
+                  if (tcstate(5)='0') then
+                  end if;
+                  --Timing: T0
+                  if (tcstate(0)='0') then
+                  end if;
+                  --Timing: T1
+                  if (tcstate(1)='0') then
+                  end if;
 
             -- 48 : PHA
             when "010" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
 
 
             -- 50 : BVC
             when "100" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
 
 
             -- 6C : JMP IND
             when "101" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
 
 
             -- 58 : CLI
             when "110" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
 
 
             when others =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
 
           end case;
 
@@ -350,6 +379,7 @@ begin
           case ir_in(4 downto 2) is
             -- 84 : STY Z-Page
             when "001" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T0
               if (tcstate(0)='0') then
               end if;
@@ -362,6 +392,7 @@ begin
 
             -- 88 : DEY
             when "010" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T0
               if (tcstate(0)='0') then
               end if;
@@ -374,6 +405,7 @@ begin
 
             -- 8C : STY ABS
             when "011" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T0
               if (tcstate(0)='0') then
               end if;
@@ -389,6 +421,7 @@ begin
 
             -- 90 : BCC
             when "100" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T0
               if (tcstate(0)='0') then
               end if;
@@ -404,6 +437,7 @@ begin
 
             -- 94 : STY Z-Page,X
             when "101" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T0
               if (tcstate(0)='0') then
               end if;
@@ -419,6 +453,7 @@ begin
 
             -- 98 : TYA
             when "110" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T0
               if (tcstate(0)='0') then
               end if;
@@ -430,6 +465,7 @@ begin
               end if;
 
             when others =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
 
           end case;
 
@@ -438,29 +474,29 @@ begin
           case ir_in(4 downto 2) is
             -- A0 : LDY IMM  V
             when "000" =>
-              r_w <= '1';
               --Timing: T0
               if (tcstate(0)='0') then
                 control_out<="0000000000000000000000000000000000000000000000000000001000101001100000";
-              end if;
               --Timing: T1
-              if (tcstate(1)='0') then
+              elsif (tcstate(1)='0') then
                 control_out<="0000000000000000100000000000000000000000000000000010001000101001100001";
+              else
+                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               end if;
 
             -- A4 : LDY Z-Page
             when "001" =>
-            --Timing: T2
+              --Timing: T2
               if (tcstate(2)='0') then
                 control_out<="0000000000000000000000000000000000000000000000000000001000101001100000";
-              end if;
               --Timing: T0
-              if (tcstate(0)='0') then
+              elsif (tcstate(0)='0') then
                 control_out<="0000000000000000000000000000000000000000000000000000000000000001111010";
-              end if;
               --Timing: T1
-              if (tcstate(1)='0') then
+              elsif (tcstate(1)='0') then
                 control_out<="0000000000000000100000000000000000000000000000000010001000101001100001";
+              else
+                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               end if;
 
             -- A8 : TAY
@@ -468,14 +504,16 @@ begin
               --Timing: T0
               if (tcstate(0)='0') then
                 control_out <= "0000000000000000100100000000000000000000000000000000000000000000000000";
-              end if;
               --Timing: T1
-              if (tcstate(1)='0') then
+              elsif (tcstate(1)='0') then
                 control_out <= "0100000001000000000010000000000000000000000000000000001000101001100000";
+              else
+                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               end if;
 
             --AC : LDY ABS
             when "011" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T0
               if (tcstate(0)='0') then
               end if;
@@ -491,10 +529,11 @@ begin
 
             -- B0 : BCS
             when "100" =>
-
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
 
             -- B4 : LDY Z-Page,X
             when "101" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T0
               if (tcstate(0)='0') then
               end if;
@@ -510,6 +549,7 @@ begin
 
             -- B8 : CLV
             when "110" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T0
               if (tcstate(0)='0') then
               end if;
@@ -522,6 +562,7 @@ begin
 
             -- BC : LDY ABS,X
             when "111" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T0
               if (tcstate(0)='0') then
               end if;
@@ -539,14 +580,17 @@ begin
               end if;
 
             when others =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
 
           end case;
 
         --110xxx00
         when "110" =>
+
           case ir_in(4 downto 2) is
             -- C0 : CPY IMM
             when "000" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T0
               if (tcstate(0)='0') then
               end if;
@@ -559,6 +603,7 @@ begin
 
             -- C4 : CPY Z-Page
             when "001" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T0
               if (tcstate(0)='0') then
               end if;
@@ -574,14 +619,16 @@ begin
               --Timing: T0
               if (tcstate(0)='0') then
                 control_out <= "0000000000000001000000010000000000001100010000000001000000000000000000";
-              end if;
               --Timing: T1
-              if (tcstate(1)='0') then
+              elsif (tcstate(1)='0') then
                 control_out <= "0100000001000000100000001100000000000000000000000001001000101001100000";
+              else
+                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               end if;
 
             -- CC : CPY ABS
             when "011" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T0
               if (tcstate(0)='0') then
               end if;
@@ -597,6 +644,7 @@ begin
 
             -- D0 : BNE
             when "100" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T0
               if (tcstate(0)='0') then
               end if;
@@ -612,6 +660,7 @@ begin
 
             -- D8 : CLD
             when "110" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T0
               if (tcstate(0)='0') then
               end if;
@@ -623,6 +672,7 @@ begin
               end if;
 
             when others =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
 
           end case;
 
@@ -631,6 +681,7 @@ begin
           case ir_in(4 downto 2) is
             -- E0 : CPX IMM
             when "000" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T0
               if (tcstate(0)='0') then
               end if;
@@ -643,6 +694,7 @@ begin
 
             -- E4 : CPX Z-Page
             when "001" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T0
               if (tcstate(0)='0') then
               end if;
@@ -658,14 +710,16 @@ begin
               --Timing: T0
               if (tcstate(0)='0') then
                 control_out <= "0000000000000000010000010000000000001100010000000001000000000000000000";
-              end if;
               --Timing: T1
-              if (tcstate(1)='0') then
+              elsif (tcstate(1)='0') then
                 control_out <= "0100000001000000001000001100000000000000000000000001001000101001100000";
+              else
+                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               end if;
 
             -- EC : CPX ABS
             when "011" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T0
               if (tcstate(0)='0') then
               end if;
@@ -681,6 +735,7 @@ begin
 
             -- F0 : BEQ
             when "100" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T0
               if (tcstate(0)='0') then
               end if;
@@ -696,6 +751,7 @@ begin
 
             -- F8 : SED
             when "110" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T0
               if (tcstate(0)='0') then
               end if;
@@ -707,11 +763,12 @@ begin
               end if;
 
             when others =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
 
           end case;
 
         when others =>
-
+          control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
       end case;
     -----------------------------------   END   --------------------------------------
 
@@ -723,6 +780,7 @@ begin
           case ir_in(4 downto 2) is
             --01 : ORA IND,X
             when "000" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -744,6 +802,7 @@ begin
 
             -- 05 : ORA Z-Page
             when "001" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T0
               if (tcstate(0)='0') then
               end if;
@@ -756,14 +815,14 @@ begin
 
             -- 09 : ORA IMM
             when "010" =>
-              r_w <= '1';
               --Timing: T0
               if (tcstate(0)='0') then
                 control_out <= "0000000000000000000100100000000000000000000000000000001000101001100000";
-              end if;
               --Timing: T1
-              if (tcstate(1)='0') then
+              elsif (tcstate(1)='0') then
                   control_out <= "0101000001010000000001001100000001000000010000000000001000101001100001";
+              else
+                  control_out <="0000000000000000000000000000000000000000000000000000000000000000000000";
               end if;
               --Timing: T2
               if (tcstate(2)='0') then
@@ -771,6 +830,7 @@ begin
 
             -- 0D : ORA ABS
             when "011" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T0
               if (tcstate(0)='0') then
               end if;
@@ -786,6 +846,7 @@ begin
 
             -- 11 : ORA IND,Y
             when "100" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -807,6 +868,7 @@ begin
 
             -- 15 : ORA Z-Page,X
             when "101" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -822,6 +884,7 @@ begin
 
             -- 19 : ORA ABS,Y
             when "110" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -840,6 +903,7 @@ begin
 
             -- 1D : ORA ABS,X
             when "111" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -857,6 +921,7 @@ begin
               end if;
 
             when others =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
 
           end case;
 
@@ -865,6 +930,7 @@ begin
           case ir_in(4 downto 2) is
             --21 : AND IND,X
             when "000" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -886,6 +952,7 @@ begin
 
             --25 : AND Z-Page
             when "001" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -898,21 +965,19 @@ begin
 
             --29 : AND IMM
             when "010" =>
-              r_w <= '1';
               --Timing: T2
               if (tcstate(2)='0') then
                 control_out <= "0000000000000000000100100000000000000000000000000000001000101001100000";
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
               --Timing: T1
-              if (tcstate(1)='0') then
+              elsif (tcstate(1)='0') then
                 control_out <= "0101000001010000000001001100000000010000010000000000001000101001100001";
+              else
+                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               end if;
 
             --2D : AND ABS
             when "011" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -928,6 +993,7 @@ begin
 
             --31 : AND IND,Y
             when "100" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -949,6 +1015,7 @@ begin
 
             -- 35 : AND Z-Page,X
             when "101" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -964,6 +1031,7 @@ begin
 
             -- 39 : AND ABS,Y
             when "110" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -982,6 +1050,7 @@ begin
 
             -- 3D : AND ABS,X
             when "111" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -999,6 +1068,7 @@ begin
               end if;
 
             when others =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
 
           end case;
 
@@ -1007,6 +1077,7 @@ begin
           case ir_in(4 downto 2) is
             --41 : EOR IND,X
             when "000" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -1028,6 +1099,7 @@ begin
 
             --45 : EOR Z-Page
             when "001" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -1043,17 +1115,16 @@ begin
               --Timing: T2
               if (tcstate(2)='0') then
                 control_out <= "0000000000000000000100100000000000000000000000000000001000101001100000";
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
               --Timing: T1
-              if (tcstate(1)='0') then
+              elsif (tcstate(1)='0') then
                 control_out <= "0101000001010000000001001100000000100000010000000000001000101001100001";
+              else
+                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               end if;
 
             --4D : EOR ABS
             when "011" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -1069,6 +1140,7 @@ begin
 
             --51 : EOR IND,Y
             when "100" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -1090,6 +1162,7 @@ begin
 
             --55 : EOR Z-Page,X
             when "101" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -1105,6 +1178,7 @@ begin
 
             --59 : EOR ABS,Y
             when "110" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -1123,6 +1197,7 @@ begin
 
             --5D : EOR ABS,X
             when "111" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -1140,6 +1215,7 @@ begin
               end if;
 
             when others =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
 
           end case;
 
@@ -1148,6 +1224,7 @@ begin
           case ir_in(4 downto 2) is
             -- 61 : ADC IND,X
             when "000" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -1172,38 +1249,39 @@ begin
               --Timing: T2
               if (tcstate(2)='0') then
                 control_out<="0000000000000000000100100000000000000000000000000000001000101001100000";
-              end if;
               --Timing: T0
-              if (tcstate(0)='0') then
+              elsif (tcstate(0)='0') then
                 control_out<="0000000000000000000000000000000000000000000000000000000000001001111010";
-              end if;
               --Timing: T1
-              if (tcstate(1)='0') then
+              elsif (tcstate(1)='0') then
                 if cin = '1' THEN
                   control_out<="0000000000000000000001001100000000001100010000000000001000101001100001";
                 else
                   control_out<="0000000000000000000001001100000000001000010000000000001000101001100001";
                 end if;
+              else
+                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               end if;
 
             -- 69 : ADC IMM
             when "010" =>
-              r_w <= '1';
               --Timing: T0
               if (tcstate(0)='0') then
                 control_out<="0000000000000000000100100000000000000000000000000000001000101001100000";
-              end if;
               --Timing: T1
-              if (tcstate(1)='0') then
+              elsif (tcstate(1)='0') then
                 if cin = '1' THEN
                 control_out<="0101000001010000000001001100000000001100010000000000001000101001100001";
                 else
                 control_out<="0101000001010000000001001100000000001000010000000000001000101001100001";
                 end if;
+              else
+                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               end if;
 
             -- 6D : ADC ABS
             when "011" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -1219,6 +1297,7 @@ begin
 
             -- 71 : ADC IND,Y
             when "100" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -1240,6 +1319,7 @@ begin
 
             -- 75 : ADC Z-Page,X
             when "101" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -1255,6 +1335,7 @@ begin
 
             -- 79 : ADC ABS,Y
             when "110" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -1273,6 +1354,7 @@ begin
 
             -- 7D : ADC ABS,X
             when "111" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -1290,6 +1372,7 @@ begin
               end if;
 
             when others =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
 
           end case;
 
@@ -1298,6 +1381,7 @@ begin
           case ir_in(4 downto 2) is
             -- 81 : STA IND,X
             when "000" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -1319,25 +1403,22 @@ begin
 
             -- 85 : STA Z-Page
             when "001" =>
-
               --Timing: T2
               if (tcstate(2)='0') then
-                r_w <= '1';
                 control_out <= "0000000000000000000000000000000000000000000000000000001000101001100000";
-              end if;
               --Timing: T0
-              if (tcstate(0)='0') then
-                r_w <= '0';
+              elsif (tcstate(0)='0') then
                 control_out <= "1000000000000000000010000000000000000000000000000000000000000001111010";
-              end if;
               --Timing: T1
-              if (tcstate(1)='0') then
-                r_w <= '1';
+              elsif (tcstate(1)='0') then
                 control_out <= "0000000000000000000000000000000000000000000000000000001000101001100000";
+              else
+                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               end if;
 
             -- 8D : STA ABS
             when "011" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -1353,6 +1434,7 @@ begin
 
             -- 91 : STA IND,Y
             when "100" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -1374,6 +1456,7 @@ begin
 
             -- 95 : STA Z-Page,X
             when "101" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -1389,6 +1472,7 @@ begin
 
             -- 99 : STA ABS,Y
             when "110" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -1407,6 +1491,7 @@ begin
 
             -- 9D : STA ABS,X
             when "111" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -1424,6 +1509,7 @@ begin
               end if;
 
             when others =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
 
           end case;
 
@@ -1432,6 +1518,7 @@ begin
           case ir_in(4 downto 2) is
             -- A1 : LDA IND,X
             when "000" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -1453,34 +1540,34 @@ begin
 
             -- A5 : LDA Z-Page  V
             when "001" =>
-              r_w <= '1';
               --Timing: T2
               if (tcstate(2)='0') then
                 control_out<="0000000000000000000000000000000000000000000000000000001000101001100000";
-              end if;
               --Timing: T0
-              if (tcstate(0)='0') then
+              elsif (tcstate(0)='0') then
                 control_out<="0000000000000000000000000000000000000000000000000000000000000001111010";
-              end if;
               --Timing: T1
-              if (tcstate(1)='0') then
+              elsif (tcstate(1)='0') then
                 control_out<="0000000000000000000001000000000000000000000000000010001000101001100001";
+              else
+                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               end if;
 
             -- A9 : LDA IMM  V
             when "010" =>
-              r_w <= '1';
               --Timing: T0
               if (tcstate(0)='0') then
                 control_out<="0000000000000000000000000000000000000000000000000000001000101001100000";
-              end if;
               --Timing: T1
-              if (tcstate(1)='0') then
+              elsif (tcstate(1)='0') then
                 control_out<="0000000000000000000001000000000000000000000000000010001000101001100001";
+              else
+                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               end if;
 
             -- AD : LDA ABS
             when "011" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -1496,6 +1583,7 @@ begin
 
             -- B1 : LDA IND,Y
             when "100" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -1517,6 +1605,7 @@ begin
 
             -- B5 : LDA Z-Page,X
             when "101" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -1532,6 +1621,7 @@ begin
 
             -- B9 : LDA ABS,Y
             when "110" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -1550,6 +1640,7 @@ begin
 
             -- BD : LDA ABS,X
             when "111" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -1567,7 +1658,7 @@ begin
               end if;
 
             when others =>
-
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
           end case;
 
         --110xxx01
@@ -1575,6 +1666,7 @@ begin
           case ir_in(4 downto 2) is
             -- C1 : CMP IND,X
             when "000" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -1596,6 +1688,7 @@ begin
 
             -- C5 : CMP Z-Page
             when "001" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -1608,6 +1701,7 @@ begin
 
             -- C9 : CMP IMM
             when "010" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -1620,6 +1714,7 @@ begin
 
             -- CD : CMP ABS
             when "011" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -1635,6 +1730,7 @@ begin
 
             -- D1 : CMP IND,Y
             when "100" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -1656,6 +1752,7 @@ begin
 
             -- D5 : CMP Z-Page,X
             when "101" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -1671,6 +1768,7 @@ begin
 
             -- D9 : CMP ABS,Y
             when "110" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -1689,6 +1787,7 @@ begin
 
             -- DD : CMP ABS,X
             when "111" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -1706,6 +1805,7 @@ begin
               end if;
 
             when others =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
 
           end case;
 
@@ -1714,6 +1814,7 @@ begin
           case ir_in(4 downto 2) is
             -- E1 : SBC IND,X
             when "000" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -1738,14 +1839,14 @@ begin
               --Timing: T2
               if (tcstate(2)='0') then
                 control_out <= "0000000000000000000100100000000000000000000000000000001000101001100000";
-              end if;
               --Timing: T0
-              if (tcstate(0)='0') then
+              elsif (tcstate(0)='0') then
                 control_out <= "0000000000000000000000000000000000000000000000000000000000001001111010";
-              end if;
               --Timing: T1
-              if (tcstate(1)='0') then
+              elsif (tcstate(1)='0') then
                 control_out <= "0000000000000000000001001100000000001000001000000000001000101001100001";
+              else
+                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               end if;
 
             -- E9 : SBC IMM
@@ -1753,14 +1854,16 @@ begin
               --Timing: T0
               if (tcstate(0)='0') then
                 control_out <= "0000000000000000000100100000000000000000000000000000001000101001100000";
-              end if;
               --Timing: T1
-              if (tcstate(1)='0') then
+              elsif (tcstate(1)='0') then
                 control_out <= "0101000001010000000001001100000000001000001000000000001000101001100001";
+              else
+                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               end if;
 
             -- ED : SBC ABS
             when "011" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -1776,6 +1879,7 @@ begin
 
             -- F1 : SBC IND,Y
             when "100" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -1797,6 +1901,7 @@ begin
 
             -- F5 : SBC Z-Page,X
             when "101" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -1812,6 +1917,7 @@ begin
 
             -- F9 : SBC ABS,Y
             when "110" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -1830,6 +1936,7 @@ begin
 
             -- FD : SBC ABS,X
             when "111" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -1847,11 +1954,12 @@ begin
               end if;
 
             when others =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
 
           end case;
 
         when others =>
-
+          control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
 
       end case;
     -----------------------------------   END   --------------------------------------
@@ -1864,6 +1972,7 @@ begin
           case ir_in(4 downto 2) is
             -- 06 : ASL Z-Page
             when "001" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -1882,21 +1991,19 @@ begin
 
             -- 0A : ASL A
             when "010" =>
-              r_w <= '1';
               --Timing: T2
               if (tcstate(2)='0') then
                 control_out <= "0000000000000000000100100000000100000000000000000000000000000000000000";
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
               --Timing: T1
-              if (tcstate(1)='0') then
+              elsif (tcstate(1)='0') then
                 control_out <= "0100000001010000000001001100000000000000000000000001001000101001100000";
+              else
+                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               end if;
 
             -- 0E : ASL ABS
             when "011" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -1918,6 +2025,7 @@ begin
 
             -- 16 : ASL Z-Page,X
             when "101" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -1939,6 +2047,7 @@ begin
 
             -- 1E : ASL ABS,X
             when "111" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -1962,6 +2071,7 @@ begin
               end if;
 
             when others =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
 
           end case;
 
@@ -1970,6 +2080,7 @@ begin
           case ir_in(4 downto 2) is
             -- 26 : rotl Z-Page
             when "001" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -1988,21 +2099,19 @@ begin
 
             -- 2A : rotl A
             when "010" =>
-              r_w <= '1';
               --Timing: T2
               if (tcstate(2)='0') THEN
                 control_out <= "0000000000000000000100100000010000000000000000000000000000000000000000";
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
               --Timing: T1
-              if (tcstate(1)='0') then
+              elsif (tcstate(1)='0') then
                 control_out <= "0100000001010000000001001100000000000000000000000001001000101001100000";
+              else
+                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               end if;
 
             -- 2E : rotl ABS
             when "011" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -2024,6 +2133,7 @@ begin
 
             -- 36 : rotl Z-Page,X
             when "101" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -2045,6 +2155,7 @@ begin
 
             -- 3E : rotl ABS,X
             when "111" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -2068,14 +2179,17 @@ begin
               end if;
 
           when others =>
+            control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
 
           end case;
 
         --010xxx11
         when "010" =>
           case ir_in(4 downto 2) is
+
             -- 46 : LSR Z-Page
             when "001" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -2094,21 +2208,19 @@ begin
 
             -- 4A : LSR A
             when "010" =>
-              r_w <= '1';
               --Timing: T2
               if (tcstate(2)='0') then
                 control_out<="0000000000000000000100100000000010000000000000000000000000000000000000";
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
               --Timing: T1
-              if (tcstate(1)='0') then
+              elsif (tcstate(1)='0') then
                 control_out<="0100000001010000000001001100000000000000000000000001001000101001100000";
+              else
+                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               end if;
 
             -- 4E : LSR ABS
             when "011" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -2130,6 +2242,7 @@ begin
 
             -- 56 : LSR Z-Page,X
             when "101" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -2151,6 +2264,7 @@ begin
 
             -- 5E : LSR ABS,X
             when "111" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -2174,14 +2288,17 @@ begin
               end if;
 
             when others =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
 
           end case;
 
         --011xxx11
         when "011" =>
           case ir_in(4 downto 2) is
+
             -- 66 : rotr Z-Page
             when "001" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -2200,21 +2317,19 @@ begin
 
             -- 6A : rotr A
             when "010" =>
-              r_w <= '1';
               --Timing: T2
               if (tcstate(2)='0') then
                 control_out <= "0000000000000000000100100000001000000000000000000000000000000000000000";
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
               --Timing: T1
-              if (tcstate(1)='0') then
+              elsif (tcstate(1)='0') then
                 control_out <= "0100000001010000000001001100000000000000000000000001001000101001100000";
+              else
+                control_out <= "0000000000000000000000000000000000000000000000000000000000000000000000";
               end if;
 
             -- 6E : rotr ABS
             when "011" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -2236,6 +2351,7 @@ begin
 
             -- 76 : rotr Z-Page,X
             when "101" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -2257,6 +2373,7 @@ begin
 
             -- 7E : rotr ABS,X
             when "111" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -2280,14 +2397,17 @@ begin
               end if;
 
             when others =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
 
           end case;
 
         --100xxx11
         when "100" =>
           case ir_in(4 downto 2) is
+
             -- 86 : STX Z-Page
             when "001" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -2300,6 +2420,7 @@ begin
 
             -- 8A : TXA
             when "010" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -2312,6 +2433,7 @@ begin
 
             -- 8E : STX ABS
             when "011" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -2327,6 +2449,7 @@ begin
 
             -- 96 : STX Z-Page,Y
             when "101" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -2342,6 +2465,7 @@ begin
 
             -- 9A : TXS
             when "110" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -2353,25 +2477,24 @@ begin
               end if;
 
             when others =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
 
           end case;
 
         --101xxx11
         when "101" =>
           case ir_in(4 downto 2) is
+
             -- A2 : LDX IMM
             when "000" =>
-              r_w <= '1';
-              -- --Timing: T2
-              -- if (tcstate(2)='0') then
-              -- end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
+              --Timing: T2
+              if (tcstate(2)='0') then
                 control_out<="0000000000000000000000000000000000000000000000000000001000101001100000";
-              end if;
               --Timing: T1
-              if (tcstate(1)='0') then
+              elsif (tcstate(1)='0') then
                 control_out<="0000000000000000001000000000000000000000000000000010001000101001100001";
+              else
+                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               end if;
 
             -- A6 : LDX Z-Page
@@ -2379,14 +2502,14 @@ begin
               --Timing: T2
               if (tcstate(2)='0') then
                 control_out <= "0000000000000000000000000000000000000000000000000000001000101001100000";
-              end if;
               --Timing: T0
-              if (tcstate(0)='0') then
+              elsif (tcstate(0)='0') then
                 control_out <= "0000000000000000000000000000000000000000000000000000000000000001111010";
-              end if;
               --Timing: T1
-              if (tcstate(1)='0') then
+              elsif (tcstate(1)='0') then
                 control_out <= "0000000000000000001000000000000000000000000000000010001000101001100001";
+              else
+                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               end if;
 
             -- AA : TAX
@@ -2394,14 +2517,16 @@ begin
               --Timing: T0
               if (tcstate(0)='0') then
                 control_out <= "0000000000000000001100000000000000000000000000000000000000000000000000";
-              end if;
               --Timing: T1
-              if (tcstate(1)='0') then
+              elsif (tcstate(1)='0') then
                 control_out <= "0100000001000000000010000000000000000000000000000000001000101001100000";
+              else
+                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               end if;
 
             -- AE : LDX ABS
             when "011" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -2417,6 +2542,7 @@ begin
 
             -- B6 : LDX Z-Page,Y
             when "101" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -2432,6 +2558,7 @@ begin
 
             -- BA : TSX
             when "110" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -2444,6 +2571,7 @@ begin
 
             -- BE : LDX ABS,Y
             when "111" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -2461,14 +2589,17 @@ begin
               end if;
 
             when others =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
 
           end case;
 
         --110xxx11
         when "110" =>
           case ir_in(4 downto 2) is
+
             -- C6 : DEC Z-Page
             when "001" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -2487,6 +2618,7 @@ begin
 
             -- CA : DEX
             when "010" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -2499,6 +2631,7 @@ begin
 
             -- CE : DEC ABS
             when "011" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -2520,6 +2653,7 @@ begin
 
             -- D6 : DEC Z-Page,X
             when "101" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -2541,6 +2675,7 @@ begin
 
             -- DE : DEC ABS,X
             when "111" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -2564,14 +2699,17 @@ begin
               end if;
 
             when others =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
 
           end case;
 
         --111xxx11
         when "111" =>
           case ir_in(4 downto 2) is
+
             --E6 : INC Z-Page
             when "001" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -2590,6 +2728,7 @@ begin
 
             --EA : NOP
             when "010" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -2602,6 +2741,7 @@ begin
 
             --EE : INC ABS
             when "011" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -2623,6 +2763,7 @@ begin
 
             --F6 : INC Z-Page,X
             when "101" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -2644,6 +2785,7 @@ begin
 
             --FE : INC ABS,X
             when "111" =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
               --Timing: T2
               if (tcstate(2)='0') then
               end if;
@@ -2667,16 +2809,19 @@ begin
               end if;
 
             when others =>
+              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
 
           end case;
 
         when others =>
+          control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
 
 
       end case;
     -----------------------------------   END   --------------------------------------
 
     when others =>
+      control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
 
   end case;
   end process;

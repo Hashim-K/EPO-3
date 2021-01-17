@@ -40,140 +40,156 @@ architecture timing_logic of timing_generation is
                       T2_R6, T3_R6, T4_R6, T5_R6,
                       T2_R5, T3_R5, T4_R5);
   -- hold the current timing of the system
-  signal state : instructions;
+  signal state, next_state : instructions;
 
 begin
 
-  Timing : process (clk, reset)
-  begin
-    if (reset = '1') then
-      state <= T2_7; -- T1P_T1 -> T2_7 now its correct break is 7 cycles!! TOM
-    elsif (rising_edge(clk)) then 
-        case state is
-          when T0 =>
-            state <= T1P_T1;
 
-          when T1P => -- this is the last cycle of specific instruction which indicates that there is no page cross and no branches taken
-            if to_integer(unsigned(cycles)) = 2 then
-              state <= T2_T0;
-            elsif to_integer(unsigned(cycles)) = 3 then
-              state <= T2_3;
-            elsif to_integer(unsigned(cycles)) = 4 then
-              state <= T2_4;
-            elsif to_integer(unsigned(cycles)) = 5 then
-              state <= T2_5;
-            elsif to_integer(unsigned(cycles)) = 6 then
-              state <= T2_6;
-            elsif to_integer(unsigned(cycles)) = 7 then
-              state <= T2_7;
-            end if;
 
-          when T1P_T1 =>
-            if rmw='0' then	-- Indication that this is not a read-modify-write isntruction
-              if to_integer(unsigned(cycles)) = 2 then
-                state <= T2_T0;
-              elsif to_integer(unsigned(cycles)) = 3 then
-                state <= T2_3;
-              elsif to_integer(unsigned(cycles)) = 4 then
-                state <= T2_4;
-              elsif to_integer(unsigned(cycles)) = 5 then
-                state <= T2_5;
-              elsif to_integer(unsigned(cycles)) = 6 then
-                state <= T2_6;
-              elsif to_integer(unsigned(cycles)) = 7 then
-                state <= T2_7;
-              end if;
-            elsif rmw='1' then
-              if to_integer(unsigned(cycles)) = 2 then
-                state <= T2_T0;
-              elsif to_integer(unsigned(cycles)) = 5 then
-                state <= T2_R5;
-              elsif to_integer(unsigned(cycles)) = 6 then
-                state <= T2_R6;
-              elsif to_integer(unsigned(cycles)) = 7 then
-                state <= T2_R7;
-            end if;
-          end if;
 
-          when T2_T0 =>
-            state <= T1P_T1;
-
-          when T2_3 =>
-            state <= T0;
-          when T2_4 =>
-            state <= T3_4;
-          when T3_4 =>
-            state <= T0;
-          when T2_5 =>
-            state <= T3_5;
-          when T3_5 =>
-            if (page_cross='1') then -- is there page crossing or not
-              state <= T4_5;
-            else
-              state <= T0;
-            end if;
-          when T4_5 =>
-            state <= T0;
-          when T2_6 =>
-            state <= T3_6;
-          when T3_6 =>
-            state <= T4_6;
-          when T4_6 =>
-            if (page_cross='1') then
-              state <= T5_6;
-            else
-              state <= T0;
-            end if;
-          when T5_6 =>
-            state <= T0;
-          when T2_7 =>
-            state <= T3_7;
-          when T3_7 =>
-            state <= T4_7;
-          when T4_7 =>
-            state <= T5_7;
-          when T5_7 =>
-            state <= T6_7;
-          when T6_7 =>
-            state <= T0;
-          when T2_R5 =>
-            state <= T3_R5;
-          when T3_R5 =>
-            state <= T4_R5;
-          when T4_R5 =>
-            state <= T0;
-          when T2_R6 =>
-            state <= T3_R6;
-          when T3_R6 =>
-            state <= T4_R6;
-          when T4_R6 =>
-            state <= T5_R6;
-          when T5_R6 =>
-            state <= T0;
-          when T2_R7 =>
-            state <= T3_R7;
-          when T3_R7 =>
-            if (page_cross='1') then
-              state <=T4_R7_p;
-            else
-              state <=T4_R7_np;
-            end if;
-          when T4_R7_np =>
-            state <= T5_R7_np;
-          when T4_R7_p =>
-            state <= T5_R7_p;
-          when T5_R7_np =>
-            state <= T0;
-          when T5_R7_p =>
-            state <= T6_R7_p;
-          when T6_R7_p =>
-            state <= T0;
-          when others =>
-            state <= T0;
-          end case;
+sec_proc : process(clk)
+begin
+  if rising_edge(clk) then
+    if reset = '1' then
+      state <= T2_7;
+    else
+      state <= next_state;
     end if;
-  end process;
-  process (state)
+  end if;
+end process;
+
+
+comb_proc : process(state, cycles, page_cross, rmw)
+begin
+  case state is
+    when T0 =>
+      next_state <= T1P_T1;
+    when T1P => -- this is the last cycle of specific instruction which indicates that there is no page cross and no branches taken
+      if to_integer(unsigned(cycles)) = 2 then
+        next_state <= T2_T0;
+      elsif to_integer(unsigned(cycles)) = 3 then
+        next_state <= T2_3;
+      elsif to_integer(unsigned(cycles)) = 4 then
+        next_state <= T2_4;
+      elsif to_integer(unsigned(cycles)) = 5 then
+        next_state <= T2_5;
+      elsif to_integer(unsigned(cycles)) = 6 then
+        next_state <= T2_6;
+      elsif to_integer(unsigned(cycles)) = 7 then
+        next_state <= T2_7;
+		  else
+			  next_state <= T1P_T1;
+      end if;
+    when T1P_T1 =>
+      if rmw='0' then	-- Indication that this is not a read-modify-write isntruction
+        if to_integer(unsigned(cycles)) = 2 then
+          next_state <= T2_T0;
+        elsif to_integer(unsigned(cycles)) = 3 then
+          next_state <= T2_3;
+        elsif to_integer(unsigned(cycles)) = 4 then
+          next_state <= T2_4;
+        elsif to_integer(unsigned(cycles)) = 5 then
+          next_state <= T2_5;
+        elsif to_integer(unsigned(cycles)) = 6 then
+          next_state <= T2_6;
+        elsif to_integer(unsigned(cycles)) = 7 then
+          next_state <= T2_7;
+			  else
+			    next_state <= T1P_T1;
+        end if;
+      elsif rmw='1' then
+        if to_integer(unsigned(cycles)) = 2 then
+          next_state <= T2_T0;
+        elsif to_integer(unsigned(cycles)) = 5 then
+          next_state <= T2_R5;
+        elsif to_integer(unsigned(cycles)) = 6 then
+          next_state <= T2_R6;
+        elsif to_integer(unsigned(cycles)) = 7 then
+          next_state <= T2_R7;
+		    else
+		      next_state <= T1P_T1;
+        end if;
+      else
+        next_state <= T1P_T1;
+      end if;
+    when T2_T0 =>
+      next_state <= T1P_T1;
+    when T2_3 =>
+      next_state <= T0;
+    when T2_4 =>
+      next_state <= T3_4;
+    when T3_4 =>
+      next_state <= T0;
+    when T2_5 =>
+      next_state <= T3_5;
+    when T3_5 =>
+      if (page_cross='1') then -- is there page crossing or not
+        next_state <= T4_5;
+      else
+        next_state <= T0;
+      end if;
+    when T4_5 =>
+      next_state <= T0;
+    when T2_6 =>
+      next_state <= T3_6;
+    when T3_6 =>
+      next_state <= T4_6;
+    when T4_6 =>
+      if (page_cross='1') then
+        next_state <= T5_6;
+      else
+        next_state <= T0;
+      end if;
+    when T5_6 =>
+      next_state <= T0;
+    when T2_7 =>
+      next_state <= T3_7;
+    when T3_7 =>
+      next_state <= T4_7;
+    when T4_7 =>
+      next_state <= T5_7;
+    when T5_7 =>
+      next_state <= T6_7;
+    when T6_7 =>
+      next_state <= T0;
+    when T2_R5 =>
+      next_state <= T3_R5;
+    when T3_R5 =>
+      next_state <= T4_R5;
+    when T4_R5 =>
+      next_state <= T0;
+    when T2_R6 =>
+      next_state <= T3_R6;
+    when T3_R6 =>
+      next_state <= T4_R6;
+    when T4_R6 =>
+      next_state <= T5_R6;
+    when T5_R6 =>
+      next_state <= T0;
+    when T2_R7 =>
+      next_state <= T3_R7;
+    when T3_R7 =>
+      if (page_cross='1') then
+        next_state <=T4_R7_p;
+      else
+        next_state <=T4_R7_np;
+      end if;
+    when T4_R7_np =>
+      next_state <= T5_R7_np;
+    when T4_R7_p =>
+      next_state <= T5_R7_p;
+    when T5_R7_np =>
+      next_state <= T0;
+    when T5_R7_p =>
+      next_state <= T6_R7_p;
+    when T6_R7_p =>
+      next_state <= T0;
+    when others =>
+      next_state <= T0;
+    end case;
+end process;
+
+  process (state, cycles, page_cross, rmw)
     begin
         case state is
           when T0 =>

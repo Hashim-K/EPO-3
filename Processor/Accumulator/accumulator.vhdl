@@ -13,7 +13,9 @@ ENTITY accumulator IS
         sb_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); --systembus out
         db : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); --databus out
         zero_flag : OUT STD_LOGIC;
-        negative_flag : OUT STD_LOGIC
+        negative_flag : OUT STD_LOGIC;
+
+        content : OUT std_logic_vector(7 downto 0)
     );
 END ENTITY;
 
@@ -54,4 +56,6 @@ BEGIN
     WITH control SELECT db <=
         data_out WHEN "01",
         "ZZZZZZZZ" WHEN OTHERS;
+
+    content <= data_out;
 END ARCHITECTURE;

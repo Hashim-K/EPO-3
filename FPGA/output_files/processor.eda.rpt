@@ -1,5 +1,5 @@
 EDA Netlist Writer report for processor
-Sat Jan 16 13:47:33 2021
+Sun Jan 17 18:16:45 2021
 Quartus II 64-Bit Version 13.0.1 Build 232 06/12/2013 Service Pack 1 SJ Web Edition
 
 
@@ -36,10 +36,10 @@ applicable agreement for further details.
 +-------------------------------------------------------------------+
 ; EDA Netlist Writer Summary                                        ;
 +---------------------------+---------------------------------------+
-; EDA Netlist Writer Status ; Successful - Sat Jan 16 13:47:33 2021 ;
+; EDA Netlist Writer Status ; Successful - Sun Jan 17 18:16:44 2021 ;
 ; Revision Name             ; processor                             ;
-; Top-level Entity Name     ; processor                             ;
-; Family                    ; Cyclone IV GX                         ;
+; Top-level Entity Name     ; system                                ;
+; Family                    ; Cyclone II                            ;
 ; Simulation Files Creation ; Successful                            ;
 +---------------------------+---------------------------------------+
 
@@ -66,20 +66,16 @@ applicable agreement for further details.
 +---------------------------------------------------------------------------------------------------+------------------------+
 
 
-+--------------------------------------------------------------------------------------------------------+
-; Simulation Generated Files                                                                             ;
-+--------------------------------------------------------------------------------------------------------+
-; Generated Files                                                                                        ;
-+--------------------------------------------------------------------------------------------------------+
-; C:/Users/T.O/Documents/GitHub/EPO3/EPO-3/FPGA/simulation/modelsim/processor_6_1200mv_85c_slow.vho      ;
-; C:/Users/T.O/Documents/GitHub/EPO3/EPO-3/FPGA/simulation/modelsim/processor_6_1200mv_0c_slow.vho       ;
-; C:/Users/T.O/Documents/GitHub/EPO3/EPO-3/FPGA/simulation/modelsim/processor_min_1200mv_0c_fast.vho     ;
-; C:/Users/T.O/Documents/GitHub/EPO3/EPO-3/FPGA/simulation/modelsim/processor.vho                        ;
-; C:/Users/T.O/Documents/GitHub/EPO3/EPO-3/FPGA/simulation/modelsim/processor_6_1200mv_85c_vhd_slow.sdo  ;
-; C:/Users/T.O/Documents/GitHub/EPO3/EPO-3/FPGA/simulation/modelsim/processor_6_1200mv_0c_vhd_slow.sdo   ;
-; C:/Users/T.O/Documents/GitHub/EPO3/EPO-3/FPGA/simulation/modelsim/processor_min_1200mv_0c_vhd_fast.sdo ;
-; C:/Users/T.O/Documents/GitHub/EPO3/EPO-3/FPGA/simulation/modelsim/processor_vhd.sdo                    ;
-+--------------------------------------------------------------------------------------------------------+
++------------------------------------------------------------------------------------------+
+; Simulation Generated Files                                                               ;
++------------------------------------------------------------------------------------------+
+; Generated Files                                                                          ;
++------------------------------------------------------------------------------------------+
+; C:/Users/T.O/Documents/GitHub/EPO3/EPO-3/FPGA/simulation/modelsim/processor.vho          ;
+; C:/Users/T.O/Documents/GitHub/EPO3/EPO-3/FPGA/simulation/modelsim/processor_fast.vho     ;
+; C:/Users/T.O/Documents/GitHub/EPO3/EPO-3/FPGA/simulation/modelsim/processor_vhd.sdo      ;
+; C:/Users/T.O/Documents/GitHub/EPO3/EPO-3/FPGA/simulation/modelsim/processor_vhd_fast.sdo ;
++------------------------------------------------------------------------------------------+
 
 
 +-----------------------------+
@@ -88,19 +84,12 @@ applicable agreement for further details.
 Info: *******************************************************************
 Info: Running Quartus II 64-Bit EDA Netlist Writer
     Info: Version 13.0.1 Build 232 06/12/2013 Service Pack 1 SJ Web Edition
-    Info: Processing started: Sat Jan 16 13:47:32 2021
+    Info: Processing started: Sun Jan 17 18:16:44 2021
 Info: Command: quartus_eda --read_settings_files=off --write_settings_files=off processor -c processor
-Info (204019): Generated file processor_6_1200mv_85c_slow.vho in folder "C:/Users/T.O/Documents/GitHub/EPO3/EPO-3/FPGA/simulation/modelsim/" for EDA simulation tool
-Info (204019): Generated file processor_6_1200mv_0c_slow.vho in folder "C:/Users/T.O/Documents/GitHub/EPO3/EPO-3/FPGA/simulation/modelsim/" for EDA simulation tool
-Info (204019): Generated file processor_min_1200mv_0c_fast.vho in folder "C:/Users/T.O/Documents/GitHub/EPO3/EPO-3/FPGA/simulation/modelsim/" for EDA simulation tool
-Info (204019): Generated file processor.vho in folder "C:/Users/T.O/Documents/GitHub/EPO3/EPO-3/FPGA/simulation/modelsim/" for EDA simulation tool
-Info (204019): Generated file processor_6_1200mv_85c_vhd_slow.sdo in folder "C:/Users/T.O/Documents/GitHub/EPO3/EPO-3/FPGA/simulation/modelsim/" for EDA simulation tool
-Info (204019): Generated file processor_6_1200mv_0c_vhd_slow.sdo in folder "C:/Users/T.O/Documents/GitHub/EPO3/EPO-3/FPGA/simulation/modelsim/" for EDA simulation tool
-Info (204019): Generated file processor_min_1200mv_0c_vhd_fast.sdo in folder "C:/Users/T.O/Documents/GitHub/EPO3/EPO-3/FPGA/simulation/modelsim/" for EDA simulation tool
-Info (204019): Generated file processor_vhd.sdo in folder "C:/Users/T.O/Documents/GitHub/EPO3/EPO-3/FPGA/simulation/modelsim/" for EDA simulation tool
+Info (204026): Generated files "processor.vho", "processor_fast.vho", "processor_vhd.sdo" and "processor_vhd_fast.sdo" in directory "C:/Users/T.O/Documents/GitHub/EPO3/EPO-3/FPGA/simulation/modelsim/" for EDA simulation tool
 Info: Quartus II 64-Bit EDA Netlist Writer was successful. 0 errors, 0 warnings
-    Info: Peak virtual memory: 4590 megabytes
-    Info: Processing ended: Sat Jan 16 13:47:33 2021
+    Info: Peak virtual memory: 4544 megabytes
+    Info: Processing ended: Sun Jan 17 18:16:45 2021
     Info: Elapsed time: 00:00:01
     Info: Total CPU time (on all processors): 00:00:01
 

@@ -17,8 +17,8 @@ signal load : std_logic;
 
 begin
 --creating the load signal based on pg44 of hardware manual
+-- load <= (sync AND rdy);
 load <= (sync AND rdy);
-
 	PROCESS (clk, reset, load)
 	BEGIN
 		IF (rising_edge(clk)) THEN

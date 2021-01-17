@@ -24,7 +24,6 @@ end entity;
 architecture arch of mem_add_reg is
 	type statetype is (reset_state,  state1, state2, state3, wait_1, wait_2, wait_3); -- pr_state,
 	signal state, next_state : statetype := reset_state;
-	signal c, c_next : integer;
 	signal rw : std_logic;
 begin
 	comb_proc : process (clk)
@@ -32,11 +31,8 @@ begin
 		if rising_edge(clk) then
 			if reset = '1' then
 				state <= reset_state;
-				c <= 0;
-				c_next <= 0;
 			else
 				state <= next_state;
-				c <= c_next;
 			end if;
 		end if;
 	end process;
@@ -121,9 +117,9 @@ begin
 					control <= "11";
 					next_state <= reset_state;
 
-
-
 			when others =>
+				o_to_extern <= "00000000";
+				control <= "11";
 				next_state <= reset_state;
 		end case;
 	end process;

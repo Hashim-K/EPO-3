@@ -55,6 +55,8 @@ begin
           cycles <= "101";
         elsif (databus (4 DOWNTO 2) = "111") then -- absolute, X
           cycles <= "101";
+		  else
+			cycles <= "111"; -- Tom fix latch
         end if;
 
       ----------------------------------- cc = 10 --------------------------------------
@@ -73,6 +75,8 @@ begin
             cycles <= "100";
           elsif (databus(4 DOWNTO 2) = "111") then -- absolute, X/Y
             cycles <= "101";
+			 else
+				cycles <= "111"; -- Tom fix latch
           end if;
         elsif (databus(4 DOWNTO 2) = "010") then -- accumulator, needs seperate statement because accumulator is not RMW
           cycles <= "010";
@@ -87,6 +91,8 @@ begin
             cycles <= "110";
           elsif (databus(4 DOWNTO 2) = "111") then -- absolute, X/Y
             cycles <= "111";
+			 else
+				cycles <= "111"; -- Tom fix latch
           end if;
         end if;
         ----------------------------------- cc = 00 --------------------------------------
@@ -129,7 +135,7 @@ begin
 						  cycles <= "101";
 					else
 						cycles<= "000";
-          end if;
+					end if;
         else
           cycles <= "000";
           RMW <= '0';

@@ -14,7 +14,9 @@ entity mem_dummy is
   addres_data_in : IN std_logic_vector(7 downto 0);
   control : IN std_logic_vector(1 downto 0);
 
-  data_out : OUT std_logic_vector(7 downto 0)
+  data_out : OUT std_logic_vector(7 downto 0);
+
+  dor_out : OUT std_logic_vector(7 downto 0)
   );
 end entity;
 
@@ -90,7 +92,7 @@ begin
   MAL : register_8bit PORT MAP(clk_inv, en_mal, res, addres_data_in, mal_out);
   MAH : register_8bit PORT MAP(clk_inv, en_mah, res, addres_data_in, mah_out);
   DATA : register_8bit PORT MAP(clk_inv, en_data, res, addres_data_in, data_reg_out);
-
+  dor_out <= data_reg_out;
   address <= mah_out & mal_out;
 
   -- at this moment no writing memory

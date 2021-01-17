@@ -1,10 +1,43 @@
-|processor
+|system
+clk_25mhz => processor:processor_m.clk_25mhz
+clk_25mhz => mem_dummy:mem_dummy_m.clk
+extern_reset => processor:processor_m.res
+extern_reset => mem_dummy:mem_dummy_m.reset
+sys_out[0] <= mem_dummy:mem_dummy_m.dor_out[0]
+sys_out[1] <= mem_dummy:mem_dummy_m.dor_out[1]
+sys_out[2] <= mem_dummy:mem_dummy_m.dor_out[2]
+sys_out[3] <= mem_dummy:mem_dummy_m.dor_out[3]
+sys_out[4] <= mem_dummy:mem_dummy_m.dor_out[4]
+sys_out[5] <= mem_dummy:mem_dummy_m.dor_out[5]
+sys_out[6] <= mem_dummy:mem_dummy_m.dor_out[6]
+sys_out[7] <= mem_dummy:mem_dummy_m.dor_out[7]
+sys_acc[0] <= processor:processor_m.sys_acc[0]
+sys_acc[1] <= processor:processor_m.sys_acc[1]
+sys_acc[2] <= processor:processor_m.sys_acc[2]
+sys_acc[3] <= processor:processor_m.sys_acc[3]
+sys_acc[4] <= processor:processor_m.sys_acc[4]
+sys_acc[5] <= processor:processor_m.sys_acc[5]
+sys_acc[6] <= processor:processor_m.sys_acc[6]
+sys_acc[7] <= processor:processor_m.sys_acc[7]
+sys_inst[0] <= processor:processor_m.sys_inst[0]
+sys_inst[1] <= processor:processor_m.sys_inst[1]
+sys_inst[2] <= processor:processor_m.sys_inst[2]
+sys_inst[3] <= processor:processor_m.sys_inst[3]
+sys_inst[4] <= processor:processor_m.sys_inst[4]
+sys_inst[5] <= processor:processor_m.sys_inst[5]
+sys_inst[6] <= processor:processor_m.sys_inst[6]
+sys_inst[7] <= processor:processor_m.sys_inst[7]
+sys_cont[0] <= processor:processor_m.sys_cont[0]
+sys_cont[1] <= processor:processor_m.sys_cont[1]
+sys_cont[2] <= processor:processor_m.sys_cont[2]
+
+
+|system|processor:processor_m
 clk_25mhz => clock:clo.clk_25mhz
 clk_25mhz => mem_add_reg:add_Reg.clk
-nmi => interr_res:int_ctl.nmi
-res => interr_res:int_ctl.res
+nmi => ~NO_FANOUT~
 res => clock:clo.reset
-irq => interr_res:int_ctl.irq
+irq => ~NO_FANOUT~
 sv => instruction_decoder:instruction_dec.sv
 r => ready:ready_map.r
 adb_external[0] <= mem_add_reg:add_Reg.o_to_extern[0]
@@ -33,9 +66,28 @@ db_external[6] => mem_data_reg:data_reg.external_in[6]
 db_external[6] => predecode_register:pre_reg.databus[6]
 db_external[7] => mem_data_reg:data_reg.external_in[7]
 db_external[7] => predecode_register:pre_reg.databus[7]
+sys_cont[0] <= clock:clo.system_reset
+sys_cont[1] <= clock:clo.clk
+sys_cont[2] <= clock:clo.clk_2
+sys_inst[0] <= intruction_reg:ins_reg.data_out[0]
+sys_inst[1] <= intruction_reg:ins_reg.data_out[1]
+sys_inst[2] <= intruction_reg:ins_reg.data_out[2]
+sys_inst[3] <= intruction_reg:ins_reg.data_out[3]
+sys_inst[4] <= intruction_reg:ins_reg.data_out[4]
+sys_inst[5] <= intruction_reg:ins_reg.data_out[5]
+sys_inst[6] <= intruction_reg:ins_reg.data_out[6]
+sys_inst[7] <= intruction_reg:ins_reg.data_out[7]
+sys_acc[0] <= accumulator:accumu.content[0]
+sys_acc[1] <= accumulator:accumu.content[1]
+sys_acc[2] <= accumulator:accumu.content[2]
+sys_acc[3] <= accumulator:accumu.content[3]
+sys_acc[4] <= accumulator:accumu.content[4]
+sys_acc[5] <= accumulator:accumu.content[5]
+sys_acc[6] <= accumulator:accumu.content[6]
+sys_acc[7] <= accumulator:accumu.content[7]
 
 
-|processor|clock:clo
+|system|processor:processor_m|clock:clo
 clk_25mhz => state~1.DATAIN
 reset => state.OUTPUTSELECT
 reset => state.OUTPUTSELECT
@@ -51,7 +103,7 @@ clk <= clk.DB_MAX_OUTPUT_PORT_TYPE
 clk_2 <= clk_2.DB_MAX_OUTPUT_PORT_TYPE
 
 
-|processor|x_index:x_in
+|system|processor:processor_m|x_index:x_in
 clk => q[0].CLK
 clk => q[1].CLK
 clk => q[2].CLK
@@ -96,7 +148,7 @@ sb[6] <= sb[6].DB_MAX_OUTPUT_PORT_TYPE
 sb[7] <= sb[7].DB_MAX_OUTPUT_PORT_TYPE
 
 
-|processor|y_index:y_in
+|system|processor:processor_m|y_index:y_in
 clk => q[0].CLK
 clk => q[1].CLK
 clk => q[2].CLK
@@ -141,7 +193,7 @@ sb[6] <= sb[6].DB_MAX_OUTPUT_PORT_TYPE
 sb[7] <= sb[7].DB_MAX_OUTPUT_PORT_TYPE
 
 
-|processor|alu:Algorithmic_Unit
+|system|processor:processor_m|alu:Algorithmic_Unit
 clk => B_input_register:B_REGISTER.clk
 clk => A_input_register:A_REGSISTER.clk
 clk => adder_hold_register:HOLD_REGISTER.clk
@@ -226,7 +278,7 @@ db_add => B_input_register:B_REGISTER.db_add
 adl_add => B_input_register:B_REGISTER.adl_add
 
 
-|processor|alu:Algorithmic_Unit|alu_logic:alu_logicmap
+|system|processor:processor_m|alu:Algorithmic_Unit|alu_logic:alu_logicmap
 a[0] => eight_bit_adder:ADDER.a[0]
 a[0] => eight_bit_or:ORR.a[0]
 a[0] => eight_bit_xor:XORR.a[0]
@@ -501,7 +553,7 @@ acr <= Selector8.DB_MAX_OUTPUT_PORT_TYPE
 hc <= <GND>
 
 
-|processor|alu:Algorithmic_Unit|alu_logic:alu_logicmap|eight_bit_adder:ADDER
+|system|processor:processor_m|alu:Algorithmic_Unit|alu_logic:alu_logicmap|eight_bit_adder:ADDER
 a[0] => Add0.IN8
 a[1] => Add0.IN7
 a[2] => Add0.IN6
@@ -535,7 +587,7 @@ carry <= Add1.DB_MAX_OUTPUT_PORT_TYPE
 overflow <= overflow.DB_MAX_OUTPUT_PORT_TYPE
 
 
-|processor|alu:Algorithmic_Unit|alu_logic:alu_logicmap|eight_bit_or:ORR
+|system|processor:processor_m|alu:Algorithmic_Unit|alu_logic:alu_logicmap|eight_bit_or:ORR
 a[0] => o.IN0
 a[1] => o.IN0
 a[2] => o.IN0
@@ -562,7 +614,7 @@ o[6] <= o.DB_MAX_OUTPUT_PORT_TYPE
 o[7] <= o.DB_MAX_OUTPUT_PORT_TYPE
 
 
-|processor|alu:Algorithmic_Unit|alu_logic:alu_logicmap|eight_bit_xor:XORR
+|system|processor:processor_m|alu:Algorithmic_Unit|alu_logic:alu_logicmap|eight_bit_xor:XORR
 a[0] => o.IN0
 a[1] => o.IN0
 a[2] => o.IN0
@@ -589,7 +641,7 @@ o[6] <= o.DB_MAX_OUTPUT_PORT_TYPE
 o[7] <= o.DB_MAX_OUTPUT_PORT_TYPE
 
 
-|processor|alu:Algorithmic_Unit|alu_logic:alu_logicmap|eight_bit_and:ANDD
+|system|processor:processor_m|alu:Algorithmic_Unit|alu_logic:alu_logicmap|eight_bit_and:ANDD
 a[0] => o.IN0
 a[1] => o.IN0
 a[2] => o.IN0
@@ -616,7 +668,7 @@ o[6] <= o.DB_MAX_OUTPUT_PORT_TYPE
 o[7] <= o.DB_MAX_OUTPUT_PORT_TYPE
 
 
-|processor|alu:Algorithmic_Unit|alu_logic:alu_logicmap|eight_bit_shift:SHIFT
+|system|processor:processor_m|alu:Algorithmic_Unit|alu_logic:alu_logicmap|eight_bit_shift:SHIFT
 a[0] => Mux6.IN14
 a[0] => Mux6.IN15
 a[0] => Mux8.IN14
@@ -706,7 +758,7 @@ o[6] <= Mux1.DB_MAX_OUTPUT_PORT_TYPE
 o[7] <= Mux0.DB_MAX_OUTPUT_PORT_TYPE
 
 
-|processor|alu:Algorithmic_Unit|alu_logic:alu_logicmap|eight_bit_pass:PASS
+|system|processor:processor_m|alu:Algorithmic_Unit|alu_logic:alu_logicmap|eight_bit_pass:PASS
 a[0] => Mux7.IN2
 a[1] => Mux6.IN2
 a[2] => Mux5.IN2
@@ -749,7 +801,7 @@ o[6] <= Mux1.DB_MAX_OUTPUT_PORT_TYPE
 o[7] <= Mux0.DB_MAX_OUTPUT_PORT_TYPE
 
 
-|processor|alu:Algorithmic_Unit|B_input_register:B_REGISTER
+|system|processor:processor_m|alu:Algorithmic_Unit|B_input_register:B_REGISTER
 clk => register_8bit:l1.clk
 reset => register_8bit:l1.reset
 db[0] => Mux7.IN0
@@ -810,7 +862,7 @@ adl_add => Mux6.IN8
 adl_add => Mux7.IN8
 
 
-|processor|alu:Algorithmic_Unit|B_input_register:B_REGISTER|register_8bit:l1
+|system|processor:processor_m|alu:Algorithmic_Unit|B_input_register:B_REGISTER|register_8bit:l1
 clk => q[0].CLK
 clk => q[1].CLK
 clk => q[2].CLK
@@ -847,7 +899,7 @@ reg_out[6] <= q[6].DB_MAX_OUTPUT_PORT_TYPE
 reg_out[7] <= q[7].DB_MAX_OUTPUT_PORT_TYPE
 
 
-|processor|alu:Algorithmic_Unit|A_input_register:A_REGSISTER
+|system|processor:processor_m|alu:Algorithmic_Unit|A_input_register:A_REGSISTER
 clk => register_8bit_A:L1.clk
 reset => register_8bit_A:L1.reset
 in_sb[0] => Mux7.IN1
@@ -886,7 +938,7 @@ sb_add => Mux7.IN5
 sb_add => Mux8.IN5
 
 
-|processor|alu:Algorithmic_Unit|A_input_register:A_REGSISTER|register_8bit_A:L1
+|system|processor:processor_m|alu:Algorithmic_Unit|A_input_register:A_REGSISTER|register_8bit_A:L1
 clk => q[0].CLK
 clk => q[1].CLK
 clk => q[2].CLK
@@ -923,7 +975,7 @@ reg_out[6] <= q[6].DB_MAX_OUTPUT_PORT_TYPE
 reg_out[7] <= q[7].DB_MAX_OUTPUT_PORT_TYPE
 
 
-|processor|alu:Algorithmic_Unit|adder_hold_register:HOLD_REGISTER
+|system|processor:processor_m|alu:Algorithmic_Unit|adder_hold_register:HOLD_REGISTER
 clk => register_8bit:l1.clk
 reset => register_8bit:l1.reset
 alu_data_in[0] => register_8bit:l1.data_in[0]
@@ -980,7 +1032,7 @@ add_sb7 => Mux8.IN4
 load_signal => register_8bit:l1.load
 
 
-|processor|alu:Algorithmic_Unit|adder_hold_register:HOLD_REGISTER|register_8bit:l1
+|system|processor:processor_m|alu:Algorithmic_Unit|adder_hold_register:HOLD_REGISTER|register_8bit:l1
 clk => q[0].CLK
 clk => q[1].CLK
 clk => q[2].CLK
@@ -1017,7 +1069,7 @@ reg_out[6] <= q[6].DB_MAX_OUTPUT_PORT_TYPE
 reg_out[7] <= q[7].DB_MAX_OUTPUT_PORT_TYPE
 
 
-|processor|pc_low:program_counter_low
+|system|processor:processor_m|pc_low:program_counter_low
 clk => register_8bit:l1.clk
 reset => register_8bit:l1.reset
 pclc <= pclc.DB_MAX_OUTPUT_PORT_TYPE
@@ -1080,7 +1132,7 @@ db_out[6] <= db_out[6].DB_MAX_OUTPUT_PORT_TYPE
 db_out[7] <= db_out[7].DB_MAX_OUTPUT_PORT_TYPE
 
 
-|processor|pc_low:program_counter_low|register_8bit:l1
+|system|processor:processor_m|pc_low:program_counter_low|register_8bit:l1
 clk => q[0].CLK
 clk => q[1].CLK
 clk => q[2].CLK
@@ -1117,7 +1169,7 @@ reg_out[6] <= q[6].DB_MAX_OUTPUT_PORT_TYPE
 reg_out[7] <= q[7].DB_MAX_OUTPUT_PORT_TYPE
 
 
-|processor|pc_high:program_counter_high
+|system|processor:processor_m|pc_high:program_counter_high
 clk => register_8bit:l1.clk
 reset => register_8bit:l1.reset
 adh_pch => to_increment[7].OUTPUTSELECT
@@ -1178,7 +1230,7 @@ db_out[6] <= db_out[6].DB_MAX_OUTPUT_PORT_TYPE
 db_out[7] <= db_out[7].DB_MAX_OUTPUT_PORT_TYPE
 
 
-|processor|pc_high:program_counter_high|register_8bit:l1
+|system|processor:processor_m|pc_high:program_counter_high|register_8bit:l1
 clk => q[0].CLK
 clk => q[1].CLK
 clk => q[2].CLK
@@ -1215,7 +1267,7 @@ reg_out[6] <= q[6].DB_MAX_OUTPUT_PORT_TYPE
 reg_out[7] <= q[7].DB_MAX_OUTPUT_PORT_TYPE
 
 
-|processor|accumulator:accumu
+|system|processor:processor_m|accumulator:accumu
 clk => register_8bit_C:l1.clk
 reset => register_8bit_C:l1.reset
 ac_db => Mux1.IN5
@@ -1290,9 +1342,17 @@ db[6] <= db[6].DB_MAX_OUTPUT_PORT_TYPE
 db[7] <= db[7].DB_MAX_OUTPUT_PORT_TYPE
 zero_flag <= Mux0.DB_MAX_OUTPUT_PORT_TYPE
 negative_flag <= sb_in[7].DB_MAX_OUTPUT_PORT_TYPE
+content[0] <= register_8bit_C:l1.reg_out[0]
+content[1] <= register_8bit_C:l1.reg_out[1]
+content[2] <= register_8bit_C:l1.reg_out[2]
+content[3] <= register_8bit_C:l1.reg_out[3]
+content[4] <= register_8bit_C:l1.reg_out[4]
+content[5] <= register_8bit_C:l1.reg_out[5]
+content[6] <= register_8bit_C:l1.reg_out[6]
+content[7] <= register_8bit_C:l1.reg_out[7]
 
 
-|processor|accumulator:accumu|register_8bit_C:l1
+|system|processor:processor_m|accumulator:accumu|register_8bit_C:l1
 clk => q[0].CLK
 clk => q[1].CLK
 clk => q[2].CLK
@@ -1329,28 +1389,27 @@ reg_out[6] <= q[6].DB_MAX_OUTPUT_PORT_TYPE
 reg_out[7] <= q[7].DB_MAX_OUTPUT_PORT_TYPE
 
 
-|processor|mem_add_reg:add_Reg
+|system|processor:processor_m|mem_add_reg:add_Reg
 clk => state~1.DATAIN
 reset => state.OUTPUTSELECT
 reset => state.OUTPUTSELECT
 reset => state.OUTPUTSELECT
 reset => state.OUTPUTSELECT
 reset => state.OUTPUTSELECT
-adh_abh => seq_proc.IN0
+reset => state.OUTPUTSELECT
+reset => state.OUTPUTSELECT
 adh_abh => next_state.OUTPUTSELECT
 adh_abh => next_state.OUTPUTSELECT
 adh_abh => next_state.DATAA
 adh_abh => Selector9.IN3
-adl_abl => seq_proc.IN1
 adl_abl => next_state.OUTPUTSELECT
 adl_abl => next_state.OUTPUTSELECT
 adl_abl => next_state.OUTPUTSELECT
 adl_abl => next_state.state1.DATAB
-db_dor => seq_proc.IN1
 db_dor => next_state.DATAA
 db_dor => Selector10.IN4
 db_dor => next_state.DATAA
-db_dor => Selector8.IN2
+db_dor => Selector11.IN2
 abl_in[0] => Selector7.IN2
 abl_in[1] => Selector6.IN2
 abl_in[2] => Selector5.IN2
@@ -1387,7 +1446,7 @@ control[0] <= control.DB_MAX_OUTPUT_PORT_TYPE
 control[1] <= control.DB_MAX_OUTPUT_PORT_TYPE
 
 
-|processor|mem_data_reg:data_reg
+|system|processor:processor_m|mem_data_reg:data_reg
 clk => register_8bit:l1.clk
 reset => register_8bit:l1.reset
 load => data_in[7].OUTPUTSELECT
@@ -1456,7 +1515,7 @@ external_in[6] => data_in[6].DATAB
 external_in[7] => data_in[7].DATAB
 
 
-|processor|mem_data_reg:data_reg|register_8bit:l1
+|system|processor:processor_m|mem_data_reg:data_reg|register_8bit:l1
 clk => q[0].CLK
 clk => q[1].CLK
 clk => q[2].CLK
@@ -1493,7 +1552,7 @@ reg_out[6] <= q[6].DB_MAX_OUTPUT_PORT_TYPE
 reg_out[7] <= q[7].DB_MAX_OUTPUT_PORT_TYPE
 
 
-|processor|status_register:flag_reg
+|system|processor:processor_m|status_register:flag_reg
 clk => register_8bit:l1.clk
 reset => register_8bit:l1.reset
 db_in[0] => dbz.IN0
@@ -1550,7 +1609,7 @@ db_out[6] <= db_out[6].DB_MAX_OUTPUT_PORT_TYPE
 db_out[7] <= db_out[7].DB_MAX_OUTPUT_PORT_TYPE
 
 
-|processor|status_register:flag_reg|register_8bit:l1
+|system|processor:processor_m|status_register:flag_reg|register_8bit:l1
 clk => q[0].CLK
 clk => q[1].CLK
 clk => q[2].CLK
@@ -1587,7 +1646,7 @@ reg_out[6] <= q[6].DB_MAX_OUTPUT_PORT_TYPE
 reg_out[7] <= q[7].DB_MAX_OUTPUT_PORT_TYPE
 
 
-|processor|pass:pass_sb_db
+|system|processor:processor_m|pass:pass_sb_db
 bus_in_1[0] => Mux9.IN3
 bus_in_1[1] => Mux10.IN3
 bus_in_1[2] => Mux11.IN3
@@ -1658,7 +1717,7 @@ bus_out_2[6] <= bus_out_2[6].DB_MAX_OUTPUT_PORT_TYPE
 bus_out_2[7] <= bus_out_2[7].DB_MAX_OUTPUT_PORT_TYPE
 
 
-|processor|pass:pass_sb_adh
+|system|processor:processor_m|pass:pass_sb_adh
 bus_in_1[0] => Mux9.IN3
 bus_in_1[1] => Mux10.IN3
 bus_in_1[2] => Mux11.IN3
@@ -1729,7 +1788,7 @@ bus_out_2[6] <= bus_out_2[6].DB_MAX_OUTPUT_PORT_TYPE
 bus_out_2[7] <= bus_out_2[7].DB_MAX_OUTPUT_PORT_TYPE
 
 
-|processor|open_drain_ADH:od_adh
+|system|processor:processor_m|open_drain_ADH:od_adh
 control[0] => ADH[0].OE
 control[1] => ADH[1].OE
 control[1] => ADH[2].OE
@@ -1748,7 +1807,7 @@ ADH[6] <= ADH[6].DB_MAX_OUTPUT_PORT_TYPE
 ADH[7] <= ADH[7].DB_MAX_OUTPUT_PORT_TYPE
 
 
-|processor|open_drain_ADL:od_adl
+|system|processor:processor_m|open_drain_ADL:od_adl
 control[0] => ADL[0].OE
 control[1] => ADL[1].OE
 control[2] => ADL[2].OE
@@ -1762,7 +1821,7 @@ ADL[6] <= ADL[6].DB_MAX_OUTPUT_PORT_TYPE
 ADL[7] <= ADL[7].DB_MAX_OUTPUT_PORT_TYPE
 
 
-|processor|stack_pointer:stk_point
+|system|processor:processor_m|stack_pointer:stk_point
 clk => q[0].CLK
 clk => q[1].CLK
 clk => q[2].CLK
@@ -1823,55 +1882,7 @@ adl_out[6] <= adl_out[6].DB_MAX_OUTPUT_PORT_TYPE
 adl_out[7] <= adl_out[7].DB_MAX_OUTPUT_PORT_TYPE
 
 
-|processor|interr_res:int_ctl
-clk1 => NMIG.CLK
-clk1 => i_s.CLK
-clk1 => IRQP.CLK
-clk1 => RESP.CLK
-clk2 => out1.CLK
-clk2 => out0.CLK
-clk2 => INTG.CLK
-clk2 => flag.CLK
-clk2 => nmi_rec.CLK
-clk2 => blk.CLK
-clk2 => irq_rec.CLK
-clk2 => res_rec.CLK
-nmi => nmi_rec.OUTPUTSELECT
-nmi => flag.OUTPUTSELECT
-nmi => nmi_rec.OUTPUTSELECT
-nmi => flag.OUTPUTSELECT
-irq => irq_rec.OUTPUTSELECT
-irq => irq_rec.OUTPUTSELECT
-res => res_rec.OUTPUTSELECT
-res => res_rec.OUTPUTSELECT
-timer[0] => process_4.IN1
-timer[0] => process_4.IN1
-timer[0] => process_4.IN1
-timer[1] => ~NO_FANOUT~
-timer[2] => process_4.IN0
-timer[3] => ~NO_FANOUT~
-timer[4] => ~NO_FANOUT~
-timer[5] => ~NO_FANOUT~
-v1 => process_3.IN1
-v1 => INTG.OUTPUTSELECT
-v1 => out0.OUTPUTSELECT
-v1 => out1.OUTPUTSELECT
-i => process_4.IN1
-i => process_4.IN1
-bcr => process_4.IN0
-bcr => process_4.IN1
-bcr => process_4.IN1
-page_cross => process_4.IN1
-i_flag <= i_s.DB_MAX_OUTPUT_PORT_TYPE
-nmi_out <= out0.DB_MAX_OUTPUT_PORT_TYPE
-irq_out <= out1.DB_MAX_OUTPUT_PORT_TYPE
-res_out <= RESP.DB_MAX_OUTPUT_PORT_TYPE
-interrupt <= INTG.DB_MAX_OUTPUT_PORT_TYPE
-reset <= RESP.DB_MAX_OUTPUT_PORT_TYPE
-rw <= RESP.DB_MAX_OUTPUT_PORT_TYPE
-
-
-|processor|predecode_register:pre_reg
+|system|processor:processor_m|predecode_register:pre_reg
 clk => q[0].CLK
 clk => q[1].CLK
 clk => q[2].CLK
@@ -1908,7 +1919,7 @@ data_out[6] <= q[6].DB_MAX_OUTPUT_PORT_TYPE
 data_out[7] <= q[7].DB_MAX_OUTPUT_PORT_TYPE
 
 
-|processor|predecode_logic:pr_logic
+|system|processor:processor_m|predecode_logic:pr_logic
 databus[0] => instruction.DATAA
 databus[0] => Equal0.IN0
 databus[0] => Equal3.IN1
@@ -1990,10 +2001,10 @@ reset => instruction.OUTPUTSELECT
 reset => instruction.OUTPUTSELECT
 reset => instruction.OUTPUTSELECT
 reset => instruction.OUTPUTSELECT
+reset => cycles.OUTPUTSELECT
+reset => cycles.OUTPUTSELECT
+reset => cycles.OUTPUTSELECT
 reset => RMW.OUTPUTSELECT
-reset => cycles[0]$latch.PRESET
-reset => cycles[1]$latch.PRESET
-reset => cycles[2]$latch.PRESET
 instruction[0] <= instruction.DB_MAX_OUTPUT_PORT_TYPE
 instruction[1] <= instruction.DB_MAX_OUTPUT_PORT_TYPE
 instruction[2] <= instruction.DB_MAX_OUTPUT_PORT_TYPE
@@ -2002,14 +2013,14 @@ instruction[4] <= instruction.DB_MAX_OUTPUT_PORT_TYPE
 instruction[5] <= instruction.DB_MAX_OUTPUT_PORT_TYPE
 instruction[6] <= instruction.DB_MAX_OUTPUT_PORT_TYPE
 instruction[7] <= instruction.DB_MAX_OUTPUT_PORT_TYPE
-cycles[0] <= cycles[0]$latch.DB_MAX_OUTPUT_PORT_TYPE
-cycles[1] <= cycles[1]$latch.DB_MAX_OUTPUT_PORT_TYPE
-cycles[2] <= cycles[2]$latch.DB_MAX_OUTPUT_PORT_TYPE
+cycles[0] <= cycles.DB_MAX_OUTPUT_PORT_TYPE
+cycles[1] <= cycles.DB_MAX_OUTPUT_PORT_TYPE
+cycles[2] <= cycles.DB_MAX_OUTPUT_PORT_TYPE
 RMW <= RMW.DB_MAX_OUTPUT_PORT_TYPE
 BCR <= <GND>
 
 
-|processor|intruction_reg:ins_reg
+|system|processor:processor_m|intruction_reg:ins_reg
 clk => q[0].CLK
 clk => q[1].CLK
 clk => q[2].CLK
@@ -2047,593 +2058,475 @@ data_out[6] <= q[6].DB_MAX_OUTPUT_PORT_TYPE
 data_out[7] <= q[7].DB_MAX_OUTPUT_PORT_TYPE
 
 
-|processor|instruction_decoder:instruction_dec
-ir_in[0] => Mux110.IN5
-ir_in[0] => Mux109.IN5
-ir_in[0] => Mux108.IN5
-ir_in[0] => Mux107.IN5
-ir_in[0] => Mux106.IN5
-ir_in[0] => Mux105.IN5
-ir_in[0] => Mux104.IN5
-ir_in[0] => Mux103.IN5
-ir_in[0] => Mux102.IN5
-ir_in[0] => Mux101.IN5
-ir_in[0] => Mux100.IN5
-ir_in[0] => Mux99.IN5
-ir_in[0] => Mux98.IN5
-ir_in[0] => Mux97.IN5
-ir_in[0] => Mux96.IN5
-ir_in[0] => Mux95.IN5
-ir_in[0] => Mux94.IN5
-ir_in[0] => Mux93.IN5
-ir_in[0] => Mux92.IN5
-ir_in[0] => Mux91.IN5
-ir_in[0] => Mux90.IN5
-ir_in[0] => Mux89.IN5
-ir_in[0] => Mux88.IN5
-ir_in[0] => Mux87.IN5
-ir_in[0] => Mux86.IN5
-ir_in[0] => Mux85.IN5
-ir_in[0] => Mux84.IN5
-ir_in[0] => Mux83.IN5
-ir_in[0] => Mux82.IN5
-ir_in[0] => Mux81.IN5
-ir_in[0] => Mux80.IN5
-ir_in[0] => Mux79.IN5
-ir_in[0] => Mux78.IN5
-ir_in[0] => Mux139.IN5
+|system|processor:processor_m|instruction_decoder:instruction_dec
+ir_in[0] => Mux71.IN5
+ir_in[0] => Mux72.IN5
+ir_in[0] => Mux73.IN5
+ir_in[0] => Mux74.IN5
+ir_in[0] => Mux75.IN5
+ir_in[0] => Mux76.IN5
 ir_in[0] => Mux77.IN5
-ir_in[0] => Mux6.IN5
-ir_in[1] => Mux110.IN4
-ir_in[1] => Mux109.IN4
-ir_in[1] => Mux108.IN4
-ir_in[1] => Mux107.IN4
-ir_in[1] => Mux106.IN4
-ir_in[1] => Mux105.IN4
-ir_in[1] => Mux104.IN4
-ir_in[1] => Mux103.IN4
-ir_in[1] => Mux102.IN4
-ir_in[1] => Mux101.IN4
-ir_in[1] => Mux100.IN4
-ir_in[1] => Mux99.IN4
-ir_in[1] => Mux98.IN4
-ir_in[1] => Mux97.IN4
-ir_in[1] => Mux96.IN4
-ir_in[1] => Mux95.IN4
-ir_in[1] => Mux94.IN4
-ir_in[1] => Mux93.IN4
-ir_in[1] => Mux92.IN4
-ir_in[1] => Mux91.IN4
-ir_in[1] => Mux90.IN4
-ir_in[1] => Mux89.IN4
-ir_in[1] => Mux88.IN4
-ir_in[1] => Mux87.IN4
-ir_in[1] => Mux86.IN4
-ir_in[1] => Mux85.IN4
-ir_in[1] => Mux84.IN4
-ir_in[1] => Mux83.IN4
-ir_in[1] => Mux82.IN4
-ir_in[1] => Mux81.IN4
-ir_in[1] => Mux80.IN4
-ir_in[1] => Mux79.IN4
-ir_in[1] => Mux78.IN4
-ir_in[1] => Mux139.IN4
+ir_in[0] => Mux78.IN5
+ir_in[0] => Mux79.IN5
+ir_in[0] => Mux80.IN5
+ir_in[0] => Mux81.IN5
+ir_in[0] => Mux82.IN5
+ir_in[0] => Mux83.IN5
+ir_in[0] => Mux84.IN5
+ir_in[0] => Mux85.IN5
+ir_in[0] => Mux86.IN5
+ir_in[0] => Mux87.IN5
+ir_in[0] => Mux88.IN5
+ir_in[0] => Mux89.IN5
+ir_in[0] => Mux90.IN5
+ir_in[0] => Mux91.IN5
+ir_in[0] => Mux92.IN5
+ir_in[0] => Mux93.IN5
+ir_in[0] => Mux94.IN5
+ir_in[0] => Mux95.IN5
+ir_in[0] => Mux96.IN5
+ir_in[0] => Mux97.IN5
+ir_in[0] => Mux98.IN5
+ir_in[0] => Mux99.IN5
+ir_in[0] => Mux100.IN5
+ir_in[0] => Mux101.IN5
+ir_in[0] => Mux102.IN5
+ir_in[0] => Mux103.IN5
+ir_in[0] => Mux104.IN5
+ir_in[0] => Mux105.IN5
+ir_in[0] => Mux106.IN5
+ir_in[0] => Mux107.IN5
+ir_in[0] => Mux108.IN5
+ir_in[1] => Mux71.IN4
+ir_in[1] => Mux72.IN4
+ir_in[1] => Mux73.IN4
+ir_in[1] => Mux74.IN4
+ir_in[1] => Mux75.IN4
+ir_in[1] => Mux76.IN4
 ir_in[1] => Mux77.IN4
-ir_in[1] => Mux6.IN4
-ir_in[2] => Mux76.IN10
-ir_in[2] => Mux37.IN10
-ir_in[2] => Mux75.IN10
-ir_in[2] => Mux4.IN10
-ir_in[2] => Mux36.IN10
-ir_in[2] => Mux74.IN10
-ir_in[2] => Mux35.IN10
-ir_in[2] => Mux3.IN10
-ir_in[2] => Mux117.IN10
-ir_in[2] => Mux73.IN10
-ir_in[2] => Mux115.IN10
-ir_in[2] => Mux34.IN10
-ir_in[2] => Mux2.IN10
-ir_in[2] => Mux72.IN9
-ir_in[2] => Mux33.IN9
-ir_in[2] => Mux127.IN9
-ir_in[2] => Mux129.IN9
-ir_in[2] => Mux71.IN10
-ir_in[2] => Mux113.IN10
-ir_in[2] => Mux70.IN10
-ir_in[2] => Mux112.IN10
-ir_in[2] => Mux32.IN10
-ir_in[2] => Mux27.IN10
-ir_in[2] => Mux1.IN10
-ir_in[2] => Mux132.IN10
-ir_in[2] => Mux69.IN10
-ir_in[2] => Mux47.IN10
-ir_in[2] => Mux111.IN10
-ir_in[2] => Mux44.IN10
-ir_in[2] => Mux31.IN10
-ir_in[2] => Mux7.IN10
+ir_in[1] => Mux78.IN4
+ir_in[1] => Mux79.IN4
+ir_in[1] => Mux80.IN4
+ir_in[1] => Mux81.IN4
+ir_in[1] => Mux82.IN4
+ir_in[1] => Mux83.IN4
+ir_in[1] => Mux84.IN4
+ir_in[1] => Mux85.IN4
+ir_in[1] => Mux86.IN4
+ir_in[1] => Mux87.IN4
+ir_in[1] => Mux88.IN4
+ir_in[1] => Mux89.IN4
+ir_in[1] => Mux90.IN4
+ir_in[1] => Mux91.IN4
+ir_in[1] => Mux92.IN4
+ir_in[1] => Mux93.IN4
+ir_in[1] => Mux94.IN4
+ir_in[1] => Mux95.IN4
+ir_in[1] => Mux96.IN4
+ir_in[1] => Mux97.IN4
+ir_in[1] => Mux98.IN4
+ir_in[1] => Mux99.IN4
+ir_in[1] => Mux100.IN4
+ir_in[1] => Mux101.IN4
+ir_in[1] => Mux102.IN4
+ir_in[1] => Mux103.IN4
+ir_in[1] => Mux104.IN4
+ir_in[1] => Mux105.IN4
+ir_in[1] => Mux106.IN4
+ir_in[1] => Mux107.IN4
+ir_in[1] => Mux108.IN4
 ir_in[2] => Mux0.IN10
-ir_in[2] => Mux114.IN10
-ir_in[2] => Mux133.IN10
-ir_in[2] => Mux136.IN10
-ir_in[2] => Mux137.IN10
-ir_in[2] => Mux68.IN10
+ir_in[2] => Mux1.IN10
+ir_in[2] => Mux2.IN10
+ir_in[2] => Mux3.IN10
+ir_in[2] => Mux4.IN10
+ir_in[2] => Mux5.IN10
+ir_in[2] => Mux6.IN10
+ir_in[2] => Mux20.IN10
+ir_in[2] => Mux21.IN10
+ir_in[2] => Mux22.IN10
+ir_in[2] => Mux23.IN10
+ir_in[2] => Mux24.IN10
+ir_in[2] => Mux25.IN10
+ir_in[2] => Mux26.IN10
+ir_in[2] => Mux27.IN10
+ir_in[2] => Mux28.IN10
+ir_in[2] => Mux29.IN10
+ir_in[2] => Mux30.IN10
 ir_in[2] => Mux49.IN10
 ir_in[2] => Mux50.IN10
-ir_in[2] => Mux48.IN10
-ir_in[2] => Mux43.IN10
-ir_in[2] => Mux46.IN10
-ir_in[2] => Mux41.IN10
-ir_in[2] => Mux40.IN10
-ir_in[3] => Mux76.IN9
-ir_in[3] => Mux37.IN9
-ir_in[3] => Mux75.IN9
-ir_in[3] => Mux4.IN9
-ir_in[3] => Mux36.IN9
-ir_in[3] => Mux74.IN9
-ir_in[3] => Mux35.IN9
-ir_in[3] => Mux3.IN9
-ir_in[3] => Mux117.IN9
-ir_in[3] => Mux73.IN9
-ir_in[3] => Mux115.IN9
-ir_in[3] => Mux34.IN9
-ir_in[3] => Mux2.IN9
-ir_in[3] => Mux72.IN8
-ir_in[3] => Mux33.IN8
-ir_in[3] => Mux127.IN8
-ir_in[3] => Mux129.IN8
-ir_in[3] => Mux71.IN9
-ir_in[3] => Mux113.IN9
-ir_in[3] => Mux70.IN9
-ir_in[3] => Mux112.IN9
-ir_in[3] => Mux32.IN9
-ir_in[3] => Mux27.IN9
-ir_in[3] => Mux1.IN9
-ir_in[3] => Mux132.IN9
-ir_in[3] => Mux69.IN9
-ir_in[3] => Mux47.IN9
-ir_in[3] => Mux111.IN9
-ir_in[3] => Mux44.IN9
-ir_in[3] => Mux31.IN9
-ir_in[3] => Mux7.IN9
+ir_in[2] => Mux51.IN10
+ir_in[2] => Mux52.IN10
+ir_in[2] => Mux53.IN10
+ir_in[2] => Mux54.IN10
+ir_in[2] => Mux55.IN10
 ir_in[3] => Mux0.IN9
-ir_in[3] => Mux114.IN9
-ir_in[3] => Mux133.IN9
-ir_in[3] => Mux136.IN9
-ir_in[3] => Mux137.IN9
-ir_in[3] => Mux68.IN9
+ir_in[3] => Mux1.IN9
+ir_in[3] => Mux2.IN9
+ir_in[3] => Mux3.IN9
+ir_in[3] => Mux4.IN9
+ir_in[3] => Mux5.IN9
+ir_in[3] => Mux6.IN9
+ir_in[3] => Mux20.IN9
+ir_in[3] => Mux21.IN9
+ir_in[3] => Mux22.IN9
+ir_in[3] => Mux23.IN9
+ir_in[3] => Mux24.IN9
+ir_in[3] => Mux25.IN9
+ir_in[3] => Mux26.IN9
+ir_in[3] => Mux27.IN9
+ir_in[3] => Mux28.IN9
+ir_in[3] => Mux29.IN9
+ir_in[3] => Mux30.IN9
 ir_in[3] => Mux49.IN9
 ir_in[3] => Mux50.IN9
-ir_in[3] => Mux48.IN9
-ir_in[3] => Mux43.IN9
-ir_in[3] => Mux46.IN9
-ir_in[3] => Mux41.IN9
-ir_in[3] => Mux40.IN9
-ir_in[4] => Mux76.IN8
-ir_in[4] => Mux37.IN8
-ir_in[4] => Mux75.IN8
-ir_in[4] => Mux4.IN8
-ir_in[4] => Mux36.IN8
-ir_in[4] => Mux74.IN8
-ir_in[4] => Mux35.IN8
-ir_in[4] => Mux3.IN8
-ir_in[4] => Mux117.IN8
-ir_in[4] => Mux73.IN8
-ir_in[4] => Mux115.IN8
-ir_in[4] => Mux34.IN8
-ir_in[4] => Mux2.IN8
-ir_in[4] => Mux72.IN7
-ir_in[4] => Mux33.IN7
-ir_in[4] => Mux127.IN7
-ir_in[4] => Mux129.IN7
-ir_in[4] => Mux71.IN8
-ir_in[4] => Mux113.IN8
-ir_in[4] => Mux70.IN8
-ir_in[4] => Mux112.IN8
-ir_in[4] => Mux32.IN8
-ir_in[4] => Mux27.IN8
-ir_in[4] => Mux1.IN8
-ir_in[4] => Mux132.IN8
-ir_in[4] => Mux69.IN8
-ir_in[4] => Mux47.IN8
-ir_in[4] => Mux111.IN8
-ir_in[4] => Mux44.IN8
-ir_in[4] => Mux31.IN8
-ir_in[4] => Mux7.IN8
+ir_in[3] => Mux51.IN9
+ir_in[3] => Mux52.IN9
+ir_in[3] => Mux53.IN9
+ir_in[3] => Mux54.IN9
+ir_in[3] => Mux55.IN9
 ir_in[4] => Mux0.IN8
-ir_in[4] => Mux114.IN8
-ir_in[4] => Mux133.IN8
-ir_in[4] => Mux136.IN8
-ir_in[4] => Mux137.IN8
-ir_in[4] => Mux68.IN8
+ir_in[4] => Mux1.IN8
+ir_in[4] => Mux2.IN8
+ir_in[4] => Mux3.IN8
+ir_in[4] => Mux4.IN8
+ir_in[4] => Mux5.IN8
+ir_in[4] => Mux6.IN8
+ir_in[4] => Mux20.IN8
+ir_in[4] => Mux21.IN8
+ir_in[4] => Mux22.IN8
+ir_in[4] => Mux23.IN8
+ir_in[4] => Mux24.IN8
+ir_in[4] => Mux25.IN8
+ir_in[4] => Mux26.IN8
+ir_in[4] => Mux27.IN8
+ir_in[4] => Mux28.IN8
+ir_in[4] => Mux29.IN8
+ir_in[4] => Mux30.IN8
 ir_in[4] => Mux49.IN8
 ir_in[4] => Mux50.IN8
-ir_in[4] => Mux48.IN8
-ir_in[4] => Mux43.IN8
-ir_in[4] => Mux46.IN8
-ir_in[4] => Mux41.IN8
-ir_in[4] => Mux40.IN8
-ir_in[5] => Mux67.IN10
-ir_in[5] => Mux26.IN10
-ir_in[5] => Mux29.IN10
-ir_in[5] => Mux66.IN10
-ir_in[5] => Mux25.IN10
-ir_in[5] => Mux5.IN10
-ir_in[5] => Mux24.IN10
-ir_in[5] => Mux65.IN10
-ir_in[5] => Mux23.IN10
-ir_in[5] => Mux116.IN10
-ir_in[5] => Mux118.IN10
-ir_in[5] => Mux64.IN10
-ir_in[5] => Mux22.IN10
-ir_in[5] => Mux119.IN10
-ir_in[5] => Mux21.IN10
-ir_in[5] => Mux20.IN10
-ir_in[5] => Mux19.IN10
-ir_in[5] => Mux18.IN10
-ir_in[5] => Mux17.IN10
-ir_in[5] => Mux16.IN10
-ir_in[5] => Mux15.IN10
-ir_in[5] => Mux63.IN10
-ir_in[5] => Mux62.IN10
-ir_in[5] => Mux61.IN10
-ir_in[5] => Mux60.IN10
-ir_in[5] => Mux14.IN10
-ir_in[5] => Mux120.IN10
-ir_in[5] => Mux121.IN10
-ir_in[5] => Mux59.IN10
-ir_in[5] => Mux13.IN10
-ir_in[5] => Mux58.IN10
-ir_in[5] => Mux12.IN10
-ir_in[5] => Mux122.IN10
-ir_in[5] => Mux57.IN10
-ir_in[5] => Mux11.IN10
-ir_in[5] => Mux123.IN10
-ir_in[5] => Mux56.IN10
-ir_in[5] => Mux124.IN10
-ir_in[5] => Mux125.IN10
-ir_in[5] => Mux126.IN10
-ir_in[5] => Mux128.IN10
-ir_in[5] => Mux55.IN10
-ir_in[5] => Mux54.IN10
-ir_in[5] => Mux10.IN10
-ir_in[5] => Mux130.IN10
-ir_in[5] => Mux53.IN10
-ir_in[5] => Mux9.IN10
-ir_in[5] => Mux131.IN10
-ir_in[5] => Mux52.IN10
-ir_in[5] => Mux39.IN10
+ir_in[4] => Mux51.IN8
+ir_in[4] => Mux52.IN8
+ir_in[4] => Mux53.IN8
+ir_in[4] => Mux54.IN8
+ir_in[4] => Mux55.IN8
+ir_in[5] => Mux7.IN10
 ir_in[5] => Mux8.IN10
-ir_in[5] => Mux134.IN10
-ir_in[5] => Mux135.IN10
-ir_in[5] => Mux138.IN10
-ir_in[5] => Mux51.IN10
-ir_in[5] => Mux45.IN10
-ir_in[5] => Mux42.IN10
+ir_in[5] => Mux9.IN10
+ir_in[5] => Mux10.IN10
+ir_in[5] => Mux11.IN10
+ir_in[5] => Mux12.IN10
+ir_in[5] => Mux13.IN10
+ir_in[5] => Mux14.IN10
+ir_in[5] => Mux15.IN10
+ir_in[5] => Mux16.IN10
+ir_in[5] => Mux17.IN10
+ir_in[5] => Mux18.IN10
+ir_in[5] => Mux19.IN10
+ir_in[5] => Mux31.IN10
+ir_in[5] => Mux32.IN10
+ir_in[5] => Mux33.IN10
+ir_in[5] => Mux34.IN10
+ir_in[5] => Mux35.IN10
+ir_in[5] => Mux36.IN10
+ir_in[5] => Mux37.IN10
 ir_in[5] => Mux38.IN10
-ir_in[5] => Mux30.IN10
-ir_in[5] => Mux28.IN10
-ir_in[6] => Mux67.IN9
-ir_in[6] => Mux26.IN9
-ir_in[6] => Mux29.IN9
-ir_in[6] => Mux66.IN9
-ir_in[6] => Mux25.IN9
-ir_in[6] => Mux5.IN9
-ir_in[6] => Mux24.IN9
-ir_in[6] => Mux65.IN9
-ir_in[6] => Mux23.IN9
-ir_in[6] => Mux116.IN9
-ir_in[6] => Mux118.IN9
-ir_in[6] => Mux64.IN9
-ir_in[6] => Mux22.IN9
-ir_in[6] => Mux119.IN9
-ir_in[6] => Mux21.IN9
-ir_in[6] => Mux20.IN9
-ir_in[6] => Mux19.IN9
-ir_in[6] => Mux18.IN9
-ir_in[6] => Mux17.IN9
-ir_in[6] => Mux16.IN9
-ir_in[6] => Mux15.IN9
-ir_in[6] => Mux63.IN9
-ir_in[6] => Mux62.IN9
-ir_in[6] => Mux61.IN9
-ir_in[6] => Mux60.IN9
-ir_in[6] => Mux14.IN9
-ir_in[6] => Mux120.IN9
-ir_in[6] => Mux121.IN9
-ir_in[6] => Mux59.IN9
-ir_in[6] => Mux13.IN9
-ir_in[6] => Mux58.IN9
-ir_in[6] => Mux12.IN9
-ir_in[6] => Mux122.IN9
-ir_in[6] => Mux57.IN9
-ir_in[6] => Mux11.IN9
-ir_in[6] => Mux123.IN9
-ir_in[6] => Mux56.IN9
-ir_in[6] => Mux124.IN9
-ir_in[6] => Mux125.IN9
-ir_in[6] => Mux126.IN9
-ir_in[6] => Mux128.IN9
-ir_in[6] => Mux55.IN9
-ir_in[6] => Mux54.IN9
-ir_in[6] => Mux10.IN9
-ir_in[6] => Mux130.IN9
-ir_in[6] => Mux53.IN9
-ir_in[6] => Mux9.IN9
-ir_in[6] => Mux131.IN9
-ir_in[6] => Mux52.IN9
-ir_in[6] => Mux39.IN9
+ir_in[5] => Mux39.IN10
+ir_in[5] => Mux40.IN10
+ir_in[5] => Mux41.IN10
+ir_in[5] => Mux42.IN10
+ir_in[5] => Mux43.IN10
+ir_in[5] => Mux44.IN10
+ir_in[5] => Mux45.IN10
+ir_in[5] => Mux46.IN10
+ir_in[5] => Mux47.IN10
+ir_in[5] => Mux48.IN10
+ir_in[5] => Mux56.IN10
+ir_in[5] => Mux57.IN10
+ir_in[5] => Mux58.IN10
+ir_in[5] => Mux59.IN10
+ir_in[5] => Mux60.IN10
+ir_in[5] => Mux61.IN10
+ir_in[5] => Mux62.IN10
+ir_in[5] => Mux63.IN10
+ir_in[5] => Mux64.IN10
+ir_in[5] => Mux65.IN10
+ir_in[5] => Mux66.IN10
+ir_in[5] => Mux67.IN10
+ir_in[5] => Mux68.IN10
+ir_in[5] => Mux69.IN10
+ir_in[5] => Mux70.IN10
+ir_in[6] => Mux7.IN9
 ir_in[6] => Mux8.IN9
-ir_in[6] => Mux134.IN9
-ir_in[6] => Mux135.IN9
-ir_in[6] => Mux138.IN9
-ir_in[6] => Mux51.IN9
-ir_in[6] => Mux45.IN9
-ir_in[6] => Mux42.IN9
+ir_in[6] => Mux9.IN9
+ir_in[6] => Mux10.IN9
+ir_in[6] => Mux11.IN9
+ir_in[6] => Mux12.IN9
+ir_in[6] => Mux13.IN9
+ir_in[6] => Mux14.IN9
+ir_in[6] => Mux15.IN9
+ir_in[6] => Mux16.IN9
+ir_in[6] => Mux17.IN9
+ir_in[6] => Mux18.IN9
+ir_in[6] => Mux19.IN9
+ir_in[6] => Mux31.IN9
+ir_in[6] => Mux32.IN9
+ir_in[6] => Mux33.IN9
+ir_in[6] => Mux34.IN9
+ir_in[6] => Mux35.IN9
+ir_in[6] => Mux36.IN9
+ir_in[6] => Mux37.IN9
 ir_in[6] => Mux38.IN9
-ir_in[6] => Mux30.IN9
-ir_in[6] => Mux28.IN9
-ir_in[7] => Mux67.IN8
-ir_in[7] => Mux26.IN8
-ir_in[7] => Mux29.IN8
-ir_in[7] => Mux66.IN8
-ir_in[7] => Mux25.IN8
-ir_in[7] => Mux5.IN8
-ir_in[7] => Mux24.IN8
-ir_in[7] => Mux65.IN8
-ir_in[7] => Mux23.IN8
-ir_in[7] => Mux116.IN8
-ir_in[7] => Mux118.IN8
-ir_in[7] => Mux64.IN8
-ir_in[7] => Mux22.IN8
-ir_in[7] => Mux119.IN8
-ir_in[7] => Mux21.IN8
-ir_in[7] => Mux20.IN8
-ir_in[7] => Mux19.IN8
-ir_in[7] => Mux18.IN8
-ir_in[7] => Mux17.IN8
-ir_in[7] => Mux16.IN8
-ir_in[7] => Mux15.IN8
-ir_in[7] => Mux63.IN8
-ir_in[7] => Mux62.IN8
-ir_in[7] => Mux61.IN8
-ir_in[7] => Mux60.IN8
-ir_in[7] => Mux14.IN8
-ir_in[7] => Mux120.IN8
-ir_in[7] => Mux121.IN8
-ir_in[7] => Mux59.IN8
-ir_in[7] => Mux13.IN8
-ir_in[7] => Mux58.IN8
-ir_in[7] => Mux12.IN8
-ir_in[7] => Mux122.IN8
-ir_in[7] => Mux57.IN8
-ir_in[7] => Mux11.IN8
-ir_in[7] => Mux123.IN8
-ir_in[7] => Mux56.IN8
-ir_in[7] => Mux124.IN8
-ir_in[7] => Mux125.IN8
-ir_in[7] => Mux126.IN8
-ir_in[7] => Mux128.IN8
-ir_in[7] => Mux55.IN8
-ir_in[7] => Mux54.IN8
-ir_in[7] => Mux10.IN8
-ir_in[7] => Mux130.IN8
-ir_in[7] => Mux53.IN8
-ir_in[7] => Mux9.IN8
-ir_in[7] => Mux131.IN8
-ir_in[7] => Mux52.IN8
-ir_in[7] => Mux39.IN8
+ir_in[6] => Mux39.IN9
+ir_in[6] => Mux40.IN9
+ir_in[6] => Mux41.IN9
+ir_in[6] => Mux42.IN9
+ir_in[6] => Mux43.IN9
+ir_in[6] => Mux44.IN9
+ir_in[6] => Mux45.IN9
+ir_in[6] => Mux46.IN9
+ir_in[6] => Mux47.IN9
+ir_in[6] => Mux48.IN9
+ir_in[6] => Mux56.IN9
+ir_in[6] => Mux57.IN9
+ir_in[6] => Mux58.IN9
+ir_in[6] => Mux59.IN9
+ir_in[6] => Mux60.IN9
+ir_in[6] => Mux61.IN9
+ir_in[6] => Mux62.IN9
+ir_in[6] => Mux63.IN9
+ir_in[6] => Mux64.IN9
+ir_in[6] => Mux65.IN9
+ir_in[6] => Mux66.IN9
+ir_in[6] => Mux67.IN9
+ir_in[6] => Mux68.IN9
+ir_in[6] => Mux69.IN9
+ir_in[6] => Mux70.IN9
+ir_in[7] => Mux7.IN8
 ir_in[7] => Mux8.IN8
-ir_in[7] => Mux134.IN8
-ir_in[7] => Mux135.IN8
-ir_in[7] => Mux138.IN8
-ir_in[7] => Mux51.IN8
-ir_in[7] => Mux45.IN8
-ir_in[7] => Mux42.IN8
+ir_in[7] => Mux9.IN8
+ir_in[7] => Mux10.IN8
+ir_in[7] => Mux11.IN8
+ir_in[7] => Mux12.IN8
+ir_in[7] => Mux13.IN8
+ir_in[7] => Mux14.IN8
+ir_in[7] => Mux15.IN8
+ir_in[7] => Mux16.IN8
+ir_in[7] => Mux17.IN8
+ir_in[7] => Mux18.IN8
+ir_in[7] => Mux19.IN8
+ir_in[7] => Mux31.IN8
+ir_in[7] => Mux32.IN8
+ir_in[7] => Mux33.IN8
+ir_in[7] => Mux34.IN8
+ir_in[7] => Mux35.IN8
+ir_in[7] => Mux36.IN8
+ir_in[7] => Mux37.IN8
 ir_in[7] => Mux38.IN8
-ir_in[7] => Mux30.IN8
-ir_in[7] => Mux28.IN8
+ir_in[7] => Mux39.IN8
+ir_in[7] => Mux40.IN8
+ir_in[7] => Mux41.IN8
+ir_in[7] => Mux42.IN8
+ir_in[7] => Mux43.IN8
+ir_in[7] => Mux44.IN8
+ir_in[7] => Mux45.IN8
+ir_in[7] => Mux46.IN8
+ir_in[7] => Mux47.IN8
+ir_in[7] => Mux48.IN8
+ir_in[7] => Mux56.IN8
+ir_in[7] => Mux57.IN8
+ir_in[7] => Mux58.IN8
+ir_in[7] => Mux59.IN8
+ir_in[7] => Mux60.IN8
+ir_in[7] => Mux61.IN8
+ir_in[7] => Mux62.IN8
+ir_in[7] => Mux63.IN8
+ir_in[7] => Mux64.IN8
+ir_in[7] => Mux65.IN8
+ir_in[7] => Mux66.IN8
+ir_in[7] => Mux67.IN8
+ir_in[7] => Mux68.IN8
+ir_in[7] => Mux69.IN8
+ir_in[7] => Mux70.IN8
 tcstate[0] => Control.IN0
-tcstate[0] => control_out[50].DATAA
-tcstate[0] => r_w.DATAA
-tcstate[0] => r_w.IN0
-tcstate[0] => control_out[69].DATAA
-tcstate[0] => control_out[69].IN0
-tcstate[0] => control_out[69].IN1
+tcstate[0] => control_out.OUTPUTSELECT
+tcstate[0] => control_out.DATAA
+tcstate[0] => control_out.DATAA
+tcstate[0] => control_out.OUTPUTSELECT
+tcstate[0] => Mux52.IN6
+tcstate[0] => control_out.OUTPUTSELECT
+tcstate[0] => Mux27.IN6
+tcstate[0] => control_out.OUTPUTSELECT
+tcstate[0] => control_out.OUTPUTSELECT
+tcstate[0] => Mux5.IN7
+tcstate[0] => Mux1.IN6
 tcstate[1] => Control.IN1
-tcstate[1] => Mux33.IN10
-tcstate[1] => Mux72.IN10
-tcstate[1] => Mux127.IN10
-tcstate[1] => Mux129.IN10
-tcstate[1] => control_out[69].OUTPUTSELECT
-tcstate[1] => r_w.OUTPUTSELECT
-tcstate[1] => r_w.IN1
-tcstate[1] => control_out[69].IN1
-tcstate[1] => Mux70.IN2
-tcstate[1] => Mux74.IN1
-tcstate[1] => Mux75.IN2
-tcstate[1] => Mux73.IN1
-tcstate[1] => Mux73.IN2
-tcstate[1] => control_out[69].IN0
-tcstate[1] => Mux112.IN0
-tcstate[1] => Mux32.IN1
-tcstate[1] => Mux34.IN0
-tcstate[1] => control_out[50].OUTPUTSELECT
-tcstate[1] => Mux34.IN1
-tcstate[1] => control_out[32].OUTPUTSELECT
-tcstate[1] => Mux127.IN0
-tcstate[1] => Mux127.IN1
-tcstate[1] => control_out[69].IN1
+tcstate[1] => control_out.DATAA
+tcstate[1] => control_out.DATAA
+tcstate[1] => control_out.DATAA
+tcstate[1] => control_out.OUTPUTSELECT
+tcstate[1] => control_out.DATAA
+tcstate[1] => control_out.DATAA
+tcstate[1] => control_out.DATAB
 tcstate[2] => Control.IN1
-tcstate[2] => r_w.IN1
-tcstate[2] => control_out[69].IN1
-tcstate[2] => control_out[69].IN0
+tcstate[2] => control_out.OUTPUTSELECT
+tcstate[2] => control_out.OUTPUTSELECT
+tcstate[2] => Mux50.IN7
+tcstate[2] => control_out.OUTPUTSELECT
+tcstate[2] => control_out.OUTPUTSELECT
+tcstate[2] => control_out.OUTPUTSELECT
+tcstate[2] => control_out.OUTPUTSELECT
+tcstate[2] => control_out.OUTPUTSELECT
+tcstate[2] => control_out.OUTPUTSELECT
+tcstate[2] => Mux27.IN7
+tcstate[2] => control_out.OUTPUTSELECT
 tcstate[3] => Control.IN1
-tcstate[3] => control_out[69].IN1
+tcstate[3] => control_out.OUTPUTSELECT
 tcstate[4] => Control.IN1
-tcstate[4] => control_out[69].IN1
+tcstate[4] => control_out.OUTPUTSELECT
 tcstate[5] => Control.IN1
-tcstate[5] => control_out[69].IN1
+tcstate[5] => control_out.OUTPUTSELECT
 interrupt[0] => ~NO_FANOUT~
 interrupt[1] => ~NO_FANOUT~
 interrupt[2] => ~NO_FANOUT~
 ready => ~NO_FANOUT~
-r_w <= r_w$latch.DB_MAX_OUTPUT_PORT_TYPE
+r_w <= <GND>
 sv => ~NO_FANOUT~
 acr => ~NO_FANOUT~
-cin => control_out[32].DATAB
-control_out[0] <= control_out[0]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[1] <= control_out[1]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[2] <= control_out[2]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[3] <= control_out[3]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[4] <= control_out[4]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[5] <= control_out[5]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[6] <= control_out[6]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[7] <= control_out[7]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[8] <= control_out[8]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[9] <= control_out[9]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[10] <= control_out[10]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[11] <= control_out[11]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[12] <= control_out[12]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[13] <= control_out[13]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[14] <= control_out[14]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[15] <= control_out[15]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[16] <= control_out[16]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[17] <= control_out[17]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[18] <= control_out[18]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[19] <= control_out[19]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[20] <= control_out[20]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[21] <= control_out[21]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[22] <= control_out[22]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[23] <= control_out[23]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[24] <= control_out[24]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[25] <= control_out[25]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[26] <= control_out[26]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[27] <= control_out[27]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[28] <= control_out[28]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[29] <= control_out[29]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[30] <= control_out[30]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[31] <= control_out[31]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[32] <= control_out[32]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[33] <= control_out[33]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[34] <= control_out[34]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[35] <= control_out[35]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[36] <= control_out[36]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[37] <= control_out[37]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[38] <= control_out[38]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[39] <= control_out[39]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[40] <= control_out[40]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[41] <= control_out[41]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[42] <= control_out[42]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[43] <= control_out[43]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[44] <= control_out[44]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[45] <= control_out[45]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[46] <= control_out[46]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[47] <= control_out[47]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[48] <= control_out[48]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[49] <= control_out[49]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[50] <= control_out[50]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[51] <= control_out[51]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[52] <= control_out[52]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[53] <= control_out[53]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[54] <= control_out[54]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[55] <= control_out[55]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[56] <= control_out[56]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[57] <= control_out[57]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[58] <= control_out[58]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[59] <= control_out[59]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[60] <= control_out[60]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[61] <= control_out[61]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[62] <= control_out[62]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[63] <= control_out[63]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[64] <= control_out[64]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[65] <= control_out[65]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[66] <= control_out[66]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[67] <= control_out[67]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[68] <= control_out[68]$latch.DB_MAX_OUTPUT_PORT_TYPE
-control_out[69] <= control_out[69]$latch.DB_MAX_OUTPUT_PORT_TYPE
+cin => control_out.DATAB
+control_out[0] <= Mux108.DB_MAX_OUTPUT_PORT_TYPE
+control_out[1] <= Mux107.DB_MAX_OUTPUT_PORT_TYPE
+control_out[2] <= <GND>
+control_out[3] <= Mux106.DB_MAX_OUTPUT_PORT_TYPE
+control_out[4] <= Mux105.DB_MAX_OUTPUT_PORT_TYPE
+control_out[5] <= Mux104.DB_MAX_OUTPUT_PORT_TYPE
+control_out[6] <= Mux103.DB_MAX_OUTPUT_PORT_TYPE
+control_out[7] <= <GND>
+control_out[8] <= <GND>
+control_out[9] <= Mux102.DB_MAX_OUTPUT_PORT_TYPE
+control_out[10] <= <GND>
+control_out[11] <= Mux101.DB_MAX_OUTPUT_PORT_TYPE
+control_out[12] <= <GND>
+control_out[13] <= <GND>
+control_out[14] <= <GND>
+control_out[15] <= Mux100.DB_MAX_OUTPUT_PORT_TYPE
+control_out[16] <= <GND>
+control_out[17] <= <GND>
+control_out[18] <= Mux99.DB_MAX_OUTPUT_PORT_TYPE
+control_out[19] <= Mux98.DB_MAX_OUTPUT_PORT_TYPE
+control_out[20] <= <GND>
+control_out[21] <= <GND>
+control_out[22] <= <GND>
+control_out[23] <= <GND>
+control_out[24] <= <GND>
+control_out[25] <= <GND>
+control_out[26] <= <GND>
+control_out[27] <= Mux97.DB_MAX_OUTPUT_PORT_TYPE
+control_out[28] <= Mux96.DB_MAX_OUTPUT_PORT_TYPE
+control_out[29] <= <GND>
+control_out[30] <= <GND>
+control_out[31] <= <GND>
+control_out[32] <= Mux95.DB_MAX_OUTPUT_PORT_TYPE
+control_out[33] <= Mux94.DB_MAX_OUTPUT_PORT_TYPE
+control_out[34] <= Mux93.DB_MAX_OUTPUT_PORT_TYPE
+control_out[35] <= Mux92.DB_MAX_OUTPUT_PORT_TYPE
+control_out[36] <= Mux91.DB_MAX_OUTPUT_PORT_TYPE
+control_out[37] <= Mux90.DB_MAX_OUTPUT_PORT_TYPE
+control_out[38] <= Mux89.DB_MAX_OUTPUT_PORT_TYPE
+control_out[39] <= Mux88.DB_MAX_OUTPUT_PORT_TYPE
+control_out[40] <= Mux87.DB_MAX_OUTPUT_PORT_TYPE
+control_out[41] <= <GND>
+control_out[42] <= <GND>
+control_out[43] <= <GND>
+control_out[44] <= Mux86.DB_MAX_OUTPUT_PORT_TYPE
+control_out[45] <= Mux85.DB_MAX_OUTPUT_PORT_TYPE
+control_out[46] <= Mux84.DB_MAX_OUTPUT_PORT_TYPE
+control_out[47] <= Mux83.DB_MAX_OUTPUT_PORT_TYPE
+control_out[48] <= Mux82.DB_MAX_OUTPUT_PORT_TYPE
+control_out[49] <= Mux81.DB_MAX_OUTPUT_PORT_TYPE
+control_out[50] <= Mux80.DB_MAX_OUTPUT_PORT_TYPE
+control_out[51] <= Mux79.DB_MAX_OUTPUT_PORT_TYPE
+control_out[52] <= Mux78.DB_MAX_OUTPUT_PORT_TYPE
+control_out[53] <= Mux77.DB_MAX_OUTPUT_PORT_TYPE
+control_out[54] <= Mux76.DB_MAX_OUTPUT_PORT_TYPE
+control_out[55] <= <GND>
+control_out[56] <= <GND>
+control_out[57] <= <GND>
+control_out[58] <= Mux75.DB_MAX_OUTPUT_PORT_TYPE
+control_out[59] <= <GND>
+control_out[60] <= Mux74.DB_MAX_OUTPUT_PORT_TYPE
+control_out[61] <= <GND>
+control_out[62] <= <GND>
+control_out[63] <= <GND>
+control_out[64] <= <GND>
+control_out[65] <= <GND>
+control_out[66] <= Mux73.DB_MAX_OUTPUT_PORT_TYPE
+control_out[67] <= <GND>
+control_out[68] <= Mux72.DB_MAX_OUTPUT_PORT_TYPE
+control_out[69] <= Mux71.DB_MAX_OUTPUT_PORT_TYPE
 s1 => ~NO_FANOUT~
 s2 => ~NO_FANOUT~
 v1 => ~NO_FANOUT~
 
 
-|processor|timing_generation:tim_gen
-clk => state~34.DATAIN
-reset => state~36.DATAIN
+|system|processor:processor_m|timing_generation:tim_gen
+clk => state~1.DATAIN
+reset => state.OUTPUTSELECT
+reset => state.OUTPUTSELECT
+reset => state.OUTPUTSELECT
+reset => state.OUTPUTSELECT
+reset => state.OUTPUTSELECT
+reset => state.OUTPUTSELECT
+reset => state.OUTPUTSELECT
+reset => state.OUTPUTSELECT
+reset => state.OUTPUTSELECT
+reset => state.OUTPUTSELECT
+reset => state.OUTPUTSELECT
+reset => state.OUTPUTSELECT
+reset => state.OUTPUTSELECT
+reset => state.OUTPUTSELECT
+reset => state.OUTPUTSELECT
+reset => state.OUTPUTSELECT
+reset => state.OUTPUTSELECT
+reset => state.OUTPUTSELECT
+reset => state.OUTPUTSELECT
+reset => state.OUTPUTSELECT
+reset => state.OUTPUTSELECT
+reset => state.OUTPUTSELECT
+reset => state.OUTPUTSELECT
+reset => state.OUTPUTSELECT
+reset => state.OUTPUTSELECT
+reset => state.OUTPUTSELECT
+reset => state.OUTPUTSELECT
+reset => state.OUTPUTSELECT
+reset => state.OUTPUTSELECT
+reset => state.OUTPUTSELECT
+reset => state.OUTPUTSELECT
+reset => state.OUTPUTSELECT
+reset => state.OUTPUTSELECT
+reset => state.OUTPUTSELECT
 bcr => ~NO_FANOUT~
-page_cross => Selector13.IN4
-page_cross => Selector16.IN4
-page_cross => Selector21.IN4
-page_cross => Selector0.IN4
-page_cross => Selector0.IN5
-page_cross => Selector22.IN3
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
-rmw => state.OUTPUTSELECT
+page_cross => next_state.T4_5.DATAB
+page_cross => next_state.T5_6.DATAB
+page_cross => next_state.T4_R7_p.DATAB
+page_cross => Selector0.IN2
+page_cross => Selector0.IN3
+page_cross => next_state.T4_R7_np.DATAB
+rmw => next_state.OUTPUTSELECT
+rmw => next_state.OUTPUTSELECT
+rmw => next_state.OUTPUTSELECT
+rmw => next_state.OUTPUTSELECT
+rmw => next_state.OUTPUTSELECT
+rmw => next_state.OUTPUTSELECT
+rmw => next_state.OUTPUTSELECT
+rmw => next_state.OUTPUTSELECT
+rmw => next_state.OUTPUTSELECT
+rmw => next_state.OUTPUTSELECT
+rmw => next_state.OUTPUTSELECT
+rmw => next_state.OUTPUTSELECT
+rmw => next_state.OUTPUTSELECT
+rmw => next_state.OUTPUTSELECT
+rmw => next_state.OUTPUTSELECT
 cycles[0] => Equal0.IN1
 cycles[0] => Equal1.IN2
 cycles[0] => Equal2.IN1
@@ -2652,22 +2545,188 @@ cycles[2] => Equal2.IN2
 cycles[2] => Equal3.IN1
 cycles[2] => Equal4.IN1
 cycles[2] => Equal5.IN0
-tcstate[0] <= WideOr29.DB_MAX_OUTPUT_PORT_TYPE
+tcstate[0] <= WideOr9.DB_MAX_OUTPUT_PORT_TYPE
 tcstate[1] <= tcstate[1].DB_MAX_OUTPUT_PORT_TYPE
-tcstate[2] <= WideOr28.DB_MAX_OUTPUT_PORT_TYPE
-tcstate[3] <= WideOr27.DB_MAX_OUTPUT_PORT_TYPE
-tcstate[4] <= WideOr26.DB_MAX_OUTPUT_PORT_TYPE
-tcstate[5] <= WideOr25.DB_MAX_OUTPUT_PORT_TYPE
+tcstate[2] <= WideOr8.DB_MAX_OUTPUT_PORT_TYPE
+tcstate[3] <= WideOr7.DB_MAX_OUTPUT_PORT_TYPE
+tcstate[4] <= WideOr6.DB_MAX_OUTPUT_PORT_TYPE
+tcstate[5] <= WideOr5.DB_MAX_OUTPUT_PORT_TYPE
 sync <= sync.DB_MAX_OUTPUT_PORT_TYPE
-s1 <= WideOr30.DB_MAX_OUTPUT_PORT_TYPE
-s2 <= WideOr31.DB_MAX_OUTPUT_PORT_TYPE
+s1 <= WideOr10.DB_MAX_OUTPUT_PORT_TYPE
+s2 <= WideOr11.DB_MAX_OUTPUT_PORT_TYPE
 v1 <= v1.DB_MAX_OUTPUT_PORT_TYPE
 
 
-|processor|ready:ready_map
+|system|processor:processor_m|ready:ready_map
 clk => rdy~reg0.CLK
 r => rdy.OUTPUTSELECT
 r_w => rdy.DATAA
 rdy <= rdy~reg0.DB_MAX_OUTPUT_PORT_TYPE
+
+
+|system|mem_dummy:mem_dummy_m
+clk => register_8bit:MAL.clk
+clk => register_8bit:MAH.clk
+clk => register_8bit:DATA.clk
+reset => register_8bit:MAL.reset
+reset => register_8bit:MAH.reset
+reset => register_8bit:DATA.reset
+addres_data_in[0] => register_8bit:MAL.data_in[0]
+addres_data_in[0] => register_8bit:MAH.data_in[0]
+addres_data_in[0] => register_8bit:DATA.data_in[0]
+addres_data_in[1] => register_8bit:MAL.data_in[1]
+addres_data_in[1] => register_8bit:MAH.data_in[1]
+addres_data_in[1] => register_8bit:DATA.data_in[1]
+addres_data_in[2] => register_8bit:MAL.data_in[2]
+addres_data_in[2] => register_8bit:MAH.data_in[2]
+addres_data_in[2] => register_8bit:DATA.data_in[2]
+addres_data_in[3] => register_8bit:MAL.data_in[3]
+addres_data_in[3] => register_8bit:MAH.data_in[3]
+addres_data_in[3] => register_8bit:DATA.data_in[3]
+addres_data_in[4] => register_8bit:MAL.data_in[4]
+addres_data_in[4] => register_8bit:MAH.data_in[4]
+addres_data_in[4] => register_8bit:DATA.data_in[4]
+addres_data_in[5] => register_8bit:MAL.data_in[5]
+addres_data_in[5] => register_8bit:MAH.data_in[5]
+addres_data_in[5] => register_8bit:DATA.data_in[5]
+addres_data_in[6] => register_8bit:MAL.data_in[6]
+addres_data_in[6] => register_8bit:MAH.data_in[6]
+addres_data_in[6] => register_8bit:DATA.data_in[6]
+addres_data_in[7] => register_8bit:MAL.data_in[7]
+addres_data_in[7] => register_8bit:MAH.data_in[7]
+addres_data_in[7] => register_8bit:DATA.data_in[7]
+control[0] => en_mah.IN0
+control[0] => en_mal.IN0
+control[0] => en_data.IN0
+control[1] => en_data.IN1
+control[1] => en_mal.IN1
+control[1] => en_mah.IN1
+data_out[0] <= Mux7.DB_MAX_OUTPUT_PORT_TYPE
+data_out[1] <= Mux6.DB_MAX_OUTPUT_PORT_TYPE
+data_out[2] <= Mux5.DB_MAX_OUTPUT_PORT_TYPE
+data_out[3] <= Mux4.DB_MAX_OUTPUT_PORT_TYPE
+data_out[4] <= Mux3.DB_MAX_OUTPUT_PORT_TYPE
+data_out[5] <= Mux2.DB_MAX_OUTPUT_PORT_TYPE
+data_out[6] <= Mux1.DB_MAX_OUTPUT_PORT_TYPE
+data_out[7] <= Mux0.DB_MAX_OUTPUT_PORT_TYPE
+dor_out[0] <= register_8bit:DATA.reg_out[0]
+dor_out[1] <= register_8bit:DATA.reg_out[1]
+dor_out[2] <= register_8bit:DATA.reg_out[2]
+dor_out[3] <= register_8bit:DATA.reg_out[3]
+dor_out[4] <= register_8bit:DATA.reg_out[4]
+dor_out[5] <= register_8bit:DATA.reg_out[5]
+dor_out[6] <= register_8bit:DATA.reg_out[6]
+dor_out[7] <= register_8bit:DATA.reg_out[7]
+
+
+|system|mem_dummy:mem_dummy_m|register_8bit:MAL
+clk => q[0].CLK
+clk => q[1].CLK
+clk => q[2].CLK
+clk => q[3].CLK
+clk => q[4].CLK
+clk => q[5].CLK
+clk => q[6].CLK
+clk => q[7].CLK
+reset => q.OUTPUTSELECT
+reset => q.OUTPUTSELECT
+reset => q.OUTPUTSELECT
+reset => q.OUTPUTSELECT
+reset => q.OUTPUTSELECT
+reset => q.OUTPUTSELECT
+reset => q.OUTPUTSELECT
+reset => q.OUTPUTSELECT
+reset => process_0.IN0
+load => process_0.IN1
+data_in[0] => q.DATAB
+data_in[1] => q.DATAB
+data_in[2] => q.DATAB
+data_in[3] => q.DATAB
+data_in[4] => q.DATAB
+data_in[5] => q.DATAB
+data_in[6] => q.DATAB
+data_in[7] => q.DATAB
+reg_out[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
+reg_out[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
+reg_out[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
+reg_out[3] <= q[3].DB_MAX_OUTPUT_PORT_TYPE
+reg_out[4] <= q[4].DB_MAX_OUTPUT_PORT_TYPE
+reg_out[5] <= q[5].DB_MAX_OUTPUT_PORT_TYPE
+reg_out[6] <= q[6].DB_MAX_OUTPUT_PORT_TYPE
+reg_out[7] <= q[7].DB_MAX_OUTPUT_PORT_TYPE
+
+
+|system|mem_dummy:mem_dummy_m|register_8bit:MAH
+clk => q[0].CLK
+clk => q[1].CLK
+clk => q[2].CLK
+clk => q[3].CLK
+clk => q[4].CLK
+clk => q[5].CLK
+clk => q[6].CLK
+clk => q[7].CLK
+reset => q.OUTPUTSELECT
+reset => q.OUTPUTSELECT
+reset => q.OUTPUTSELECT
+reset => q.OUTPUTSELECT
+reset => q.OUTPUTSELECT
+reset => q.OUTPUTSELECT
+reset => q.OUTPUTSELECT
+reset => q.OUTPUTSELECT
+reset => process_0.IN0
+load => process_0.IN1
+data_in[0] => q.DATAB
+data_in[1] => q.DATAB
+data_in[2] => q.DATAB
+data_in[3] => q.DATAB
+data_in[4] => q.DATAB
+data_in[5] => q.DATAB
+data_in[6] => q.DATAB
+data_in[7] => q.DATAB
+reg_out[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
+reg_out[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
+reg_out[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
+reg_out[3] <= q[3].DB_MAX_OUTPUT_PORT_TYPE
+reg_out[4] <= q[4].DB_MAX_OUTPUT_PORT_TYPE
+reg_out[5] <= q[5].DB_MAX_OUTPUT_PORT_TYPE
+reg_out[6] <= q[6].DB_MAX_OUTPUT_PORT_TYPE
+reg_out[7] <= q[7].DB_MAX_OUTPUT_PORT_TYPE
+
+
+|system|mem_dummy:mem_dummy_m|register_8bit:DATA
+clk => q[0].CLK
+clk => q[1].CLK
+clk => q[2].CLK
+clk => q[3].CLK
+clk => q[4].CLK
+clk => q[5].CLK
+clk => q[6].CLK
+clk => q[7].CLK
+reset => q.OUTPUTSELECT
+reset => q.OUTPUTSELECT
+reset => q.OUTPUTSELECT
+reset => q.OUTPUTSELECT
+reset => q.OUTPUTSELECT
+reset => q.OUTPUTSELECT
+reset => q.OUTPUTSELECT
+reset => q.OUTPUTSELECT
+reset => process_0.IN0
+load => process_0.IN1
+data_in[0] => q.DATAB
+data_in[1] => q.DATAB
+data_in[2] => q.DATAB
+data_in[3] => q.DATAB
+data_in[4] => q.DATAB
+data_in[5] => q.DATAB
+data_in[6] => q.DATAB
+data_in[7] => q.DATAB
+reg_out[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
+reg_out[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
+reg_out[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
+reg_out[3] <= q[3].DB_MAX_OUTPUT_PORT_TYPE
+reg_out[4] <= q[4].DB_MAX_OUTPUT_PORT_TYPE
+reg_out[5] <= q[5].DB_MAX_OUTPUT_PORT_TYPE
+reg_out[6] <= q[6].DB_MAX_OUTPUT_PORT_TYPE
+reg_out[7] <= q[7].DB_MAX_OUTPUT_PORT_TYPE
 
 

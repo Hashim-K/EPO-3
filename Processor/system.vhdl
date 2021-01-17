@@ -49,7 +49,9 @@ architecture arch of system is
   signal nmi, irq, sv : std_logic;
   signal r : std_logic;
 begin
-
+  nmi <= '1';
+  irq <= '1';
+  sv <= '0';
   r <= '1';
   processor_m : processor PORT MAP(clk_25mhz, nmi, extern_reset, irq, sv, r, addres_data, control, data);
   mem_dummy_m : mem_dummy PORT MAP(clk_25mhz, extern_reset, addres_data, control, data);
