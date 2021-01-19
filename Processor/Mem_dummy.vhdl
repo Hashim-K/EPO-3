@@ -64,15 +64,20 @@ architecture arch of mem_dummy is
   --     x"FF", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
   --     x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00"
   -- );
-  constant pla : rom := (
+  constant memory : rom := (
       x"A9",
       x"20",
       x"69",
-      x"03", x"85", x"02", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"FF", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00"
+      x"03",
+      x"85",
+      x"FF",
+      x"00",
+      x"00",
+      x"00",
+      x"00",
+      x"00",
+      x"00",
+      x"00",
   );
 
 
@@ -99,7 +104,7 @@ begin
 
   main : process(address)
   begin
-      data_out <= pla(to_integer(unsigned(address)));
+      data_out <= memory(to_integer(unsigned(address)));
   end process main;
 
 end architecture;

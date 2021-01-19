@@ -1,5 +1,5 @@
 Analysis & Synthesis report for processor
-Sun Jan 17 18:16:31 2021
+Tue Jan 19 22:17:58 2021
 Quartus II 64-Bit Version 13.0.1 Build 232 06/12/2013 Service Pack 1 SJ Web Edition
 
 
@@ -21,24 +21,22 @@ Quartus II 64-Bit Version 13.0.1 Build 232 06/12/2013 Service Pack 1 SJ Web Edit
  13. Removed Registers Triggering Further Register Optimizations
  14. General Register Statistics
  15. Multiplexer Restructuring Statistics (Restructuring Performed)
- 16. Port Connectivity Checks: "mem_dummy:mem_dummy_m|register_8bit:MAH"
- 17. Port Connectivity Checks: "mem_dummy:mem_dummy_m|register_8bit:MAL"
- 18. Port Connectivity Checks: "processor:processor_m|timing_generation:tim_gen"
- 19. Port Connectivity Checks: "processor:processor_m|instruction_decoder:instruction_dec"
- 20. Port Connectivity Checks: "processor:processor_m|predecode_logic:pr_logic"
- 21. Port Connectivity Checks: "processor:processor_m|predecode_register:pre_reg"
- 22. Port Connectivity Checks: "processor:processor_m|status_register:flag_reg|register_8bit:l1"
- 23. Port Connectivity Checks: "processor:processor_m|status_register:flag_reg"
- 24. Port Connectivity Checks: "processor:processor_m|mem_data_reg:data_reg|register_8bit:l1"
- 25. Port Connectivity Checks: "processor:processor_m|mem_data_reg:data_reg"
- 26. Port Connectivity Checks: "processor:processor_m|accumulator:accumu"
- 27. Port Connectivity Checks: "processor:processor_m|pc_high:program_counter_high|register_8bit:l1"
- 28. Port Connectivity Checks: "processor:processor_m|pc_low:program_counter_low|register_8bit:l1"
- 29. Port Connectivity Checks: "processor:processor_m|alu:Algorithmic_Unit|B_input_register:B_REGISTER|register_8bit:l1"
- 30. Port Connectivity Checks: "processor:processor_m|alu:Algorithmic_Unit"
- 31. Port Connectivity Checks: "processor:processor_m"
- 32. Elapsed Time Per Partition
- 33. Analysis & Synthesis Messages
+ 16. Port Connectivity Checks: "processor:processor_m|timing_generation:tim_gen"
+ 17. Port Connectivity Checks: "processor:processor_m|instruction_decoder:instruction_dec"
+ 18. Port Connectivity Checks: "processor:processor_m|predecode_logic:pr_logic"
+ 19. Port Connectivity Checks: "processor:processor_m|predecode_register:pre_reg"
+ 20. Port Connectivity Checks: "processor:processor_m|status_register:flag_reg|register_8bit:l1"
+ 21. Port Connectivity Checks: "processor:processor_m|status_register:flag_reg"
+ 22. Port Connectivity Checks: "processor:processor_m|mem_data_reg:data_reg|register_8bit:l1"
+ 23. Port Connectivity Checks: "processor:processor_m|mem_data_reg:data_reg"
+ 24. Port Connectivity Checks: "processor:processor_m|accumulator:accumu"
+ 25. Port Connectivity Checks: "processor:processor_m|pc_high:program_counter_high|register_8bit:l1"
+ 26. Port Connectivity Checks: "processor:processor_m|pc_low:program_counter_low|register_8bit:l1"
+ 27. Port Connectivity Checks: "processor:processor_m|alu:Algorithmic_Unit|B_input_register:B_REGISTER|register_8bit:l1"
+ 28. Port Connectivity Checks: "processor:processor_m|alu:Algorithmic_Unit"
+ 29. Port Connectivity Checks: "processor:processor_m"
+ 30. Elapsed Time Per Partition
+ 31. Analysis & Synthesis Messages
 
 
 
@@ -64,15 +62,15 @@ applicable agreement for further details.
 +--------------------------------------------------------------------------------------+
 ; Analysis & Synthesis Summary                                                         ;
 +------------------------------------+-------------------------------------------------+
-; Analysis & Synthesis Status        ; Successful - Sun Jan 17 18:16:30 2021           ;
+; Analysis & Synthesis Status        ; Successful - Tue Jan 19 22:17:58 2021           ;
 ; Quartus II 64-Bit Version          ; 13.0.1 Build 232 06/12/2013 SP 1 SJ Web Edition ;
 ; Revision Name                      ; processor                                       ;
 ; Top-level Entity Name              ; system                                          ;
 ; Family                             ; Cyclone II                                      ;
-; Total logic elements               ; 490                                             ;
-;     Total combinational functions  ; 471                                             ;
-;     Dedicated logic registers      ; 137                                             ;
-; Total registers                    ; 137                                             ;
+; Total logic elements               ; 477                                             ;
+;     Total combinational functions  ; 464                                             ;
+;     Dedicated logic registers      ; 123                                             ;
+; Total registers                    ; 123                                             ;
 ; Total pins                         ; 29                                              ;
 ; Total virtual pins                 ; 0                                               ;
 ; Total memory bits                  ; 0                                               ;
@@ -182,8 +180,7 @@ Parallel compilation was disabled, but you have multiple processors available. E
 +---------------------------------------------------------------+-----------------+-----------------+-----------------------------------------------------------------------------------------------------+---------+
 ; File Name with User-Entered Path                              ; Used in Netlist ; File Type       ; File Name with Absolute Path                                                                        ; Library ;
 +---------------------------------------------------------------+-----------------+-----------------+-----------------------------------------------------------------------------------------------------+---------+
-; FPGA_VHDL_FILES/Memdummy.vhdl                                 ; yes             ; User VHDL File  ; C:/Users/T.O/Documents/GitHub/EPO3/EPO-3/FPGA/FPGA_VHDL_FILES/Memdummy.vhdl                         ;         ;
-; FPGA_VHDL_FILES/system.vhdl                                   ; yes             ; User VHDL File  ; C:/Users/T.O/Documents/GitHub/EPO3/EPO-3/FPGA/FPGA_VHDL_FILES/system.vhdl                           ;         ;
+; FPGA_VHDL_FILES/system_2.vhdl                                 ; yes             ; User VHDL File  ; C:/Users/T.O/Documents/GitHub/EPO3/EPO-3/FPGA/FPGA_VHDL_FILES/system_2.vhdl                         ;         ;
 ; ../Processor/8_bit_register.vhdl                              ; yes             ; User VHDL File  ; C:/Users/T.O/Documents/GitHub/EPO3/EPO-3/Processor/8_bit_register.vhdl                              ;         ;
 ; ../Processor/Mosfets/Pass_Mosfets/pass_mosfet.vhdl            ; yes             ; User VHDL File  ; C:/Users/T.O/Documents/GitHub/EPO3/EPO-3/Processor/Mosfets/Pass_Mosfets/pass_mosfet.vhdl            ;         ;
 ; ../Processor/Mosfets/Drain_Mosfets/open_drain_ADL.vhdl        ; yes             ; User VHDL File  ; C:/Users/T.O/Documents/GitHub/EPO3/EPO-3/Processor/Mosfets/Drain_Mosfets/open_drain_ADL.vhdl        ;         ;
@@ -226,28 +223,28 @@ Parallel compilation was disabled, but you have multiple processors available. E
 +---------------------------------------------+-------------------------------------------+
 ; Resource                                    ; Usage                                     ;
 +---------------------------------------------+-------------------------------------------+
-; Estimated Total logic elements              ; 490                                       ;
+; Estimated Total logic elements              ; 477                                       ;
 ;                                             ;                                           ;
-; Total combinational functions               ; 471                                       ;
+; Total combinational functions               ; 464                                       ;
 ; Logic element usage by number of LUT inputs ;                                           ;
-;     -- 4 input functions                    ; 290                                       ;
-;     -- 3 input functions                    ; 88                                        ;
-;     -- <=2 input functions                  ; 93                                        ;
+;     -- 4 input functions                    ; 296                                       ;
+;     -- 3 input functions                    ; 74                                        ;
+;     -- <=2 input functions                  ; 94                                        ;
 ;                                             ;                                           ;
 ; Logic elements by mode                      ;                                           ;
-;     -- normal mode                          ; 448                                       ;
+;     -- normal mode                          ; 441                                       ;
 ;     -- arithmetic mode                      ; 23                                        ;
 ;                                             ;                                           ;
-; Total registers                             ; 137                                       ;
-;     -- Dedicated logic registers            ; 137                                       ;
+; Total registers                             ; 123                                       ;
+;     -- Dedicated logic registers            ; 123                                       ;
 ;     -- I/O registers                        ; 0                                         ;
 ;                                             ;                                           ;
 ; I/O pins                                    ; 29                                        ;
 ; Embedded Multiplier 9-bit elements          ; 0                                         ;
 ; Maximum fan-out node                        ; processor:processor_m|clock:clo|WideOr0~0 ;
-; Maximum fan-out                             ; 110                                       ;
-; Total fan-out                               ; 2028                                      ;
-; Average fan-out                             ; 3.18                                      ;
+; Maximum fan-out                             ; 116                                       ;
+; Total fan-out                               ; 1954                                      ;
+; Average fan-out                             ; 3.17                                      ;
 +---------------------------------------------+-------------------------------------------+
 
 
@@ -256,39 +253,35 @@ Parallel compilation was disabled, but you have multiple processors available. E
 +----------------------------------------------+-------------------+--------------+-------------+--------------+---------+-----------+------+--------------+-------------------------------------------------------------------------------------------------------+--------------+
 ; Compilation Hierarchy Node                   ; LC Combinationals ; LC Registers ; Memory Bits ; DSP Elements ; DSP 9x9 ; DSP 18x18 ; Pins ; Virtual Pins ; Full Hierarchy Name                                                                                   ; Library Name ;
 +----------------------------------------------+-------------------+--------------+-------------+--------------+---------+-----------+------+--------------+-------------------------------------------------------------------------------------------------------+--------------+
-; |system                                      ; 471 (0)           ; 137 (0)      ; 0           ; 0            ; 0       ; 0         ; 29   ; 0            ; |system                                                                                               ; work         ;
-;    |mem_dummy:mem_dummy_m|                   ; 30 (16)           ; 14 (0)       ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|mem_dummy:mem_dummy_m                                                                         ; work         ;
-;       |register_8bit:DATA|                   ; 13 (13)           ; 8 (8)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|mem_dummy:mem_dummy_m|register_8bit:DATA                                                      ; work         ;
-;       |register_8bit:MAL|                    ; 1 (1)             ; 6 (6)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|mem_dummy:mem_dummy_m|register_8bit:MAL                                                       ; work         ;
-;    |processor:processor_m|                   ; 441 (57)          ; 123 (0)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|processor:processor_m                                                                         ; work         ;
-;       |accumulator:accumu|                   ; 12 (2)            ; 8 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|processor:processor_m|accumulator:accumu                                                      ; work         ;
-;          |register_8bit_C:l1|                ; 10 (10)           ; 8 (8)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|processor:processor_m|accumulator:accumu|register_8bit_C:l1                                   ; work         ;
-;       |alu:Algorithmic_Unit|                 ; 111 (1)           ; 24 (0)       ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|processor:processor_m|alu:Algorithmic_Unit                                                    ; work         ;
-;          |A_input_register:A_REGSISTER|      ; 12 (0)            ; 8 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|processor:processor_m|alu:Algorithmic_Unit|A_input_register:A_REGSISTER                       ; work         ;
-;             |register_8bit_A:L1|             ; 12 (12)           ; 8 (8)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|processor:processor_m|alu:Algorithmic_Unit|A_input_register:A_REGSISTER|register_8bit_A:L1    ; work         ;
-;          |B_input_register:B_REGISTER|       ; 13 (0)            ; 8 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|processor:processor_m|alu:Algorithmic_Unit|B_input_register:B_REGISTER                        ; work         ;
-;             |register_8bit:l1|               ; 13 (13)           ; 8 (8)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|processor:processor_m|alu:Algorithmic_Unit|B_input_register:B_REGISTER|register_8bit:l1       ; work         ;
-;          |adder_hold_register:HOLD_REGISTER| ; 54 (0)            ; 8 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|processor:processor_m|alu:Algorithmic_Unit|adder_hold_register:HOLD_REGISTER                  ; work         ;
-;             |register_8bit:l1|               ; 54 (54)           ; 8 (8)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|processor:processor_m|alu:Algorithmic_Unit|adder_hold_register:HOLD_REGISTER|register_8bit:l1 ; work         ;
-;          |alu_logic:alu_logicmap|            ; 31 (8)            ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|processor:processor_m|alu:Algorithmic_Unit|alu_logic:alu_logicmap                             ; work         ;
-;             |eight_bit_adder:ADDER|          ; 14 (14)           ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|processor:processor_m|alu:Algorithmic_Unit|alu_logic:alu_logicmap|eight_bit_adder:ADDER       ; work         ;
-;             |eight_bit_shift:SHIFT|          ; 8 (8)             ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|processor:processor_m|alu:Algorithmic_Unit|alu_logic:alu_logicmap|eight_bit_shift:SHIFT       ; work         ;
-;             |eight_bit_xor:XORR|             ; 1 (1)             ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|processor:processor_m|alu:Algorithmic_Unit|alu_logic:alu_logicmap|eight_bit_xor:XORR          ; work         ;
+; |system                                      ; 464 (0)           ; 123 (0)      ; 0           ; 0            ; 0       ; 0         ; 29   ; 0            ; |system                                                                                               ; work         ;
+;    |processor:processor_m|                   ; 464 (53)          ; 123 (0)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|processor:processor_m                                                                         ; work         ;
+;       |accumulator:accumu|                   ; 11 (2)            ; 8 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|processor:processor_m|accumulator:accumu                                                      ; work         ;
+;          |register_8bit_C:l1|                ; 9 (9)             ; 8 (8)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|processor:processor_m|accumulator:accumu|register_8bit_C:l1                                   ; work         ;
+;       |alu:Algorithmic_Unit|                 ; 118 (2)           ; 24 (0)       ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|processor:processor_m|alu:Algorithmic_Unit                                                    ; work         ;
+;          |A_input_register:A_REGSISTER|      ; 13 (0)            ; 8 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|processor:processor_m|alu:Algorithmic_Unit|A_input_register:A_REGSISTER                       ; work         ;
+;             |register_8bit_A:L1|             ; 13 (13)           ; 8 (8)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|processor:processor_m|alu:Algorithmic_Unit|A_input_register:A_REGSISTER|register_8bit_A:L1    ; work         ;
+;          |B_input_register:B_REGISTER|       ; 12 (0)            ; 8 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|processor:processor_m|alu:Algorithmic_Unit|B_input_register:B_REGISTER                        ; work         ;
+;             |register_8bit:l1|               ; 12 (12)           ; 8 (8)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|processor:processor_m|alu:Algorithmic_Unit|B_input_register:B_REGISTER|register_8bit:l1       ; work         ;
+;          |adder_hold_register:HOLD_REGISTER| ; 63 (0)            ; 8 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|processor:processor_m|alu:Algorithmic_Unit|adder_hold_register:HOLD_REGISTER                  ; work         ;
+;             |register_8bit:l1|               ; 63 (63)           ; 8 (8)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|processor:processor_m|alu:Algorithmic_Unit|adder_hold_register:HOLD_REGISTER|register_8bit:l1 ; work         ;
+;          |alu_logic:alu_logicmap|            ; 28 (3)            ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|processor:processor_m|alu:Algorithmic_Unit|alu_logic:alu_logicmap                             ; work         ;
+;             |eight_bit_adder:ADDER|          ; 15 (15)           ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|processor:processor_m|alu:Algorithmic_Unit|alu_logic:alu_logicmap|eight_bit_adder:ADDER       ; work         ;
+;             |eight_bit_shift:SHIFT|          ; 10 (10)           ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|processor:processor_m|alu:Algorithmic_Unit|alu_logic:alu_logicmap|eight_bit_shift:SHIFT       ; work         ;
 ;       |clock:clo|                            ; 11 (11)           ; 9 (9)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|processor:processor_m|clock:clo                                                               ; work         ;
 ;       |instruction_decoder:instruction_dec|  ; 113 (113)         ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|processor:processor_m|instruction_decoder:instruction_dec                                     ; work         ;
 ;       |intruction_reg:ins_reg|               ; 9 (9)             ; 8 (8)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|processor:processor_m|intruction_reg:ins_reg                                                  ; work         ;
-;       |mem_add_reg:add_Reg|                  ; 22 (22)           ; 6 (6)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|processor:processor_m|mem_add_reg:add_Reg                                                     ; work         ;
-;       |mem_data_reg:data_reg|                ; 0 (0)             ; 8 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|processor:processor_m|mem_data_reg:data_reg                                                   ; work         ;
-;          |register_8bit:l1|                  ; 0 (0)             ; 8 (8)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|processor:processor_m|mem_data_reg:data_reg|register_8bit:l1                                  ; work         ;
+;       |mem_add_reg:add_Reg|                  ; 41 (41)           ; 6 (6)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|processor:processor_m|mem_add_reg:add_Reg                                                     ; work         ;
+;       |mem_data_reg:data_reg|                ; 8 (0)             ; 8 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|processor:processor_m|mem_data_reg:data_reg                                                   ; work         ;
+;          |register_8bit:l1|                  ; 8 (8)             ; 8 (8)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|processor:processor_m|mem_data_reg:data_reg|register_8bit:l1                                  ; work         ;
 ;       |pass:pass_sb_db|                      ; 1 (1)             ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|processor:processor_m|pass:pass_sb_db                                                         ; work         ;
-;       |pc_high:program_counter_high|         ; 9 (0)             ; 8 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|processor:processor_m|pc_high:program_counter_high                                            ; work         ;
-;          |register_8bit:l1|                  ; 9 (9)             ; 8 (8)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|processor:processor_m|pc_high:program_counter_high|register_8bit:l1                           ; work         ;
+;       |pc_high:program_counter_high|         ; 10 (0)            ; 8 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|processor:processor_m|pc_high:program_counter_high                                            ; work         ;
+;          |register_8bit:l1|                  ; 10 (10)           ; 8 (8)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|processor:processor_m|pc_high:program_counter_high|register_8bit:l1                           ; work         ;
 ;       |pc_low:program_counter_low|           ; 9 (0)             ; 8 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|processor:processor_m|pc_low:program_counter_low                                              ; work         ;
 ;          |register_8bit:l1|                  ; 9 (9)             ; 8 (8)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|processor:processor_m|pc_low:program_counter_low|register_8bit:l1                             ; work         ;
-;       |predecode_logic:pr_logic|             ; 30 (30)           ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|processor:processor_m|predecode_logic:pr_logic                                                ; work         ;
-;       |status_register:flag_reg|             ; 5 (5)             ; 1 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|processor:processor_m|status_register:flag_reg                                                ; work         ;
+;       |predecode_logic:pr_logic|             ; 26 (26)           ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|processor:processor_m|predecode_logic:pr_logic                                                ; work         ;
+;       |status_register:flag_reg|             ; 1 (1)             ; 1 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|processor:processor_m|status_register:flag_reg                                                ; work         ;
 ;          |register_8bit:l1|                  ; 0 (0)             ; 1 (1)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|processor:processor_m|status_register:flag_reg|register_8bit:l1                               ; work         ;
-;       |timing_generation:tim_gen|            ; 39 (39)           ; 27 (27)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|processor:processor_m|timing_generation:tim_gen                                               ; work         ;
+;       |timing_generation:tim_gen|            ; 40 (40)           ; 27 (27)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|processor:processor_m|timing_generation:tim_gen                                               ; work         ;
 ;       |x_index:x_in|                         ; 9 (9)             ; 8 (8)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|processor:processor_m|x_index:x_in                                                            ; work         ;
 ;       |y_index:y_in|                         ; 4 (4)             ; 8 (8)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |system|processor:processor_m|y_index:y_in                                                            ; work         ;
 +----------------------------------------------+-------------------+--------------+-------------+--------------+---------+-----------+------+--------------+-------------------------------------------------------------------------------------------------------+--------------+
@@ -402,9 +395,9 @@ Note: All cells listed above may not be present at the end of synthesis due to v
 ; processor:processor_m|predecode_register:pre_reg|q[0]                       ; Merged with processor:processor_m|mem_data_reg:data_reg|register_8bit:l1|q[0] ;
 ; processor:processor_m|predecode_register:pre_reg|q[1]                       ; Merged with processor:processor_m|mem_data_reg:data_reg|register_8bit:l1|q[1] ;
 ; processor:processor_m|predecode_register:pre_reg|q[2]                       ; Merged with processor:processor_m|mem_data_reg:data_reg|register_8bit:l1|q[2] ;
+; processor:processor_m|predecode_register:pre_reg|q[3]                       ; Merged with processor:processor_m|mem_data_reg:data_reg|register_8bit:l1|q[3] ;
 ; processor:processor_m|predecode_register:pre_reg|q[4]                       ; Merged with processor:processor_m|mem_data_reg:data_reg|register_8bit:l1|q[4] ;
 ; processor:processor_m|predecode_register:pre_reg|q[5]                       ; Merged with processor:processor_m|mem_data_reg:data_reg|register_8bit:l1|q[5] ;
-; processor:processor_m|predecode_register:pre_reg|q[3]                       ; Merged with processor:processor_m|mem_data_reg:data_reg|register_8bit:l1|q[3] ;
 ; processor:processor_m|predecode_register:pre_reg|q[6]                       ; Merged with processor:processor_m|mem_data_reg:data_reg|register_8bit:l1|q[6] ;
 ; processor:processor_m|predecode_register:pre_reg|q[7]                       ; Merged with processor:processor_m|mem_data_reg:data_reg|register_8bit:l1|q[7] ;
 ; processor:processor_m|timing_generation:tim_gen|state.T1P                   ; Lost fanout                                                                   ;
@@ -436,12 +429,12 @@ Note: All cells listed above may not be present at the end of synthesis due to v
 +----------------------------------------------+-------+
 ; Statistic                                    ; Value ;
 +----------------------------------------------+-------+
-; Total registers                              ; 137   ;
-; Number of registers using Synchronous Clear  ; 37    ;
+; Total registers                              ; 123   ;
+; Number of registers using Synchronous Clear  ; 29    ;
 ; Number of registers using Synchronous Load   ; 0     ;
 ; Number of registers using Asynchronous Clear ; 0     ;
 ; Number of registers using Asynchronous Load  ; 0     ;
-; Number of registers using Clock Enable       ; 84    ;
+; Number of registers using Clock Enable       ; 70    ;
 ; Number of registers using Preset             ; 0     ;
 +----------------------------------------------+-------+
 
@@ -451,43 +444,22 @@ Note: All cells listed above may not be present at the end of synthesis due to v
 +--------------------+-----------+---------------+----------------------+------------------------+------------+------------------------------------------------------------------------------------------------------------+
 ; Multiplexer Inputs ; Bus Width ; Baseline Area ; Area if Restructured ; Saving if Restructured ; Registered ; Example Multiplexer Output                                                                                 ;
 +--------------------+-----------+---------------+----------------------+------------------------+------------+------------------------------------------------------------------------------------------------------------+
-; 3:1                ; 8 bits    ; 16 LEs        ; 8 LEs                ; 8 LEs                  ; Yes        ; |system|processor:processor_m|pc_high:program_counter_high|register_8bit:l1|q[0]                           ;
-; 3:1                ; 8 bits    ; 16 LEs        ; 8 LEs                ; 8 LEs                  ; Yes        ; |system|processor:processor_m|pc_low:program_counter_low|register_8bit:l1|q[0]                             ;
-; 5:1                ; 8 bits    ; 24 LEs        ; 16 LEs               ; 8 LEs                  ; Yes        ; |system|processor:processor_m|alu:Algorithmic_Unit|B_input_register:B_REGISTER|register_8bit:l1|q[6]       ;
-; 3:1                ; 8 bits    ; 16 LEs        ; 8 LEs                ; 8 LEs                  ; Yes        ; |system|processor:processor_m|accumulator:accumu|register_8bit_C:l1|q[1]                                   ;
-; 3:1                ; 8 bits    ; 16 LEs        ; 8 LEs                ; 8 LEs                  ; Yes        ; |system|processor:processor_m|x_index:x_in|q[5]                                                            ;
-; 3:1                ; 8 bits    ; 16 LEs        ; 8 LEs                ; 8 LEs                  ; Yes        ; |system|processor:processor_m|y_index:y_in|q[1]                                                            ;
-; 4:1                ; 8 bits    ; 16 LEs        ; 8 LEs                ; 8 LEs                  ; Yes        ; |system|processor:processor_m|intruction_reg:ins_reg|q[7]                                                  ;
-; 3:1                ; 6 bits    ; 12 LEs        ; 6 LEs                ; 6 LEs                  ; Yes        ; |system|mem_dummy:mem_dummy_m|register_8bit:DATA|q[4]                                                      ;
-; 3:1                ; 6 bits    ; 12 LEs        ; 6 LEs                ; 6 LEs                  ; Yes        ; |system|mem_dummy:mem_dummy_m|register_8bit:MAL|q[5]                                                       ;
-; 6:1                ; 8 bits    ; 32 LEs        ; 16 LEs               ; 16 LEs                 ; Yes        ; |system|processor:processor_m|alu:Algorithmic_Unit|A_input_register:A_REGSISTER|register_8bit_A:L1|q[1]    ;
-; 7:1                ; 2 bits    ; 8 LEs         ; 6 LEs                ; 2 LEs                  ; Yes        ; |system|mem_dummy:mem_dummy_m|register_8bit:DATA|q[6]                                                      ;
+; 3:1                ; 8 bits    ; 16 LEs        ; 8 LEs                ; 8 LEs                  ; Yes        ; |system|processor:processor_m|pc_high:program_counter_high|register_8bit:l1|q[7]                           ;
+; 3:1                ; 8 bits    ; 16 LEs        ; 8 LEs                ; 8 LEs                  ; Yes        ; |system|processor:processor_m|pc_low:program_counter_low|register_8bit:l1|q[5]                             ;
+; 5:1                ; 8 bits    ; 24 LEs        ; 16 LEs               ; 8 LEs                  ; Yes        ; |system|processor:processor_m|alu:Algorithmic_Unit|B_input_register:B_REGISTER|register_8bit:l1|q[1]       ;
+; 3:1                ; 8 bits    ; 16 LEs        ; 8 LEs                ; 8 LEs                  ; Yes        ; |system|processor:processor_m|accumulator:accumu|register_8bit_C:l1|q[5]                                   ;
+; 3:1                ; 8 bits    ; 16 LEs        ; 8 LEs                ; 8 LEs                  ; Yes        ; |system|processor:processor_m|x_index:x_in|q[6]                                                            ;
+; 3:1                ; 8 bits    ; 16 LEs        ; 8 LEs                ; 8 LEs                  ; Yes        ; |system|processor:processor_m|y_index:y_in|q[6]                                                            ;
+; 4:1                ; 8 bits    ; 16 LEs        ; 8 LEs                ; 8 LEs                  ; Yes        ; |system|processor:processor_m|intruction_reg:ins_reg|q[2]                                                  ;
+; 6:1                ; 8 bits    ; 32 LEs        ; 16 LEs               ; 16 LEs                 ; Yes        ; |system|processor:processor_m|alu:Algorithmic_Unit|A_input_register:A_REGSISTER|register_8bit_A:L1|q[0]    ;
 ; 13:1               ; 6 bits    ; 48 LEs        ; 36 LEs               ; 12 LEs                 ; Yes        ; |system|processor:processor_m|alu:Algorithmic_Unit|adder_hold_register:HOLD_REGISTER|register_8bit:l1|q[1] ;
 ; 3:1                ; 2 bits    ; 4 LEs         ; 2 LEs                ; 2 LEs                  ; No         ; |system|processor:processor_m|timing_generation:tim_gen|state                                              ;
-; 3:1                ; 2 bits    ; 4 LEs         ; 2 LEs                ; 2 LEs                  ; No         ; |system|processor:processor_m|instruction_decoder:instruction_dec|Mux28                                    ;
+; 3:1                ; 2 bits    ; 4 LEs         ; 2 LEs                ; 2 LEs                  ; No         ; |system|processor:processor_m|instruction_decoder:instruction_dec|Mux3                                     ;
 ; 4:1                ; 3 bits    ; 6 LEs         ; 3 LEs                ; 3 LEs                  ; No         ; |system|processor:processor_m|timing_generation:tim_gen|state                                              ;
-; 5:1                ; 6 bits    ; 18 LEs        ; 18 LEs               ; 0 LEs                  ; No         ; |system|processor:processor_m|mem_add_reg:add_Reg|Selector7                                                ;
-; 3:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; No         ; |system|processor:processor_m|db[6]                                                                        ;
-; 5:1                ; 8 bits    ; 24 LEs        ; 24 LEs               ; 0 LEs                  ; No         ; |system|processor:processor_m|sb[0]                                                                        ;
+; 5:1                ; 8 bits    ; 24 LEs        ; 24 LEs               ; 0 LEs                  ; No         ; |system|processor:processor_m|mem_add_reg:add_Reg|Selector6                                                ;
+; 3:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; No         ; |system|processor:processor_m|db[7]                                                                        ;
+; 5:1                ; 8 bits    ; 24 LEs        ; 24 LEs               ; 0 LEs                  ; No         ; |system|processor:processor_m|sb[7]                                                                        ;
 +--------------------+-----------+---------------+----------------------+------------------------+------------+------------------------------------------------------------------------------------------------------------+
-
-
-+-------------------------------------------------------------------------------------------------------------------+
-; Port Connectivity Checks: "mem_dummy:mem_dummy_m|register_8bit:MAH"                                               ;
-+---------+--------+----------+-------------------------------------------------------------------------------------+
-; Port    ; Type   ; Severity ; Details                                                                             ;
-+---------+--------+----------+-------------------------------------------------------------------------------------+
-; reg_out ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
-+---------+--------+----------+-------------------------------------------------------------------------------------+
-
-
-+-------------------------------------------------------------------------------------------------------------------------+
-; Port Connectivity Checks: "mem_dummy:mem_dummy_m|register_8bit:MAL"                                                     ;
-+---------------+--------+----------+-------------------------------------------------------------------------------------+
-; Port          ; Type   ; Severity ; Details                                                                             ;
-+---------------+--------+----------+-------------------------------------------------------------------------------------+
-; reg_out[7..6] ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
-+---------------+--------+----------+-------------------------------------------------------------------------------------+
 
 
 +-----------------------------------------------------------------------------+
@@ -576,6 +548,7 @@ Note: All cells listed above may not be present at the end of synthesis due to v
 +---------------+--------+----------+-------------------------------------------------------------------------------------+
 ; zero_flag     ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
 ; negative_flag ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; content       ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
 +---------------+--------+----------+-------------------------------------------------------------------------------------+
 
 
@@ -642,13 +615,10 @@ Note: All cells listed above may not be present at the end of synthesis due to v
 Info: *******************************************************************
 Info: Running Quartus II 64-Bit Analysis & Synthesis
     Info: Version 13.0.1 Build 232 06/12/2013 Service Pack 1 SJ Web Edition
-    Info: Processing started: Sun Jan 17 18:16:27 2021
+    Info: Processing started: Tue Jan 19 22:17:55 2021
 Info: Command: quartus_map --read_settings_files=on --write_settings_files=off processor -c processor
 Warning (20028): Parallel compilation is not licensed and has been disabled
-Info (12021): Found 2 design units, including 1 entities, in source file fpga_vhdl_files/memdummy.vhdl
-    Info (12022): Found design unit 1: mem_dummy-arch
-    Info (12023): Found entity 1: mem_dummy
-Info (12021): Found 2 design units, including 1 entities, in source file fpga_vhdl_files/system.vhdl
+Info (12021): Found 2 design units, including 1 entities, in source file fpga_vhdl_files/system_2.vhdl
     Info (12022): Found design unit 1: system-arch
     Info (12023): Found entity 1: system
 Info (12021): Found 2 design units, including 1 entities, in source file /users/t.o/documents/github/epo3/epo-3/processor/8_bit_register.vhdl
@@ -764,6 +734,7 @@ Warning (10036): Verilog HDL or VHDL warning at processor.vhdl(434): object "pcl
 Warning (10036): Verilog HDL or VHDL warning at processor.vhdl(442): object "i" assigned a value but never read
 Warning (10036): Verilog HDL or VHDL warning at processor.vhdl(472): object "zero_flag" assigned a value but never read
 Warning (10036): Verilog HDL or VHDL warning at processor.vhdl(472): object "negative_flag" assigned a value but never read
+Warning (10036): Verilog HDL or VHDL warning at processor.vhdl(508): object "acc_content" assigned a value but never read
 Info (12128): Elaborating entity "clock" for hierarchy "processor:processor_m|clock:clo"
 Info (12128): Elaborating entity "x_index" for hierarchy "processor:processor_m|x_index:x_in"
 Info (12128): Elaborating entity "y_index" for hierarchy "processor:processor_m|y_index:y_in"
@@ -797,7 +768,6 @@ Info (12128): Elaborating entity "intruction_reg" for hierarchy "processor:proce
 Info (12128): Elaborating entity "instruction_decoder" for hierarchy "processor:processor_m|instruction_decoder:instruction_dec"
 Info (12128): Elaborating entity "timing_generation" for hierarchy "processor:processor_m|timing_generation:tim_gen"
 Info (12128): Elaborating entity "ready" for hierarchy "processor:processor_m|ready:ready_map"
-Info (12128): Elaborating entity "mem_dummy" for hierarchy "mem_dummy:mem_dummy_m"
 Warning (13046): Tri-state node(s) do not directly drive top-level pin(s)
     Warning (13048): Converted tri-state node "processor:processor_m|sb[7]" into a selector
     Warning (13048): Converted tri-state node "processor:processor_m|sb[6]" into a selector
@@ -835,14 +805,14 @@ Warning (12241): 1 hierarchies have connectivity warnings - see the Connectivity
 Info (17049): 16 registers lost all their fanouts during netlist optimizations.
 Info (16010): Generating hard_block partition "hard_block:auto_generated_inst"
     Info (16011): Adding 0 node(s), including 0 DDIO, 0 PLL, 0 transceiver and 0 LCELL
-Info (21057): Implemented 533 device resources after synthesis - the final resource count might be different
-    Info (21058): Implemented 2 input pins
-    Info (21059): Implemented 27 output pins
-    Info (21061): Implemented 504 logic cells
-Info: Quartus II 64-Bit Analysis & Synthesis was successful. 0 errors, 41 warnings
-    Info: Peak virtual memory: 4660 megabytes
-    Info: Processing ended: Sun Jan 17 18:16:31 2021
-    Info: Elapsed time: 00:00:04
-    Info: Total CPU time (on all processors): 00:00:04
+Info (21057): Implemented 515 device resources after synthesis - the final resource count might be different
+    Info (21058): Implemented 10 input pins
+    Info (21059): Implemented 19 output pins
+    Info (21061): Implemented 486 logic cells
+Info: Quartus II 64-Bit Analysis & Synthesis was successful. 0 errors, 42 warnings
+    Info: Peak virtual memory: 4653 megabytes
+    Info: Processing ended: Tue Jan 19 22:17:58 2021
+    Info: Elapsed time: 00:00:03
+    Info: Total CPU time (on all processors): 00:00:03
 
 

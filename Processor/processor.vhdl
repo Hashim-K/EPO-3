@@ -17,9 +17,9 @@ entity processor is
   adb_control : out std_logic_vector(1 downto 0);   -- Select the external register
   db_external : in std_logic_vector(7 downto 0);    -- External connection of the databus bus in
 
-  sys_cont : OUT std_logic_vector(2 downto 0);
-  sys_inst : OUT std_logic_vector(7 downto 0);
-  sys_acc : OUT std_logic_vector(7 downto 0)
+  -- sys_cont : OUT std_logic_vector(2 downto 0);
+  sys_inst : OUT std_logic_vector(7 downto 0)
+  -- sys_acc : OUT std_logic_vector(7 downto 0)
 
   );
 end entity;
@@ -510,10 +510,10 @@ begin
   inv_res <= not res;
 
 
-  sys_cont <= clk_2 & clk & reset;
+  -- sys_cont <= clk_2 & clk & reset;
   sys_inst <= ins_data_out;
 
-  sys_acc <= acc_content;
+  -- sys_acc <= acc_content;
 
 
 --/*************************************************

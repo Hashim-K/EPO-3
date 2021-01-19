@@ -41,31 +41,6 @@ begin
 	begin
 		case state is
 
-			-- when reset_state =>
-			-- 	o_to_extern <= "00000000";
-			-- 	control <= "11"; -- means not in operation
-			--
-			-- 	if (adl_abl or adh_abh or db_dor) = '1' then
-			-- 		next_state <= pr_state;
-			-- 	else
-			-- 		next_state <= reset_state;
-			-- 	end if;
-			--
-			--
-			-- when pr_state => -- for timing wait one clock cycle
-			-- 	o_to_extern <= "00000000";
-			-- 	control <= "11";
-			-- 	if adl_abl = '1' then
-			-- 		next_state <= state1;
-			-- 	elsif adh_abh = '1' then
-			-- 		next_state <= state2;
-			-- 	elsif db_dor = '1' then
-			-- 		next_state <= state3;
-			-- 	else
-			-- 		next_state <= reset_state;
-			-- 	end if;
-
-
 			when reset_state =>
 				o_to_extern <= "00000000";
 				control <= "11"; -- means not in operation
