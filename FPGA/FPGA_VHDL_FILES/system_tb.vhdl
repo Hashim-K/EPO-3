@@ -9,12 +9,12 @@ architecture arch of system_tb is
   component system is
     port (
     clk_25mhz : IN std_logic;
-    extern_reset : IN std_logic;
+    extern_reset : IN std_logic
 
-    sys_out : OUT std_logic_vector(7 downto 0);
-    sys_acc : OUT std_logic_vector(7 downto 0);
-    sys_inst : OUT std_logic_vector(7 downto 0);
-    sys_cont : OUT std_logic_vector(2 downto 0)
+    -- sys_out : OUT std_logic_vector(7 downto 0);
+    -- sys_acc : OUT std_logic_vector(7 downto 0);
+    -- sys_inst : OUT std_logic_vector(7 downto 0);
+    -- sys_cont : OUT std_logic_vector(2 downto 0)
     );
   end component;
 
@@ -28,7 +28,7 @@ begin
   extern_reset <= '0' after 0 ns,
                   '1' after 50 ns;
 
-  sy : system PORT MAP(clk_25mhz, extern_reset,  sys_out, sys_acc, sys_inst, sys_cont);
+  sy : system PORT MAP(clk_25mhz, extern_reset  ); -- ,sys_out, sys_acc, sys_inst, sys_cont
 
 
 end architecture;

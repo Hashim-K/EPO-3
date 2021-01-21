@@ -10,13 +10,13 @@ library ieee;
 entity system is
   port (
   clk_25mhz : IN std_logic;
-  extern_reset : IN std_logic;
+  extern_reset : IN std_logic
 
 
-  sys_out : OUT std_logic_vector(7 downto 0);
-  sys_acc : OUT std_logic_vector(7 downto 0);
-  sys_inst : OUT std_logic_vector(7 downto 0);
-  sys_cont : OUT std_logic_vector(2 downto 0)
+  -- sys_out : OUT std_logic_vector(7 downto 0);
+  -- sys_acc : OUT std_logic_vector(7 downto 0);
+  -- sys_inst : OUT std_logic_vector(7 downto 0);
+  -- sys_cont : OUT std_logic_vector(2 downto 0)
   );
 end entity;
 
@@ -34,11 +34,11 @@ architecture arch of system is
 
     adb_external : out std_logic_vector(7 downto 0);  -- External connection of the addres + data
     adb_control : out std_logic_vector(1 downto 0);   -- Select the external register
-    db_external : in std_logic_vector(7 downto 0);    -- External connection of the databus bus in
+    db_external : in std_logic_vector(7 downto 0)    -- External connection of the databus bus in
 
-    sys_cont : OUT std_logic_vector(2 downto 0);
-    sys_inst : OUT std_logic_vector(7 downto 0);
-    sys_acc : OUT std_logic_vector(7 downto 0)
+    -- sys_cont : OUT std_logic_vector(2 downto 0);
+    -- sys_inst : OUT std_logic_vector(7 downto 0);
+    -- sys_acc : OUT std_logic_vector(7 downto 0)
 
     );
   end component;
@@ -62,6 +62,8 @@ architecture arch of system is
   signal nmi, irq, sv : std_logic;
   signal r : std_logic;
 
+  signal sys_out : std_logic_vector(7 downto 0);
+
 begin
 
 
@@ -70,7 +72,7 @@ begin
   irq <= '1';
   sv <= '0';
   r <= '1';
-  processor_m : processor PORT MAP(clk_25mhz, nmi, extern_reset, irq, sv, r, addres_data, control, data, sys_cont, sys_inst, sys_acc);
+  processor_m : processor PORT MAP(clk_25mhz, nmi, extern_reset, irq, sv, r, addres_data, control, data); -- sys_cont, sys_inst, sys_acc
   mem_dummy_m : mem_dummy PORT MAP(clk_25mhz, extern_reset, addres_data, control, data, sys_out);
 
 
