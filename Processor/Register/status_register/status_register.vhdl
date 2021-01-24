@@ -106,7 +106,7 @@ reg_in(5) <= '0';
   --V FLAG
 WITH control(12 downto 10) SELECT reg_in(6) <=
 db_in (6)   WHEN "001",   -- DB6/V
-acr         WHEN "010", -- AVR/V
+avr         WHEN "010", -- AVR/V
 '1'  WHEN "100", -- 1/V,
 reg_out (6) WHEN OTHERS;
 

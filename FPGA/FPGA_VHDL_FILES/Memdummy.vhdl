@@ -32,48 +32,9 @@ architecture arch of mem_dummy is
 
 
   -- update array size acourdingly
-  type rom is array (0 to 652) of std_logic_vector(7 downto 0);
-  constant pla : rom := (
-      x"A9",
-      x"20",
-      x"69",
-      x"03",
-      x"8D",
-      x"FF",
-      x"01", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
+  type rom is array (0 to 319) of std_logic_vector(7 downto 0); --65535
+  signal pla : rom := (
+      x"B5", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
       x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
       x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
       x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
@@ -106,12 +67,23 @@ architecture arch of mem_dummy is
       x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
       x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00"
   );
+  type rom_2 is array (65534 to 65535) of std_logic_vector(7 downto 0); --65535
+  constant pla_end : rom_2 := (
+      -- ADL, ADH
+      x"00", x"00"
+  );
+
 
 
   signal address : std_logic_vector(15 downto 0);
   signal clk_inv : std_logic;
   signal mal_out, mah_out, data_reg_out : std_logic_vector(7 downto 0);
   signal en_mal, en_mah, en_data, res : std_logic;
+  signal location : integer := 0;
+  signal write_buf : std_logic;
+
+  type statetype is (reset_state, state_1);
+  signal state, next_state : statetype;
 begin
 
   en_mal  <= (NOT control(0)) AND (NOT control(1));
@@ -127,12 +99,55 @@ begin
 
   dor_out <= data_reg_out;
   address <= mah_out & mal_out;
-
+  location <= to_integer(unsigned(address));
   -- at this moment no writing memory
 
-  main : process(address)
+
+
+
+  main : process(location, write_buf)
   begin
-      data_out <= pla(to_integer(unsigned(address)));
+      if write_buf = '1' then
+        pla(location) <= data_reg_out;
+      else
+        if location < 319 then
+          data_out <= pla(location);
+        elsif location > 65533 then
+          data_out <= pla_end(location);
+        else
+          data_out <= x"05";
+      end if;
+    end if;
+
   end process main;
+
+
+  -- Writing to memory!
+  comb_proc : process(en_data, state)
+  begin
+    case(state) is
+    when reset_state =>
+        write_buf <= '0';
+      if en_data = '1' THEN
+        next_state <= state_1;
+      else
+        next_state <= reset_state;
+      end if;
+    when state_1 =>
+        write_buf <= '1';
+        next_state <= reset_state;
+    end case;
+  end process;
+
+  sec_proc : process(clk_inv)
+  begin
+    if rising_edge(clk_inv) then
+        if res = '1' then
+          state <= reset_state;
+        else
+          state <= next_state;
+        end if;
+      end if;
+  end process;
 
 end architecture;

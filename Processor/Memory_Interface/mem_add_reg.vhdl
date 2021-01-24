@@ -1,5 +1,5 @@
 
--- The memory interface is quit advanced it stores the values when exicuted
+-- The memory interface is quite advanced it stores the values when exicuted
 -- small registers from the oudside it seems like a 16 bit wire and 8 bit wire
 
 

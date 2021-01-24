@@ -674,7 +674,7 @@ reset <= system_reset;
   -- Processor status register
 
   -- TODO Fix these flags ?!
-   ir5 <= ins_data_out(5);
+   ir5 <= ins_data_out(5); -- this is correct!!!!
   -- hc;
 
 
@@ -813,7 +813,7 @@ data_reg :mem_data_reg PORT MAP(
 
 -- Processor Status Register
 flag_reg : status_register PORT MAP(
-                      clk,
+                      accumulator_clk,
                       reset,
                       db,
                       status_reg_control,
