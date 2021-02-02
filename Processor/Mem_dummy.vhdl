@@ -65,13 +65,13 @@ architecture arch of mem_dummy is
   --     x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00"
   -- );
   constant memory : rom := (
-      x"A9",
-      x"20",
-      x"69",
-      x"03",
-      x"8D",
-      x"02",
-      x"02",
+      x"BA",
+      x"9A",
+      x"00",
+      x"00",
+      x"00",
+      x"00",
+      x"00",
       x"00",
       x"00",
       x"00",

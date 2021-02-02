@@ -12,6 +12,9 @@ ENTITY alu IS
     sb_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); -- system bus out
     db_in : IN STD_LOGIC_VECTOR(7 DOWNTO 0); -- data bus in
 
+    i_add : IN std_logic;
+    inv_i_add : IN std_logic;
+
     -- ALU logic
     control : IN STD_LOGIC_VECTOR(11 DOWNTO 0); -- control signals for ALU
     --bit(0) = daa, not used since decimal is not implemented
@@ -29,6 +32,8 @@ ENTITY alu IS
 
     avr : OUT STD_LOGIC; -- overflow flag
     acr : OUT STD_LOGIC; -- carry out flag
+    anr : OUT std_logic; -- negative out flag
+    azr : out std_logic; -- zero out flag
     hc : OUT STD_LOGIC; -- half carry flag
 
     -- adder hold register
@@ -73,8 +78,6 @@ ARCHITECTURE structural OF alu IS
     );
   END COMPONENT;
 
-
-
   COMPONENT A_input_register IS
     PORT (
       clk : IN STD_LOGIC;
@@ -95,7 +98,9 @@ ARCHITECTURE structural OF alu IS
       out_to_alu : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
       inv_db_add : IN STD_LOGIC; -- use databus inverse
       db_add : IN STD_LOGIC; -- use databus
-      adl_add : IN STD_LOGIC -- use addres line
+      adl_add : IN STD_LOGIC; -- use addres line
+      i_add : IN std_logic;
+      inv_i_add : IN std_logic
     );
   END COMPONENT;
 
@@ -122,6 +127,9 @@ ARCHITECTURE structural OF alu IS
   signal load_signal : std_logic;
 
 BEGIN
+
+  anr <= output_alu(7);
+  azr <= not ( output_alu(0) or output_alu(1) or output_alu(2) or output_alu(3) or output_alu(4) or output_alu(5) or output_alu(6) or output_alu(7) );
 
 
 load_signal <= control(0)
@@ -152,7 +160,10 @@ load_signal <= control(0)
     b,
     inv_db_add,
     db_add,
-    adl_add);
+    adl_add,
+    i_add,
+    inv_i_add
+    );
 
   -- A input register
   A_REGSISTER : A_input_register PORT MAP(

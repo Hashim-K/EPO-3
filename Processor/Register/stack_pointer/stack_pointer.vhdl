@@ -23,7 +23,7 @@ input:	process (clk, reset, sb_s)
 		begin
 			if (rising_edge(clk)) then
 				if (reset = '1') then
-					q <= "00000000";
+					q <= "11111111";
 				elsif (reset = '0') and (sb_s = '1') then
 					q <= sb_in;
 				end if;
@@ -37,24 +37,5 @@ input:	process (clk, reset, sb_s)
 		with s_adl select adl_out <=
 			q when '1',
 			"ZZZZZZZZ" when others;
-
--- output_sb:	process(s_sb)
--- 			begin
--- 				if (s_sb = '1') then
--- 					sb_out  <= q;
--- 				elsif (s_sb='0') then
--- 					sb_out  <= "ZZZZZZZZ";
--- 				end if;
--- 			end  process;
-
--- output_adl:	process(s_adl)
--- 			begin
--- 				if (s_adl='1') then
--- 					adl_out  <= q;
--- 				elsif (s_adl='0') then
--- 					adl_out  <= "ZZZZZZZZ";
--- 				end if;
--- 			end  process;
-
 
 end behavioural;

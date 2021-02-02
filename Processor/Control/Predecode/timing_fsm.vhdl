@@ -117,16 +117,24 @@ begin
     when T2_3 =>
       next_state <= T0;
     when T2_4 =>
-      next_state <= T3_4;
+      if bcr = '1' then
+        next_state <= T3_4;
+      else
+        next_state <= T1P_T1;
+      end if;
     when T3_4 =>
-      next_state <= T0;
+      if page_cross = '1' then
+        next_state <= T0;
+      else
+        next_state <= T1P_T1;
+      end if;
     when T2_5 =>
       next_state <= T3_5;
     when T3_5 =>
-      if (page_cross='1') then -- is there page crossing or not
+      if (page_cross='1') then -- is there page crossing or not     TODO FIX!!
         next_state <= T4_5;
       else
-        next_state <= T0;
+        next_state <= T4_5;
       end if;
     when T4_5 =>
       next_state <= T0;
@@ -138,7 +146,7 @@ begin
       if (page_cross='1') then
         next_state <= T5_6;
       else
-        next_state <= T0;
+        next_state <= T5_6; -- is there page crossing or not     TODO FIX!!
       end if;
     when T5_6 =>
       next_state <= T0;

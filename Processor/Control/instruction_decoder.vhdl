@@ -1,21 +1,26 @@
 library ieee;
+
   use ieee.std_logic_1164.all;
+
   use ieee.numeric_std.all;
+
 
 entity instruction_decoder is
   port (
-      ir_in: IN STD_LOGIC_VECTOR(7 DOWNTO 0);    -- Instruction register in
+      ir_in: IN STD_LOGIC_VECTOR(7 DOWNTO 0);   -- Instruction register in
       tcstate: IN STD_LOGIC_VECTOR(5 DOWNTO 0);
       interrupt: IN STD_LOGIC_VECTOR(2 DOWNTO 0);
       ready: IN STD_LOGIC;
       r_w: OUT STD_LOGIC;
       sv: IN STD_LOGIC;
       acr : IN STD_LOGIC;
-      cin : IN STD_LOGIC;
+      cin : IN STD_LOGIC; -- from status register
       control_out: OUT STD_LOGIC_VECTOR(69 DOWNTO 0);
       s1 : IN STD_LOGIC;
       s2 : IN STD_LOGIC;
-    --  ff_add: IN STD_Logic
+      page_crossing : OUT std_logic; -- indicate page crossing
+      bcr : OUT std_logic; -- indicate branch instruction taking on
+    --  ff_add: IN STD_Logic 
       v1: IN STD_LOGIC
   );
 end entity;
@@ -26,2803 +31,2973 @@ architecture arch of instruction_decoder is
   -- 1. Check CC
   -- 2. Check AAA
   -- 3. Check BBB
-  -- signal control_temp_out : std_logic_vector(68 DOWNTO 0);
-  -- signal dl_db, dl_adl, dl_adh, zero_adh_0, zero_adh_17, adh_abh, adl_abl, pcl_pcl, adl_pcl, one_pc, pcl_db, pcl_adl, pch_pch, adh_pch, pch_db, pch_adh,
-  -- sb_adh, adh_sb, sb_db, db_sb, zero_adl_0, zero_adl_1, zero_adl_2, s_adl, sb_s, s_s, s_sb, inv_db_add, db_add, adl_add, dsa, daa, one_addc, sums, ands,
-  -- xors, ors, lsr, asl, rotr, rotl, pass1_a, pass2_b, add_adl, add_sb_06, add_sb_7, zero_add, sb_add, sb_ac, ac_db, ac_sb, sb_x, x_sb, sb_y, y_sb,
-  -- p_db, db0_c, ir5_c, acr_c, dbi_z, dbz_z, db2_1, ir5_1, db3_d, ir5_d, db6_v, avr_v, one_v, db7_n: std_logic := '0' ;
 
-begin
-   -- TODO FIX R_W SIGNAL
-   r_w <= '0';
-
-  Control : process(tcstate, ir_in, cin) -- Fix TOM added IR, cin
-  begin
-  --  control_temp_out<="000000000000000000000000000000000000000000000000000000000000000000000";
-  case ir_in(1 downto 0) is
-
-    ----------------------------------- cc = 00 --------------------------------------
-    when "00" => --xxxxxx00
-      case ir_in(7 downto 5) is
-
-        --000xxx00
-        when "000" =>
-          case ir_in(4 downto 2) is
-            -- 00 : BRK
-            when "000" =>
-              --Timing: T2
-              if (tcstate(2)='0') then
-                control_out<="0000000000000000000000000000100000000000000000000000000000000000000000";
-
-              --Timing: T3
-              elsif (tcstate(3)='0') then
-                control_out<="0000000000000000000000001110000100000000000000000000010000000001100000";
-
-              --Timing: T4
-              elsif (tcstate(4)='0') then
-                control_out<="0000000000000000000000000010000000000000000000000000000010000001000100";
-
-              --Timing: T5
-              elsif (tcstate(5)='0') then
-                control_out<="0000000000000000000000000000000000000000000000000000000000000100000010";
-
-              --Timing: T6
-              elsif (tcstate(0)='1' and tcstate(1)='1' and tcstate(2)='1' and tcstate(3)='1' and tcstate(4)='1' and tcstate(5)='1') then
-                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-
-              --Timing: T0
-              elsif (tcstate(0)='0') then
-                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-
-              --Timing: T1
-              elsif (tcstate(1)='0') then
-                control_out<="0000000000000000000000000000000000000000000000000000001000101001100000";
-
-              else
-                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              end if;
-
-            -- 08 : PHP
-            when "010" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-
-              end if;
-
-            -- 10 : BPL
-            when "100" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-
-            -- 18 : CLC
-            when "110" =>
-              --Timing: T0
-              if (tcstate(0)='0') then
-            	   control_out<="0000000000001000000000000000000000000000000000000000000000000000000000";
-              --Timing: T1
-              elsif (tcstate(1)='0') then
-            	   control_out<="0000000000000000000000000000000000000000000000000000001000101001100000";
-              else
-            	   control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              end if;
-
-            when others =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-
-          end case;
-
-        --001xxx00
-        when "001" =>
-          case ir_in(4 downto 2) is
-            -- 20 : JSR
-            when "000" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T5
-              if (tcstate(5)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            -- 24 : BIT Z-Page
-            when "001" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-
-            -- 28 : PLP
-            when "010" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-
-            -- 2c : BIT ABS
-            when "011" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-
-            -- 30 : BMI
-            when "100" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-
-            -- 38 : SEC
-            when "110" =>
-              --Timing: T0
-              if (tcstate(0)='0') then
-            	   control_out<="0000000000001000000000000000000000000000000000000000000000000000000000";
-              --Timing: T1
-              elsif (tcstate(1)='0') then
-            	   control_out<="0000000000000000000000000000000000000000000000000000001000101001100000";
-              else
-            	   control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              end if;
-
-            when others =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-
-          end case;
-
-        --010xxx00
-        when "010" =>
-          case ir_in(4 downto 2) is
-            -- 60 : RTS
-            when "000" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T5
-              if (tcstate(5)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            -- 68 : PLA
-            when "010" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-
-            -- 4C : JMP ABS
-            when "011" =>
-            --Timing: T2
-            if (tcstate(2)='0') then
-            	control_out<="0000000000000000000000000000000000000000000000000000001000101001100000";
-            --Timing: T0
-            elsif (tcstate(0)='0') then
-            	control_out<="0000000000000000000000000001000000000000010000000000001000100001100001";
-            --Timing: T1
-            elsif (tcstate(1)='0') then
-            	control_out<="0000000000000000000000000010000000000000000000000000000010001101100100";
-            else
-            	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-            end if;
-
-            -- 70 : BVS
-            when "100" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-
-            -- 78 : SEI
-            when "110" =>
-            --Timing: T0
-            if (tcstate(0)='0') then
-            	control_out<="0000000100000000000000000000000000000000000000000000000000000000000000";
-            --Timing: T1
-            elsif (tcstate(1)='0') then
-            	control_out<="0000000000000000000000000000000000000000000000000000001000101001100000";
-            else
-            	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-            end if;
-
-            when others =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-
-          end case;
-
-        --011xxx00
-        when "011" =>
-          case ir_in(4 downto 2) is
-              -- 40 : RTI
-            when "000" =>
-                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-                --Timing: T2
-                  if (tcstate(2)='0') then
-                  end if;
-                  --Timing: T3
-                  if (tcstate(3)='0') then
-                  end if;
-                  --Timing: T4
-                  if (tcstate(4)='0') then
-                  end if;
-                  --Timing: T5
-                  if (tcstate(5)='0') then
-                  end if;
-                  --Timing: T0
-                  if (tcstate(0)='0') then
-                  end if;
-                  --Timing: T1
-                  if (tcstate(1)='0') then
-                  end if;
-
-            -- 48 : PHA
-            when "010" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-
-
-            -- 50 : BVC
-            when "100" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-
-
-            -- 6C : JMP IND
-            when "101" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-
-
-            -- 58 : CLI
-            when "110" =>
-            --Timing: T0
-            if (tcstate(0)='0') then
-            	control_out<="0000000100000000000000000000000000000000000000000000000000000000000000";
-            --Timing: T1
-            elsif (tcstate(1)='0') then
-            	control_out<="0000000000000000000000000000000000000000000000000000001000101001100000";
-            else
-            	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-            end if;
-
-            when others =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-
-          end case;
-
-        --100xxx00
-        when "100" =>
-          case ir_in(4 downto 2) is
-            -- 84 : STY Z-Page
-            when "001" =>
-              --Timing: T2
-              if (tcstate(2)='0') then
-                control_out <= "0000000000000000000000000000000000000000000000000000001000101001100000";
-                --Timing: T0
-              elsif (tcstate(0)='0') then
-                control_out <= "1000000000000001000000000000000000000000000000000001000000000001111010";
-                --Timing: T1
-              elsif (tcstate(1)='0') then
-                control_out <= "0000000000000000000000000000000000000000000000000000001000101001100000";
-              else
-                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              end if;
-
-            -- 88 : DEY
-            when "010" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-
-            -- 8C : STY ABS
-            when "011" =>
-              --Timing: T0
-              if (tcstate(0)='0') then
-                control_out <= "0000000000000000000000000000000000000000000000000000001000101001100000";
-              --Timing: T1
-              elsif (tcstate(1)='0') then
-                control_out <= "0000000000000000000000000001000000000000010000000000001000101001100001";
-              --Timing: T2
-              elsif (tcstate(2)='0') then
-                control_out <= "1000000000000001000000000010000000000000000000000001000000000001100100";
-              --Timing: T3
-              elsif (tcstate(3)='0') then
-                control_out <= "0000000000000000000000000000000000000000000000000000001000101001100000";
-              else
-                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              end if;
-
-            -- 90 : BCC
-            when "100" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-
-            -- 94 : STY Z-Page,X
-            when "101" =>
-              control_out <= "000000000000000000000000000000000000000000000000000000000000000000000";
-
-            -- 98 : TYA
-            when "110" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-
-            when others =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-
-          end case;
-
-        --101xxx00
-        when "101" =>
-          case ir_in(4 downto 2) is
-            -- A0 : LDY IMM  V
-            when "000" =>
-              --Timing: T0
-              if (tcstate(0)='0') then
-                control_out<="0000000000000000000000000000000000000000000000000000001000101001100000";
-              --Timing: T1
-              elsif (tcstate(1)='0') then
-                control_out<="0000000000000000100000000000000000000000000000000010001000101001100001";
-              else
-                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              end if;
-
-            -- A4 : LDY Z-Page
-            when "001" =>
-              --Timing: T2
-              if (tcstate(2)='0') then
-                control_out<="0000000000000000000000000000000000000000000000000000001000101001100000";
-              --Timing: T0
-              elsif (tcstate(0)='0') then
-                control_out<="0000000000000000000000000000000000000000000000000000000000000001111010";
-              --Timing: T1
-              elsif (tcstate(1)='0') then
-                control_out<="0000000000000000100000000000000000000000000000000010001000101001100001";
-              else
-                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              end if;
-
-            -- A8 : TAY
-            when "010" =>
-              --Timing: T0
-              if (tcstate(0)='0') then
-                control_out <= "0000000000000000100100000000000000000000000000000000000000000000000000";
-              --Timing: T1
-              elsif (tcstate(1)='0') then
-                control_out <= "0100000001000000000010000000000000000000000000000000001000101001100000";
-              else
-                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              end if;
-
-            --AC : LDY ABS
-            when "011" =>
-              --Timing: T2
-              if (tcstate(2)='0') then
-                control_out <= "0000000000000000000000000000000000000000000000000000001000101001100000";
-                --Timing: T3
-              elsif (tcstate(3)='0') then
-                control_out <= "0000000000000000000000000001000000000000010000000000001000101001100001";
-                --Timing: T0
-              elsif (tcstate(0)='0') then
-                control_out <= "0000000000000000000000000010000000000000000000000000000000000001100100";
-                --Timing: T1
-              elsif (tcstate(1)='0') then
-                control_out <= "0000000000000000100000000000000000000000000000000010001000101001100001";
-              else
-                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              end if;
-
-            -- B0 : BCS
-            when "100" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-
-            -- B4 : LDY Z-Page,X
-            when "101" =>
-            --Timing: T2
-            if (tcstate(2)='0') then
-            	control_out<="0000000000000000000000000000000000000000000000000000001000101001100000";
-            --Timing: T3
-            elsif (tcstate(3)='0') then
-            	control_out<="0000000000000000010000100000000000001000010000000000000000000000000001";
-            --Timing: T0
-            elsif (tcstate(0)='0') then
-            	control_out<="0000000000000000000000000010000000000000000000000000000000000001111000";
-            --Timing: T1
-            elsif (tcstate(1)='0') then
-            	control_out<="0100000001000000100000000000000000000000000000000010001000101001100001";
-            else
-            	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-            end if;
-
-            -- B8 : CLV
-            when "110" =>
-              control_out <= "000000000000000000000000000000000000000000000000000000000000000000000";
-
-
-
-            -- BC : LDY ABS,X
-            when "111" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-
-            when others =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-
-          end case;
-
-        --110xxx00
-        when "110" =>
-
-          case ir_in(4 downto 2) is
-            -- C0 : CPY IMM
-            when "000" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-
-            -- C4 : CPY Z-Page
-            when "001" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-
-            -- C8 : INY
-            when "010" =>
-              --Timing: T0
-              if (tcstate(0)='0') then
-                control_out <= "0000000000000001000000010000000000001100010000000001000000000000000000";
-              --Timing: T1
-              elsif (tcstate(1)='0') then
-                control_out <= "0100000001000000100000001100000000000000000000000001001000101001100000";
-              else
-                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              end if;
-
-            -- CC : CPY ABS
-            when "011" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-
-            -- D0 : BNE
-            when "100" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-
-            -- D8 : CLD
-            when "110" =>
-            --Timing: T0
-            if (tcstate(0)='0') then
-            	control_out<="0000010000000000000000000000000000000000000000000000000000000000000000";
-            --Timing: T1
-            elsif (tcstate(1)='0') then
-            	control_out<="0000000000000000000000000000000000000000000000000000001000101001100000";
-            else
-            	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-            end if;
-
-            when others =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-
-          end case;
-
-        --111xxx00
-        when "111" =>
-          case ir_in(4 downto 2) is
-            -- E0 : CPX IMM
-            when "000" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-
-            -- E4 : CPX Z-Page
-            when "001" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-
-            -- E8 : INX
-            when "010" =>
-              --Timing: T0
-              if (tcstate(0)='0') then
-                control_out <= "0000000000000000010000010000000000001100010000000001000000000000000000";
-              --Timing: T1
-              elsif (tcstate(1)='0') then
-                control_out <= "0100000001000000001000001100000000000000000000000001001000101001100000";
-              else
-                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              end if;
-
-            -- EC : CPX ABS
-            when "011" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-
-            -- F0 : BEQ
-            when "100" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-
-            -- F8 : SED
-            when "110" =>
-              --Timing: T0
-              if (tcstate(0)='0') then
-            	   control_out<="0000010000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T1
-              elsif (tcstate(1)='0') then
-            	   control_out<="0000000000000000000000000000000000000000000000000000001000101001100000";
-               else
-            	   control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              end if;
-
-            when others =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-
-          end case;
-
-        when others =>
-          control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-      end case;
-    -----------------------------------   END   --------------------------------------
-
-    ----------------------------------- cc = 01 --------------------------------------
-    when "01" =>
-      case ir_in(7 downto 5) is
-        --000xxx01
-        when "000" =>
-          case ir_in(4 downto 2) is
-            --01 : ORA IND,X
-            when "000" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T5
-              if (tcstate(5)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            -- 05 : ORA Z-Page
-            when "001" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-
-            -- 09 : ORA IMM
-            when "010" =>
-              --Timing: T0
-              if (tcstate(0)='0') then
-                control_out <= "0000000000000000000100100000000000000000000000000000001000101001100000";
-              --Timing: T1
-              elsif (tcstate(1)='0') then
-                  control_out <= "0101000001010000000001001100000001000000010000000000001000101001100001";
-              else
-                  control_out <="0000000000000000000000000000000000000000000000000000000000000000000000";
-              end if;
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-
-            -- 0D : ORA ABS
-            when "011" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-
-            -- 11 : ORA IND,Y
-            when "100" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T5
-              if (tcstate(5)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            -- 15 : ORA Z-Page,X
-            when "101" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            -- 19 : ORA ABS,Y
-            when "110" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            -- 1D : ORA ABS,X
-            when "111" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            when others =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-
-          end case;
-
-        --001xxx01
-        when "001" =>
-          case ir_in(4 downto 2) is
-            --21 : AND IND,X
-            when "000" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T5
-              if (tcstate(5)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            --25 : AND Z-Page
-            when "001" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            --29 : AND IMM
-            when "010" =>
-              --Timing: T2
-              if (tcstate(2)='0') then
-                control_out <= "0000000000000000000100100000000000000000000000000000001000101001100000";
-              --Timing: T1
-              elsif (tcstate(1)='0') then
-                control_out <= "0101000001010000000001001100000000010000010000000000001000101001100001";
-              else
-                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              end if;
-
-            --2D : AND ABS
-            when "011" =>
-            --Timing: T2
-            if (tcstate(2)='0') then
-            	control_out<="0000000000000000000000000000000000000000000000000000001000101001100000";
-            --Timing: T3
-            elsif (tcstate(3)='0') then
-            	control_out<="0000000000000000000000000001000000000000010000000000001000101001100001";
-            --Timing: T0
-            elsif (tcstate(0)='0') then
-            	control_out<="0000000000000000000100100010000000000000000000000000000000000001100100";
-            --Timing: T1
-            elsif (tcstate(1)='0') then
-            	control_out<="0001000000010000000001001100000000010000010000000000001000101001100001";
-            else
-            	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-            end if;
-
-            --31 : AND IND,Y
-            when "100" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T5
-              if (tcstate(5)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            -- 35 : AND Z-Page,X
-            when "101" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            -- 39 : AND ABS,Y
-            when "110" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            -- 3D : AND ABS,X
-            when "111" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            when others =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-
-          end case;
-
-        --010xxx01
-        when "010" =>
-          case ir_in(4 downto 2) is
-            --41 : EOR IND,X
-            when "000" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T5
-              if (tcstate(5)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            --45 : EOR Z-Page
-            when "001" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            --49 : EOR IMM
-            when "010" =>
-              --Timing: T2
-              if (tcstate(2)='0') then
-                control_out <= "0000000000000000000100100000000000000000000000000000001000101001100000";
-              --Timing: T1
-              elsif (tcstate(1)='0') then
-                control_out <= "0101000001010000000001001100000000100000010000000000001000101001100001";
-              else
-                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              end if;
-
-            --4D : EOR ABS
-            when "011" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            --51 : EOR IND,Y
-            when "100" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T5
-              if (tcstate(5)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            --55 : EOR Z-Page,X
-            when "101" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            --59 : EOR ABS,Y
-            when "110" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            --5D : EOR ABS,X
-            when "111" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            when others =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-
-          end case;
-
-        --011xxx01
-        when "011" =>
-          case ir_in(4 downto 2) is
-            -- 61 : ADC IND,X
-            when "000" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T5
-              if (tcstate(5)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            -- 65 : ADC Z-Page  V
-            when "001" =>
-              --Timing: T2
-              if (tcstate(2)='0') then
-                control_out<="0000000000000000000100100000000000000000000000000000001000101001100000";
-              --Timing: T0
-              elsif (tcstate(0)='0') then
-                control_out<="0000000000000000000000000000000000000000000000000000000000001001111010";
-              --Timing: T1
-              elsif (tcstate(1)='0') then
-                if cin = '1' THEN
-                  control_out<="0000000000000000000001001100000000001100010000000000001000101001100001";
-                else
-                  control_out<="0000000000000000000001001100000000001000010000000000001000101001100001";
-                end if;
-              else
-                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              end if;
-
-            -- 69 : ADC IMM
-            when "010" =>
-              --Timing: T0
-              if (tcstate(0)='0') then
-                control_out<="0000000000000000000100100000000000000000000000000000001000101001100000";
-              --Timing: T1
-              elsif (tcstate(1)='0') then
-                if cin = '1' THEN
-                control_out<="0101000001010000000001001100000000001100010000000000001000101001100001";
-                else
-                control_out<="0101000001010000000001001100000000001000010000000000001000101001100001";
-                end if;
-              else
-                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              end if;
-
-            -- 6D : ADC ABS
-            when "011" =>
-            --Timing: T2
-            if (tcstate(2)='0') then
-            	control_out<="0000000000000000000000000000000000000000000000000000001000101001100000";
-            --Timing: T3
-            elsif (tcstate(3)='0') then
-            	control_out<="0000000000000000000000000001000000000000010000000000001000101001100001";
-            --Timing: T0
-            elsif (tcstate(0)='0') then
-            	control_out<="0000000000000000000100100010000000000000000000000000000000000001100100";
-            --Timing: T1
-            elsif (tcstate(1)='0') then
-            	control_out<="0001000000010000000001001100000000001000010000000000001000101001100001";
-            else
-            	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-            end if;
-
-
-            -- 71 : ADC IND,Y
-            when "100" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T5
-              if (tcstate(5)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            -- 75 : ADC Z-Page,X
-            when "101" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            -- 79 : ADC ABS,Y
-            when "110" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            -- 7D : ADC ABS,X
-            when "111" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            when others =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-
-          end case;
-
-        --100xxx01
-        when "100" =>
-          case ir_in(4 downto 2) is
-            -- 81 : STA IND,X
-            when "000" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T5
-              if (tcstate(5)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            -- 85 : STA Z-Page
-            when "001" =>
-              --Timing: T2
-              if (tcstate(2)='0') then
-                control_out <= "0000000000000000000000000000000000000000000000000000001000101001100000";
-              --Timing: T0
-              elsif (tcstate(0)='0') then
-                control_out <= "1000000000000000000010000000000000000000000000000000000000000001111010";
-              --Timing: T1
-              elsif (tcstate(1)='0') then
-                control_out <= "0000000000000000000000000000000000000000000000000000001000101001100000";
-              else
-                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              end if;
-
-            -- 8D : STA ABS
-            when "011" =>
-              -- control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-                control_out <= "0000000000000000000000000000000000000000000000000000001000101001100000";
-              --Timing: T3
-              elsif (tcstate(3)='0') then
-                control_out <= "0000000000000000000000000001000000000000010000000000001000101001100001";
-              --Timing: T0
-              elsif (tcstate(0)='0') then
-                control_out <= "1000000000000000000010000010000000000000000000000000000000000001100100";
-              --Timing: T1
-              elsif (tcstate(1)='0') then
-                control_out <= "0000000000000000000000000000000000000000000000000000001000101001100000";
-              else
-                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              end if;
-
-            -- 91 : STA IND,Y
-            when "100" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T5
-              if (tcstate(5)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            -- 95 : STA Z-Page,X
-            when "101" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            -- 99 : STA ABS,Y
-            when "110" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            -- 9D : STA ABS,X
-            when "111" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            when others =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-
-          end case;
-
-        --101xxx01
-        when "101" =>
-          case ir_in(4 downto 2) is
-            -- A1 : LDA IND,X
-            when "000" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T5
-              if (tcstate(5)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            -- A5 : LDA Z-Page  V
-            when "001" =>
-              --Timing: T2
-              if (tcstate(2)='0') then
-                control_out<="0000000000000000000000000000000000000000000000000000001000101001100000";
-              --Timing: T0
-              elsif (tcstate(0)='0') then
-                control_out<="0000000000000000000000000000000000000000000000000000000000000001111010";
-              --Timing: T1
-              elsif (tcstate(1)='0') then
-                control_out<="0000000000000000000001000000000000000000000000000010001000101001100001";
-              else
-                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              end if;
-
-            -- A9 : LDA IMM  V
-            when "010" =>
-              --Timing: T0
-              if (tcstate(0)='0') then
-                control_out<="0000000000000000000000000000000000000000000000000000001000101001100000";
-              --Timing: T1
-              elsif (tcstate(1)='0') then
-                control_out<="0000000000000000000001000000000000000000000000000010001000101001100001";
-              else
-                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              end if;
-
-            -- AD : LDA ABS
-            when "011" =>
-              --Timing: T2
-              if (tcstate(2)='0') then
-                control_out <= "0000000000000000000000000000000000000000000000000000001000101001100000";
-              --Timing: T3
-              elsif (tcstate(3)='0') then
-                control_out <= "0000000000000000000000000001000000000000010000000000001000101001100001";
-              --Timing: T0
-              elsif (tcstate(0)='0') then
-                control_out <= "0000000000000000000000000010000000000000000000000000000000000001100100";
-              --Timing: T1
-              elsif (tcstate(1)='0') then
-                control_out <= "0000000000000000000001000000000000000000000000000010001000101001100001";
-              else
-                control_out <= "0000000000000000000000000000000000000000000000000000000000000000000000";
-              end if;
-
-            -- B1 : LDA IND,Y
-            when "100" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T5
-              if (tcstate(5)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            -- B5 : LDA Z-Page,X
-            when "101" =>
-            --Timing: T2
-            if (tcstate(2)='0') then
-            	control_out<="0000000000000000000000000000000000000000000000000000001000101001100000";
-            --Timing: T3
-            elsif (tcstate(3)='0') then
-            	control_out<="0000000000000000010000100000000000001000010000000000000000000000000001";
-            --Timing: T0
-            elsif (tcstate(0)='0') then
-            	control_out<="0000000000000000000000000010000000000000000000000000000000000001111000";
-            --Timing: T1
-            elsif (tcstate(1)='0') then
-            	control_out<="0100000001000000000001000000000000000000000000000010001000101001100001";
-            else
-            	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-            end if;
-
-            -- B9 : LDA ABS,Y
-            when "110" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            -- BD : LDA ABS,X
-            when "111" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            when others =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-          end case;
-
-        --110xxx01
-        when "110" =>
-          case ir_in(4 downto 2) is
-            -- C1 : CMP IND,X
-            when "000" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T5
-              if (tcstate(5)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            -- C5 : CMP Z-Page
-            when "001" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            -- C9 : CMP IMM
-            when "010" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            -- CD : CMP ABS
-            when "011" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            -- D1 : CMP IND,Y
-            when "100" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T5
-              if (tcstate(5)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            -- D5 : CMP Z-Page,X
-            when "101" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            -- D9 : CMP ABS,Y
-            when "110" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            -- DD : CMP ABS,X
-            when "111" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            when others =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-
-          end case;
-
-        --111xxx01
-        when "111" =>
-          case ir_in(4 downto 2) is
-            -- E1 : SBC IND,X
-            when "000" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T5
-              if (tcstate(5)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            -- E5 : SBC Z-Page
-            when "001" =>
-              --Timing: T2
-              if (tcstate(2)='0') then
-                control_out <= "0000000000000000000100100000000000000000000000000000001000101001100000";
-              --Timing: T0
-              elsif (tcstate(0)='0') then
-                control_out <= "0000000000000000000000000000000000000000000000000000000000001001111010";
-              --Timing: T1
-              elsif (tcstate(1)='0') then
-                control_out <= "0000000000000000000001001100000000001000001000000000001000101001100001";
-              else
-                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              end if;
-
-            -- E9 : SBC IMM
-            when "010" =>
-              --Timing: T0
-              if (tcstate(0)='0') then
-                control_out <= "0000000000000000000100100000000000000000000000000000001000101001100000";
-              --Timing: T1
-              elsif (tcstate(1)='0') then
-                control_out <= "0101000001010000000001001100000000001000001000000000001000101001100001";
-              else
-                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              end if;
-
-            -- ED : SBC ABS
-            when "011" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            -- F1 : SBC IND,Y
-            when "100" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T5
-              if (tcstate(5)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            -- F5 : SBC Z-Page,X
-            when "101" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            -- F9 : SBC ABS,Y
-            when "110" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            -- FD : SBC ABS,X
-            when "111" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            when others =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-
-          end case;
-
-        when others =>
-          control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-
-      end case;
-    -----------------------------------   END   --------------------------------------
-
-    ----------------------------------- cc = 10 --------------------------------------
-    when "10" =>
-      case ir_in(7 downto 5) is
-        --000xxx11
-        when "000" =>
-          case ir_in(4 downto 2) is
-            -- 06 : ASL Z-Page
-            when "001" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            -- 0A : ASL A
-            when "010" =>
-              --Timing: T2
-              if (tcstate(2)='0') then
-                control_out <= "0000000000000000000100100000000100000000000000000000000000000000000000";
-              --Timing: T1
-              elsif (tcstate(1)='0') then
-                control_out <= "0100000001010000000001001100000000000000000000000001001000101001100000";
-              else
-                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              end if;
-
-            -- 0E : ASL ABS
-            when "011" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T5
-              if (tcstate(5)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            -- 16 : ASL Z-Page,X
-            when "101" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T5
-              if (tcstate(5)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            -- 1E : ASL ABS,X
-            when "111" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T5
-              if (tcstate(5)='0') then
-              end if;
-              --Timing: T6
-              if (tcstate(0)='1' and tcstate(1)='1' and tcstate(2)='1' and tcstate(3)='1' and tcstate(4)='1' and tcstate(5)='1') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            when others =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-
-          end case;
-
-        --001xxx11
-        when "001" =>
-          case ir_in(4 downto 2) is
-            -- 26 : rotl Z-Page
-            when "001" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            -- 2A : rotl A
-            when "010" =>
-              --Timing: T2
-              if (tcstate(2)='0') THEN
-                control_out <= "0000000000000000000100100000010000000000000000000000000000000000000000";
-              --Timing: T1
-              elsif (tcstate(1)='0') then
-                control_out <= "0100000001010000000001001100000000000000000000000001001000101001100000";
-              else
-                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              end if;
-
-            -- 2E : rotl ABS
-            when "011" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T5
-              if (tcstate(5)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            -- 36 : rotl Z-Page,X
-            when "101" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T5
-              if (tcstate(5)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            -- 3E : rotl ABS,X
-            when "111" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T5
-              if (tcstate(5)='0') then
-              end if;
-              --Timing: T6
-              if (tcstate(0)='1' and tcstate(1)='1' and tcstate(2)='1' and tcstate(3)='1' and tcstate(4)='1' and tcstate(5)='1') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-          when others =>
-            control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-
-          end case;
-
-        --010xxx11
-        when "010" =>
-          case ir_in(4 downto 2) is
-
-            -- 46 : LSR Z-Page
-            when "001" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            -- 4A : LSR A
-            when "010" =>
-              --Timing: T2
-              if (tcstate(2)='0') then
-                control_out<="0000000000000000000100100000000010000000000000000000000000000000000000";
-              --Timing: T1
-              elsif (tcstate(1)='0') then
-                control_out<="0100000001010000000001001100000000000000000000000001001000101001100000";
-              else
-                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              end if;
-
-            -- 4E : LSR ABS
-            when "011" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T5
-              if (tcstate(5)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            -- 56 : LSR Z-Page,X
-            when "101" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T5
-              if (tcstate(5)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            -- 5E : LSR ABS,X
-            when "111" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T5
-              if (tcstate(5)='0') then
-              end if;
-              --Timing: T6
-              if (tcstate(0)='1' and tcstate(1)='1' and tcstate(2)='1' and tcstate(3)='1' and tcstate(4)='1' and tcstate(5)='1') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            when others =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-
-          end case;
-
-        --011xxx11
-        when "011" =>
-          case ir_in(4 downto 2) is
-
-            -- 66 : rotr Z-Page
-            when "001" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            -- 6A : rotr A
-            when "010" =>
-              --Timing: T2
-              if (tcstate(2)='0') then
-                control_out <= "0000000000000000000100100000001000000000000000000000000000000000000000";
-              --Timing: T1
-              elsif (tcstate(1)='0') then
-                control_out <= "0100000001010000000001001100000000000000000000000001001000101001100000";
-              else
-                control_out <= "0000000000000000000000000000000000000000000000000000000000000000000000";
-              end if;
-
-            -- 6E : rotr ABS
-            when "011" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T5
-              if (tcstate(5)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            -- 76 : rotr Z-Page,X
-            when "101" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T5
-              if (tcstate(5)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            -- 7E : rotr ABS,X
-            when "111" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T5
-              if (tcstate(5)='0') then
-              end if;
-              --Timing: T6
-              if (tcstate(0)='1' and tcstate(1)='1' and tcstate(2)='1' and tcstate(3)='1' and tcstate(4)='1' and tcstate(5)='1') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            when others =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-
-          end case;
-
-        --100xxx11
-        when "100" =>
-          case ir_in(4 downto 2) is
-
-            -- 86 : STX Z-Page
-            when "001" =>
-              --Timing: T2
-              if (tcstate(2)='0') then
-                control_out <= "0000000000000000000000000000000000000000000000000000001000101001100000";
-                --Timing: T0
-              elsif (tcstate(0)='0') then
-                control_out <= "1000000000000000010000000000000000000000000000000001000000000001111010";
-                --Timing: T1
-              elsif (tcstate(1)='0') then
-                control_out <= "0000000000000000000000000000000000000000000000000000001000101001100000";
-              else
-                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              end if;
-
-            -- 8A : TXA
-            when "010" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            -- 8E : STX ABS
-            when "011" =>
-              --Timing: T2
-              if (tcstate(2)='0') then
-                control_out <= "0000000000000000000000000000000000000000000000000000001000101001100000";
-              --Timing: T3
-              elsif (tcstate(3)='0') then
-                control_out <= "0000000000000000000000000001000000000000010000000000001000101001100001";
-              --Timing: T0
-              elsif (tcstate(0)='0') then
-                control_out <= "1000000000000000010000000010000000000000000000000001000000000001100100";
-              --Timing: T1
-              elsif (tcstate(1)='0') then
-                control_out <= "0000000000000000000000000000000000000000000000000000001000101001100000";
-              else
-                control_out <= "0000000000000000000000000000000000000000000000000000000000000000000000";
-              end if;
-
-            -- 96 : STX Z-Page,Y
-            when "101" =>
-              control_out <= "000000000000000000000000000000000000000000000000000000000000000000000";
-
-            -- 9A : TXS
-            when "110" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            when others =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-
-          end case;
-
-        --101xxx11
-        when "101" =>
-          case ir_in(4 downto 2) is
-
-            -- A2 : LDX IMM
-            when "000" =>
-              --Timing: T2
-              if (tcstate(2)='0') then
-                control_out<="0000000000000000000000000000000000000000000000000000001000101001100000";
-              --Timing: T1
-              elsif (tcstate(1)='0') then
-                control_out<="0000000000000000001000000000000000000000000000000010001000101001100001";
-              else
-                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              end if;
-
-            -- A6 : LDX Z-Page
-            when "001" =>
-              --Timing: T2
-              if (tcstate(2)='0') then
-                control_out <= "0000000000000000000000000000000000000000000000000000001000101001100000";
-              --Timing: T0
-              elsif (tcstate(0)='0') then
-                control_out <= "0000000000000000000000000000000000000000000000000000000000000001111010";
-              --Timing: T1
-              elsif (tcstate(1)='0') then
-                control_out <= "0000000000000000001000000000000000000000000000000010001000101001100001";
-              else
-                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              end if;
-
-            -- AA : TAX
-            when "010" =>
-              --Timing: T0
-              if (tcstate(0)='0') then
-                control_out <= "0000000000000000001100000000000000000000000000000000000000000000000000";
-              --Timing: T1
-              elsif (tcstate(1)='0') then
-                control_out <= "0100000001000000000010000000000000000000000000000000001000101001100000";
-              else
-                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              end if;
-
-            -- AE : LDX ABS
-            when "011" =>
-              --Timing: T2
-              if (tcstate(2)='0') then
-                control_out <= "0000000000000000000000000000000000000000000000000000001000101001100000";
-              --Timing: T3
-              elsif (tcstate(3)='0') then
-                control_out <= "0000000000000000000000000001000000000000010000000000001000101001100001";
-              --Timing: T0
-              elsif (tcstate(0)='0') then
-                control_out <= "0000000000000000000000000010000000000000000000000000000000000001100100";
-              --Timing: T1
-              elsif (tcstate(1)='0') then
-                control_out <= "0000000000000000001000000000000000000000000000000010001000101001100001";
-              else
-                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              end if;
-
-            -- B6 : LDX Z-Page,Y
-            when "101" =>
-            --Timing: T2
-            if (tcstate(2)='0') then
-            	control_out<="0000000000000000000000000000000000000000000000000000001000101001100000";
-            --Timing: T3
-            elsif (tcstate(3)='0') then
-            	control_out<="0000000000000001000000100000000000001000010000000000000000000000000001";
-            --Timing: T0
-            elsif (tcstate(0)='0') then
-            	control_out<="0000000000000000000000000010000000000000000000000000000000000001111000";
-            --Timing: T1
-            elsif (tcstate(1)='0') then
-            	control_out<="0100000001000000001000000000000000000000000000000010001000101001100001";
-            else
-            	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-            end if;
-
-            -- BA : TSX
-            when "110" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            -- BE : LDX ABS,Y
-            when "111" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            when others =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-
-          end case;
-
-        --110xxx11
-        when "110" =>
-          case ir_in(4 downto 2) is
-
-            -- C6 : DEC Z-Page
-            when "001" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            -- CA : DEX
-            when "010" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            -- CE : DEC ABS
-            when "011" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T5
-              if (tcstate(5)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            -- D6 : DEC Z-Page,X
-            when "101" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T5
-              if (tcstate(5)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            -- DE : DEC ABS,X
-            when "111" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T5
-              if (tcstate(5)='0') then
-              end if;
-              --Timing: T6
-              if (tcstate(0)='1' and tcstate(1)='1' and tcstate(2)='1' and tcstate(3)='1' and tcstate(4)='1' and tcstate(5)='1') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            when others =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-
-          end case;
-
-        --111xxx11
-        when "111" =>
-          case ir_in(4 downto 2) is
-
-            --E6 : INC Z-Page
-            when "001" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            --EA : NOP
-            when "010" =>
-              --Timing: T2
-              if (tcstate(2)='0') then
-                control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-                control_out<="0000000000000000000000000000000000000000000000000000001000101001100000";
-              end if;
-
-            --EE : INC ABS
-            when "011" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T5
-              if (tcstate(5)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            --F6 : INC Z-Page,X
-            when "101" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T5
-              if (tcstate(5)='0') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            --FE : INC ABS,X
-            when "111" =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-              --Timing: T2
-              if (tcstate(2)='0') then
-              end if;
-              --Timing: T3
-              if (tcstate(3)='0') then
-              end if;
-              --Timing: T4
-              if (tcstate(4)='0') then
-              end if;
-              --Timing: T5
-              if (tcstate(5)='0') then
-              end if;
-              --Timing: T6
-              if (tcstate(0)='1' and tcstate(1)='1' and tcstate(2)='1' and tcstate(3)='1' and tcstate(4)='1' and tcstate(5)='1') then
-              end if;
-              --Timing: T0
-              if (tcstate(0)='0') then
-              end if;
-              --Timing: T1
-              if (tcstate(1)='0') then
-              end if;
-
-            when others =>
-              control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-
-          end case;
-
-        when others =>
-          control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-
-
-      end case;
-    -----------------------------------   END   --------------------------------------
-
-    when others =>
-      control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
-
-  end case;
-  end process;
-
+begin	-- TODO FIX R_W SIGNAL
+	r_w <= '0';
+	Control : process(tcstate, ir_in, cin) -- Fix TOM added IR, cin
+	begin
+case ir_in(7 downto 0) is
+		when "00000000" =>
+			-- Cycles:7
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000010000000000000000000000000000000000000000";
+--Timing: T3
+	elsif (tcstate(3)='0') then
+control_out<="0001000000000000000000000000000010000001110000000000011000000000000000";
+	--Timing: T4
+elsif (tcstate(4)='0') then
+--Timing: T3
+	control_out<="0000000000000000000000000000000000000000010000000000010001000000000100";
+--Timing: T5
+	elsif (tcstate(5)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000100000010";
+--Timing: T6
+	elsif (tcstate(0)='1' and tcstate(1)='1' and tcstate(2)='1' and tcstate(3)='1' and tcstate(4)='1' and tcstate(5)='1') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "00000001" =>
+			-- Cycles:6
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+	elsif (tcstate(3)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+	--Timing: T4
+elsif (tcstate(4)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T5
+	elsif (tcstate(5)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "00000101" =>
+			-- Cycles:3
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000100000000000000001000000000011100101000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000011000000000011010";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000001000000100001100001000000011100101000000001";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "00000110" =>
+			-- Cycles:5
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000100000000000000001000000000011100101000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011000000000011010";
+--Timing: T4
+elsif (tcstate(4)='0') then
+	control_out<="1000000000000000000000000000000010000000001000000000000000000000000001";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0100000000000000000000000000000000000001100000000000100000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "00001000" =>
+			-- Cycles:3
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000100001000001100000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000110000000000000000000000000000000000010000000001111000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "00001001" =>
+			-- Cycles:2
+--Timing: T0
+if (tcstate(0)='0') then
+	control_out<="0000000000000000000000000100000000000000001000000000011100101000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000100000000000000001000000000011100101000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000101000000101000000001000000100001100001000000011100101000000001";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "00001010" =>
+			-- Cycles:2
+--Timing: T0
+if (tcstate(0)='0') then
+	control_out<="0000000000000000000000000100000010000000001000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000100000010000000001000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0100000100000000101000000001000000000001100000000000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "00001101" =>
+			-- Cycles:4
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000100000000000000001000000011100101000000001";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000100000000000000011000000000011000000000000100";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000001000000001000000000001000000100001100001000000000000000000000001";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "00001110" =>
+			-- Cycles:6
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+--Timing: T3
+	elsif (tcstate(3)='0') then
+control_out<="0000000000000000000000000000100000000000000001000000011100101000000001";
+	--Timing: T4
+elsif (tcstate(4)='0') then
+	control_out<="0000000000000000000000000000000000000000010000000000011000000000000100";
+--Timing: T5
+	elsif (tcstate(5)='0') then
+control_out<="1000001000000001001000000000000010000000001000000000000000000000000001";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0100000000000000000000000000000000000001100000000000100000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "00010000" =>
+			-- Cycles:4
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "00010001" =>
+			-- Cycles:5
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T4
+elsif (tcstate(4)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "00010101" =>
+			-- Cycles:4
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "00010110" =>
+			-- Cycles:6
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+	elsif (tcstate(3)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+	--Timing: T4
+elsif (tcstate(4)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T5
+	elsif (tcstate(5)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "00011000" =>
+			-- Cycles:2
+--Timing: T0
+if (tcstate(0)='0') then
+	control_out<="0000000000000000000100000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000100000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "00011001" =>
+			-- Cycles:4
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "00011101" =>
+			-- Cycles:4
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "00011110" =>
+			-- Cycles:7
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+	elsif (tcstate(3)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+	--Timing: T4
+elsif (tcstate(4)='0') then
+--Timing: T3
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T5
+	elsif (tcstate(5)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T6
+	elsif (tcstate(0)='1' and tcstate(1)='1' and tcstate(2)='1' and tcstate(3)='1' and tcstate(4)='1' and tcstate(5)='1') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "00100000" =>
+			-- Cycles:6
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000100001000001100000000000000000000";
+--Timing: T3
+	elsif (tcstate(3)='0') then
+control_out<="0000100000000000000000000000000000000101111000000000111000010000000000";
+	--Timing: T4
+elsif (tcstate(4)='0') then
+	control_out<="0000100000000000000000000000000000000001110000000010111010000000000000";
+--Timing: T5
+	elsif (tcstate(5)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000100000000000000001000000011100100000000001";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000010000000000011001001100000100";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "00100001" =>
+			-- Cycles:6
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+--Timing: T3
+	elsif (tcstate(3)='0') then
+control_out<="0000000000000000000000000000100000000000000001000000011100100000000001";
+	--Timing: T4
+elsif (tcstate(4)='0') then
+	control_out<="0000000000000000000000000000000000000000010000000000011001001100000100";
+--Timing: T5
+	elsif (tcstate(5)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "00100100" =>
+			-- Cycles:3
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000100000000000000001000000000011000000000011010";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000100100001000000000000000000001000000001000000011100101000000001";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "00100101" =>
+			-- Cycles:3
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000100000000000000001000000000011100101000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000011000000000011010";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000001000000001000000000001000000001001100001000000011100101000000001";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "00100110" =>
+			-- Cycles:5
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000100000000000000001000000000011100101000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011000000000011010";
+--Timing: T4
+elsif (tcstate(4)='0') then
+	control_out<="1000000000000000000000000000001000000000001000000000000000000000000001";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0100000000000000000000000000000000000001100000000000100000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "00101000" =>
+			-- Cycles:4
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000100000000000000000000100001000010100000000000000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000100000000000000000000000000000000000010000000001011000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="1000000000000000000000000001000000000000000000000000000000000000000001";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "00101001" =>
+			-- Cycles:2
+--Timing: T0
+if (tcstate(0)='0') then
+	control_out<="0000000000000000000000000100000000000000001000000000011100101000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000100000000000000001000000000011100101000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000101000000101000000001000000001001100001000000011100101000000001";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "00101010" =>
+			-- Cycles:2
+--Timing: T0
+if (tcstate(0)='0') then
+	control_out<="0000000000000000000000000100001000000000001000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000100001000000000001000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0100000100000000101000000001000000000001100000000000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "00101100" =>
+			-- Cycles:4
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000100000000000000001000000011100101000000001";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000100000000000000011000000000011000000000000100";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000100100001000000000000000000001000000001000000011100101000000001";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "00101101" =>
+			-- Cycles:4
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000100000000000000001000000011100101000000001";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000100000000000000011000000000011000000000000100";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000001000000001000000000001000000001001100001000000011100101000000001";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "00101110" =>
+			-- Cycles:6
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+	elsif (tcstate(3)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+	--Timing: T4
+elsif (tcstate(4)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T5
+	elsif (tcstate(5)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "00110000" =>
+			-- Cycles:4
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "00110001" =>
+			-- Cycles:5
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T4
+elsif (tcstate(4)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "00110101" =>
+			-- Cycles:4
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "00110110" =>
+			-- Cycles:6
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+	elsif (tcstate(3)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+	--Timing: T4
+elsif (tcstate(4)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T5
+	elsif (tcstate(5)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "00111000" =>
+			-- Cycles:2
+--Timing: T0
+if (tcstate(0)='0') then
+	control_out<="0000000000000000000100000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000100000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "00111001" =>
+			-- Cycles:4
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "00111101" =>
+			-- Cycles:4
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "00111110" =>
+			-- Cycles:7
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+	elsif (tcstate(3)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+	--Timing: T4
+elsif (tcstate(4)='0') then
+--Timing: T3
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T5
+	elsif (tcstate(5)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T6
+	elsif (tcstate(0)='1' and tcstate(1)='1' and tcstate(2)='1' and tcstate(3)='1' and tcstate(4)='1' and tcstate(5)='1') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "01000000" =>
+			-- Cycles:6
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000100000000000000000000000000000000100001000010101011000000000000000";
+--Timing: T3
+	elsif (tcstate(3)='0') then
+control_out<="0000100100101000010010000000000000000101111000010000011000000000000001";
+	--Timing: T4
+elsif (tcstate(4)='0') then
+	control_out<="0000000000000000000000000000000000000001101000000000000001000000000100";
+--Timing: T5
+	elsif (tcstate(5)='0') then
+control_out<="0000100000000000000000000000000000000100010000010000011000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000001100000000010000000000100000010";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "01000001" =>
+			-- Cycles:6
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+	elsif (tcstate(3)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+	--Timing: T4
+elsif (tcstate(4)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T5
+	elsif (tcstate(5)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "01000101" =>
+			-- Cycles:3
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000100000000000000001000000000011100101000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000011000000000011010";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000001000000110001100001000000011100101000000001";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "01000110" =>
+			-- Cycles:5
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000100000000000000001000000000011100101000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011000000000011010";
+--Timing: T4
+elsif (tcstate(4)='0') then
+	control_out<="1000000000000000000000000000000001000000001000000000000000000000000001";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0100000000000000000000000000000000000001100000000000100000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "01001000" =>
+			-- Cycles:3
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000100001000001100000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000100000000000000000000010000000000000010000000001111000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "01001001" =>
+			-- Cycles:2
+--Timing: T0
+if (tcstate(0)='0') then
+	control_out<="0000000000000000000000000100000000000000001000000000011100101000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000100000000000000001000000000011100101000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000101000000101000000001000000110001100001000000011100101000000001";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "01001010" =>
+			-- Cycles:2
+--Timing: T0
+if (tcstate(0)='0') then
+	control_out<="0000000000000000000000000100000001000000001000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000100000001000000001000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0100000100000000101000000001000000000001100000000000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "01001100" =>
+			-- Cycles:3
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000100000000000000001000000011100100000000001";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000010000000000011001001100000100";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "01001101" =>
+			-- Cycles:4
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000100000000000000001000000011100101000000001";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000100000000000000011000000000011000000000000100";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000001000000001000000000001000000110001101001000000000000000000000001";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "01001110" =>
+			-- Cycles:6
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+--Timing: T3
+	elsif (tcstate(3)='0') then
+control_out<="0000000000000000000000000000100000000000000001000000011100101000000001";
+	--Timing: T4
+elsif (tcstate(4)='0') then
+	control_out<="0000000000000000000000000000000000000000010000000000011000000000000100";
+--Timing: T5
+	elsif (tcstate(5)='0') then
+control_out<="1000000000000000000000000000000001000000001000000000000000000000000001";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0100000100000000101000000000000000000001100000000000100000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "01010000" =>
+			-- Cycles:4
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "01010001" =>
+			-- Cycles:5
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T4
+elsif (tcstate(4)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "01010101" =>
+			-- Cycles:4
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "01010110" =>
+			-- Cycles:6
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+--Timing: T3
+	elsif (tcstate(3)='0') then
+control_out<="0000000000000000000001000000000000000100001001000000000000000000000001";
+	--Timing: T4
+elsif (tcstate(4)='0') then
+	control_out<="0000000000000000000000000000000000000000010000000000011000000000011000";
+--Timing: T5
+	elsif (tcstate(5)='0') then
+control_out<="1000000000000000000000000000000001000000001000000000000000000000000001";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0100000100000000101000000000000000000001100000000000100000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "01011000" =>
+			-- Cycles:2
+--Timing: T0
+if (tcstate(0)='0') then
+	control_out<="0000000000000100000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000100000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "01011001" =>
+			-- Cycles:4
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "01011101" =>
+			-- Cycles:4
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "01011110" =>
+			-- Cycles:7
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+	elsif (tcstate(3)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+	--Timing: T4
+elsif (tcstate(4)='0') then
+--Timing: T3
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T5
+	elsif (tcstate(5)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T6
+	elsif (tcstate(0)='1' and tcstate(1)='1' and tcstate(2)='1' and tcstate(3)='1' and tcstate(4)='1' and tcstate(5)='1') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "01100000" =>
+			-- Cycles:6
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000100000000000000000000000000000000100001000010101011000000000000000";
+--Timing: T3
+	elsif (tcstate(3)='0') then
+control_out<="0000000000000000000000000000000000000001101000000000000001000000000100";
+	--Timing: T4
+elsif (tcstate(4)='0') then
+	control_out<="0000100000000000000000000000000000000100010000010000011000000000000000";
+--Timing: T5
+	elsif (tcstate(5)='0') then
+control_out<="0000000000000000000000000000000000000001100000000010000000001100000010";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000001000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "01100001" =>
+			-- Cycles:6
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+	elsif (tcstate(3)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+	--Timing: T4
+elsif (tcstate(4)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T5
+	elsif (tcstate(5)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "01100101" =>
+			-- Cycles:3
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000100000000000000001000000000011100101000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000011000001000011010";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000001000000000101100001000000011100101000000001";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "01100110" =>
+			-- Cycles:5
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000100000000000000001000000000011100101000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011000000000011010";
+--Timing: T4
+elsif (tcstate(4)='0') then
+	control_out<="1000000000000000000000000000000100000000001000000000000000000000000001";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0100000000000000000000000000000000000001100000000000100000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "01101000" =>
+			-- Cycles:4
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000100000000000000000000100001000010100000000000000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000100000000000000000000000000000000000010000000001011000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="1000000000000000000000000001000000000000000000000000000000000000000001";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "01101001" =>
+			-- Cycles:2
+--Timing: T0
+if (tcstate(0)='0') then
+	control_out<="0000000000000000000000000100000000000000001000000000011100101000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000100000000000000001000000000011100101000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000101000000101000000001000000000101100001000000011100101000000001";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "01101010" =>
+			-- Cycles:2
+--Timing: T0
+if (tcstate(0)='0') then
+	control_out<="0000000000000000000000000100000100000000001000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000100000100000000001000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0100000100000000101000000001000000000001100000000000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "01101100" =>
+			-- Cycles:5
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000100000000000000001000000011100100000000001";
+--Timing: T4
+elsif (tcstate(4)='0') then
+	control_out<="0000000000000000000000000000000000000000010000000000011001001100000100";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000100000000000000001000000011100101000000001";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000010000000000011001001100000100";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "01101101" =>
+			-- Cycles:4
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000100000000000000001000000011100101000000001";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000100000000000000011000000000011000000000000100";
+--Timing: T1
+elsif (tcstate(1)='0') then
+if cin = '1' then
+	control_out<="0000001000000001001000000001000000000111100001000000011100101000000001";
+else
+	control_out<="0000001000000001001000000001000000000101100001000000011100101000000001";
+end if;
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "01101110" =>
+			-- Cycles:6
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+	elsif (tcstate(3)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+	--Timing: T4
+elsif (tcstate(4)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T5
+	elsif (tcstate(5)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "01110000" =>
+			-- Cycles:4
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "01110001" =>
+			-- Cycles:5
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T4
+elsif (tcstate(4)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "01110101" =>
+			-- Cycles:4
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "01110110" =>
+			-- Cycles:6
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+	elsif (tcstate(3)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+	--Timing: T4
+elsif (tcstate(4)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T5
+	elsif (tcstate(5)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "01111000" =>
+			-- Cycles:2
+--Timing: T0
+if (tcstate(0)='0') then
+	control_out<="0000000000000100000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000100000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "01111001" =>
+			-- Cycles:4
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "01111101" =>
+			-- Cycles:4
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "01111110" =>
+			-- Cycles:7
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+	elsif (tcstate(3)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+	--Timing: T4
+elsif (tcstate(4)='0') then
+--Timing: T3
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T5
+	elsif (tcstate(5)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T6
+	elsif (tcstate(0)='1' and tcstate(1)='1' and tcstate(2)='1' and tcstate(3)='1' and tcstate(4)='1' and tcstate(5)='1') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "10000001" =>
+			-- Cycles:6
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+	elsif (tcstate(3)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+	--Timing: T4
+elsif (tcstate(4)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T5
+	elsif (tcstate(5)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "10000100" =>
+			-- Cycles:3
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0100000000000000000001000000000000000000000000000000111000000000011010";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "10000101" =>
+			-- Cycles:3
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000010000000000000000000000000111000000000011010";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "10000110" =>
+			-- Cycles:3
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0100000000000000000000010000000000000000000000000000111000000000011010";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "10001000" =>
+			-- Cycles:2
+--Timing: T0
+if (tcstate(0)='0') then
+	control_out<="0000000100000000100001000000000000000100001000010000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000100000000100001000000000000000100001000010000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000100000000000000001100000000000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "10001010" =>
+			-- Cycles:2
+--Timing: T0
+if (tcstate(0)='0') then
+	control_out<="0000000000000000000000010001000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000010001000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "10001100" =>
+			-- Cycles:4
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000100000000000000001000000011100101000000001";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0100000000000000000001000000000000000000010000000000111000000000000100";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "10001101" =>
+			-- Cycles:4
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000100000000000000001000000011100101000000001";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000010000000000000010000000000111000000000000100";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "10001110" =>
+			-- Cycles:4
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000100000000000000001000000011100101000000001";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0100000000000000000000010000000000000000010000000000111000000000000100";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "10010000" =>
+			-- Cycles:4
+page_crossing <= cin;
+bcr <= not cin;
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000001000000011100111000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0010000000000000001000000000000000000110011000000000000000000100000100";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+	control_out<="0001000000000000000000000000000000000111100101000000000011000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+		when "10010001" =>
+			-- Cycles:6
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+	elsif (tcstate(3)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+	--Timing: T4
+elsif (tcstate(4)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T5
+	elsif (tcstate(5)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "10010100" =>
+			-- Cycles:4
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000010000000000000100001001000000000000000000000001";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0100000000000000000001000000000000000000010000000000111000000000011000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "10010101" =>
+			-- Cycles:4
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000010000000000000100001001000000000000000000000001";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000010000000000000010000000000111000000000011000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "10010110" =>
+			-- Cycles:4
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000001000000000000000100001001000000000000000000000001";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0100000000000000000000010000000000000000010000000000111000000000011000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "10011000" =>
+			-- Cycles:2
+--Timing: T0
+if (tcstate(0)='0') then
+	control_out<="0000000000000000000001000001000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000001000001000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "10011001" =>
+			-- Cycles:5
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000100000000000000001000000011100101000000001";
+--Timing: T4
+elsif (tcstate(4)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000010000000000000010000000000111000000000000100";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "10011010" =>
+			-- Cycles:2
+--Timing: T0
+if (tcstate(0)='0') then
+	control_out<="0000000000000000000000010000000000000000000000000010000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000010000000000000000000000000010000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "10011101" =>
+			-- Cycles:5
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000010000000000000100001001000000011100101000000001";
+--Timing: T4
+elsif (tcstate(4)='0') then
+	control_out<="0000000000000000000000000000000000000100010001000000010000000000000001";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0001000000000000000000000000000000000001100000000000001000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "10100000" =>
+			-- Cycles:2
+--Timing: T0
+if (tcstate(0)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="1000000000000000000000100000000000000000000000000000011100101000000001";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "10100001" =>
+			-- Cycles:6
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+	elsif (tcstate(3)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+	--Timing: T4
+elsif (tcstate(4)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T5
+	elsif (tcstate(5)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "10100010" =>
+			-- Cycles:2
+--Timing: T0
+if (tcstate(0)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="1000000000000000000000001000000000000000000000000000011100101000000001";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "10100100" =>
+			-- Cycles:3
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000011000000000011010";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="1000000000000000000000100000000000000000000000000000011100101000000001";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "10100101" =>
+			-- Cycles:3
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000011000000000011010";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="1000000000000000000000000001000000000000000000000000011100101000000001";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "10100110" =>
+			-- Cycles:3
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000011000000000011010";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "10101000" =>
+			-- Cycles:2
+--Timing: T0
+if (tcstate(0)='0') then
+	control_out<="0000000000000000000000100100000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000100100000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000100000000100000000010000000000000000000000000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "10101001" =>
+			-- Cycles:2
+--Timing: T0
+if (tcstate(0)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="1000000000000000000000000001000000000000000000000000011100101000000001";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "10101010" =>
+			-- Cycles:2
+--Timing: T0
+if (tcstate(0)='0') then
+	control_out<="0000000000000000000000001100000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000001100000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000100000000100000000010000000000000000000000000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "10101100" =>
+			-- Cycles:4
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000100000000000000001000000011100101000000001";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000010000000000011000000000000100";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="1000000000000000000000100000000000000000000000000000011100101000000001";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "10101101" =>
+			-- Cycles:4
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000100000000000000001000000011100101000000001";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000010000000000011000000000000100";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="1000000000000000000000000001000000000000000000000000011100101000000001";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "10101110" =>
+			-- Cycles:4
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000100000000000000001000000011100101000000001";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000010000000000011000000000000100";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="1000000000000000000000001000000000000000000000000000011100101000000001";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "10110000" =>
+			-- Cycles:4
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "10110001" =>
+			-- Cycles:4
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "10110100" =>
+			-- Cycles:4
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "10110101" =>
+			-- Cycles:4
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000010000000000000100001001000000000000000000000001";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000010000000000011000000000011000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="1000000100000000100000000001000000000000000000000000011100101000000001";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "10110110" =>
+			-- Cycles:4
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000001000000000000000100001001000000000000000000000001";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000010000000000011000000000011000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="1000000100000000100000001000000000000000000000000000011100101000000001";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "10111000" =>
+			-- Cycles:2
+--Timing: T0
+if (tcstate(0)='0') then
+	control_out<="0110000000000000000010000000000000000000000000000000000000000000001000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0110000000000000000010000000000000000000000000000000000000000000001000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "10111001" =>
+			-- Cycles:4
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "10111010" =>
+			-- Cycles:2
+--Timing: T0
+if (tcstate(0)='0') then
+	control_out<="0000000000000000000000001000000000000000000000000100000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000001000000000000000000000000100000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "10111100" =>
+			-- Cycles:4
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "10111101" =>
+			-- Cycles:4
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "10111110" =>
+			-- Cycles:4
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "11000000" =>
+			-- Cycles:2
+--Timing: T0
+if (tcstate(0)='0') then
+	control_out<="0000000000000000000001000000000000000000001000000000011100101000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000001000000000000000000001000000000011100101000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000001000000001001000000000000000000000000001000000011100101000000001";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "11000001" =>
+			-- Cycles:6
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+	elsif (tcstate(3)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+	--Timing: T4
+elsif (tcstate(4)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T5
+	elsif (tcstate(5)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "11000100" =>
+			-- Cycles:3
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000001000000000000000000001000000000011000000000011010";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000100000000101000000000000000000100000000100000011100101000000001";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "11000101" =>
+			-- Cycles:3
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000100000000000000001000000000011000000000011010";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000100000000101000000000000000000100000000100000011100101000000001";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "11000110" =>
+			-- Cycles:5
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011000000000011010";
+--Timing: T4
+elsif (tcstate(4)='0') then
+	control_out<="1000000100000000100000000000000000000100001000010000000000000000000001";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0100000000000000000000000000000000000001100000000000100000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="1000000000000000000000000001000000000000000000000000011100101000000001";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "11001000" =>
+			-- Cycles:2
+--Timing: T0
+if (tcstate(0)='0') then
+	control_out<="0000000100000000100001000000000000000100001000001000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000100000000100001000000000000000100001000001000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000100000000000000001100000000000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "11001001" =>
+			-- Cycles:2
+--Timing: T0
+if (tcstate(0)='0') then
+	control_out<="0000000000000000000000000100000000000000001000000000011100101000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000100000000000000001000000000011100101000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000001000000001001000000000000000000000000001000000011100101000000001";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "11001010" =>
+			-- Cycles:2
+--Timing: T0
+if (tcstate(0)='0') then
+	control_out<="0000000100000000100000010000000000000100001000010000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000100000000100000010000000000000100001000010000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000001000000000000001100000000000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "11001100" =>
+			-- Cycles:4
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000100000000000000001000000011100101000000001";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000001000000000000000000011000000000011000000000000100";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000001000000001001000000000000000000100000000100000011100101000000001";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "11001101" =>
+			-- Cycles:4
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000100000000000000001000000011100101000000001";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000100000000000000011000000000011000000000000100";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000001000000001001000000000000000000100000000100000011100101000000001";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "11001110" =>
+			-- Cycles:6
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+--Timing: T3
+	elsif (tcstate(3)='0') then
+control_out<="0000000000000000000000000000100000000000000001000000011100101000000001";
+	--Timing: T4
+elsif (tcstate(4)='0') then
+	control_out<="0000000000000000000000000000000000000000010000000000011000000000000100";
+--Timing: T5
+	elsif (tcstate(5)='0') then
+control_out<="1000001000000001000000000000000000000100001000010000000000000000000001";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0100000000000000000000000000000000000001100000000000100000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "11010000" =>
+			-- Cycles:4
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "11010001" =>
+			-- Cycles:5
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T4
+elsif (tcstate(4)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "11010101" =>
+			-- Cycles:4
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "11010110" =>
+			-- Cycles:6
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+	elsif (tcstate(3)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+	--Timing: T4
+elsif (tcstate(4)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T5
+	elsif (tcstate(5)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "11011000" =>
+			-- Cycles:2
+--Timing: T0
+if (tcstate(0)='0') then
+	control_out<="0000000000010000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000010000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "11011001" =>
+			-- Cycles:5
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000001000000000000000000001000000000011100101000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000100000000000000001000000011100101000000001";
+--Timing: T4
+elsif (tcstate(4)='0') then
+	control_out<="0000000000000000000000000000000000000110010000000000010000000000000001";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0001000000000000000000000000000000000001100000000000001000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000100000000101000000000000000000100000000100000011100101000000001";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "11011101" =>
+			-- Cycles:5
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000010000000000000000001000000000011100101000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000100000000000000001000000011100101000000001";
+--Timing: T4
+elsif (tcstate(4)='0') then
+	control_out<="0000000000000000000000000000000000000110010000000000010000000000000001";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0001000000000000000000000000000000000001100000000000001000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000100000000101000000000000000000100000000100000011100101000000001";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "11011110" =>
+			-- Cycles:7
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000010000000000000000001000000000011100101000000000";
+--Timing: T3
+	elsif (tcstate(3)='0') then
+control_out<="0000000000000000000000000000100000000000000001000000011100101000000001";
+	--Timing: T4
+elsif (tcstate(4)='0') then
+--Timing: T3
+	control_out<="0000000000000000000000000000000000000110010000000000010000000000000001";
+--Timing: T5
+	elsif (tcstate(5)='0') then
+control_out<="0001000000000000000000000000000000000001100000000000001000000000000000";
+--Timing: T6
+	elsif (tcstate(0)='1' and tcstate(1)='1' and tcstate(2)='1' and tcstate(3)='1' and tcstate(4)='1' and tcstate(5)='1') then
+control_out<="1000000100000000100000000000000000000100001000010000000000000000000001";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0100000000000000000000000000000000000001100000000000100000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="1000000000000000000000000001000000000000000000000000011100101000000001";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "11100000" =>
+			-- Cycles:2
+--Timing: T0
+if (tcstate(0)='0') then
+	control_out<="0000000000000000000000010000000000000000001000000000011100101000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000010000000000000000001000000000011100101000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000001000000001001000000000000000000000000001000000011100101000000001";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "11100001" =>
+			-- Cycles:6
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+	elsif (tcstate(3)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+	--Timing: T4
+elsif (tcstate(4)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T5
+	elsif (tcstate(5)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "11100100" =>
+			-- Cycles:3
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000010000000000000000001000000000011000000000011010";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000100000000101000000000000000000100000000100000011100101000000001";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "11100101" =>
+			-- Cycles:3
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000100000000000000001000000000011100101000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000011000001000011010";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000001000000000101100000100000011100101000000001";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "11100110" =>
+			-- Cycles:5
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011000000000011010";
+--Timing: T4
+elsif (tcstate(4)='0') then
+	control_out<="1000000100000000100000000000000000000100001000001000000000000000000001";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0100000000000000000000000000000000000001100000000000100000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="1000000000000000000000000001000000000000000000000000011100101000000001";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "11101000" =>
+			-- Cycles:2
+--Timing: T0
+if (tcstate(0)='0') then
+	control_out<="0000000100000000100000010000000000000100001000001000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000100000000100000010000000000000100001000001000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000001000000000000001100000000000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "11101001" =>
+			-- Cycles:2
+--Timing: T0
+if (tcstate(0)='0') then
+	control_out<="0000000000000000000000000100000000000000001000000000011100101000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000100000000000000001000000000011100101000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000101000000101000000001000000000101100000100000011100101000000001";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "11101010" =>
+			-- Cycles:2
+--Timing: T0
+if (tcstate(0)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "11101100" =>
+			-- Cycles:4
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000100000000000000001000000011100101000000001";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000010000000000000000011000000000011000000000000100";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000001000000001001000000000000000000100000000100000011100101000000001";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "11101101" =>
+			-- Cycles:4
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000100000000000000001000000011100101000000001";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000100000000000000011000000000011000000000000010";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000001000000000101100000100000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "11101110" =>
+			-- Cycles:6
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+--Timing: T3
+	elsif (tcstate(3)='0') then
+control_out<="0000000000000000000000000000100000000000000001000000011100101000000001";
+	--Timing: T4
+elsif (tcstate(4)='0') then
+	control_out<="0000000000000000000000000000000000000000010000000000011000000000000100";
+--Timing: T5
+	elsif (tcstate(5)='0') then
+control_out<="1000001000000001000000000000000000000100001000001000000000000000000001";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0100000000000000000000000000000000000001100000000000100000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "11110000" =>
+			-- Cycles:4
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "11110001" =>
+			-- Cycles:5
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T4
+elsif (tcstate(4)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "11110101" =>
+			-- Cycles:4
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "11110110" =>
+			-- Cycles:6
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+	elsif (tcstate(3)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+	--Timing: T4
+elsif (tcstate(4)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T5
+	elsif (tcstate(5)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "11111000" =>
+			-- Cycles:2
+--Timing: T0
+if (tcstate(0)='0') then
+	control_out<="0000000000010000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000010000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "11111001" =>
+			-- Cycles:4
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "11111101" =>
+			-- Cycles:4
+--Timing: T2
+if (tcstate(2)='0') then
+	control_out<="0000000000000000000000000000000000000000000000000000011100101000000000";
+--Timing: T3
+elsif (tcstate(3)='0') then
+	control_out<="0000000000000000000000010000000000000100001001000000011100101000000001";
+--Timing: T0
+	elsif (tcstate(0)='0') then
+control_out<="0000000000000000000000000100000000000000011000000000011000000000000010";
+--Timing: T1
+elsif (tcstate(1)='0') then
+	control_out<="0000000000000000000000000001000000000101100000100000011100101000000000";
+else
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+end if;
+page_crossing <= '0';
+bcr <= '1';
+		when "11111110" =>
+			-- Cycles:0
+	control_out<="0000000000000000000000000000000000000000000000000000000000000000000000";
+when OTHERS =>
+control_out <= "0000000000000000000000000000000000000000000000000000000000000000000000";
+end case;
+end process;
 end architecture;
