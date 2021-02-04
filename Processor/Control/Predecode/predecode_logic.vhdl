@@ -37,15 +37,15 @@ begin
 			if (databus(1 downto 0) = "01") then
 				RMW <= '0';
 				if (databus(4 downto 2) = "000") then -- (Indirect, X)
-					cycles <= "110";
+					cycles <= "111"; -- modified cycle!!!
 				elsif (databus(4 downto 2) = "001") then -- (zero page)
 					cycles <= "011";
 				elsif (databus (4 downto 2) = "010") then -- (#immediate)
 					cycles <= "010";
 				elsif (databus (4 downto 2) = "011") then -- (absolute)
 					cycles <= "100";
-				elsif (databus (4 downto 2) = "100") then -- (Indirect), Y
-					cycles <= "110";
+				elsif (databus (4 downto 2) = "100") then -- (Indirect, Y),
+					cycles <= "111";
 				elsif (databus (4 downto 2) = "101") then -- zero page, X
 					cycles <= "100";
 				elsif (databus (4 downto 2) = "110") then -- absolute, Y
@@ -98,7 +98,8 @@ begin
 					end if;
 				end if;
 
-              -- 100 100 00
+				-- 010 010 00
+
 				----------------------------------- cc = 00 --------------------------------------
 			elsif (databus(1 downto 0) = "00") then
 

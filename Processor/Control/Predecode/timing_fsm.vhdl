@@ -134,7 +134,7 @@ begin
       if (page_cross='1') then -- is there page crossing or not     TODO FIX!!
         next_state <= T4_5;
       else
-        next_state <= T4_5;
+        next_state <= T0;
       end if;
     when T4_5 =>
       next_state <= T0;

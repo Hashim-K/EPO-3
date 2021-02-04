@@ -21,14 +21,14 @@ end entity;
 
 architecture arch of pc_high is
 
-  component register_8bit IS
-  	PORT (
-  		clk : IN STD_LOGIC;
-      reset : IN STD_LOGIC;
-  		load : IN STD_LOGIC;
-  		data_in : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
-  		reg_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)
-      );
+  component pch_register_8bit IS
+  PORT (
+  	clk : IN STD_LOGIC;
+  	reset : IN STD_LOGIC;
+  	load : IN STD_LOGIC;
+  	data_in : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+  	reg_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)
+  	);
   END component;
 
 
@@ -52,7 +52,7 @@ begin
 
 
   -- register
-  l1 : register_8bit PORT MAP(clk, reset, '1', to_register, reg_out);
+  l1 : pch_register_8bit PORT MAP(clk, reset, '1', to_register, reg_out);
 
 
   -- Adress bus output

@@ -23,7 +23,7 @@ input:	process (clk, reset, sb_s)
 		begin
 			if (rising_edge(clk)) then
 				if (reset = '1') then
-					q <= "11111111";
+					q <= "00000000";
 				elsif (reset = '0') and (sb_s = '1') then
 					q <= sb_in;
 				end if;

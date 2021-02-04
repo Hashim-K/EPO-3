@@ -106,8 +106,11 @@ begin
 					control <= "01";
 					if db_dor = '1' then
 						next_state <= state3;
+					elsif adl_abl = '0' then
+						next_state <= wait_1;
 					else
 						next_state <= wait_2;
+
 					end if;
 					-- Storing:
 					next_abl_store <= "00000000";
@@ -118,7 +121,11 @@ begin
 					-- DOR
 					o_to_extern <= db_store;
 					control <= "10";
-					next_state <= reset_state;
+					if adl_abl = '0' or adh_abh = '0' then
+						next_state <= wait_2;
+					else
+						next_state <= reset_state;
+					end if;
 					-- Storing:
 					next_abl_store <= "00000000";
 					next_adh_store <= "00000000";

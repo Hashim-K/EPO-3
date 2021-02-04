@@ -247,19 +247,23 @@ architecture structural of processor is
 	      r_w: OUT STD_LOGIC;
 	      sv: IN STD_LOGIC;
 	      acr : IN STD_LOGIC;
-	      cin : IN STD_LOGIC; -- from status register
+	      cin : IN STD_LOGIC; -- from status register carry in
+	      z   : IN STD_LOGIC; -- from status register zero
+	      v   : IN std_logic;
+	      n   : IN std_logic;
 	      control_out: OUT STD_LOGIC_VECTOR(69 DOWNTO 0);
 	      s1 : IN STD_LOGIC;
 	      s2 : IN STD_LOGIC;
 	      page_crossing : OUT std_logic; -- indicate page crossing
 	      bcr : OUT std_logic; -- indicate branch instruction taking on
+	    --  ff_add: IN STD_Logic
 	      v1: IN STD_LOGIC
 	  );
 	end component;
 
 	-- status register
 	component status_register is
-    port (
+		port (
       clk : in STD_LOGIC;
       reset : in STD_LOGIC;
       --Input from bus
@@ -302,7 +306,10 @@ architecture structural of processor is
       ir5   : in STD_LOGIC;
       --Outputs
       c         : out STD_LOGIC;
-      i         : out STD_LOGIC;
+			z					: out std_logic;
+      i         : out std_logic;
+      v         : out std_logic;
+      n         : out STD_LOGIC;
       db_out    : out STD_LOGIC_VECTOR(7 downto 0)
     );
 	end component;
@@ -462,7 +469,7 @@ architecture structural of processor is
 	-- memory data register
 	signal dl_db, dl_adl, dl_adh, mem_data_load : std_logic;
 	-- processor status register
-	signal c, i : std_logic;
+	signal c, i, z, v, n : std_logic;
 	signal status_reg_control : std_logic_vector(15 downto 0);
   signal one_i : std_logic;
 	-- pass mosfets
@@ -765,8 +772,13 @@ begin
 		clk_2, reset,
 		db, status_reg_control,
 		one_i, acr, avr, azr, anr,
-		ir5, c,
-		i, db
+		ir5,
+		c,
+		z,
+		i,
+		v,
+		n,
+		db
 	);
 	-- todo : FIX precharge mosfets!!
 
@@ -919,13 +931,23 @@ begin
 	-- Instruction Decoder
 	instruction_dec : instruction_decoder
 	port map(
-		ins_data_out, tcstate,
-		interrupt_vec, rdy,
-		r_w, sv,
-		acr, c,
-		control_out, s1,
-		s2, page_crossing,
-		bcr, v1
+		ins_data_out,
+		tcstate,
+		interrupt_vec,
+		rdy,
+		r_w,
+		sv,
+		acr,
+		c,
+		z,
+		v,
+		n,
+		control_out,
+		s1,
+		s2,
+		page_crossing,
+		bcr,
+		v1
 	);
 	-- Timing generation logic
 	tim_gen : timing_generation

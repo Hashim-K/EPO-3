@@ -46,7 +46,10 @@ entity status_register is
       ir5   : in STD_LOGIC;
       --Outputs
       c         : out STD_LOGIC;
-      i         : out STD_LOGIC;
+			z					: out std_logic;
+      i         : out std_logic;
+      v         : out std_logic;
+      n         : out STD_LOGIC;
       db_out    : out STD_LOGIC_VECTOR(7 downto 0)
     );
 END ENTITY;
@@ -139,6 +142,9 @@ reg_out when '1',
 --port bit 0 and 2 to a seperate output
 c <= reg_out(0);
 i <= reg_out(2);
+z <= reg_out(1);
+n <= reg_out(7);
+v <= reg_out(6);
 
 l1 : register_8bit PORT MAP(clk, '1', reset, reg_in, reg_out);
 
