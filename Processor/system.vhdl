@@ -18,17 +18,24 @@ architecture arch of system is
 
 
   component processor is
-    port (
-    clk_25mhz : in std_logic;
-    nmi : in std_logic;
-    res : in std_logic;
-    irq : in std_logic;
-    sv  : in std_logic;
-    r	  : in std_logic; -- ready
-    adb_external : out std_logic_vector(7 downto 0);  -- External connection of the addres + data
-    adb_control : out std_logic_vector(1 downto 0);   -- Select the external register
-    db_external : in std_logic_vector(7 downto 0)    -- External connection of the databus bus in
-    );
+  	port (
+    -- max 16 out/ 16 in
+		clk : in std_logic;
+		reset : in std_logic;
+
+		-- Interupt -- TODO fix these signals:::
+		nmi : in std_logic;	-- NMI stand for non-maskable-interupt edge triggered
+		irq : in std_logic;	-- interupt request, level triggered
+		sv : in std_logic;
+		sob : in std_logic; -- Set overflow if enalbed
+		r : IN std_logic; 	-- ready
+		synch : OUT std_logic; -- synch signal for external
+
+		-- Data signals
+		adb_external : out std_logic_vector(7 downto 0); -- External connection of the addres + data
+		adb_control : out std_logic_vector(1 downto 0); -- Select the external register
+		db_external : in std_logic_vector(7 downto 0) -- External connection of the databus bus in
+  	);
   end component;
 
   component mem_dummy is
@@ -53,7 +60,7 @@ begin
   irq <= '1';
   sv <= '0';
   r <= '1';
-  processor_m : processor PORT MAP(clk_25mhz, nmi, extern_reset, irq, sv, r, addres_data, control, data);
+  processor_m : processor PORT MAP(clk_25mhz, extern_reset, nmi, irq, sv, sob, r, synch, addres_data, control, data);
   mem_dummy_m : mem_dummy PORT MAP(clk_25mhz, extern_reset, addres_data, control, data);
 
 end architecture;

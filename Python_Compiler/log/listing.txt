@@ -1,0 +1,7 @@
+               |JMP Test
+0000: 4C 03 00 |yolo = 0x00
+               |Test:
+               |{
+               |    INC 0x02
+0003: E6 02    |    JMP RE
+0005: 4C 03 00 |}

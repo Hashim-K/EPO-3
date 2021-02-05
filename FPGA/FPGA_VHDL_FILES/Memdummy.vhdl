@@ -1,4 +1,5 @@
---/*************************************************
+
+    --/*************************************************
 --*This may not be synthesisez just for simulating purpusus *
 --*************************************************/
 
@@ -22,12 +23,12 @@ end entity;
 architecture arch of mem_dummy is
 
   component register_8bit IS
-  	PORT (
-  		clk : IN STD_LOGIC; -- 25 mhz
-  		load : IN STD_LOGIC;
-  		reset : IN STD_LOGIC;
-  		data_in : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
-  		reg_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0));
+    PORT (
+        clk : IN STD_LOGIC; -- 25 mhz
+        load : IN STD_LOGIC;
+        reset : IN STD_LOGIC;
+        data_in : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+        reg_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0));
   END component;
 
 -- A9 is load a immidiate
@@ -37,16 +38,18 @@ architecture arch of mem_dummy is
   type rom is array (0 to 255) of std_logic_vector(7 downto 0); --65535
   type st is array (256 to 512) of std_logic_vector(7 downto 0); --65535
   signal pla : rom := (
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
+  x"4C",x"03",x"00",x"E6",x"02",x"4C",x"03",x"00",x"00",x"00",
+x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"00",
+x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"00",
+x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"00",
+x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"00",
+x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"00",
+x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"00",
+x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"00",
+x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"00",
+x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"00",
+
+
 
       x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
       x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
@@ -122,7 +125,7 @@ begin
   en_data <=  control(1) AND NOT control(0);
 
   clk_inv <= not clk;
-  res <= not reset;
+  res <= reset;
 
   MAL : register_8bit PORT MAP(clk_inv, en_mal, res, addres_data_in, mal_out);
   MAH : register_8bit PORT MAP(clk_inv, en_mah, res, addres_data_in, mah_out);
@@ -188,3 +191,4 @@ begin
   end process;
 
 end architecture;
+    

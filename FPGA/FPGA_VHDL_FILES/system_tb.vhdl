@@ -25,8 +25,8 @@ architecture arch of system_tb is
 begin
 
   clk_25mhz <= not clk_25mhz after 5 ns;
-  extern_reset <= '0' after 0 ns,
-                  '1' after 50 ns;
+  extern_reset <= '1' after 0 ns,
+                  '0' after 50 ns;
 
   sy : system PORT MAP(clk_25mhz, extern_reset  ); -- ,sys_out, sys_acc, sys_inst, sys_cont
 

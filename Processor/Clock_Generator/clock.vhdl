@@ -15,7 +15,6 @@ end entity;
 
 architecture arch of clock is
   signal count : integer := 0;
-  signal s_clk, s_clk_2 : std_logic;
   type statetype is (reset_state, state_1, state_2, state_3, state_4, state_5, state_6, state_7, state_8);
   signal state, next_state: statetype;
 begin
@@ -96,43 +95,5 @@ begin
       state <= next_state;
     end if;
 end if;
-
-
 end process;
-
-
-
-
-
--- sec : process(clk_25mhz, reset)
--- begin
---   if rising_edge(reset) then
---     count <= 1;
---   end if;
---   if rising_edge(clk_25mhz) then
---     if (count = 4) then
---       count <= 1;
---     else
---       count <= count + 1;
---     end if;
---
---     if (count = 1) then
---       s_clk <= '1';
---     else
---       s_clk <= '0';
---     end if;
---
---     if (count = 3) then
---       s_clk_2 <= '1';
---     else
---       s_clk_2 <= '0';
---     end if;
---
---
---   end if;
--- end process;
---
--- clk <= s_clk;
--- clk_2 <= s_clk_2;
-
 end architecture;

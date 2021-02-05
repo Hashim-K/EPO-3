@@ -36,6 +36,8 @@ architecture arch of mem_add_reg is
 	signal next_abl_store, next_adh_store, next_db_store : std_logic_vector(7 downto 0);
 
 begin
+
+
 	comb_proc : process (clk)
 	begin
 		if rising_edge(clk) then
@@ -122,7 +124,7 @@ begin
 					o_to_extern <= db_store;
 					control <= "10";
 					if adl_abl = '0' or adh_abh = '0' then
-						next_state <= wait_2;
+						next_state <= wait_1;
 					else
 						next_state <= reset_state;
 					end if;

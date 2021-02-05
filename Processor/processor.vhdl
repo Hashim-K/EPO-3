@@ -6,22 +6,23 @@ use ieee.numeric_std.all;
 
 entity processor is
 	port (
-		clk_25mhz : in std_logic;
-		nmi : in std_logic;
-		res : in std_logic;
-		irq : in std_logic;
-		sv : in std_logic;
-		r : in std_logic; -- ready
+		-- max 16 out/ 16 in
+		clk : in std_logic;
+		reset : in std_logic;
 
+		-- Interupt -- TODO fix these signals:::
+		nmi : in std_logic;	-- NMI stand for non-maskable-interupt edge triggered
+		irq : in std_logic;	-- interupt request, level triggered
+
+		sob : in std_logic; -- Set overflow if enalbed done
+		r : IN std_logic; 	-- ready done
+		synch : OUT std_logic; -- synch signal for external done
+		iv		: OUT std_logic; -- indicates when a interupt is happening (i-Flag) done
+
+		-- Data signals
 		adb_external : out std_logic_vector(7 downto 0); -- External connection of the addres + data
-		adb_control : out std_logic_vector(1 downto 0); -- Select the external register
+		adb_control : out std_logic_vector(1 downto 0); -- Select the external register (also indicates write)
 		db_external : in std_logic_vector(7 downto 0) -- External connection of the databus bus in
-
-		-- These are sygnals for FPGA not used in final desing!
-		-- sys_cont : OUT std_logic_vector(2 downto 0);
-		-- sys_inst : OUT std_logic_vector(7 downto 0)
-		-- sys_acc : OUT std_logic_vector(7 downto 0)
-
 	);
 end entity;
 
@@ -245,13 +246,12 @@ architecture structural of processor is
 	      interrupt: IN STD_LOGIC_VECTOR(2 DOWNTO 0);
 	      ready: IN STD_LOGIC;
 	      r_w: OUT STD_LOGIC;
-	      sv: IN STD_LOGIC;
 	      acr : IN STD_LOGIC;
 	      cin : IN STD_LOGIC; -- from status register carry in
 	      z   : IN STD_LOGIC; -- from status register zero
 	      v   : IN std_logic;
 	      n   : IN std_logic;
-	      control_out: OUT STD_LOGIC_VECTOR(69 DOWNTO 0);
+	      control_out: OUT STD_LOGIC_VECTOR(67 DOWNTO 0);
 	      s1 : IN STD_LOGIC;
 	      s2 : IN STD_LOGIC;
 	      page_crossing : OUT std_logic; -- indicate page crossing
@@ -327,16 +327,16 @@ architecture structural of processor is
 		);
 	end component;
 
-	-- Open Drain MOSFET ADH
-	component open_drain_ADL is
-		port (
-			control : in std_logic_vector(2 downto 0);
-			--bit 0 <= ADL0
-			--bit 1 <= ADL1
-			--bit 2 <= ADL2
-			ADL : out std_logic_vector(7 downto 0)
-		);
-	end component;
+	-- -- Open Drain MOSFET ADH
+	-- component open_drain_ADL is
+	-- 	port (
+	-- 		control : in std_logic_vector(2 downto 0);
+	-- 		--bit 0 <= ADL0
+	-- 		--bit 1 <= ADL1
+	-- 		--bit 2 <= ADL2
+	-- 		ADL : out std_logic_vector(7 downto 0)
+	-- 	);
+	-- end component;
 
 	-- Open Drain MOSFET ADL
 	component open_drain_ADH is
@@ -380,18 +380,24 @@ architecture structural of processor is
 			rdy : in std_logic;
 			sync : in std_logic;
 			data_in : in std_logic_vector(7 downto 0);
-			data_out : out std_logic_vector(7 downto 0)
+			data_out : out std_logic_vector(7 downto 0);
+			nmi      : in  std_logic;
+			irq      : in  std_logic;
+			i_flag_in : in std_logic
 		);
 	end component;
 
 	-- Predecode Logic
 	component predecode_logic is
 		port (
-			databus : in std_logic_vector(7 downto 0); -- instuction or other data in
-			reset : in std_logic;
-			instruction : out std_logic_vector(7 downto 0); -- to instruction register
-			cycles : out std_logic_vector(2 downto 0); -- output the number of cycles it takse to do the instruction
-			rmw : out std_logic
+		databus : in std_logic_vector(7 downto 0); -- instuction or other data in
+		reset : in std_logic;
+		instruction : out std_logic_vector(7 downto 0); -- to instruction register
+		cycles : out std_logic_vector(2 downto 0); -- output the number of cycles it takse to do the instruction
+		RMW : out std_logic;
+		nmi : in std_logic;
+		irq : in std_logic;
+		i_flag_in : in std_logic
 		);
 	end component;
 
@@ -450,7 +456,7 @@ architecture structural of processor is
 	--*************************************************/
 
 	-- first and second phase clock
-	signal clk, clk_2 : std_logic;
+	signal clk_1, clk_2 : std_logic;
 	-- x index register
 	signal sb_x, x_sb : std_logic;
 	-- Y index REGISTER
@@ -498,7 +504,7 @@ architecture structural of processor is
 	signal instruction_to_instr_reg : std_logic_vector(7 downto 0);
 
 	--interrupt control
-	signal i_1, nmi_out, irq_out, res_out, reset, interrupt : std_logic;
+	signal i_1, nmi_out, irq_out, res_out, interrupt : std_logic;
 	-- flags
 	signal avr, acr, anr, azr : std_logic;
 	signal zero_flag, negative_flag : std_logic;
@@ -507,7 +513,7 @@ architecture structural of processor is
 	signal sb, db, adh, adl : std_logic_vector(7 downto 0);
 
 	-- Main control signal
-	signal control_out : std_logic_vector(69 downto 0);
+	signal control_out : std_logic_vector(67 downto 0);
 
 	-- pc_low carry to pc_high_carry
 	signal pc_carry : std_logic;
@@ -539,13 +545,10 @@ architecture structural of processor is
 
   -- suply mosfet
   signal i_adh_zero : std_logic;
-begin
-	inv_res <= not res;
 
-	-- These are troubleshoot signals!!
-	-- sys_cont <= clk_2 & clk & reset;
-	-- sys_inst <= ins_data_out;
-	-- sys_acc <= acc_content;
+begin
+
+
 	--/*************************************************
 	--* Signal Assignment *
 	--*************************************************/
@@ -560,69 +563,65 @@ begin
 	-- Open Drain MOSFET ADH
 	od_high_control(1 downto 0) <= control_out(4 downto 3);
 	-- Open Drain MOSFET ADL
-	od_low_control(2 downto 0) <= control_out(7 downto 5);
+	-- od_low_control(2 downto 0) <= control_out(7 downto 5);
 
 	-- Program Counter Low
-  adl_pcl    <= control_out(8);-- Load from ADL
-  one_pc     <= control_out(9);-- Enable Increment program counter
-  pcl_db     <= control_out(10);-- output count to DB
-  pcl_adl    <= control_out(11);-- output count to ADL
+  adl_pcl    <= control_out(5);-- Load from ADL
+  one_pc     <= control_out(6);-- Enable Increment program counter
+  pcl_db     <= control_out(7);-- output count to DB
+  pcl_adl    <= control_out(8);-- output count to ADL
   pc_carry   <= l_pclc;-- Carry out
 
 	-- Program Counter High
-	adh_pch <= control_out(12);
-	pch_db  <= control_out(13);
-	pch_adh <= control_out(14);
+	adh_pch <= control_out(9);
+	pch_db  <= control_out(10);
+	pch_adh <= control_out(11);
   h_pclc <= pc_carry; -- carry in from program counter low
 
   -- mem_add_reg
-  adh_abh <= control_out(15);
-  adl_abl <= control_out(16);
-  db_dor  <= control_out(17);
+  adh_abh <= control_out(12);
+  adl_abl <= control_out(13);
+  db_dor  <= control_out(14);
 
   -- Stack Pointer
-  s_adl <= control_out(18);
-  sb_s  <= control_out(19);
-  s_sb  <= control_out(20);
+  s_adl <= control_out(15);
+  sb_s  <= control_out(16);
+  s_sb  <= control_out(17);
 
   -- ALU
-  i_add       <= control_out(21);
-  inv_i_add   <= control_out(22);
-  inv_db_add  <= control_out(23);
-  db_add      <= control_out(24);
-  adl_add     <= control_out(25);
+  i_add       <= control_out(18);
+  inv_i_add   <= control_out(19);
+  inv_db_add  <= control_out(20);
+  db_add      <= control_out(21);
+  adl_add     <= control_out(22);
 
-  o_add   <= control_out(26);
-  sb_add  <= control_out(27);
+  o_add   <= control_out(23);
+  sb_add  <= control_out(24);
 
-  add_adl <= control_out(28);
-  add_sb6 <= control_out(29);
-  add_sb7 <= control_out(30);
+  add_adl <= control_out(25);
+  add_sb6 <= control_out(26);
+  add_sb7 <= control_out(27);
 
-  alu_control(11 downto 1) <= control_out(41 downto 31); -- more efficient
+  alu_control(11 downto 1) <= control_out(38 downto 28); -- more efficient
   alu_control(0) <= '0';
   -- accumulator
-  sb_ac <= control_out(42);
-  ac_db <= control_out(43);
-  ac_sb <= control_out(44);
+  sb_ac <= control_out(39);
+  ac_db <= control_out(40);
+  ac_sb <= control_out(41);
 
 	-- x index register
-	sb_x <= control_out(45);
-	x_sb <= control_out(46);
+	sb_x <= control_out(42);
+	x_sb <= control_out(43);
 
 	-- Y index REGISTER
-	sb_y <= control_out(47);
-	y_sb <= control_out(48);
+	sb_y <= control_out(44);
+	y_sb <= control_out(45);
 
   -- Processor Status register
-  status_reg_control(15 downto 0) <= control_out(64 downto 49);
-  one_i <= '1'; -- todo fix what this does
+  status_reg_control(11 downto 0) <= control_out(57 downto 46);
+	status_reg_control(12) <= control_out(58) or sob;
+	status_reg_control(15 downto 13) <= control_out(61 downto 59);
 
-	-- TODO: FIX
-	-- <= zero_flag;
-	-- <= negative_flag;
-	-- Instruction decoder
-	-- TODO: FIX Instruction Decoder
 	-- interrupt control
 	res_out <= '1';
 	nmi_out <= '0';
@@ -631,36 +630,29 @@ begin
 	interrupt_vec(1) <= irq_out;
 	interrupt_vec(2) <= res_out;
 
-  i_adh_zero <= control_out(65);
+  i_adh_zero <= control_out(62);
 
 	-- Pass Mosfets
 	-- SB -> ADH
-	sb_adh_pass <= control_out(66);
+	sb_adh_pass <= control_out(63);
 	-- ADH -> SB
-	adh_sb_pass <= control_out(67);
+	adh_sb_pass <= control_out(64);
 	-- SB -> DB
-	sb_db_pass <= control_out(68);
+	sb_db_pass <= control_out(65);
 	-- DB -> SB
-	db_sb_pass <= control_out(69);
+	db_sb_pass <= control_out(66);
 
+	one_i <= control_out(67);
 
-
-
-  -- system reset
-	reset <= system_reset;
+	ir5 <= ins_data_out(5);
 
 
 	--/*************************************************
-	--* FLAGGS! *
+	--*                    external                   *
 	--*************************************************/
 
-	-- Flags are portmapped in a nicer way
-
-	-- Processor status register
-
-	-- TODO Fix these flags ?!
-	ir5 <= ins_data_out(5); -- this is correct!!!!
-	-- hc;
+	synch <= sync;
+	iv 		<= i;
 
 	--/*************************************************
 	--* Port Maps *
@@ -669,32 +661,32 @@ begin
 	-- three phase clock generator
 	clo : clock
 	port map(
-		clk_25mhz,
-		inv_res, -- external reset with not gate
-		system_reset, clk,
+		clk,
+		reset,
+		system_reset, clk_1,
 		clk_2
 	);
 
 	-- x index register
 	x_in : x_index
 	port map(
-		clk, sb_x,
-		reset, sb,
+		clk_1, sb_x,
+		system_reset, sb,
 		x_sb, sb
 	);
 
 	-- y index register
 	y_in : y_index
 	port map(
-		clk, sb_y,
-		reset, sb,
+		clk_1, sb_y,
+		system_reset, sb,
 		y_sb, sb
 	);
 
 	-- ALU port map
 	Algorithmic_Unit : alu
 	port map(
-		clk, reset,
+		clk_1, system_reset,
 		adl, adl,
 		sb, sb,
 		db,i_add,
@@ -711,7 +703,7 @@ begin
 	program_counter_low : pc_low
 	port map(
 		clk_2, -- increment on second phase
-		reset, l_pclc,
+		system_reset, l_pclc,
 		one_pc, pcl_adl,
 		pcl_db, adl_pcl,
 		adl, adl,
@@ -722,7 +714,7 @@ begin
 	program_counter_high : pc_high
 	port map(
 		clk_2, -- increment on second phase
-		reset,
+		system_reset,
 		adh_pch,
 		pch_adh,
 		pch_db,
@@ -732,12 +724,12 @@ begin
 		db
 	);
 
-	accumulator_clk <= clk xor clk_2;
+	accumulator_clk <= clk_1 xor clk_2;
 
 	-- accumulator
 	accumu : accumulator
 	port map(
-		accumulator_clk, reset,
+		accumulator_clk, system_reset,
 		ac_db, ac_sb,
 		sb_ac, sb,
 		sb, db,
@@ -747,7 +739,7 @@ begin
 	-- Memory addres register
 	add_Reg : mem_add_reg
 	port map(
-		clk_25mhz, reset,
+		clk, system_reset,
 		adh_abh, adl_abl,
 		db_dor, adl,
 		adh, db,
@@ -757,7 +749,7 @@ begin
 	-- Memory data register
 	data_reg : mem_data_reg
 	port map(
-		clk_2, reset,
+		clk_2, system_reset,
 		mem_data_load,
 		dl_db, -- control signal
 		dl_adl, -- control signal
@@ -769,7 +761,7 @@ begin
 	-- Processor Status Register
 	flag_reg : status_register
 	port map(
-		clk_2, reset,
+		clk_2, system_reset,
 		db, status_reg_control,
 		one_i, acr, avr, azr, anr,
 		ir5,
@@ -781,45 +773,6 @@ begin
 		db
 	);
 	-- todo : FIX precharge mosfets!!
-
-	--precharge mosfet
-	-- SB
-	-- pre_sb : precharge PORT MAP(
-	-- clk_2,
-	-- reset,
-	-- sb,
-	-- sb
-	-- );
-	--
-	-- --precharge mosfet
-	-- -- DB
-	-- pre_db : precharge PORT MAP(
-	-- clk_2,
-	-- reset,
-	-- db,
-	-- db
-	-- );
-	--
-	-- --precharge mosfet
-	-- -- ADL
-	-- pre_adl : precharge PORT MAP(
-	-- clk_2,
-	-- reset,
-	-- adl,
-	-- adl
-	-- );
-	--
-	-- --precharge mosfet
-	-- -- ADH
-	-- pre_adh : precharge PORT MAP(
-	-- clk_2,
-	-- reset,
-	-- adh,
-	-- adh
-	-- );
-
-	-- pass mosfets
-	-- SB -> DB
 
 	pass_1 <= db_sb_pass & sb_db_pass;
 	pass_sb_db : pass
@@ -836,49 +789,22 @@ begin
 		pass_2, sb,
 		adh
 	);
-	-- pass_sb_db : pass PORT MAP(
-	-- sb,
-	-- sb_db_pass,
-	-- db
-	-- );
-	--
-	-- -- pass mosfets
-	-- -- SB -> ADH
-	-- pass_sb_adh : pass PORT MAP(
-	-- sb,
-	-- sb_adh_pass,
-	-- adh
-	-- );
-	-- -- pass mosfets
-	-- -- ADH -> SB
-	-- pass_adh_sb : pass PORT MAP(
-	-- adh,
-	-- adh_sb_pass,
-	-- sb
-	-- );
-	-- -- pass mosfets
-	-- -- DB -> SB
-	-- db_sb_adh : pass PORT MAP(
-	-- db,
-	-- db_sb_pass,
-	-- sb
-	-- );
-	-- open drain mosfet high
+
 	od_adh : open_drain_ADH
 	port map(
 		od_high_control, adh
 	);
 
-	-- open drain mosfet low
-	od_adl : open_drain_ADL
-	port map(
-		od_low_control, adl
-	);
+	-- -- open drain mosfet low
+	-- od_adl : open_drain_ADL
+	-- port map(
+	-- 	od_low_control, adl
+	-- );
 
 	-- stack pointer
 	stk_point : stack_pointer
 	port map(
-		clk, reset,
+		clk_1, system_reset,
 		sb_s, s_sb,
 		s_adl, sb,
 		sb, adl
@@ -909,24 +835,24 @@ begin
 	pre_reg : predecode_register
 	port map(
 		clk_2, -- second phase
-		'1', reset,
+		'1', system_reset,
 		db_external, ins_data_in
 	);
 	-- Predecode logic
 	pr_logic : predecode_logic
 	port map(
-		ins_data_in, reset,
+		ins_data_in, system_reset,
 		instruction_to_instr_reg, cycles,
-		rmw
+		rmw, nmi, irq, i
 	);
 
 	-- Instruction Register
 	ins_reg : intruction_reg
 	port map(
 		ins_reg_clk, -- special clock signal
-		reset, rdy,
+		system_reset, rdy,
 		sync, instruction_to_instr_reg,
-		ins_data_out
+		ins_data_out, nmi, irq, i
 	);
 	-- Instruction Decoder
 	instruction_dec : instruction_decoder
@@ -936,7 +862,6 @@ begin
 		interrupt_vec,
 		rdy,
 		r_w,
-		sv,
 		acr,
 		c,
 		z,
@@ -953,7 +878,7 @@ begin
 	tim_gen : timing_generation
 	port map(
 		ins_reg_clk, -- special clock signal
-		reset, bcr,
+		system_reset, bcr,
 		page_crossing, rmw,
 		cycles, tcstate,
 		sync, s1,
@@ -962,7 +887,7 @@ begin
 
 	ready_map : ready
 	port map(
-		clk, r,
+		clk_1, r,
 		r_w, rdy
 	);
 	ins_reg_clk <= not clk_2;

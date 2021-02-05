@@ -23,25 +23,25 @@ end entity;
 architecture arch of system is
 
 
-  component processor is
-    port (
-    clk_25mhz : in std_logic;
-    nmi : in std_logic;
-    res : in std_logic;
-    irq : in std_logic;
-    sv  : in std_logic;
-    r	  : in std_logic; -- ready
+component processor is
+  port (
+		-- max 16 out/ 16 in
+		clk : in std_logic;
+		reset : in std_logic;
 
-    adb_external : out std_logic_vector(7 downto 0);  -- External connection of the addres + data
-    adb_control : out std_logic_vector(1 downto 0);   -- Select the external register
-    db_external : in std_logic_vector(7 downto 0)    -- External connection of the databus bus in
+		-- Interupt -- TODO fix these signals:::
+		nmi : in std_logic;	-- NMI stand for non-maskable-interupt edge triggered
+		irq : in std_logic;	-- interupt request, level triggered
+		sob : in std_logic; -- Set overflow if enalbed
+		r : IN std_logic; 	-- ready
+		synch : OUT std_logic; -- synch signal for external
 
-    -- sys_cont : OUT std_logic_vector(2 downto 0);
-    -- sys_inst : OUT std_logic_vector(7 downto 0);
-    -- sys_acc : OUT std_logic_vector(7 downto 0)
-
-    );
-  end component;
+		-- Data signals
+		adb_external : out std_logic_vector(7 downto 0); -- External connection of the addres + data
+		adb_control : out std_logic_vector(1 downto 0); -- Select the external register
+		db_external : in std_logic_vector(7 downto 0) -- External connection of the databus bus in
+	);
+end component;
 
   component mem_dummy is
     port (
@@ -61,18 +61,19 @@ architecture arch of system is
   signal control : std_logic_vector(1 downto 0);
   signal nmi, irq, sv : std_logic;
   signal r : std_logic;
+  signal sob, synch : std_logic;
 
   signal sys_out : std_logic_vector(7 downto 0);
 
 begin
 
 
-
+  sob <= '0';
   nmi <= '1';
-  irq <= '1';
+  irq <= '0';
   sv <= '0';
   r <= '1';
-  processor_m : processor PORT MAP(clk_25mhz, nmi, extern_reset, irq, sv, r, addres_data, control, data); -- sys_cont, sys_inst, sys_acc
+  processor_m : processor PORT MAP(clk_25mhz, extern_reset, nmi, irq, sob, r, synch, addres_data, control, data); -- sys_cont, sys_inst, sys_acc
   mem_dummy_m : mem_dummy PORT MAP(clk_25mhz, extern_reset, addres_data, control, data, sys_out);
 
 
