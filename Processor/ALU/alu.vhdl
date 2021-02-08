@@ -34,7 +34,7 @@ ENTITY alu IS
     acr : OUT STD_LOGIC; -- carry out flag
     anr : OUT std_logic; -- negative out flag
     azr : out std_logic; -- zero out flag
-    hc : OUT STD_LOGIC; -- half carry flag
+    -- hc : OUT STD_LOGIC; -- half carry flag
 
     -- adder hold register
     clk_2 : IN STD_LOGIC; -- second phase clock, used as load signal
@@ -73,8 +73,8 @@ ARCHITECTURE structural OF alu IS
       --bit(11) = pass2 (register b)
       o : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); --ALU output signal to adder hold register
       avr : OUT STD_LOGIC; --overflow flag
-      acr : OUT STD_LOGIC; --carry out flag
-      hc : OUT STD_LOGIC --half carry out flag, not used since decimal is not implemented
+      acr : OUT STD_LOGIC --carry out flag
+      -- hc : OUT STD_LOGIC --half carry out flag, not used since decimal is not implemented
     );
   END COMPONENT;
 
@@ -147,8 +147,8 @@ load_signal <= control(0)
     control,
     output_alu,
     avr,
-    acr,
-    hc
+    acr
+    -- hc
   );
 
   -- B input register

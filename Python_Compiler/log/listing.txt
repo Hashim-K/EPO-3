@@ -1,7 +1,216 @@
-               |JMP Test
-0000: 4C 03 00 |yolo = 0x00
-               |Test:
-               |{
-               |    INC 0x02
-0003: E6 02    |    JMP RE
-0005: 4C 03 00 |}
+               |@0x00
+               |VAR foo
+               |
+               |; @0x0202
+               |;
+               |==Start==
+               |SEC
+0000: 38       |LDY #0x02
+0001: A0 02    |STA (0x18),y
+0003: 91 18    |LDA #0x01
+0005: A9 01    |LDA (0x18),y
+0007: B1 18    |NOP
+0009: EA       |
+               |@0x0018
+000A: 00 00 .. |DATA 0xCC
+0017: CC       |
+               |@0x0019
+               |DATA 0x00
+0018: 00       |
+               |@0x00CE
+0019: 00 00 .. |DATA 0x10
+00CD: 10       |
+               |;@0x00CC
+               |;DATA 0xAA
+               |
+               |;LDA #0x01
+               |
+               |
+               |;SEC
+               |;BCC SK
+               |;{
+               |;    ;Code for true
+               |;    LDA #0x02
+               |;}
+               |
+               |
+               |
+               |;CMP 0x0002
+               |;LDA #0x02
+               |;CMP 0x02
+               |;LDA #0x02
+               |;CMP #0x01
+               |;LDA #0x02
+               |;CMP 0x0002,X
+               |;LDA #0x02
+               |;CMP 0x0002,Y
+               |;LDA #0x02
+               |;CMP 0x02,X
+               |;LDA #0x02
+               |;CMP (0x02,X)
+               |;LDA #0x02
+               |;CMP (0x02),Y
+               |;LDA #0xFF
+               |;ORA 0x0002
+               |;LDA #0x02
+               |;ORA 0x02
+               |;LDA #0x02
+               |;ORA #0x01
+               |;LDA #0x02
+               |;ORA 0x0002,X
+               |;LDA #0x02
+               |;ORA 0x0002,Y
+               |;LDA #0x02
+               |;ORA 0x02,X
+               |;LDA #0x02
+               |;ORA (0x02,X)
+               |;LDA #0x02
+               |;ORA (0x02),Y
+               |;LDA #0xFF
+               |;NOP
+               |;NOP
+               |;NOP
+               |
+               |;@0x00FF
+               |;DATA 0xEE
+               |
+               |; CPX 0x0002
+               |; CPX 0x02
+               |; CPX #0x01
+               |;
+               |; CPY 0x0002
+               |; CPY 0x02
+               |; CPY #0x01
+               |
+               |
+               |
+               |; EOR 0x0002
+               |; LDA #0x02
+               |; EOR 0x02
+               |; LDA #0x02
+               |; EOR #0x01
+               |; LDA #0x02
+               |; EOR 0x0002,X
+               |; LDA #0x02
+               |; EOR 0x0002,Y
+               |; LDA #0x02
+               |; EOR 0x02,X
+               |; LDA #0x02
+               |; EOR (0x02,X)
+               |; LDA #0x02
+               |; EOR (0x02),Y
+               |
+               |
+               |
+               |
+               |; DEY
+               |; DEY
+               |; DEY
+               |; DEY
+               |
+               |; LDA #0x01
+               |;
+               |; SBC 0x0002
+               |; SBC 0x02
+               |; SBC #0x01
+               |; SBC 0x0002,X
+               |; SBC 0x0002,Y
+               |; SBC 0x02,X
+               |; SBC (0x02,X)
+               |; SBC (0x02),Y
+               |; SEC
+               |; CLC
+               |; SED
+               |; CLD
+               |
+               |; TSX
+               |; LDX #0x01
+               |; TXS
+               |; SEC
+               |; PHA
+               |; PHP
+               |
+               |; PLA
+               |; PLP
+               |
+               |
+               |
+               |; LDA #0x01
+               |; SBC 0x0002
+               |; SBC 0x02
+               |;
+               |; SBC #0x01
+               |; SBC 0x0002,x
+               |; SBC 0x0002,y
+               |; SBC 0x02,x
+               |
+               |
+               |
+               |
+               |
+               |;
+               |; Test:
+               |; LDA #0xFF
+               |; RTS
+               |
+               |
+               |
+               |
+               |
+               |
+               |
+               |; Interupt:
+               |; LDA #0x02
+               |; RTI
+               |; LDA #0x05
+               |;
+               |;
+               |;
+               |;
+               |;
+               |
+               |; SEC
+               |; SED
+               |; SEI
+               |; LDA #0x00
+               |; ; 1-5
+               |; ; 2-3-4-8 if flag = 0
+               |;
+               |; BCC SK
+               |; {
+               |;     LDA #0x01
+               |; }
+               |;
+               |; BCS SK
+               |; {
+               |;     LDA #0x02
+               |; }
+               |; BEQ SK
+               |; {
+               |;     LDA #0x03
+               |; }
+               |; BMI SK
+               |; {
+               |;     LDA #0x04
+               |; }
+               |; BNE SK
+               |; {
+               |;     LDA #0x05
+               |; }
+               |; BPL SK
+               |; {
+               |;     LDA #0x06
+               |; }
+               |; BVC SK
+               |; {
+               |;     LDA #0x07
+               |; }
+               |; BVS SK
+               |; {
+               |;     LDA #0x08
+               |; }
+               |
+               |
+               |
+               |@0xFFFC
+00CE: 00 00 .. |DATA Start ; program start where

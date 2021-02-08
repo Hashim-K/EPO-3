@@ -14,11 +14,11 @@ entity predecode_logic is
 		i_flag_in : in std_logic
 	);
 end entity;
-
+-- 11 110 01
 architecture behaviour of predecode_logic is
 	-- Things that it is going to tell: What type of instruction, what addressing mode, how many cycles, is it a RMW-instruction.
 begin
-	process (databus, reset)
+	process (databus, reset, nmi, irq, i_flag_in)
 	begin
 		if (reset = '1') then -- Reset resets the entire sequence, pushes out a BRK instruction
 			instruction <= "00000000";
@@ -36,7 +36,7 @@ begin
 				if (databus(1 downto 0) = "01") then
 					RMW <= '0';
 					if (databus(4 downto 2) = "000") then -- (Indirect, X)
-						cycles <= "111"; -- modified cycle!!!
+						cycles <= "110";
 					elsif (databus(4 downto 2) = "001") then -- (zero page)
 						cycles <= "011";
 					elsif (databus (4 downto 2) = "010") then -- (#immediate)
@@ -44,7 +44,7 @@ begin
 					elsif (databus (4 downto 2) = "011") then -- (absolute)
 						cycles <= "100";
 					elsif (databus (4 downto 2) = "100") then -- (Indirect, Y),
-						cycles <= "111";
+						cycles <= "110";
 					elsif (databus (4 downto 2) = "101") then -- zero page, X
 						cycles <= "100";
 					elsif (databus (4 downto 2) = "110") then -- absolute, Y

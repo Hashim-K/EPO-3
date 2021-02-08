@@ -70,6 +70,8 @@ signal reg_in : STD_LOGIC_VECTOR(7 downto 0);
 
 signal dbz  : STD_LOGIC;
 
+signal contr_temp : std_logic_vector(2 downto 0);
+
 BEGIN
 
 
@@ -94,10 +96,11 @@ dbz         WHEN "010", -- DBZ/Z
 azr         WHEN "100", -- DBZ/Z
 reg_out (1) WHEN OTHERS;
 
+contr_temp <= one_i & control(7 downto 6);
 
 --bit 2
   -- I FLAG
-WITH one_i & control(7 downto 6) SELECT reg_in(2) <=
+WITH contr_temp SELECT reg_in(2) <=
 db_in(2) 	 WHEN "001", -- DB2/I
 ir5        WHEN "010", -- IR5/I
 '1'        WHEN "100", -- 1/I

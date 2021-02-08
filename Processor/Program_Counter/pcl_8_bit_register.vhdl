@@ -24,7 +24,7 @@ BEGIN
 	BEGIN
 		IF (rising_edge(clk)) THEN --both need to be high to load value from bus
 			IF (reset = '1') THEN
-				q <= "11111110"; --clears the value in q
+				q <= "11111100"; --clears the value in q
 			ELSIF (reset = '0' AND load = '1') THEN
 				q <= data_in; --data from bus stored in q
 			END IF;

@@ -97,7 +97,7 @@ architecture structural of processor is
       acr : OUT STD_LOGIC; -- carry out flag
       anr : OUT std_logic; -- negative out flag
       azr : out std_logic; -- zero out flag
-      hc : OUT STD_LOGIC; -- half carry flag
+      -- hc : OUT STD_LOGIC; -- half carry flag
 
       -- adder hold register
       clk_2 : IN STD_LOGIC; -- second phase clock, used as load signal
@@ -133,7 +133,12 @@ architecture structural of processor is
 			-- buss conections
 			adl_in : in std_logic_vector(7 downto 0); -- adders bus low
 			adl_out : out std_logic_vector(7 downto 0);
-			db_out : out std_logic_vector(7 downto 0) -- databus
+			db_out : out std_logic_vector(7 downto 0); -- databus
+			sync : in std_logic;
+			nmi : in std_logic;
+			irq : in std_logic;
+			brk : in std_logic; -- indicate break instruction
+			i : in std_logic
 		);
 	end component;
 	-- program counter high
@@ -150,7 +155,12 @@ architecture structural of processor is
 
 			adh_in : in std_logic_vector(7 downto 0); -- addres bus low in
 			adh_out : out std_logic_vector(7 downto 0); -- addres bus high out
-			db_out : out std_logic_vector(7 downto 0) -- databus out
+			db_out : out std_logic_vector(7 downto 0); -- databus out
+			sync : in std_logic;
+			nmi : in std_logic;
+			irq : in std_logic;
+			brk : in std_logic; -- indicate break instruction
+			i : in std_logic
 		);
 	end component;
 	-- accumulator
@@ -163,11 +173,7 @@ architecture structural of processor is
 			sb_ac : in STD_LOGIC; --systembus to accumulator
 			sb_in : in STD_LOGIC_VECTOR(7 downto 0); --systembus in
 			sb_out : out STD_LOGIC_VECTOR(7 downto 0); --systembus out
-			db : out STD_LOGIC_VECTOR(7 downto 0); --databus out
-			zero_flag : out STD_LOGIC;
-			negative_flag : out STD_LOGIC;
-
-			content : out std_logic_vector(7 downto 0)
+			db : out STD_LOGIC_VECTOR(7 downto 0) --databus out
 		);
 	end component;
 
@@ -462,7 +468,7 @@ architecture structural of processor is
 	-- Y index REGISTER
 	signal sb_y, y_sb : std_logic;
 	-- ALU
-	signal daa, i_addc, i_add, inv_i_add, srs, hc, add_adl, add_sb6, add_sb7, o_add, sb_add, inv_db_add, db_add, adl_add, ff_add : std_logic;
+	signal daa, i_addc, i_add, inv_i_add, srs, add_adl, add_sb6, add_sb7, o_add, sb_add, inv_db_add, db_add, adl_add, ff_add : std_logic;
 	signal alu_control : std_logic_vector(11 downto 0);
 	-- Program counter High
 	signal adh_pch, pch_adh, pch_db, h_pclc : std_logic;
@@ -507,7 +513,6 @@ architecture structural of processor is
 	signal i_1, nmi_out, irq_out, res_out, interrupt : std_logic;
 	-- flags
 	signal avr, acr, anr, azr : std_logic;
-	signal zero_flag, negative_flag : std_logic;
 
 	-- Busses
 	signal sb, db, adh, adl : std_logic_vector(7 downto 0);
@@ -541,10 +546,14 @@ architecture structural of processor is
 
 	signal pass_1, pass_2 : std_logic_vector(1 downto 0);
 
-	signal acc_content : std_logic_vector(7 downto 0);
-
   -- suply mosfet
   signal i_adh_zero : std_logic;
+
+	signal brk : std_logic;
+
+	signal T4_now : std_logic;
+
+	signal carry_dff : std_logic;
 
 begin
 
@@ -602,8 +611,32 @@ begin
   add_sb6 <= control_out(26);
   add_sb7 <= control_out(27);
 
-  alu_control(11 downto 1) <= control_out(38 downto 28); -- more efficient
+
+
+  alu_control(11 downto 2) <= control_out(38 downto 29); -- more efficient
+
+
   alu_control(0) <= '0';
+	alu_control(1) <= carry_dff;
+
+
+	 process(clk_1)
+	 begin
+		 if(rising_edge(clk_1)) then
+    		if(system_reset='1') then
+     			carry_dff <= '0';
+    		else
+     			carry_dff <= control_out(28);
+    		end if;
+     end if;
+	 end process;
+
+
+
+
+
+
+
   -- accumulator
   sb_ac <= control_out(39);
   ac_db <= control_out(40);
@@ -645,6 +678,11 @@ begin
 	one_i <= control_out(67);
 
 	ir5 <= ins_data_out(5);
+
+	brk <= not (ins_data_out(0) or ins_data_out(1) or ins_data_out(2) or ins_data_out(3) or ins_data_out(4) or ins_data_out(5) or ins_data_out(6) or ins_data_out(7));
+
+
+	T4_now <= (not tcstate(4)) and (tcstate(0)) and (tcstate(1)) and (tcstate(2)) and (tcstate(3)) and (tcstate(5));
 
 
 	--/*************************************************
@@ -692,7 +730,7 @@ begin
 		db,i_add,
     inv_i_add, alu_control,
 		avr, acr, anr, azr,
-		hc, clk_2,
+		clk_2,
 		add_adl, add_sb6,
 		add_sb7, o_add,
 		sb_add, inv_db_add,
@@ -707,7 +745,12 @@ begin
 		one_pc, pcl_adl,
 		pcl_db, adl_pcl,
 		adl, adl,
-		db
+		db,
+		T4_now,
+		nmi,
+		irq,
+		brk,
+		i
 	);
 
 	-- program counter high
@@ -721,7 +764,12 @@ begin
 		h_pclc,
 		adh,
 		adh,
-		db
+		db,
+		T4_now,
+		nmi,
+		irq,
+		brk,
+		i
 	);
 
 	accumulator_clk <= clk_1 xor clk_2;
@@ -732,9 +780,7 @@ begin
 		accumulator_clk, system_reset,
 		ac_db, ac_sb,
 		sb_ac, sb,
-		sb, db,
-		zero_flag, negative_flag,
-		acc_content
+		sb, db
 	);
 	-- Memory addres register
 	add_Reg : mem_add_reg
@@ -862,8 +908,8 @@ begin
 		interrupt_vec,
 		rdy,
 		r_w,
-		acr,
 		c,
+		acr,
 		z,
 		v,
 		n,

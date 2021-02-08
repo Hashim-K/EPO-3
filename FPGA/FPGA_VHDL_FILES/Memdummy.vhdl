@@ -101,9 +101,13 @@ x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"00",
 
       x"00", x"00", x"00", x"00", x"00", x"00", x"00"
   );
-  type rom_2 is array (65534 to 65535) of std_logic_vector(7 downto 0); --65535
+  type rom_2 is array (65530 to 65535) of std_logic_vector(7 downto 0); --65535
   constant pla_end : rom_2 := (
-      -- ADL, ADH
+    --FFFA   FFFB   NMI
+      x"00", x"00",
+    --FFFC   FFFD   Reset
+      x"00", x"00",
+    --FFFE   FFFF   IRQ/BRK
       x"00", x"00"
   );
 
@@ -152,7 +156,7 @@ begin
           data_out <= pla(location);
         elsif (location >= 256) and (location < 512) then
           data_out <= stack(location);
-        elsif location > 65533 then
+        elsif location > 65529 then
           data_out <= pla_end(location);
         else
           data_out <= x"05";
@@ -191,4 +195,3 @@ begin
   end process;
 
 end architecture;
-    

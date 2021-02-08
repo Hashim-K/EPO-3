@@ -53,6 +53,40 @@ set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
 set_global_assignment -name STRATIX_DEVICE_IO_STANDARD "3.3-V LVTTL"
 set_location_assignment PIN_T21 -to extern_reset
 set_location_assignment PIN_R22 -to clk_25mhz
+set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
+set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
+set_location_assignment PIN_B14 -to addres_data[0]
+set_location_assignment PIN_A15 -to addres_data[1]
+set_location_assignment PIN_A18 -to addres_data[7]
+set_location_assignment PIN_B17 -to addres_data[6]
+set_location_assignment PIN_A17 -to addres_data[5]
+set_location_assignment PIN_B16 -to addres_data[4]
+set_location_assignment PIN_A16 -to addres_data[3]
+set_location_assignment PIN_B15 -to addres_data[2]
+set_location_assignment PIN_A13 -to control[0]
+set_location_assignment PIN_B13 -to control[1]
+set_location_assignment PIN_A14 -to clk_out
+set_location_assignment PIN_D21 -to data[7]
+set_location_assignment PIN_C22 -to data[6]
+set_location_assignment PIN_C21 -to data[5]
+set_location_assignment PIN_B20 -to data[4]
+set_location_assignment PIN_A20 -to data[3]
+set_location_assignment PIN_B19 -to data[2]
+set_location_assignment PIN_A19 -to data[1]
+set_location_assignment PIN_B18 -to data[0]
+set_location_assignment PIN_R20 -to ir_out[0]
+set_location_assignment PIN_R19 -to ir_out[1]
+set_location_assignment PIN_U19 -to ir_out[2]
+set_location_assignment PIN_Y19 -to ir_out[3]
+set_location_assignment PIN_T18 -to ir_out[4]
+set_location_assignment PIN_V19 -to ir_out[5]
+set_location_assignment PIN_Y18 -to ir_out[6]
+set_location_assignment PIN_U18 -to ir_out[7]
+set_global_assignment -name USE_CONFIGURATION_DEVICE ON
+set_global_assignment -name STRATIX_CONFIGURATION_DEVICE EPCS4
+set_global_assignment -name VHDL_FILE ../Processor/Mosfets/Supply_Mosfets/supply_drain_ADH.vhdl
+set_global_assignment -name VHDL_FILE ../Processor/Program_Counter/pcl_8_bit_register.vhdl
+set_global_assignment -name VHDL_FILE ../Processor/Program_Counter/pch_8_bit_register.vhdl
 set_global_assignment -name VHDL_FILE FPGA_VHDL_FILES/system_2.vhdl
 set_global_assignment -name VHDL_FILE ../Processor/8_bit_register.vhdl
 set_global_assignment -name VHDL_FILE ../Processor/Mosfets/Pass_Mosfets/pass_mosfet.vhdl
@@ -90,35 +124,4 @@ set_global_assignment -name VHDL_FILE "../Processor/Register/y-index-register.vh
 set_global_assignment -name VHDL_FILE "../Processor/Register/x-index-register.vhdl"
 set_global_assignment -name VHDL_FILE ../Processor/processor.vhdl
 set_global_assignment -name SOURCE_FILE db/processor.cmp.rdb
-set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
-set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
-set_location_assignment PIN_B14 -to addres_data[0]
-set_location_assignment PIN_A15 -to addres_data[1]
-set_location_assignment PIN_A18 -to addres_data[7]
-set_location_assignment PIN_B17 -to addres_data[6]
-set_location_assignment PIN_A17 -to addres_data[5]
-set_location_assignment PIN_B16 -to addres_data[4]
-set_location_assignment PIN_A16 -to addres_data[3]
-set_location_assignment PIN_B15 -to addres_data[2]
-set_location_assignment PIN_A13 -to control[0]
-set_location_assignment PIN_B13 -to control[1]
-set_location_assignment PIN_A14 -to clk_out
-set_location_assignment PIN_D21 -to data[7]
-set_location_assignment PIN_C22 -to data[6]
-set_location_assignment PIN_C21 -to data[5]
-set_location_assignment PIN_B20 -to data[4]
-set_location_assignment PIN_A20 -to data[3]
-set_location_assignment PIN_B19 -to data[2]
-set_location_assignment PIN_A19 -to data[1]
-set_location_assignment PIN_B18 -to data[0]
-set_location_assignment PIN_R20 -to ir_out[0]
-set_location_assignment PIN_R19 -to ir_out[1]
-set_location_assignment PIN_U19 -to ir_out[2]
-set_location_assignment PIN_Y19 -to ir_out[3]
-set_location_assignment PIN_T18 -to ir_out[4]
-set_location_assignment PIN_V19 -to ir_out[5]
-set_location_assignment PIN_Y18 -to ir_out[6]
-set_location_assignment PIN_U18 -to ir_out[7]
-set_global_assignment -name USE_CONFIGURATION_DEVICE ON
-set_global_assignment -name STRATIX_CONFIGURATION_DEVICE EPCS4
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

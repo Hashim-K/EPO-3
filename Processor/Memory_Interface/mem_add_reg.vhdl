@@ -55,7 +55,7 @@ begin
 		end if;
 	end process;
 
-	seq_proc : process (state, adl_abl, adh_abh, db_dor, abl_in, abh_in, db_in)
+	seq_proc : process (state, adl_abl, adh_abh, db_dor, abl_in, abh_in, db_in, abl_store, adh_store, db_store)
 	begin
 		case state is
 
@@ -82,6 +82,9 @@ begin
 						next_adh_store <= "00000000";
 						next_db_store <=  db_in;
 					else
+						next_abl_store <= "00000000";
+						next_adh_store <= "00000000";
+						next_db_store <=  "00000000";
 						next_state <= reset_state;
 					end if;
 
@@ -123,8 +126,10 @@ begin
 					-- DOR
 					o_to_extern <= db_store;
 					control <= "10";
-					if adl_abl = '0' or adh_abh = '0' then
+					if adl_abl = '0' and adh_abh = '0' then
 						next_state <= wait_1;
+					elsif adl_abl = '0' or adh_abh = '0' then
+						next_state <= wait_2;
 					else
 						next_state <= reset_state;
 					end if;

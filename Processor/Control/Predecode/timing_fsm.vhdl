@@ -59,7 +59,7 @@ begin
 end process;
 
 
-comb_proc : process(state, cycles, page_cross, rmw)
+comb_proc : process(state, cycles, page_cross, rmw, bcr)
 begin
   case state is
     when T0 =>

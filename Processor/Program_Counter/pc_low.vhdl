@@ -19,8 +19,13 @@ entity pc_low is
   -- buss conections
   adl_in : IN std_logic_vector(7 downto 0); -- adders bus low
   adl_out : OUT std_logic_vector(7 downto 0);
-  db_out : OUT std_logic_vector(7 downto 0) -- databus
+  db_out : OUT std_logic_vector(7 downto 0); -- databus
 
+  sync : in std_logic;
+  nmi : in std_logic;
+  irq : in std_logic;
+  brk : in std_logic; -- indicate break instruction
+  i : in std_logic
   );
 end entity;
 
@@ -41,23 +46,34 @@ signal reg_out : std_logic_vector(7 downto 0);
 
 signal to_register, to_increment : std_logic_vector(7 downto 0);
 signal in_signal : std_logic_vector(8 downto 0);
+signal control : std_logic_vector(3 downto 0);
+
+signal c_pc : std_logic;
 begin
 
+              -- BRK                      NMI                         IRQ
+  control <= (brk and sync and not i) & (sync and nmi and not i) & (sync and irq and not i) & adl_pcl;
+
   -- Program counter select
-  with adl_pcl select to_increment <=
-	adl_in when '1',
+  with control select to_increment <=
+	adl_in when "0001",
+  X"FE" when  "0010", -- irq
+  X"FA" when  "0100", -- nmi
+  X"FE" when  "1000", -- brk
   reg_out when others;
 
   in_signal <= std_logic_vector(unsigned('0' & to_increment) + 1 );
 
+  c_pc <= i_pc and not (control(3) or control(2) or control(1));
+
   -- Increment
-  with i_pc select to_register <=
+  with c_pc select to_register <=
   in_signal(7 downto 0) when '1',
   to_increment when others;
 
   -- pclc (carry out handling)
 
-  pclc <= in_signal(8) and i_pc;
+  pclc <= in_signal(8) and c_pc;
 
   -- register
   l1 : pcl_register_8bit PORT MAP(clk, reset, '1', to_register, reg_out);

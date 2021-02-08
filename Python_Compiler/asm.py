@@ -141,18 +141,26 @@ JUMPERS = [
 
 
 def vhdl_mem_write(hex):
-
-    split_hex = []
+    print(hex)
+    split_hex = ["00"]
     n = 2
+    z = 0
     for index in range(0, len(hex), n):
         split_hex.append(hex[index: index + n])
-    for i in range(100 - len(split_hex)):
-        split_hex.append("00")
-    print(split_hex)
-    f = open("C:/Users/T.O/Documents/GitHub/EPO3/EPO-3/FPGA/FPGA_VHDL_FILES/Memdummy.vhdl", "w")
+        z = z + 1
+    print(z)
+    print(len(split_hex))
+
+    if (65535 - z) != 0:
+        for i in range(65535 - z):
+            # print("ADDED")
+            split_hex.append("00")
+
+    f = open("C:/Users/T.O/Documents/GitHub/EPO3/EPO-3/FPGA/FPGA_VHDL_FILES/processor_tb.vhdl", "w")
 
     s = ""
     s += '''
+
     --/*************************************************
 --*This may not be synthesisez just for simulating purpusus *
 --*************************************************/
@@ -161,20 +169,10 @@ library ieee;
   use ieee.std_logic_1164.all;
   use ieee.numeric_std.all;
 
-entity mem_dummy is
-  port (
-  clk : IN std_logic;
-  reset : IN std_logic;
-
-  addres_data_in : IN std_logic_vector(7 downto 0);
-  control : IN std_logic_vector(1 downto 0);
-
-  data_out : OUT std_logic_vector(7 downto 0);
-  dor_out : OUT std_logic_vector(7 downto 0)
-  );
+entity processor_tb is
 end entity;
 
-architecture arch of mem_dummy is
+architecture arch of processor_tb is
 
   component register_8bit IS
     PORT (
@@ -185,85 +183,114 @@ architecture arch of mem_dummy is
         reg_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0));
   END component;
 
+  component processor is
+    port (
+  		-- max 16 out/ 16 in
+  		clk : in std_logic;
+  		reset : in std_logic;
+
+  		-- Interupt -- TODO fix these signals:::
+  		nmi : in std_logic;	-- NMI stand for non-maskable-interupt edge triggered
+  		irq : in std_logic;	-- interupt request, level triggered
+
+  		sob : in std_logic; -- Set overflow if enalbed done
+  		r : IN std_logic; 	-- ready done
+  		synch : OUT std_logic; -- synch signal for external done
+  		iv		: OUT std_logic; -- indicates when a interupt is happening (i-Flag) done
+
+  		-- Data signals
+  		adb_external : out std_logic_vector(7 downto 0); -- External connection of the addres + data
+  		adb_control : out std_logic_vector(1 downto 0); -- Select the external register (also indicates write)
+  		db_external : in std_logic_vector(7 downto 0) -- External connection of the databus bus in
+  	);
+  end component;
+
 -- A9 is load a immidiate
 -- AD is load a absolute
 -- EA is nopop
   -- update array size acourdingly
-  type rom is array (0 to 255) of std_logic_vector(7 downto 0); --65535
-  type st is array (256 to 512) of std_logic_vector(7 downto 0); --65535
-  signal pla : rom := (
   '''
+    lens = 0
+    lene = 255
+
+    s += '''type rom is array (''' + str(lens) + ''' to ''' + str(lene) + ''') of std_logic_vector(7 downto 0); --65535
+    signal pla : rom := ( '''
+
     z = 0
-    for i in split_hex:
-        s += 'x"' + i + '",'
+    for i in range(lene - lens + 1):
+        s += 'x"' + str(split_hex[i + lens]) + '"'
+        if i != (lene - lens):
+            # print(i)
+            s += ', '
         z = z + 1
         if z >= 10:
             s += '\n'
             z = 0
 
-    # s += 'x"00"'
+    s += '\n'
+    s += '\n'
+    s += ''');'''
 
+    lens = 256
+    lene = 511
+
+    s += '''type st is array (''' + str(lens) + ''' to ''' + str(lene) + ''') of std_logic_vector(7 downto 0); --65535
+    signal stack : st := ( '''
+
+    z = 0
+    for i in range(lene - lens + 1):
+        s += 'x"' + str(split_hex[i + lens]) + '"'
+        if i != (lene - lens):
+            # print(i)
+            s += ', '
+        z = z + 1
+        if z >= 10:
+            s += '\n'
+            z = 0
+
+    ofset = 0
+
+    print("NMI:\t\t" + str(split_hex[0xFFFA - ofset]) + "\t" + str(split_hex[0xFFFB - ofset]))
+    print("Reset:\t\t" + str(split_hex[0xFFFC - ofset]) + "\t" + str(split_hex[0xFFFD - ofset]))
+    print("IRQ/BRK:\t" + str(split_hex[0xFFFE - ofset]) + "\t" + str(split_hex[0xFFFF - ofset]))
+    s += '\n'
+    s += '\n'
     s += '''
-
-
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-
-      x"00", x"00", x"00", x"00", x"00", x"00"
   );
-  signal stack : st := (
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"60", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-
-      x"00", x"00", x"00", x"00", x"00", x"00", x"00"
+  type rom_3 is array (65530 to 65535) of std_logic_vector(7 downto 0); --65535
+  signal pla_end : rom_3 := (
+    --FFFA   FFFB   NMI
+      x"''' + str(split_hex[0xFFFA - ofset]) +  '''", x"''' + str(split_hex[0xFFFB - ofset]) +  '''",
+    --FFFC   FFFD   Reset
+      x"''' + str(split_hex[0xFFFC - ofset]) +  '''", x"''' + str(split_hex[0xFFFD - ofset]) +  '''",
+    --FFFE   FFFF   IRQ/BRK
+      x"''' + str(split_hex[0xFFFE - ofset]) +  '''", x"''' + str(split_hex[0xFFFF - ofset]) +  '''"
   );
-  type rom_2 is array (65534 to 65535) of std_logic_vector(7 downto 0); --65535
-  constant pla_end : rom_2 := (
-      -- ADL, ADH
-      x"00", x"00"
+'''
+    lens = 512
+    lene = 65529
+
+    s += '''type rom_2 is array (''' + str(lens) + ''' to ''' + str(lene) + ''') of std_logic_vector(7 downto 0); --65535
+  signal oth : rom_2 := ( '''
+
+    z = 0
+    for i in range(lene - lens + 1):
+        s += 'x"' + str(split_hex[i + lens]) + '"'
+        if i != (lene - lens):
+            # print(i)
+            s += ', '
+        z = z + 1
+        if z >= 10:
+            s += '\n'
+            z = 0
+
+    s += '\n'
+    s += '\n'
+    s += '''
   );
 
 
-
+  -- for memory
   signal address : std_logic_vector(15 downto 0);
   signal clk_inv : std_logic;
   signal mal_out, mah_out, data_reg_out : std_logic_vector(7 downto 0);
@@ -273,20 +300,34 @@ architecture arch of mem_dummy is
 
   type statetype is (reset_state, state_1);
   signal state, next_state : statetype;
+
+  -- for testbench
+  signal clk_25mhz : std_logic :='0';
+  signal extern_reset : std_logic;
+  signal control : std_logic_vector(1 downto 0);
+
+  signal nmi, irq, iv : std_logic;
+  signal r : std_logic;
+  signal addres_data, data_out : std_logic_vector(7 downto 0);
+  signal sob, synch : std_logic;
 begin
+
+
+  --/*************************************************
+  --*                    All memory things           *
+  --*************************************************/
 
   en_mal  <= (NOT control(0)) AND (NOT control(1));
   en_mah  <=  control(0) AND NOT control(1);
   en_data <=  control(1) AND NOT control(0);
 
-  clk_inv <= not clk;
-  res <= reset;
+  clk_inv <= not clk_25mhz;
+  res <= extern_reset;
 
-  MAL : register_8bit PORT MAP(clk_inv, en_mal, res, addres_data_in, mal_out);
-  MAH : register_8bit PORT MAP(clk_inv, en_mah, res, addres_data_in, mah_out);
-  DATA : register_8bit PORT MAP(clk_inv, en_data, res, addres_data_in, data_reg_out);
+  MAL : register_8bit PORT MAP(clk_inv, en_mal, res, addres_data, mal_out);
+  MAH : register_8bit PORT MAP(clk_inv, en_mah, res, addres_data, mah_out);
+  DATA : register_8bit PORT MAP(clk_inv, en_data, res, addres_data, data_reg_out);
 
-  dor_out <= data_reg_out;
   address <= mah_out & mal_out;
   location <= to_integer(unsigned(address));
   -- at this moment no writing memory
@@ -301,16 +342,20 @@ begin
           pla(location) <= data_reg_out;
         elsif (location >= 256) and (location < 512) then
           stack(location) <= data_reg_out;
+        elsif (location > 65529) and (location <= 65535) then
+          pla_end(location) <= data_reg_out;
+        else
+          oth(location) <= data_reg_out;
         end if;
       else
         if location <= 255 then
           data_out <= pla(location);
         elsif (location >= 256) and (location < 512) then
           data_out <= stack(location);
-        elsif location > 65533 then
+        elsif (location > 65529) and (location <= 65535) then
           data_out <= pla_end(location);
         else
-          data_out <= x"05";
+          data_out <= oth(location);
       end if;
     end if;
 
@@ -345,7 +390,25 @@ begin
       end if;
   end process;
 
+
+
+  --/*************************************************
+  --*                    Testbench                   *
+  --*************************************************/
+
+  nmi <= '0';
+  irq <= '0';
+  sob <= '0';
+  r <= '1';
+
+  clk_25mhz <= not clk_25mhz after 5 ns;
+  extern_reset <= '1' after 0 ns,
+                  '0' after 50 ns;
+  processor_m : processor PORT MAP(clk_25mhz, extern_reset, nmi, irq, sob, r, synch, iv, addres_data, control, data_out);
+
+
 end architecture;
+
     '''
 
     f.write(s)
@@ -756,8 +819,8 @@ def generate_listing():
         listing.write('{:<12}.. |{}\n'.format(line[0:12], sourceList[line_nr - 1]))
 
 
-# print(BRACKET_OP_PATTERN.match('BR,SK'))	
-# sys.exit()		
+# print(BRACKET_OP_PATTERN.match('BR,SK'))
+# sys.exit()
 
 path = re.search(r'^[\w\/]+/', sys.argv[1])
 if path:
@@ -794,7 +857,7 @@ second_pass()
 generate_listing()
 
 hex = memory_as_hex()
-print(hex)
+# print(hex)
 vhdl_mem_write(hex)
 
 if len(sys.argv) == 2:

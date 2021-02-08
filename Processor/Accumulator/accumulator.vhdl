@@ -11,11 +11,7 @@ ENTITY accumulator IS
         sb_ac : IN STD_LOGIC; --systembus to accumulator
         sb_in : IN STD_LOGIC_VECTOR(7 DOWNTO 0); --systembus in
         sb_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); --systembus out
-        db : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); --databus out
-        zero_flag : OUT STD_LOGIC;
-        negative_flag : OUT STD_LOGIC;
-
-        content : OUT std_logic_vector(7 downto 0)
+        db : OUT STD_LOGIC_VECTOR(7 DOWNTO 0) --databus out
     );
 END ENTITY;
 
@@ -43,11 +39,6 @@ BEGIN
     load <= sb_ac;
     data_in <= sb_in;
 
-    WITH sb_in SELECT zero_flag <=
-        '1' WHEN "00000000",
-        '0' WHEN OTHERS;
-
-    negative_flag <= sb_in(7);
 
     WITH control SELECT sb_out <=
         data_out WHEN "10",
@@ -57,5 +48,4 @@ BEGIN
         data_out WHEN "01",
         "ZZZZZZZZ" WHEN OTHERS;
 
-    content <= data_out;
 END ARCHITECTURE;

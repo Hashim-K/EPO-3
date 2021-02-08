@@ -21,8 +21,8 @@ ENTITY alu_logic IS
     --bit(11) = pass2 (register b)
     o : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); --ALU output signal to adder hold register
     avr : OUT STD_LOGIC; --overflow flag
-    acr : OUT STD_LOGIC; --carry out flag
-    hc : OUT STD_LOGIC --half carry out flag, not used since decimal is not implemented
+    acr : OUT STD_LOGIC --carry out flag
+    -- hc : OUT STD_LOGIC --half carry out flag, not used since decimal is not implemented
   );
 END ENTITY;
 
@@ -134,6 +134,6 @@ BEGIN
     acr2 WHEN "001000000010",
 
     control(1) WHEN OTHERS;
-  hc <= '0'; -- pulled to low since it is not implemented
+  -- hc <= '0'; -- pulled to low since it is not implemented
 
 END ARCHITECTURE;
