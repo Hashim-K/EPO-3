@@ -3,27 +3,27 @@ TimeQuest Timing Analyzer Summary
 ------------------------------------------------------------
 
 Type  : Slow Model Setup 'processor:processor_m|clock:clo|state.state_3'
-Slack : -27.208
-TNS   : -829.772
+Slack : -28.442
+TNS   : -867.283
 
 Type  : Slow Model Setup 'processor:processor_m|clock:clo|state.state_1'
-Slack : -25.592
-TNS   : -1075.734
+Slack : -26.600
+TNS   : -1103.197
 
 Type  : Slow Model Setup 'clk_25mhz'
-Slack : -24.850
-TNS   : -513.423
+Slack : -23.531
+TNS   : -497.175
 
 Type  : Slow Model Hold 'clk_25mhz'
-Slack : -2.726
-TNS   : -51.546
+Slack : -3.282
+TNS   : -42.959
 
 Type  : Slow Model Hold 'processor:processor_m|clock:clo|state.state_3'
-Slack : -0.242
-TNS   : -0.317
+Slack : 0.445
+TNS   : 0.000
 
 Type  : Slow Model Hold 'processor:processor_m|clock:clo|state.state_1'
-Slack : 0.147
+Slack : 1.197
 TNS   : 0.000
 
 Type  : Slow Model Minimum Pulse Width 'clk_25mhz'
@@ -39,28 +39,28 @@ Slack : -0.611
 TNS   : -69.654
 
 Type  : Fast Model Setup 'processor:processor_m|clock:clo|state.state_3'
-Slack : -9.690
-TNS   : -274.083
-
-Type  : Fast Model Setup 'clk_25mhz'
-Slack : -9.117
-TNS   : -183.492
+Slack : -10.563
+TNS   : -288.852
 
 Type  : Fast Model Setup 'processor:processor_m|clock:clo|state.state_1'
-Slack : -9.069
-TNS   : -377.978
+Slack : -9.826
+TNS   : -390.339
+
+Type  : Fast Model Setup 'clk_25mhz'
+Slack : -8.734
+TNS   : -179.389
 
 Type  : Fast Model Hold 'clk_25mhz'
-Slack : -1.402
-TNS   : -20.829
+Slack : -1.610
+TNS   : -14.758
 
 Type  : Fast Model Hold 'processor:processor_m|clock:clo|state.state_3'
-Slack : -0.324
-TNS   : -0.833
+Slack : 0.143
+TNS   : 0.000
 
 Type  : Fast Model Hold 'processor:processor_m|clock:clo|state.state_1'
-Slack : -0.181
-TNS   : -0.404
+Slack : 0.193
+TNS   : 0.000
 
 Type  : Fast Model Minimum Pulse Width 'clk_25mhz'
 Slack : -1.222

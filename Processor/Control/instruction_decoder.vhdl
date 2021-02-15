@@ -1,31 +1,23 @@
-library ieee;
+LIBRARY ieee;
 
-  use ieee.std_logic_1164.all;
+USE ieee.std_logic_1164.ALL;
 
-  use ieee.numeric_std.all;
-
-
-entity instruction_decoder is
-  port (
-      ir_in: IN STD_LOGIC_VECTOR(7 DOWNTO 0);   -- Instruction register in
-      tcstate: IN STD_LOGIC_VECTOR(5 DOWNTO 0);
-      interrupt: IN STD_LOGIC_VECTOR(2 DOWNTO 0);
-      ready: IN STD_LOGIC;
-      r_w: OUT STD_LOGIC;
-      acr : IN STD_LOGIC;
-      cin : IN STD_LOGIC; -- from status register carry in
-      z   : IN STD_LOGIC; -- from status register zero
-      v   : IN std_logic;
-      n   : IN std_logic;
-      control_out: OUT STD_LOGIC_VECTOR(67 DOWNTO 0);
-      s1 : IN STD_LOGIC;
-      s2 : IN STD_LOGIC;
-      page_crossing : OUT std_logic; -- indicate page crossing
-      bcr : OUT std_logic; -- indicate branch instruction taking on
-    --  ff_add: IN STD_Logic
-      v1: IN STD_LOGIC
-  );
-end entity;
+USE ieee.numeric_std.ALL;
+ENTITY instruction_decoder IS
+	PORT (
+	ir_in: IN STD_LOGIC_VECTOR(7 DOWNTO 0);   -- Instruction register in
+	tcstate: IN STD_LOGIC_VECTOR(5 DOWNTO 0);
+	r_w: OUT STD_LOGIC;
+	acr : IN STD_LOGIC;	-- from alu loop!!
+	cin : IN STD_LOGIC; -- from status register carry in
+	z   : IN STD_LOGIC; -- from status register zero
+	v   : IN std_logic;
+	n   : IN std_logic;
+	control_out: OUT STD_LOGIC_VECTOR(67 DOWNTO 0);
+	page_crossing : OUT std_logic; -- indicate page crossing
+	bcr : OUT std_logic -- indicate branch instruction taking on
+	);
+END ENTITY;
 
 architecture arch of instruction_decoder is
 
@@ -219,8 +211,16 @@ page_crossing <= '1';
 bcr <= '1';
 		when "00010000" =>
 			-- Cycles:4
-page_crossing <= cin;
-bcr <= not n;
+if cin = '1' then
+page_crossing <= '1';
+else
+page_crossing <= '0';
+end if;
+if n = '0' then
+bcr <= '1';
+else
+bcr <= '0';
+end if;
 --Timing: T2
 if (tcstate(2)='0') then
 	control_out<="00000000000000000000000000000000000000000000001000000011100111000000";
@@ -324,7 +324,11 @@ page_crossing <= '1';
 bcr <= '1';
 		when "00011001" =>
 			-- Cycles:6
-page_crossing <= cin;
+if cin = '1' then
+page_crossing <= '1';
+else
+page_crossing <= '0';
+end if;
 bcr <= '1';
 --Timing: T2
 if (tcstate(2)='0') then
@@ -392,7 +396,11 @@ page_crossing <= '1';
 bcr <= '1';
 		when "00011101" =>
 			-- Cycles:6
-page_crossing <= cin;
+if cin = '1' then
+page_crossing <= '1';
+else
+page_crossing <= '0';
+end if;
 bcr <= '1';
 --Timing: T2
 if (tcstate(2)='0') then
@@ -691,8 +699,16 @@ page_crossing <= '1';
 bcr <= '1';
 		when "00110000" =>
 			-- Cycles:4
-page_crossing <= cin;
-bcr <= n;
+if cin = '1' then
+page_crossing <= '1';
+else
+page_crossing <= '0';
+end if;
+if n = '1' then
+bcr <= '1';
+else
+bcr <= '0';
+end if;
 --Timing: T2
 if (tcstate(2)='0') then
 	control_out<="00000000000000000000000000000000000000000000001000000011100111000000";
@@ -796,7 +812,11 @@ page_crossing <= '1';
 bcr <= '1';
 		when "00111001" =>
 			-- Cycles:6
-page_crossing <= cin;
+if cin = '1' then
+page_crossing <= '1';
+else
+page_crossing <= '0';
+end if;
 bcr <= '1';
 --Timing: T2
 if (tcstate(2)='0') then
@@ -851,7 +871,11 @@ page_crossing <= '1';
 bcr <= '1';
 		when "00111101" =>
 			-- Cycles:6
-page_crossing <= cin;
+if cin = '1' then
+page_crossing <= '1';
+else
+page_crossing <= '0';
+end if;
 bcr <= '1';
 --Timing: T2
 if (tcstate(2)='0') then
@@ -1099,8 +1123,16 @@ page_crossing <= '1';
 bcr <= '1';
 		when "01010000" =>
 			-- Cycles:4
-page_crossing <= cin;
-bcr <= not v;
+if cin = '1' then
+page_crossing <= '1';
+else
+page_crossing <= '0';
+end if;
+if v = '0' then
+bcr <= '1';
+else
+bcr <= '0';
+end if;
 --Timing: T2
 if (tcstate(2)='0') then
 	control_out<="00000000000000000000000000000000000000000000001000000011100111000000";
@@ -1204,7 +1236,11 @@ page_crossing <= '1';
 bcr <= '1';
 		when "01011001" =>
 			-- Cycles:6
-page_crossing <= cin;
+if cin = '1' then
+page_crossing <= '1';
+else
+page_crossing <= '0';
+end if;
 bcr <= '1';
 --Timing: T2
 if (tcstate(2)='0') then
@@ -1230,7 +1266,11 @@ else
 end if;
 		when "01011101" =>
 			-- Cycles:6
-page_crossing <= cin;
+if cin = '1' then
+page_crossing <= '1';
+else
+page_crossing <= '0';
+end if;
 bcr <= '1';
 --Timing: T2
 if (tcstate(2)='0') then
@@ -1534,8 +1574,16 @@ page_crossing <= '1';
 bcr <= '1';
 		when "01110000" =>
 			-- Cycles:4
-page_crossing <= cin;
-bcr <= v;
+if cin = '1' then
+page_crossing <= '1';
+else
+page_crossing <= '0';
+end if;
+if v = '1' then
+bcr <= '1';
+else
+bcr <= '0';
+end if;
 --Timing: T2
 if (tcstate(2)='0') then
 	control_out<="00000000000000000000000000000000000000000000001000000011100111000000";
@@ -1647,7 +1695,11 @@ page_crossing <= '1';
 bcr <= '1';
 		when "01111001" =>
 			-- Cycles:6
-page_crossing <= cin;
+if cin = '1' then
+page_crossing <= '1';
+else
+page_crossing <= '0';
+end if;
 bcr <= '1';
 --Timing: T2
 if (tcstate(2)='0') then
@@ -1673,7 +1725,11 @@ else
 end if;
 		when "01111101" =>
 			-- Cycles:6
-page_crossing <= cin;
+if cin = '1' then
+page_crossing <= '1';
+else
+page_crossing <= '0';
+end if;
 bcr <= '1';
 --Timing: T2
 if (tcstate(2)='0') then
@@ -1887,8 +1943,16 @@ page_crossing <= '1';
 bcr <= '1';
 		when "10010000" =>
 			-- Cycles:4
-page_crossing <= cin;
-bcr <= not acr;
+if cin = '1' then
+page_crossing <= '1';
+else
+page_crossing <= '0';
+end if;
+if acr = '0' then
+bcr <= '1';
+else
+bcr <= '0';
+end if;
 --Timing: T2
 if (tcstate(2)='0') then
 	control_out<="00000000000000000000000000000000000000000000001000000011100111000000";
@@ -2265,8 +2329,16 @@ page_crossing <= '1';
 bcr <= '1';
 		when "10110000" =>
 			-- Cycles:4
-page_crossing <= cin;
-bcr <= acr;
+if cin = '1' then
+page_crossing <= '1';
+else
+page_crossing <= '0';
+end if;
+if acr = '1' then
+bcr <= '1';
+else
+bcr <= '0';
+end if;
 --Timing: T2
 if (tcstate(2)='0') then
 	control_out<="00000000000000000000000000000000000000000000001000000011100111000000";
@@ -2383,7 +2455,11 @@ page_crossing <= '1';
 bcr <= '1';
 		when "10111001" =>
 			-- Cycles:6
-page_crossing <= cin;
+if cin = '1' then
+page_crossing <= '1';
+else
+page_crossing <= '0';
+end if;
 bcr <= '1';
 --Timing: T2
 if (tcstate(2)='0') then
@@ -2422,7 +2498,11 @@ page_crossing <= '1';
 bcr <= '1';
 		when "10111100" =>
 			-- Cycles:6
-page_crossing <= cin;
+if cin = '1' then
+page_crossing <= '1';
+else
+page_crossing <= '0';
+end if;
 bcr <= '1';
 --Timing: T2
 if (tcstate(2)='0') then
@@ -2448,7 +2528,11 @@ else
 end if;
 		when "10111101" =>
 			-- Cycles:6
-page_crossing <= cin;
+if cin = '1' then
+page_crossing <= '1';
+else
+page_crossing <= '0';
+end if;
 bcr <= '1';
 --Timing: T2
 if (tcstate(2)='0') then
@@ -2474,7 +2558,11 @@ else
 end if;
 		when "10111110" =>
 			-- Cycles:6
-page_crossing <= cin;
+if cin = '1' then
+page_crossing <= '1';
+else
+page_crossing <= '0';
+end if;
 bcr <= '1';
 --Timing: T2
 if (tcstate(2)='0') then
@@ -2694,8 +2782,16 @@ page_crossing <= '1';
 bcr <= '1';
 		when "11010000" =>
 			-- Cycles:4
-page_crossing <= cin;
-bcr <= not z;
+if cin = '1' then
+page_crossing <= '1';
+else
+page_crossing <= '0';
+end if;
+if z = '0' then
+bcr <= '1';
+else
+bcr <= '0';
+end if;
 --Timing: T2
 if (tcstate(2)='0') then
 	control_out<="00000000000000000000000000000000000000000000001000000011100111000000";
@@ -2799,7 +2895,11 @@ page_crossing <= '1';
 bcr <= '1';
 		when "11011001" =>
 			-- Cycles:6
-page_crossing <= cin;
+if cin = '1' then
+page_crossing <= '1';
+else
+page_crossing <= '0';
+end if;
 bcr <= '1';
 --Timing: T2
 if (tcstate(2)='0') then
@@ -3090,8 +3190,16 @@ page_crossing <= '1';
 bcr <= '1';
 		when "11110000" =>
 			-- Cycles:4
-page_crossing <= cin;
-bcr <= z;
+if cin = '1' then
+page_crossing <= '1';
+else
+page_crossing <= '0';
+end if;
+if z = '1' then
+bcr <= '1';
+else
+bcr <= '0';
+end if;
 --Timing: T2
 if (tcstate(2)='0') then
 	control_out<="00000000000000000000000000000000000000000000001000000011100111000000";
@@ -3203,7 +3311,11 @@ page_crossing <= '1';
 bcr <= '1';
 		when "11111001" =>
 			-- Cycles:6
-page_crossing <= cin;
+if cin = '1' then
+page_crossing <= '1';
+else
+page_crossing <= '0';
+end if;
 bcr <= '1';
 --Timing: T2
 if (tcstate(2)='0') then
@@ -3229,7 +3341,11 @@ else
 end if;
 		when "11111101" =>
 			-- Cycles:6
-page_crossing <= cin;
+if cin = '1' then
+page_crossing <= '1';
+else
+page_crossing <= '0';
+end if;
 bcr <= '1';
 --Timing: T2
 if (tcstate(2)='0') then
@@ -3285,6 +3401,410 @@ elsif (tcstate(1)='0') then
 else
 	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
 end if;
+		when "00000010" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "00000011" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "00000100" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "00000111" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "00001011" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "00001100" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "00001111" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "00010010" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "00010011" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "00010100" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "00010111" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "00011100" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "00100010" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "00100011" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "00100111" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "00101011" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "00101111" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "00110010" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "00110011" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "00110100" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "00110111" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "00111010" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "00111100" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "00111111" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "01000010" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "01000011" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "01000100" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "01000111" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "01001011" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "01001111" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "01010010" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "01010011" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "01010100" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "01010111" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "01011010" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "01011011" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "01011100" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "01011111" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "01100010" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "01100011" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "01100100" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "01100111" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "01101011" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "01101111" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "01110010" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "01110011" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "01110100" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "01110111" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "01111010" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "01111011" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "01111100" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "01111111" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "10000000" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "10000010" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "10000011" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "10000111" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "10001001" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "10001011" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "10001111" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "10010010" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "10010011" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "10010111" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "10011011" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "10011100" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "10011110" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "10011111" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "10100011" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "10100111" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "10101011" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "10101111" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "10110010" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "10110011" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "10110111" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "10111011" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "10111111" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "11000010" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "11000011" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "11000111" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "11001011" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "11001111" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "11010010" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "11010011" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "11010100" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "11010111" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "11011010" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "11011011" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "11011100" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "11011111" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "11100010" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "11100011" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "11100111" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "11101011" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "11101111" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "11110010" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "11110011" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "11110100" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "11110111" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "11111010" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "11111011" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "11111100" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
+		when "11111111" =>
+	control_out<="00000000000000000000000000000000000000000000000000000000000000000000";
+page_crossing <= '1';
+bcr <= '1';
 when OTHERS =>
 control_out <= "00000000000000000000000000000000000000000000000000000000000000000000";
 page_crossing <= '1';

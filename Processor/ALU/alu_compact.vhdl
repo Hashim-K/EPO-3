@@ -1,0 +1,297 @@
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+USE ieee.numeric_std.ALL;
+USE ieee.std_logic_unsigned.ALL;
+
+ENTITY alu IS
+  PORT (
+    clk : IN STD_LOGIC;
+    reset : IN STD_LOGIC;
+    adl_in : IN STD_LOGIC_VECTOR(7 DOWNTO 0); -- addres bus low in
+    adl_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); -- addres bus low out
+    sb_in : IN STD_LOGIC_VECTOR(7 DOWNTO 0); -- system bus in
+    sb_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); -- system bus out
+    db_in : IN STD_LOGIC_VECTOR(7 DOWNTO 0); -- data bus in
+
+    i_add : IN std_logic;
+    inv_i_add : IN std_logic;
+
+    -- ALU logic
+    control : IN STD_LOGIC_VECTOR(11 DOWNTO 0); -- control signals for ALU
+    --bit(0) = daa, not used since decimal is not implemented
+    --bit(1) = i/addc (carry in)
+    --bit(2) = sums (add)
+    --bit(3) = ands (and)
+    --bit(4) = exors (exor)
+    --bit(5) = ors (or)
+    --bit(6) = srs (shift right)
+    --bit(7) = sls (shift left)
+    --bit(8) = rotate right
+    --bit(9) = rotate left
+    --bit(10) = pass1 (register a)
+    --bit(11) = pass2 (register b)
+
+    avr : OUT STD_LOGIC; -- overflow flag
+    acr : OUT STD_LOGIC; -- carry out flag
+    anr : OUT std_logic; -- negative out flag
+    azr : out std_logic; -- zero out flag
+    -- hc : OUT STD_LOGIC; -- half carry flag
+
+    -- adder hold register
+    clk_2 : IN STD_LOGIC; -- second phase clock, used as load signal
+    add_adl : IN STD_LOGIC; -- output to addres low bus
+    add_sb6 : IN STD_LOGIC; -- output to SB bus 0-6
+    add_sb7 : IN STD_LOGIC; -- output to SB bus 7
+
+    -- A input register
+    o_add : IN STD_LOGIC; --load all 0's
+    sb_add : IN STD_LOGIC; --load data from SB
+
+    -- B input register
+    inv_db_add : IN STD_LOGIC; -- load databus inverse
+    db_add : IN STD_LOGIC; -- load databus
+    adl_add : IN STD_LOGIC -- load addres line
+  );
+END ENTITY;
+
+ARCHITECTURE structural OF alu IS
+  COMPONENT alu_logic IS
+    PORT (
+      a : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+      b : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+      control : IN STD_LOGIC_VECTOR(11 DOWNTO 0);
+      --bit(0) = daa, not used since decimal is not implemented
+      --bit(1) = i/addc (carry in)
+      --bit(2) = sums (add)
+      --bit(3) = ands (and)
+      --bit(4) = exors (exor)
+      --bit(5) = ors (or)
+      --bit(6) = srs (shift right)
+      --bit(7) = sls (shift left)
+      --bit(8) = rotate right
+      --bit(9) = rotate left
+      --bit(10) = pass1 (register a)
+      --bit(11) = pass2 (register b)
+      o : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); --ALU output signal to adder hold register
+      avr : OUT STD_LOGIC; --overflow flag
+      acr : OUT STD_LOGIC --carry out flag
+      -- hc : OUT STD_LOGIC --half carry out flag, not used since decimal is not implemented
+    );
+  END COMPONENT;
+
+  COMPONENT A_input_register IS
+    PORT (
+      clk : IN STD_LOGIC;
+      reset : IN STD_LOGIC;
+      in_sb : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+      out_alu : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
+      o_add : IN STD_LOGIC; --load all 0's
+      sb_add : IN STD_LOGIC --load data from SB
+    );
+  END COMPONENT;
+
+  COMPONENT B_input_register IS
+    PORT (
+      clk : IN STD_LOGIC;
+      reset : IN STD_LOGIC;
+      db : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+      adl : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+      out_to_alu : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
+      inv_db_add : IN STD_LOGIC; -- use databus inverse
+      db_add : IN STD_LOGIC; -- use databus
+      adl_add : IN STD_LOGIC; -- use addres line
+      i_add : IN std_logic;
+      inv_i_add : IN std_logic
+    );
+  END COMPONENT;
+
+  COMPONENT adder_hold_register IS
+    PORT (
+      clk : IN STD_LOGIC;
+      reset : IN STD_LOGIC;
+
+      alu_data_in : IN STD_LOGIC_VECTOR(7 DOWNTO 0); -- input from alu
+      adl : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); -- addres low bus
+      sb : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); -- system bus
+
+      clk_2 : IN STD_LOGIC; -- second phase clock, used as load signal
+      add_adl : IN STD_LOGIC; -- output to ADL
+      add_sb6 : IN STD_LOGIC; -- output to SB bus 0-6
+      add_sb7 : IN STD_LOGIC; -- output to SB bus 7
+      load_signal : IN std_logic
+    );
+  END COMPONENT;
+
+  -- intermidate data signals
+  SIGNAL output_alu : STD_LOGIC_VECTOR(7 DOWNTO 0);
+  SIGNAL a, b : STD_LOGIC_VECTOR(7 DOWNTO 0);
+  signal load_signal : std_logic;
+
+
+  -- ALU logic
+  SIGNAL o_adder, o_or, o_xor, o_and, o_shift, o_pass : STD_LOGIC_VECTOR(7 DOWNTO 0);
+  SIGNAL acr1, acr2 : STD_LOGIC;
+
+  -- adder
+  signal Adder_result : std_logic_vector(8 downto 0);
+
+BEGIN
+
+  anr <= output_alu(7);
+  azr <= not ( output_alu(0) or output_alu(1) or output_alu(2) or output_alu(3) or output_alu(4) or output_alu(5) or output_alu(6) or output_alu(7) );
+
+
+load_signal <= control(0)
+               or control(1) or control(2)
+               or control(3) or control(4)
+               or control(5) or control(6)
+               or control(7) or control(8)
+               or control(9) or control(10)
+               or control(11);
+
+
+    WITH control SELECT output_alu <=
+      -- Addition: add (with carry), substraction (with borrow)
+      o_adder WHEN "000000000100",
+      o_adder WHEN "000000000110",
+
+      -- Bitwise AND
+      o_and WHEN "000000001000",
+
+      -- Bitwise XOR
+      o_xor WHEN "000000010000",
+
+      -- Bitwise OR
+      o_or WHEN "000000100000",
+
+      --Shift: shift right/left, rotate right/left
+      o_shift WHEN "000001000000",
+      o_shift WHEN "000010000000",
+      o_shift WHEN "000100000000",
+      o_shift WHEN "000100000010",
+      o_shift WHEN "001000000000",
+      o_shift WHEN "001000000010",
+
+      --Pass: pass A/B
+      o_pass WHEN "010000000000",
+      o_pass WHEN "100000000000",
+
+      "00000000" WHEN OTHERS;
+
+    WITH control SELECT acr <=
+      acr1 WHEN "000000000100",
+      acr1 WHEN "000000000110",
+
+      acr2 WHEN "000001000000",
+      acr2 WHEN "000010000000",
+      acr2 WHEN "000100000000",
+      acr2 WHEN "000100000010",
+      acr2 WHEN "001000000000",
+      acr2 WHEN "001000000010",
+
+      control(1) WHEN OTHERS;
+
+  -- Adder
+    -- ADDER : eight_bit_adder PORT MAP(a, b, control(1), o_adder, acr1, avr);
+
+  Adder_result <= ("0" & a) + ("0" & b) + control(1);
+  o_adder <= Adder_result(7 DOWNTO 0);
+  acr1 <= Adder_result(8);
+  avr <= ((a(7) AND b(7) AND (NOT Adder_result(7))) OR ((NOT a(7)) AND (NOT b(7)) AND Adder_result(7)));
+
+    -- ORR : eight_bit_or PORT MAP(a, b, o_or);
+    -- or
+    o_or(0) <= a(0) OR b (0);
+    o_or(1) <= a(1) OR b (1);
+    o_or(2) <= a(2) OR b (2);
+    o_or(3) <= a(3) OR b (3);
+    o_or(4) <= a(4) OR b (4);
+    o_or(5) <= a(5) OR b (5);
+    o_or(6) <= a(6) OR b (6);
+    o_or(7) <= a(7) OR b (7);
+
+    -- XORR : eight_bit_xor PORT MAP(a, b, o_xor);
+    o_xor(0) <= a(0) XOR b (0);
+    o_xor(1) <= a(1) XOR b (1);
+    o_xor(2) <= a(2) XOR b (2);
+    o_xor(3) <= a(3) XOR b (3);
+    o_xor(4) <= a(4) XOR b (4);
+    o_xor(5) <= a(5) XOR b (5);
+    o_xor(6) <= a(6) XOR b (6);
+    o_xor(7) <= a(7) XOR b (7);
+
+    -- ANDD : eight_bit_and PORT MAP(a, b, o_and);
+    o_and(0) <= a(0) AND b (0);
+    o_and(1) <= a(1) AND b (1);
+    o_and(2) <= a(2) AND b (2);
+    o_and(3) <= a(3) AND b (3);
+    o_and(4) <= a(4) AND b (4);
+    o_and(5) <= a(5) AND b (5);
+    o_and(6) <= a(6) AND b (6);
+    o_and(7) <= a(7) AND b (7);
+
+    -- SHIFT : eight_bit_shift PORT MAP(a, b, control(1), control(9 DOWNTO 6), acr2, o_shift);
+
+    WITH control(9 DOWNTO 6) SELECT o_shift(7 DOWNTO 0) <=
+      '0' & a(7) & a(6) & a(5) & a(4) & a(3) & a(2) & a(1) WHEN "0001", --shift right
+      a(6) & a(5) & a(4) & a(3) & a(2) & a(1) & a(0) & '0' WHEN "0010", --shift left
+      control(1) & a(7) & a(6) & a(5) & a(4) & a(3) & a(2) & a(1) WHEN "0100", --rotate right
+      a(6) & a(5) & a(4) & a(3) & a(2) & a(1) & a(0) & control(1) WHEN "1000", --rotate left
+      "00000000" WHEN OTHERS;
+
+    WITH control(9 DOWNTO 6) SELECT acr2 <=
+      a(0) WHEN "0001", --shift right
+      a(0) WHEN "0100", --rotate right
+
+      a(7) WHEN "0010", --shift left
+      a(7) WHEN "1000", --rotate left
+      '0' WHEN OTHERS;
+
+
+
+    -- PASS : eight_bit_pass PORT MAP(a, b, control(11 DOWNTO 10), o_pass);
+    WITH control(11 DOWNTO 10) SELECT o_pass <=
+        a WHEN "01",
+        b WHEN "10",
+        "00000000" WHEN OTHERS;
+
+
+
+
+  -- B input register
+  B_REGISTER : B_input_register PORT MAP(
+    clk,
+    reset,
+    db_in,
+    adl_in,
+    b,
+    inv_db_add,
+    db_add,
+    adl_add,
+    i_add,
+    inv_i_add
+    );
+
+  -- A input register
+  A_REGSISTER : A_input_register PORT MAP(
+    clk,
+    reset,
+    sb_in,
+    a,
+    o_add,
+    sb_add);
+
+  -- adder hold register THIS IS TRIGGERED AT INV_Q1
+  HOLD_REGISTER : adder_hold_register PORT MAP(
+    clk,
+    reset,
+    output_alu,
+    adl_out,
+    sb_out,
+    clk_2,
+    add_adl,
+    add_sb6,
+    add_sb7,
+    load_signal);
+
+END ARCHITECTURE;

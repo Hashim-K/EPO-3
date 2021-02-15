@@ -56,21 +56,15 @@ END ENTITY;
 
 ARCHITECTURE behaviour of status_register is
 
-  COMPONENT register_8bit IS
-    PORT (
-      clk : IN STD_LOGIC;
-      load : IN STD_LOGIC;
-      reset : IN STD_LOGIC;
-      data_in : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
-      reg_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0));
-  END COMPONENT;
-
 signal reg_out : STD_LOGIC_VECTOR(7 downto 0); --intermediate signals
 signal reg_in : STD_LOGIC_VECTOR(7 downto 0);
 
 signal dbz  : STD_LOGIC;
 
 signal contr_temp : std_logic_vector(2 downto 0);
+
+SIGNAL q : STD_LOGIC_VECTOR (7 DOWNTO 0); --adding intermediate signal for output register
+
 
 BEGIN
 
@@ -149,6 +143,21 @@ z <= reg_out(1);
 n <= reg_out(7);
 v <= reg_out(6);
 
-l1 : register_8bit PORT MAP(clk, '1', reset, reg_in, reg_out);
+PROCESS (clk, reset) --process to determine output register
+BEGIN
+  IF (rising_edge(clk)) THEN --both need to be high to load value from bus
+    IF (reset = '1') THEN
+      q <= "00000000"; --clears the value in q
+    ELSIF (reset = '0') THEN
+      q <= reg_in; --data from bus stored in q
+    END IF;
+  END IF;
+END PROCESS;
+reg_out <= q;
+
+
+
+
+
 
  end behaviour;

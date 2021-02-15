@@ -17,21 +17,12 @@ END ENTITY;
 
 ARCHITECTURE structural OF accumulator IS
 
-    COMPONENT register_8bit_C IS
-        PORT (
-            clk : IN STD_LOGIC;
-            load : IN STD_LOGIC;
-            reset : IN STD_LOGIC;
-            data_in : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
-            reg_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0));
-    END COMPONENT;
-
     SIGNAL load : STD_LOGIC;
     SIGNAL data_in, data_out : STD_LOGIC_VECTOR(7 DOWNTO 0);
     SIGNAL control : STD_LOGIC_VECTOR(1 DOWNTO 0);
 
+    signal q : std_logic_vector(7 downto 0);
 BEGIN
-    l1 : register_8bit_C PORT MAP(clk, load, reset, data_in, data_out);
 
     control(0) <= ac_db;
     control(1) <= ac_sb;
@@ -47,5 +38,19 @@ BEGIN
     WITH control SELECT db <=
         data_out WHEN "01",
         "ZZZZZZZZ" WHEN OTHERS;
+
+
+
+        PROCESS (clk, reset, load) --process to determine output register
+        BEGIN
+          IF (rising_edge(clk)) THEN --both need to be high to load value from bus
+            IF (reset = '1') THEN
+              q <= "10101010"; --clears the value in q
+            ELSIF (reset = '0') and (load = '1') THEN
+              q <= data_in; --data from bus stored in q
+            END IF;
+          END IF;
+        END PROCESS;
+      data_out <= q;
 
 END ARCHITECTURE;

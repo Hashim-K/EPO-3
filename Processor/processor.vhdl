@@ -247,23 +247,17 @@ architecture structural of processor is
 	-- Instruction decoder
 	component instruction_decoder is
 		port (
-	      ir_in: IN STD_LOGIC_VECTOR(7 DOWNTO 0);   -- Instruction register in
-	      tcstate: IN STD_LOGIC_VECTOR(5 DOWNTO 0);
-	      interrupt: IN STD_LOGIC_VECTOR(2 DOWNTO 0);
-	      ready: IN STD_LOGIC;
-	      r_w: OUT STD_LOGIC;
-	      acr : IN STD_LOGIC;
-	      cin : IN STD_LOGIC; -- from status register carry in
-	      z   : IN STD_LOGIC; -- from status register zero
-	      v   : IN std_logic;
-	      n   : IN std_logic;
-	      control_out: OUT STD_LOGIC_VECTOR(67 DOWNTO 0);
-	      s1 : IN STD_LOGIC;
-	      s2 : IN STD_LOGIC;
-	      page_crossing : OUT std_logic; -- indicate page crossing
-	      bcr : OUT std_logic; -- indicate branch instruction taking on
-	    --  ff_add: IN STD_Logic
-	      v1: IN STD_LOGIC
+		ir_in: IN STD_LOGIC_VECTOR(7 DOWNTO 0);   -- Instruction register in
+		tcstate: IN STD_LOGIC_VECTOR(5 DOWNTO 0);
+		r_w: OUT STD_LOGIC;
+		acr : IN STD_LOGIC;
+		cin : IN STD_LOGIC; -- from status register carry in
+		z   : IN STD_LOGIC; -- from status register zero
+		v   : IN std_logic;
+		n   : IN std_logic;
+		control_out: OUT STD_LOGIC_VECTOR(67 DOWNTO 0);
+		page_crossing : OUT std_logic; -- indicate page crossing
+		bcr : OUT std_logic -- indicate branch instruction taking on
 	  );
 	end component;
 
@@ -323,6 +317,7 @@ architecture structural of processor is
 	-- Pass Mosfets
 	component pass is
 		port (
+			clk : in std_logic;
 			bus_in_1 : in std_logic_vector(7 downto 0);
 			bus_in_2 : in std_logic_vector(7 downto 0);
 			enable_pass : in std_logic_vector(1 downto 0);
@@ -457,6 +452,15 @@ architecture structural of processor is
     );
   end component;
 
+	component acr_buf is
+	  port (
+	  clk : IN std_logic;
+	  reset : IN std_logic;
+	  acr_in : IN std_logic;
+	  acr_out : OUT std_logic
+	  );
+	end component;
+
 	--/*************************************************
 	--* Signals *
 	--*************************************************/
@@ -555,6 +559,7 @@ architecture structural of processor is
 
 	signal carry_dff : std_logic;
 
+	signal acr_buffed : std_logic;
 begin
 
 
@@ -667,13 +672,13 @@ begin
 
 	-- Pass Mosfets
 	-- SB -> ADH
-	sb_adh_pass <= control_out(63);
+	sb_adh_pass <= control_out(63) and not clk_2;
 	-- ADH -> SB
-	adh_sb_pass <= control_out(64);
+	adh_sb_pass <= control_out(64) and not clk_2;
 	-- SB -> DB
-	sb_db_pass <= control_out(65);
+	sb_db_pass <= control_out(65) and not clk_2;
 	-- DB -> SB
-	db_sb_pass <= control_out(66);
+	db_sb_pass <= control_out(66) and not clk_2;
 
 	one_i <= control_out(67);
 
@@ -823,6 +828,7 @@ begin
 	pass_1 <= db_sb_pass & sb_db_pass;
 	pass_sb_db : pass
 	port map(
+	clk,
 		sb, db,
 		pass_1, db,
 		sb
@@ -831,6 +837,7 @@ begin
 	pass_2 <= sb_adh_pass & adh_sb_pass;
 	pass_sb_adh : pass
 	port map(
+	clk,
 		adh, sb,
 		pass_2, sb,
 		adh
@@ -905,20 +912,15 @@ begin
 	port map(
 		ins_data_out,
 		tcstate,
-		interrupt_vec,
-		rdy,
 		r_w,
 		c,
-		acr,
+		acr_buffed,
 		z,
 		v,
 		n,
 		control_out,
-		s1,
-		s2,
 		page_crossing,
-		bcr,
-		v1
+		bcr
 	);
 	-- Timing generation logic
 	tim_gen : timing_generation
@@ -943,5 +945,10 @@ begin
     i_adh_zero,
     adh
   );
+
+	acbuf : acr_buf
+	port map(
+		clk, reset, acr, acr_buffed
+	);
 
 end architecture;

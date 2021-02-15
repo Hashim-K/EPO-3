@@ -290,6 +290,7 @@ architecture arch of processor_tb is
   );
 
 
+  signal q_mal, q_mah, q_data : std_logic_vector(7 downto 0);
   -- for memory
   signal address : std_logic_vector(15 downto 0);
   signal clk_inv : std_logic;
@@ -313,7 +314,7 @@ architecture arch of processor_tb is
 begin
 
 
-  --/*************************************************
+ --/*************************************************
   --*                    All memory things           *
   --*************************************************/
 
@@ -324,9 +325,44 @@ begin
   clk_inv <= not clk_25mhz;
   res <= extern_reset;
 
-  MAL : register_8bit PORT MAP(clk_inv, en_mal, res, addres_data, mal_out);
-  MAH : register_8bit PORT MAP(clk_inv, en_mah, res, addres_data, mah_out);
-  DATA : register_8bit PORT MAP(clk_inv, en_data, res, addres_data, data_reg_out);
+  -- MAL : register_8bit PORT MAP(clk_inv, en_mal, res, addres_data, mal_out);
+  PROCESS (clk_inv, res, en_mal) --process to determine output register
+	BEGIN
+		IF (rising_edge(clk_inv)) THEN --both need to be high to load value from bus
+			IF (res = '1') THEN
+				q_mal <= "00000000"; --clears the value in q
+			ELSIF (res = '0' AND en_mal = '1') THEN
+				q_mal <= addres_data; --data from bus stored in q
+			END IF;
+		END IF;
+	END PROCESS;
+	mal_out <= q_mal;
+
+  -- MAH : register_8bit PORT MAP(clk_inv, en_mah, res, addres_data, mah_out);
+  PROCESS (clk_inv, res, en_mah) --process to determine output register
+	BEGIN
+		IF (rising_edge(clk_inv)) THEN --both need to be high to load value from bus
+			IF (res = '1') THEN
+				q_mah <= "00000000"; --clears the value in q
+			ELSIF (res = '0' AND en_mah = '1') THEN
+				q_mah <= addres_data; --data from bus stored in q
+			END IF;
+		END IF;
+	END PROCESS;
+	mah_out <= q_mah;
+
+  -- DATA : register_8bit PORT MAP(clk_inv, en_data, res, addres_data, data_reg_out);
+  PROCESS (clk_inv, res, en_data) --process to determine output register
+  BEGIN
+    IF (rising_edge(clk_inv)) THEN --both need to be high to load value from bus
+      IF (res = '1') THEN
+        q_data <= "00000000"; --clears the value in q
+      ELSIF (res = '0' AND en_data = '1') THEN
+        q_data <= addres_data; --data from bus stored in q
+      END IF;
+    END IF;
+  END PROCESS;
+  data_reg_out <= q_data;
 
   address <= mah_out & mal_out;
   location <= to_integer(unsigned(address));
@@ -406,9 +442,7 @@ begin
                   '0' after 50 ns;
   processor_m : processor PORT MAP(clk_25mhz, extern_reset, nmi, irq, sob, r, synch, iv, addres_data, control, data_out);
 
-
 end architecture;
-
     '''
 
     f.write(s)

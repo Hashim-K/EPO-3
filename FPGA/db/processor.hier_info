@@ -786,8 +786,30 @@ o[7] <= Mux0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |system|processor:processor_m|alu:Algorithmic_Unit|B_input_register:B_REGISTER
-clk => register_8bit:l1.clk
-reset => register_8bit:l1.reset
+clk => q[0].CLK
+clk => q[1].CLK
+clk => q[2].CLK
+clk => q[3].CLK
+clk => q[4].CLK
+clk => q[5].CLK
+clk => q[6].CLK
+clk => q[7].CLK
+reset => q.OUTPUTSELECT
+reset => q.OUTPUTSELECT
+reset => q.OUTPUTSELECT
+reset => q.OUTPUTSELECT
+reset => q.OUTPUTSELECT
+reset => q.OUTPUTSELECT
+reset => q.OUTPUTSELECT
+reset => q.OUTPUTSELECT
+reset => q.OUTPUTSELECT
+reset => q.OUTPUTSELECT
+reset => q.OUTPUTSELECT
+reset => q.OUTPUTSELECT
+reset => q.OUTPUTSELECT
+reset => q.OUTPUTSELECT
+reset => q.OUTPUTSELECT
+reset => q.OUTPUTSELECT
 db[0] => Mux7.IN2
 db[0] => Mux7.IN31
 db[1] => Mux6.IN2
@@ -812,14 +834,14 @@ adl[4] => Mux3.IN3
 adl[5] => Mux2.IN3
 adl[6] => Mux1.IN3
 adl[7] => Mux0.IN3
-out_to_alu[0] <= register_8bit:l1.reg_out[0]
-out_to_alu[1] <= register_8bit:l1.reg_out[1]
-out_to_alu[2] <= register_8bit:l1.reg_out[2]
-out_to_alu[3] <= register_8bit:l1.reg_out[3]
-out_to_alu[4] <= register_8bit:l1.reg_out[4]
-out_to_alu[5] <= register_8bit:l1.reg_out[5]
-out_to_alu[6] <= register_8bit:l1.reg_out[6]
-out_to_alu[7] <= register_8bit:l1.reg_out[7]
+out_to_alu[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
+out_to_alu[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
+out_to_alu[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
+out_to_alu[3] <= q[3].DB_MAX_OUTPUT_PORT_TYPE
+out_to_alu[4] <= q[4].DB_MAX_OUTPUT_PORT_TYPE
+out_to_alu[5] <= q[5].DB_MAX_OUTPUT_PORT_TYPE
+out_to_alu[6] <= q[6].DB_MAX_OUTPUT_PORT_TYPE
+out_to_alu[7] <= q[7].DB_MAX_OUTPUT_PORT_TYPE
 inv_db_add => Mux0.IN36
 inv_db_add => Mux1.IN36
 inv_db_add => Mux2.IN36
@@ -862,7 +884,7 @@ inv_i_add => Mux6.IN32
 inv_i_add => Mux7.IN32
 
 
-|system|processor:processor_m|alu:Algorithmic_Unit|B_input_register:B_REGISTER|register_8bit:l1
+|system|processor:processor_m|alu:Algorithmic_Unit|A_input_register:A_REGSISTER
 clk => q[0].CLK
 clk => q[1].CLK
 clk => q[2].CLK
@@ -879,29 +901,7 @@ reset => q.OUTPUTSELECT
 reset => q.OUTPUTSELECT
 reset => q.OUTPUTSELECT
 reset => q.OUTPUTSELECT
-reset => process_0.IN0
-load => process_0.IN1
-data_in[0] => q.DATAB
-data_in[1] => q.DATAB
-data_in[2] => q.DATAB
-data_in[3] => q.DATAB
-data_in[4] => q.DATAB
-data_in[5] => q.DATAB
-data_in[6] => q.DATAB
-data_in[7] => q.DATAB
-reg_out[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[3] <= q[3].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[4] <= q[4].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[5] <= q[5].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[6] <= q[6].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[7] <= q[7].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|system|processor:processor_m|alu:Algorithmic_Unit|A_input_register:A_REGSISTER
-clk => register_8bit_A:L1.clk
-reset => register_8bit_A:L1.reset
+reset => process_0.IN1
 in_sb[0] => Mux7.IN1
 in_sb[1] => Mux6.IN1
 in_sb[2] => Mux5.IN1
@@ -910,14 +910,14 @@ in_sb[4] => Mux3.IN1
 in_sb[5] => Mux2.IN1
 in_sb[6] => Mux1.IN1
 in_sb[7] => Mux0.IN1
-out_alu[0] <= register_8bit_A:L1.reg_out[0]
-out_alu[1] <= register_8bit_A:L1.reg_out[1]
-out_alu[2] <= register_8bit_A:L1.reg_out[2]
-out_alu[3] <= register_8bit_A:L1.reg_out[3]
-out_alu[4] <= register_8bit_A:L1.reg_out[4]
-out_alu[5] <= register_8bit_A:L1.reg_out[5]
-out_alu[6] <= register_8bit_A:L1.reg_out[6]
-out_alu[7] <= register_8bit_A:L1.reg_out[7]
+out_alu[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
+out_alu[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
+out_alu[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
+out_alu[3] <= q[3].DB_MAX_OUTPUT_PORT_TYPE
+out_alu[4] <= q[4].DB_MAX_OUTPUT_PORT_TYPE
+out_alu[5] <= q[5].DB_MAX_OUTPUT_PORT_TYPE
+out_alu[6] <= q[6].DB_MAX_OUTPUT_PORT_TYPE
+out_alu[7] <= q[7].DB_MAX_OUTPUT_PORT_TYPE
 o_add => Mux0.IN4
 o_add => Mux1.IN4
 o_add => Mux2.IN4
@@ -938,7 +938,7 @@ sb_add => Mux7.IN5
 sb_add => Mux8.IN5
 
 
-|system|processor:processor_m|alu:Algorithmic_Unit|A_input_register:A_REGSISTER|register_8bit_A:L1
+|system|processor:processor_m|alu:Algorithmic_Unit|adder_hold_register:HOLD_REGISTER
 clk => q[0].CLK
 clk => q[1].CLK
 clk => q[2].CLK
@@ -947,7 +947,6 @@ clk => q[4].CLK
 clk => q[5].CLK
 clk => q[6].CLK
 clk => q[7].CLK
-load => process_0.IN0
 reset => q.OUTPUTSELECT
 reset => q.OUTPUTSELECT
 reset => q.OUTPUTSELECT
@@ -956,36 +955,15 @@ reset => q.OUTPUTSELECT
 reset => q.OUTPUTSELECT
 reset => q.OUTPUTSELECT
 reset => q.OUTPUTSELECT
-reset => process_0.IN1
-data_in[0] => q.DATAB
-data_in[1] => q.DATAB
-data_in[2] => q.DATAB
-data_in[3] => q.DATAB
-data_in[4] => q.DATAB
-data_in[5] => q.DATAB
-data_in[6] => q.DATAB
-data_in[7] => q.DATAB
-reg_out[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[3] <= q[3].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[4] <= q[4].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[5] <= q[5].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[6] <= q[6].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[7] <= q[7].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|system|processor:processor_m|alu:Algorithmic_Unit|adder_hold_register:HOLD_REGISTER
-clk => register_8bit:l1.clk
-reset => register_8bit:l1.reset
-alu_data_in[0] => register_8bit:l1.data_in[0]
-alu_data_in[1] => register_8bit:l1.data_in[1]
-alu_data_in[2] => register_8bit:l1.data_in[2]
-alu_data_in[3] => register_8bit:l1.data_in[3]
-alu_data_in[4] => register_8bit:l1.data_in[4]
-alu_data_in[5] => register_8bit:l1.data_in[5]
-alu_data_in[6] => register_8bit:l1.data_in[6]
-alu_data_in[7] => register_8bit:l1.data_in[7]
+reset => process_0.IN0
+alu_data_in[0] => q.DATAB
+alu_data_in[1] => q.DATAB
+alu_data_in[2] => q.DATAB
+alu_data_in[3] => q.DATAB
+alu_data_in[4] => q.DATAB
+alu_data_in[5] => q.DATAB
+alu_data_in[6] => q.DATAB
+alu_data_in[7] => q.DATAB
 adl[0] <= adl[0].DB_MAX_OUTPUT_PORT_TYPE
 adl[1] <= adl[1].DB_MAX_OUTPUT_PORT_TYPE
 adl[2] <= adl[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -1029,10 +1007,10 @@ add_sb7 => Mux5.IN4
 add_sb7 => Mux6.IN4
 add_sb7 => Mux7.IN4
 add_sb7 => Mux8.IN4
-load_signal => register_8bit:l1.load
+load_signal => process_0.IN1
 
 
-|system|processor:processor_m|alu:Algorithmic_Unit|adder_hold_register:HOLD_REGISTER|register_8bit:l1
+|system|processor:processor_m|pc_low:program_counter_low
 clk => q[0].CLK
 clk => q[1].CLK
 clk => q[2].CLK
@@ -1049,29 +1027,6 @@ reset => q.OUTPUTSELECT
 reset => q.OUTPUTSELECT
 reset => q.OUTPUTSELECT
 reset => q.OUTPUTSELECT
-reset => process_0.IN0
-load => process_0.IN1
-data_in[0] => q.DATAB
-data_in[1] => q.DATAB
-data_in[2] => q.DATAB
-data_in[3] => q.DATAB
-data_in[4] => q.DATAB
-data_in[5] => q.DATAB
-data_in[6] => q.DATAB
-data_in[7] => q.DATAB
-reg_out[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[3] <= q[3].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[4] <= q[4].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[5] <= q[5].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[6] <= q[6].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[7] <= q[7].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|system|processor:processor_m|pc_low:program_counter_low
-clk => pcl_register_8bit:l1.clk
-reset => pcl_register_8bit:l1.reset
 pclc <= pclc.DB_MAX_OUTPUT_PORT_TYPE
 i_pc => c_pc.IN1
 pcl_adl => adl_out[0].OE
@@ -1133,7 +1088,7 @@ i => control[2].IN1
 i => control[1].IN1
 
 
-|system|processor:processor_m|pc_low:program_counter_low|pcl_register_8bit:l1
+|system|processor:processor_m|pc_high:program_counter_high
 clk => q[0].CLK
 clk => q[1].CLK
 clk => q[2].CLK
@@ -1150,29 +1105,6 @@ reset => q.OUTPUTSELECT
 reset => q.OUTPUTSELECT
 reset => q.OUTPUTSELECT
 reset => q.OUTPUTSELECT
-reset => process_0.IN0
-load => process_0.IN1
-data_in[0] => q.DATAB
-data_in[1] => q.DATAB
-data_in[2] => q.DATAB
-data_in[3] => q.DATAB
-data_in[4] => q.DATAB
-data_in[5] => q.DATAB
-data_in[6] => q.DATAB
-data_in[7] => q.DATAB
-reg_out[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[3] <= q[3].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[4] <= q[4].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[5] <= q[5].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[6] <= q[6].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[7] <= q[7].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|system|processor:processor_m|pc_high:program_counter_high
-clk => pch_register_8bit:l1.clk
-reset => pch_register_8bit:l1.reset
 adh_pch => Mux0.IN19
 adh_pch => Mux1.IN19
 adh_pch => Mux2.IN19
@@ -1233,7 +1165,7 @@ i => control[2].IN1
 i => control[1].IN1
 
 
-|system|processor:processor_m|pc_high:program_counter_high|pch_register_8bit:l1
+|system|processor:processor_m|accumulator:accumu
 clk => q[0].CLK
 clk => q[1].CLK
 clk => q[2].CLK
@@ -1251,28 +1183,6 @@ reset => q.OUTPUTSELECT
 reset => q.OUTPUTSELECT
 reset => q.OUTPUTSELECT
 reset => process_0.IN0
-load => process_0.IN1
-data_in[0] => q.DATAB
-data_in[1] => q.DATAB
-data_in[2] => q.DATAB
-data_in[3] => q.DATAB
-data_in[4] => q.DATAB
-data_in[5] => q.DATAB
-data_in[6] => q.DATAB
-data_in[7] => q.DATAB
-reg_out[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[3] <= q[3].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[4] <= q[4].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[5] <= q[5].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[6] <= q[6].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[7] <= q[7].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|system|processor:processor_m|accumulator:accumu
-clk => register_8bit_C:l1.clk
-reset => register_8bit_C:l1.reset
 ac_db => Mux0.IN5
 ac_db => Mux1.IN5
 ac_db => Mux2.IN5
@@ -1309,15 +1219,15 @@ ac_sb => Mux14.IN4
 ac_sb => Mux15.IN4
 ac_sb => Mux16.IN4
 ac_sb => Mux17.IN4
-sb_ac => register_8bit_C:l1.load
-sb_in[0] => register_8bit_C:l1.data_in[0]
-sb_in[1] => register_8bit_C:l1.data_in[1]
-sb_in[2] => register_8bit_C:l1.data_in[2]
-sb_in[3] => register_8bit_C:l1.data_in[3]
-sb_in[4] => register_8bit_C:l1.data_in[4]
-sb_in[5] => register_8bit_C:l1.data_in[5]
-sb_in[6] => register_8bit_C:l1.data_in[6]
-sb_in[7] => register_8bit_C:l1.data_in[7]
+sb_ac => process_0.IN1
+sb_in[0] => q.DATAB
+sb_in[1] => q.DATAB
+sb_in[2] => q.DATAB
+sb_in[3] => q.DATAB
+sb_in[4] => q.DATAB
+sb_in[5] => q.DATAB
+sb_in[6] => q.DATAB
+sb_in[7] => q.DATAB
 sb_out[0] <= sb_out[0].DB_MAX_OUTPUT_PORT_TYPE
 sb_out[1] <= sb_out[1].DB_MAX_OUTPUT_PORT_TYPE
 sb_out[2] <= sb_out[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -1334,43 +1244,6 @@ db[4] <= db[4].DB_MAX_OUTPUT_PORT_TYPE
 db[5] <= db[5].DB_MAX_OUTPUT_PORT_TYPE
 db[6] <= db[6].DB_MAX_OUTPUT_PORT_TYPE
 db[7] <= db[7].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|system|processor:processor_m|accumulator:accumu|register_8bit_C:l1
-clk => q[0].CLK
-clk => q[1].CLK
-clk => q[2].CLK
-clk => q[3].CLK
-clk => q[4].CLK
-clk => q[5].CLK
-clk => q[6].CLK
-clk => q[7].CLK
-load => process_0.IN0
-reset => q.OUTPUTSELECT
-reset => q.OUTPUTSELECT
-reset => q.OUTPUTSELECT
-reset => q.OUTPUTSELECT
-reset => q.OUTPUTSELECT
-reset => q.OUTPUTSELECT
-reset => q.OUTPUTSELECT
-reset => q.OUTPUTSELECT
-reset => process_0.IN1
-data_in[0] => q.DATAB
-data_in[1] => q.DATAB
-data_in[2] => q.DATAB
-data_in[3] => q.DATAB
-data_in[4] => q.DATAB
-data_in[5] => q.DATAB
-data_in[6] => q.DATAB
-data_in[7] => q.DATAB
-reg_out[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[3] <= q[3].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[4] <= q[4].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[5] <= q[5].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[6] <= q[6].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[7] <= q[7].DB_MAX_OUTPUT_PORT_TYPE
 
 
 |system|processor:processor_m|mem_add_reg:add_Reg
@@ -1558,8 +1431,22 @@ control[1] <= control.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |system|processor:processor_m|mem_data_reg:data_reg
-clk => register_8bit:l1.clk
-reset => register_8bit:l1.reset
+clk => q[0].CLK
+clk => q[1].CLK
+clk => q[2].CLK
+clk => q[3].CLK
+clk => q[4].CLK
+clk => q[5].CLK
+clk => q[6].CLK
+clk => q[7].CLK
+reset => q.OUTPUTSELECT
+reset => q.OUTPUTSELECT
+reset => q.OUTPUTSELECT
+reset => q.OUTPUTSELECT
+reset => q.OUTPUTSELECT
+reset => q.OUTPUTSELECT
+reset => q.OUTPUTSELECT
+reset => q.OUTPUTSELECT
 load => data_in[7].OUTPUTSELECT
 load => data_in[6].OUTPUTSELECT
 load => data_in[5].OUTPUTSELECT
@@ -1626,7 +1513,7 @@ external_in[6] => data_in[6].DATAB
 external_in[7] => data_in[7].DATAB
 
 
-|system|processor:processor_m|mem_data_reg:data_reg|register_8bit:l1
+|system|processor:processor_m|status_register:flag_reg
 clk => q[0].CLK
 clk => q[1].CLK
 clk => q[2].CLK
@@ -1641,31 +1528,6 @@ reset => q.OUTPUTSELECT
 reset => q.OUTPUTSELECT
 reset => q.OUTPUTSELECT
 reset => q.OUTPUTSELECT
-reset => q.OUTPUTSELECT
-reset => q.OUTPUTSELECT
-reset => process_0.IN0
-load => process_0.IN1
-data_in[0] => q.DATAB
-data_in[1] => q.DATAB
-data_in[2] => q.DATAB
-data_in[3] => q.DATAB
-data_in[4] => q.DATAB
-data_in[5] => q.DATAB
-data_in[6] => q.DATAB
-data_in[7] => q.DATAB
-reg_out[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[3] <= q[3].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[4] <= q[4].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[5] <= q[5].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[6] <= q[6].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[7] <= q[7].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|system|processor:processor_m|status_register:flag_reg
-clk => register_8bit:l1.clk
-reset => register_8bit:l1.reset
 db_in[0] => dbz.IN0
 db_in[0] => Mux0.IN0
 db_in[1] => dbz.IN1
@@ -1711,11 +1573,11 @@ anr => Mux5.IN3
 ir5 => Mux0.IN5
 ir5 => Mux2.IN2
 ir5 => Mux3.IN3
-c <= register_8bit:l1.reg_out[0]
-z <= register_8bit:l1.reg_out[1]
-i <= register_8bit:l1.reg_out[2]
-v <= register_8bit:l1.reg_out[6]
-n <= register_8bit:l1.reg_out[7]
+c <= q[0].DB_MAX_OUTPUT_PORT_TYPE
+z <= q[1].DB_MAX_OUTPUT_PORT_TYPE
+i <= q[2].DB_MAX_OUTPUT_PORT_TYPE
+v <= q[6].DB_MAX_OUTPUT_PORT_TYPE
+n <= q[7].DB_MAX_OUTPUT_PORT_TYPE
 db_out[0] <= db_out[0].DB_MAX_OUTPUT_PORT_TYPE
 db_out[1] <= db_out[1].DB_MAX_OUTPUT_PORT_TYPE
 db_out[2] <= db_out[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -1724,43 +1586,6 @@ db_out[4] <= db_out[4].DB_MAX_OUTPUT_PORT_TYPE
 db_out[5] <= db_out[5].DB_MAX_OUTPUT_PORT_TYPE
 db_out[6] <= db_out[6].DB_MAX_OUTPUT_PORT_TYPE
 db_out[7] <= db_out[7].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|system|processor:processor_m|status_register:flag_reg|register_8bit:l1
-clk => q[0].CLK
-clk => q[1].CLK
-clk => q[2].CLK
-clk => q[3].CLK
-clk => q[4].CLK
-clk => q[5].CLK
-clk => q[6].CLK
-clk => q[7].CLK
-reset => q.OUTPUTSELECT
-reset => q.OUTPUTSELECT
-reset => q.OUTPUTSELECT
-reset => q.OUTPUTSELECT
-reset => q.OUTPUTSELECT
-reset => q.OUTPUTSELECT
-reset => q.OUTPUTSELECT
-reset => q.OUTPUTSELECT
-reset => process_0.IN0
-load => process_0.IN1
-data_in[0] => q.DATAB
-data_in[1] => q.DATAB
-data_in[2] => q.DATAB
-data_in[3] => q.DATAB
-data_in[4] => q.DATAB
-data_in[5] => q.DATAB
-data_in[6] => q.DATAB
-data_in[7] => q.DATAB
-reg_out[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[3] <= q[3].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[4] <= q[4].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[5] <= q[5].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[6] <= q[6].DB_MAX_OUTPUT_PORT_TYPE
-reg_out[7] <= q[7].DB_MAX_OUTPUT_PORT_TYPE
 
 
 |system|processor:processor_m|pass:pass_sb_db
@@ -3215,10 +3040,6 @@ tcstate[5] => control_out.DATAA
 tcstate[5] => control_out.OUTPUTSELECT
 tcstate[5] => control_out.OUTPUTSELECT
 tcstate[5] => control_out.OUTPUTSELECT
-interrupt[0] => ~NO_FANOUT~
-interrupt[1] => ~NO_FANOUT~
-interrupt[2] => ~NO_FANOUT~
-ready => ~NO_FANOUT~
 r_w <= <GND>
 acr => control_out.DATAB
 acr => Mux68.IN260
@@ -3331,11 +3152,8 @@ control_out[64] <= Mux3.DB_MAX_OUTPUT_PORT_TYPE
 control_out[65] <= Mux2.DB_MAX_OUTPUT_PORT_TYPE
 control_out[66] <= Mux1.DB_MAX_OUTPUT_PORT_TYPE
 control_out[67] <= Mux0.DB_MAX_OUTPUT_PORT_TYPE
-s1 => ~NO_FANOUT~
-s2 => ~NO_FANOUT~
 page_crossing <= Mux67.DB_MAX_OUTPUT_PORT_TYPE
 bcr <= Mux68.DB_MAX_OUTPUT_PORT_TYPE
-v1 => ~NO_FANOUT~
 
 
 |system|processor:processor_m|timing_generation:tim_gen

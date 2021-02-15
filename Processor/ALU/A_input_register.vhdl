@@ -14,20 +14,26 @@ ENTITY A_input_register IS
 END ENTITY;
 ARCHITECTURE structural OF A_input_register IS
 
-  COMPONENT register_8bit_A IS
-    PORT (
-      clk : IN STD_LOGIC;
-      load : IN STD_LOGIC;
-      reset : IN STD_LOGIC;
-      data_in : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
-      reg_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0));
-  END COMPONENT;
-
   SIGNAL temp_data, bus_data, reg_out : STD_LOGIC_VECTOR(7 DOWNTO 0);
   SIGNAL control : STD_LOGIC_VECTOR(1 DOWNTO 0);
   SIGNAL temp_control : STD_LOGIC;
+
+  SIGNAL q : STD_LOGIC_VECTOR (7 DOWNTO 0);
 BEGIN
-  L1 : register_8bit_A PORT MAP(clk, temp_control, reset, temp_data, reg_out);
+
+  PROCESS (clk, reset, temp_control) --process to determine output register
+	BEGIN
+		IF (rising_edge(clk)) THEN --both need to be high to load value from bus
+			IF (reset = '1') THEN
+				q <= "11111111"; --clears the value in q
+			ELSIF (reset = '0') and (temp_control = '1') THEN
+				q <= temp_data; --data from bus stored in q
+			END IF;
+		END IF;
+	END PROCESS;
+  reg_out <= q;
+
+
 
   control(1) <= o_add; --load zero
   control(0) <= sb_add;-- load from databus

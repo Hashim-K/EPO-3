@@ -31,17 +31,6 @@ end entity;
 
 architecture arch of pc_low is
 
-  component pcl_register_8bit IS
-  PORT (
-  	clk : IN STD_LOGIC;
-  	reset : IN STD_LOGIC;
-  	load : IN STD_LOGIC;
-  	data_in : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
-  	reg_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)
-  	);
-  END component;
-
-
 signal reg_out : std_logic_vector(7 downto 0);
 
 signal to_register, to_increment : std_logic_vector(7 downto 0);
@@ -49,6 +38,9 @@ signal in_signal : std_logic_vector(8 downto 0);
 signal control : std_logic_vector(3 downto 0);
 
 signal c_pc : std_logic;
+
+SIGNAL q : STD_LOGIC_VECTOR (7 DOWNTO 0); --adding intermediate signal for output register
+
 begin
 
               -- BRK                      NMI                         IRQ
@@ -75,8 +67,7 @@ begin
 
   pclc <= in_signal(8) and c_pc;
 
-  -- register
-  l1 : pcl_register_8bit PORT MAP(clk, reset, '1', to_register, reg_out);
+
 
   -- Adress bus output
   with pcl_adl select adl_out <=
@@ -87,6 +78,19 @@ begin
   with pcl_db select db_out <=
   reg_out when '1',
   "ZZZZZZZZ" when others;
+
+
+  PROCESS (clk, reset) --process to determine output register
+  BEGIN
+    IF (rising_edge(clk)) THEN --both need to be high to load value from bus
+      IF (reset = '1') THEN
+        q <= "11111100"; --clears the value in q
+      ELSIF (reset = '0') THEN
+        q <= to_register; --data from bus stored in q
+      END IF;
+    END IF;
+  END PROCESS;
+  reg_out <= q;
 
 end architecture;
 

@@ -25,17 +25,11 @@ entity mem_data_reg is
 end entity;
 
 architecture arch of mem_data_reg is
-  component register_8bit IS
-    PORT (
-      clk : IN STD_LOGIC;
-      load : IN STD_LOGIC;
-      reset : IN STD_LOGIC;
-      data_in : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
-      reg_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0));
-  END component;
 
   -- signal  load : std_logic;
   signal data_in, reg_out : std_logic_vector(7 downto 0);
+
+  signal q : std_logic_vector(7 downto 0);
 begin
 
   -- databus
@@ -58,6 +52,16 @@ begin
     external_in when '1',
     reg_out when others;
 
-    l1 : register_8bit PORT MAP(clk, '1', reset, data_in, reg_out);
+    PROCESS (clk, reset) --process to determine output register
+    BEGIN
+      IF (rising_edge(clk)) THEN --both need to be high to load value from bus
+        IF (reset = '1') THEN
+          q <= "00000000"; --clears the value in q
+        ELSIF (reset = '0') THEN
+          q <= data_in; --data from bus stored in q
+        END IF;
+      END IF;
+    END PROCESS;
+    reg_out <= q;
 
 end architecture;

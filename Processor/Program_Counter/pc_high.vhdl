@@ -26,16 +26,6 @@ end entity;
 
 architecture arch of pc_high is
 
-  component pch_register_8bit IS
-  PORT (
-  	clk : IN STD_LOGIC;
-  	reset : IN STD_LOGIC;
-  	load : IN STD_LOGIC;
-  	data_in : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
-  	reg_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)
-  	);
-  END component;
-
 
 signal data_in, reg_out : std_logic_vector(7 downto 0);
 
@@ -44,6 +34,8 @@ signal controll : std_logic_vector(1 downto 0);
 signal to_increment, to_register : std_logic_vector(7 downto 0);
 signal control : std_logic_vector(3 downto 0);
 signal c_pc : std_logic;
+
+	SIGNAL q : STD_LOGIC_VECTOR (7 DOWNTO 0); --ad
 begin
 
   control <= (brk and sync and not i) & (sync and nmi and not i) & (sync and irq and not i) & adh_pch;
@@ -64,8 +56,6 @@ begin
   to_increment when others;
 
 
-  -- register
-  l1 : pch_register_8bit PORT MAP(clk, reset, '1', to_register, reg_out);
 
 
   -- Adress bus output
@@ -77,5 +67,18 @@ begin
   with pch_db select db_out <=
   reg_out when '1',
   "ZZZZZZZZ" when others;
+
+
+  PROCESS (clk, reset) --process to determine output register
+  BEGIN
+    IF (rising_edge(clk)) THEN --both need to be high to load value from bus
+      IF (reset = '1') THEN
+        q <= "11111111"; --clears the value in q
+      ELSIF (reset = '0') THEN
+        q <= to_register; --data from bus stored in q
+      END IF;
+    END IF;
+  END PROCESS;
+  reg_out <= q;
 
 end architecture;
